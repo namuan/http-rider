@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>HttpRider</title>
+    <link href="https://namuan.github.io/http-rider/feed.xml" rel="self" />
+    <link href="https://namuan.github.io/http-rider" />
+    <updated>2019-07-13T08:57:24+01:00</updated>
+    <author>
+        <name>NL</name>
+    </author>
+    <id>https://namuan.github.io/http-rider</id>
+
+    <entry>
+        <title>Hello World</title>
+        <author>
+            <name>NL</name>
+        </author>
+        <link href="https://namuan.github.io/http-rider/hello-world.html"/>
+        <id>https://namuan.github.io/http-rider/hello-world.html</id>
+
+        <updated>2019-07-13T08:56:28+01:00</updated>
+            <summary>
+                <![CDATA[
+                    First Post
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                First Post
+            ]]>
+        </content>
+    </entry>
+</feed>
