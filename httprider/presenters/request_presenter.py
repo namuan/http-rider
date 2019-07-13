@@ -76,6 +76,9 @@ class RequestPresenter:
     def on_show_assertions_dialog(self):
         self.assertion_builder_dialog.show_dialog(self.current)
 
+    def get_api_description(self):
+        return self.view.txt_api_description.toPlainText().strip()
+
     def form_to_object(self):
         url, qs = split_url_qs(self.view.txt_http_url.text().strip())
         self.current.http_method = self.get_http_method()
@@ -85,7 +88,7 @@ class RequestPresenter:
         self.current.form_params = self.get_form_params()
         self.current.http_request_body = self.get_request_body()
         self.current.title = self.view.txt_api_title.text().strip()
-        self.current.description = self.view.txt_api_description.toPlainText().strip()
+        self.current.description = self.get_api_description()
         self.current.tags = self.get_all_tags()
 
     def get_all_tags(self):
@@ -102,7 +105,8 @@ class RequestPresenter:
 
         self.view.txt_http_url.setText(self.current.http_url)
         self.view.txt_api_title.setText(self.current.title)
-        self.view.txt_api_description.setPlainText(self.current.description)
+        if self.get_api_description() != self.current.description:
+            self.view.txt_api_description.setPlainText(self.current.description)
         index_to_set = self.view.cmb_http_method.findText(self.current.http_method.upper())
         self.view.cmb_http_method.setCurrentIndex(index_to_set)
         self.update_headers_on_form(self.current.http_headers)
