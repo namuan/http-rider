@@ -123,6 +123,8 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def draw_status_code(self, title_rect, bounding_rect, painter, api_status_code, api_call):
+        code_rect_width = api_status_code * 2 if api_status_code else ""
+
         font: QFont = QApplication.font()
         font.setPointSize(10)
         font_metrics: QFontMetrics = QFontMetrics(font)
@@ -132,7 +134,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             bounding_rect.width(),
             0,
             Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
-            api_status_code * 2
+            code_rect_width
         )
         painter.setRenderHint(QPainter.Antialiasing)
         path = QPainterPath()
