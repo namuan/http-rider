@@ -1,0 +1,129 @@
+import logging
+import time
+
+from PyQt5.QtCore import QRunnable, QObject, pyqtSignal, pyqtSlot
+from requests.exceptions import ConnectionError
+from urllib3.exceptions import NewConnectionError
+
+from ..core import guess_content_type, replace_variables
+from ..core.constants import ContentType
+from ..core.core_settings import app_settings
+from ..core.generators import is_file_function
+from ..external import requester, open_form_file
+from ..model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
+
+
+class HttpExchangeSignals(QObject):
+    request_started = pyqtSignal(str, int)
+    request_finished = pyqtSignal()
+    interrupt = pyqtSignal()
+
+
+http_exchange_signals = HttpExchangeSignals()
+
+
+class RestApiResponseSignals(QObject):
+    result = pyqtSignal(HttpExchange)
+    error = pyqtSignal(HttpExchange)
+
+
+class RestApiConnector(QRunnable):
+
+    def __init__(self, http_exchange: HttpExchange):
+        super(RestApiConnector, self).__init__()
+        self.halt_processing = False
+        self.signals = RestApiResponseSignals()
+        http_exchange_signals.interrupt.connect(self.on_halt_processing)
+        self.exchange = http_exchange
+
+    def on_halt_processing(self):
+        self.halt_processing = True
+        logging.info(f"Received interrupt signal on {self.exchange}")
+
+    def make_http_call(self):
+        if self.halt_processing:
+            self.halt_processing = False
+            return
+
+        self.exchange.request = replace_variables(app_settings, self.exchange.request)
+        req: ExchangeRequest = self.exchange.request
+        logging.info(f"==> make_http_call({self.exchange.api_call_id}): Http {req.http_method} to {req.http_url}")
+        kwargs = dict(
+            headers=req.headers,
+            params=req.query_params
+        )
+
+        content_type = ContentType.NONE.value
+
+        if req.request_body or req.form_params:
+            req.request_body_type = guess_content_type(req.request_body, req.form_params)
+            content_type = req.headers.get('Content-Type', req.request_body_type.value)
+
+        if req.form_params and 'application/x-www-form-urlencoded' in content_type:
+            kwargs['data'] = req.form_params
+        elif req.request_body and 'application/json' in content_type:
+            kwargs['data'] = req.request_body
+        elif req.form_params:
+            if content_type:
+                del kwargs['headers']['Content-Type']
+
+            kwargs['files'] = {
+                k: open_form_file(is_file_function(v).group(2))
+                for k, v in req.form_params.items()
+                if is_file_function(v)
+            }
+
+        try:
+            progress_message = f"{req.http_method} call to {req.http_url}"
+            http_exchange_signals.request_started.emit(progress_message, self.exchange.api_call_id)
+            response = requester.make_request(req.http_method, req.http_url, kwargs)
+
+            for fk, fv in kwargs.get('files', {}).items():
+                fv.close()
+
+            res = ExchangeResponse(
+                http_status_code=response.status_code,
+                response_body=response.text
+            )
+
+            if res.response_body:
+                res.response_body_type = guess_content_type(res.response_body)
+
+            res.elapsed_time = response.elapsed
+            res.headers = response.headers
+            self.exchange.response = res
+            logging.info(f"<== make_http_call({self.exchange.api_call_id}): Received response in {res.elapsed_time}")
+            self.signals.result.emit(self.exchange)
+        except ConnectionError as e:
+            nce: NewConnectionError = e.args[0].reason
+            error_response = ExchangeResponse(
+                http_status_code=-1,
+                response_body=nce.args[0]
+            )
+            self.exchange.response = error_response
+            self.signals.error.emit(self.exchange)
+        except Exception as e:
+            logging.error(e)
+            error_response = ExchangeResponse(
+                http_status_code=-1,
+                response_body=str(e)
+            )
+            self.exchange.response = error_response
+            self.signals.error.emit(self.exchange)
+
+        http_exchange_signals.request_finished.emit()
+
+    @pyqtSlot()
+    def run(self):
+        logging.info(f"Running Rest API Connector for API: {self.exchange.api_call_id}")
+        try:
+            self.make_http_call()
+            # NOTE: Giving main thread some time to write data
+            # As we raised events in the scheduler thread
+            # which are consumed by Main thread
+            # Otherwise data is corrupted if we try to read/write at the same time
+            # @todo: Re-design and remove the need to put in this sleep
+            time.sleep(0.5)
+        except Exception as e:
+            logging.error(f"Unhandled exception: {e}")
+            raise e

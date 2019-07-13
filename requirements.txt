@@ -1,0 +1,16 @@
+PyQt5 == 5.12.1
+tinydb
+requests
+attrs
+cattrs
+Faker
+objectpath
+jsonpath_rw
+uncurl
+Pygments
+prance
+openapi_spec_validator
+apispec
+apispec[yaml]
+apispec[validation]
+genson

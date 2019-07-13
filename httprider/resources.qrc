@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/configure-48.png</file>
+        <file>images/download-48.png</file>
+        <file>images/download-disabled-48.png</file>
+        <file>images/plus-48.png</file>
+        <file>images/minus-48.png</file>
+        <file>images/folder-48.png</file>
+        <file>images/import-48.png</file>
+        <file>images/export-48.png</file>
+        <file>images/export-all-48.png</file>
+        <file>images/environment-48.png</file>
+        <file>images/multirun-48.png</file>
+        <file>images/info-48.png</file>
+        <file>images/branch-closed.svg</file>
+        <file>images/branch-end.svg</file>
+        <file>images/branch-end-closed.svg</file>
+        <file>images/branch-end-open.svg</file>
+        <file>images/branch-more.svg</file>
+        <file>images/branch-open.svg</file>
+        <file>images/branch-vline.svg</file>
+        <file>themes/light.qss</file>
+        <file>themes/pyg.css</file>
+    </qresource>
+</RCC>

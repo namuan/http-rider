@@ -1,0 +1,16 @@
+public/
+infrastructure/.terraform/
+web/.firebase/
+.env
+*.retry
+*.log
+certs/
+*.db
+venv
+target
+__pycache__/
+.idea/
+contextual_app.egg-info
+build/
+dist/
+.DS_Store

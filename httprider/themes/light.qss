@@ -1,0 +1,128 @@
+QToolBar {
+    border-bottom: 1px solid #4D545B;
+}
+
+QListWidget::item:selected {
+   background: #CBD8E1;
+   color: black;
+}
+
+QTreeView
+{
+    border: 0.1ex solid #BAB9B8;
+    background-color: #FCFCFC;
+}
+
+QTreeView::branch:has-siblings:!adjoins-item
+{
+    border-image: url(:/images/branch-vline.svg) 0;
+}
+
+QTreeView::branch:has-siblings:adjoins-item
+{
+    border-image: url(:/images/branch-more.svg) 0;
+}
+
+QTreeView::branch:!has-children:!has-siblings:adjoins-item
+{
+    border-image: url(:/images/branch-end.svg) 0;
+}
+
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings
+{
+    border-image: url(:/images/branch-end-closed.svg) 0;
+    image: url(:/images/branch-closed.svg);
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings
+{
+    border-image: url(:/images/branch-end-open.svg) 0;
+    image: url(:/images/branch-open.svg);
+}
+
+QTreeView::item
+{
+    padding: 0.3ex;
+}
+
+QTreeView::item:!selected:hover
+{
+    background-color: rgba(61, 173, 232, 0.1);
+    outline: 0;
+    color: #31363B;
+    padding: 0.1ex;
+}
+
+QPushButton[accessibleName="greenbox"] {
+   background-color: #01721d;
+   border-width: 1px;
+   border-color: rgb(55, 94, 55);
+   border-style: none;
+}
+
+QPushButton[accessibleName="greenbox"]:pressed {
+   background-color: #00380d;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="greenbox"]:hover {
+   background-color: #00380d;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="redbox"] {
+   background-color: #a51e00;
+   border-width: 1px;
+   border-color: #6b1300;
+   border-style: none;
+}
+
+QPushButton[accessibleName="redbox"]:pressed {
+   background-color: #6b1300;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="redbox"]:hover {
+   background-color: #6b1300;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="amberbox"] {
+   background-color: #d8a413;
+   border-width: 1px;
+   border-color: #936f0a;
+   border-style: none;
+}
+
+QPushButton[accessibleName="amberbox"]:pressed {
+   background-color: #936f0a;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="amberbox"]:hover {
+   background-color: #936f0a;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="selectedgreenbox"] {
+   background-color: #01721d;
+   border-width: 2px;
+   border-color: #000000;
+   border-style: ridge;
+}
+
+QPushButton[accessibleName="selectedredbox"] {
+   background-color: #a51e00;
+   border-width: 2px;
+   border-color: #000000;
+   border-style: ridge;
+}
+
+QPushButton[accessibleName="selectedamberbox"] {
+   background-color: #d8a413;
+   border-width: 2px;
+   border-color: #000000;
+   border-style: ridge;
+}
