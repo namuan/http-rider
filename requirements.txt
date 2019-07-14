@@ -1,4 +1,5 @@
-PyQt5 == 5.12.1
+sip
+PyQt5
 tinydb
 requests
 attrs
