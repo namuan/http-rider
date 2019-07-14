@@ -37,7 +37,7 @@ tmp_package_dir = Path(os.getcwd()).joinpath("tmp-packaging")
 dist_dir = tmp_package_dir.joinpath('dist').as_posix()
 bdist_dir = tmp_package_dir.joinpath('build').as_posix(),
 
-APP = ['httprider/application.py']
+APP = ['httprider/main.py']
 
 if py2app_build:
     py2app_options = {
