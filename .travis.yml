@@ -1,0 +1,21 @@
+language: python
+os: linux
+dist: trusty
+sudo: required
+python: '3.6'
+git:
+  depth: 1
+branches:
+  only:
+    - master
+env:
+  global:
+    - BUILD_VERSION="0.0.2"
+script:
+  - git config --local user.name "namuan"
+  - git remote set-url origin https://namuan:${GITHUB_TOKEN}@github.com/namuan/http-rider.git
+  - git push origin :refs/tags/${BUILD_VERSION}
+  - git tag -f -am v${BUILD_VERSION} ${BUILD_VERSION}
+  - git push origin ${BUILD_VERSION}
+notifications:
+  email: false
