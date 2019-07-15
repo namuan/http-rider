@@ -8,7 +8,7 @@ from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiCall
 
-regex = r'.*\[([\S\s]+)->([\S\s]+)\](.*)$'
+regex = r'.*\[([\S\s]+)->([\S\s][^]]+)\](.*)$'
 
 
 def get_actors_from_title(api_title):
@@ -26,10 +26,6 @@ def gen_function(api_call, last_exchange, api_test_case):
     statements = [
         f"    {source.strip()}->>{target.strip()}: {title.strip()}"
     ]
-    if api_call.description:
-        statements.append(
-            f"    Note right of {source.strip()}: {api_call.description}"
-        )
 
     return "\n".join(statements)
 

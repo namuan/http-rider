@@ -457,9 +457,7 @@ class AppDataReader(AppData):
             for assertion in api_test_case.assertions
         }
 
-    def get_all_api_test_assertions(self):
-        api_calls = self.get_all_api_calls()
-
+    def get_all_api_test_assertions(self, api_calls):
         return [
             self.__build_assertion(
                 api_call,
