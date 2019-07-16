@@ -11,7 +11,7 @@ from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSo
 
 
 def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
-    statements = ["\tgiven(BASE_SPEC)."]
+    statements = ["\tgiven()."]
     for hk, hv in last_exchange.request.headers.items():
         statements.append(f"                header(\"{hk}\", \"{hv}\").")
 
@@ -118,14 +118,10 @@ import io.restassured.RestAssured.*;
 import io.restassured.matcher.RestAssuredMatchers.*;
 import org.hamcrest.Matchers.*;
 
-class AirHttpTests {{
-    private static final RequestSpecification BASE_SPEC = baseSpecBuilder()
-            .setBaseUri("{get_base_url(api_call)}")
-            .build();
-        
+class AirHttpTests {   
         """
         test_file_footer = """
-}}        
+}        
         """
         output = [
             self.__export_api_call(api_call)
