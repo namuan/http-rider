@@ -31,7 +31,7 @@ class ExchangePresenter:
         app_settings.app_data_writer.signals.selected_exchange_changed.connect(self.on_exchange_changed)
 
     def display_last_exchange(self, api_call: ApiCall):
-        api_call_exchanges = app_settings.app_data_reader.get_api_call_exchanges(api_call.id)
+        api_call_exchanges = app_settings.app_data_cache.get_api_call_exchanges(api_call.id)
         if api_call_exchanges:
             last_exchange = api_call_exchanges[-1]
             self.refresh(api_call.id, last_exchange)

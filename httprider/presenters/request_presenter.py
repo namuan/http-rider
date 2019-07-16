@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QKeyEvent
 from PyQt5.QtWidgets import *
 
+from httprider.model.completer import get_completer_model
 from ..core import styles_from_file, split_url_qs
 from ..core.core_settings import app_settings
 from ..core.rest_api_interactor import make_http_call
@@ -60,7 +61,7 @@ class RequestPresenter:
         self.refresh_completer()
 
     def refresh_completer(self):
-        completer_model: QStandardItemModel = app_settings.app_data_reader.get_completer_model()
+        completer_model: QStandardItemModel = get_completer_model()
         self.view.txt_http_url.setup_completions(
             None,
             completer_model

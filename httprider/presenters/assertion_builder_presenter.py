@@ -106,8 +106,8 @@ class AssertionBuilderPresenter:
 
     def load_configuration_dialog(self, api_call: ApiCall):
         self.current = api_call
-        self.current_api_test_case = app_settings.app_data_reader.get_api_test_case(self.current.id)
-        last_exchange: HttpExchange = app_settings.app_data_reader.get_last_exchange(api_call.id)
+        self.current_api_test_case = app_settings.app_data_cache.get_api_test_case(self.current.id)
+        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
 
         self.request_headers_presenter.refresh(last_exchange.request.headers.items())
         self.response_headers_presenter.refresh(last_exchange.response.headers.items())

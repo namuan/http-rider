@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import *
 
+from httprider.model.completer import get_completer_model
 from ..core import DynamicStringData
 from ..core.core_settings import app_settings
 from ..widgets.key_value_widget import KeyValueWidget
@@ -19,7 +20,7 @@ class KeyValueListPresenter:
         app_settings.app_data_writer.signals.environment_data_changed.connect(self.refresh_completer)
 
         # setup auto completions
-        self.completer_model = app_settings.app_data_reader.get_completer_model()
+        self.completer_model = get_completer_model()
 
         self.header_name_completer = None
         if key_completions:
@@ -36,7 +37,7 @@ class KeyValueListPresenter:
             self.header_value_completer.setCompletionMode(QCompleter.PopupCompletion)
 
     def refresh_completer(self):
-        completer_model: QStandardItemModel = app_settings.app_data_reader.get_completer_model()
+        completer_model: QStandardItemModel = get_completer_model()
         self.completer_model = completer_model
         for i in range(self.lst_view.count() - 1):
             item = self.lst_view.item(i)

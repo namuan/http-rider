@@ -69,8 +69,8 @@ class ApickliExporter:
         return "<br/>".join(output)
 
     def __export_api_call(self, api_call):
-        last_exchange = app_settings.app_data_reader.get_last_exchange(api_call.id)
-        api_test_case = app_settings.app_data_reader.get_api_test_case(api_call.id)
+        last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
+        api_test_case = app_settings.app_data_cache.get_api_test_case(api_call.id)
         doc = f"""# {api_call.title}
 # 
 {gen_given(api_call, last_exchange)}
