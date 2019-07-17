@@ -59,6 +59,8 @@ class AppDataCache:
             self.api_http_exchanges[api_call.id] = http_exchanges
 
         self.app_state = self.app_data_reader.get_app_state()
+        logging.info(f"Initial Cache Loading Completed: API Calls: {len(self.api_call_list)} - API Test Cases: {len(self.api_test_cases)} - API HTTP Exchanges: {len(self.api_http_exchanges)}")
+        self.app_data_reader.signals.initial_cache_loading_completed.emit()
 
     def on_api_http_exchange_added(self, api_call_id, exchange):
         http_exchanges = self.api_http_exchanges.get(api_call_id, [])
@@ -149,8 +151,7 @@ class AppDataCache:
             return HttpExchange(api_call_id)
 
     def get_api_test_case(self, api_call_id):
-        logging.info(f"CACHE API: {api_call_id} - Getting API Test case")
-        return self.api_test_cases.get(api_call_id)
+        return self.api_test_cases.get(api_call_id, ApiTestCase.from_json(None, api_call_id))
 
     def get_all_api_test_assertions(self):
         api_calls = self.get_all_api_calls()

@@ -18,9 +18,7 @@ class KeyValueListPresenter:
 
         app_settings.app_data_writer.signals.api_test_case_changed.connect(self.refresh_completer)
         app_settings.app_data_writer.signals.environment_data_changed.connect(self.refresh_completer)
-
-        # setup auto completions
-        self.completer_model = get_completer_model()
+        app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(self.refresh_completer)
 
         self.header_name_completer = None
         if key_completions:

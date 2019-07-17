@@ -246,6 +246,7 @@ class AppDataSignals(QObject):
 
 class AppDataReadSignals(QObject):
     api_call_change_selection = pyqtSignal(ApiCall)
+    initial_cache_loading_completed = pyqtSignal()
 
 
 class AppData:
