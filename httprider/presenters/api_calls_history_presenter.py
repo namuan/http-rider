@@ -21,7 +21,7 @@ class ApiCallsHistoryPresenter:
             existing_button.hide()
             self.calls_layout.removeWidget(existing_button)
 
-        exchanges = app_settings.app_data_reader.get_api_call_exchanges(self.current_exchange.api_call_id)
+        exchanges = app_settings.app_data_cache.get_api_call_exchanges(self.current_exchange.api_call_id)
         for ex in exchanges[-10:]:
             self.on_exchange_added(ex.id, ex)
 

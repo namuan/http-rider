@@ -149,7 +149,7 @@ class AssertionListPresenter:
 
             try:
                 current_value_from_exchange = \
-                    app_settings.app_data_reader.get_latest_assertion_value_from_exchange(assertion, last_exchange)
+                    app_settings.app_data_cache.get_latest_assertion_value_from_exchange(assertion, last_exchange)
             except Exception as e:
                 logging.error("Unable to retrieve value")
                 logging.error(assertion)

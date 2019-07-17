@@ -63,8 +63,8 @@ class MermaidExporter:
         return highlight(combined_output, MarkdownLexer(), HtmlFormatter())
 
     def __export_api_call(self, api_call):
-        last_exchange = app_settings.app_data_reader.get_last_exchange(api_call.id)
-        api_test_case = app_settings.app_data_reader.get_api_test_case(api_call.id)
+        last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
+        api_test_case = app_settings.app_data_cache.get_api_test_case(api_call.id)
         return gen_function(api_call, last_exchange, api_test_case)
 
 

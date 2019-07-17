@@ -28,11 +28,13 @@ class AssertionResultPresenter:
 
         # Update API Call assertions status
         api_call = app_settings.app_data_reader.get_api_call(api_test_case.api_call_id)
-        api_call.last_assertion_result = 1 if all([o.result for o in assertions_with_output]) else 0
+        api_call.last_assertion_result = 1 if all(
+            [o.result for o in assertions_with_output if o.matcher != AssertionMatchers.SKIP.value]
+        ) else 0
         app_settings.app_data_writer.update_api_call(api_call.id, api_call)
 
     def __get_last_exchange(self, api_call_id):
-        api_call_exchanges = app_settings.app_data_reader.get_api_call_exchanges(api_call_id)
+        api_call_exchanges = app_settings.app_data_cache.get_api_call_exchanges(api_call_id)
         if api_call_exchanges:
             return api_call_exchanges[-1]
         else:
@@ -49,7 +51,7 @@ class AssertionResultPresenter:
                 self.view.addItem(f"{assertion.output}")
 
     def __evaluate_assertion(self, assertion: Assertion, exchange: HttpExchange):
-        current_val = app_settings.app_data_reader.get_latest_assertion_value_from_exchange(assertion, exchange)
+        current_val = app_settings.app_data_cache.get_latest_assertion_value_from_exchange(assertion, exchange)
         if assertion.expected_value == "None" or assertion.matcher == AssertionMatchers.SKIP.value:
             assertion.output = None
         else:

@@ -6,13 +6,12 @@ from typing import Any, Optional, Dict, List
 import attr
 import cattr
 from PyQt5.QtCore import QObject, pyqtSignal
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from requests.structures import CaseInsensitiveDict
 from tinydb import Query
 from tinydb.database import Table
 from tinydb.operations import set
 
-from ..core import DynamicStringData, json_path, response_code_formatter, response_code_round_up
+from ..core import DynamicStringData
 from ..core.constants import *
 
 
@@ -247,6 +246,7 @@ class AppDataSignals(QObject):
 
 class AppDataReadSignals(QObject):
     api_call_change_selection = pyqtSignal(ApiCall)
+    initial_cache_loading_completed = pyqtSignal()
 
 
 class AppData:
@@ -409,7 +409,7 @@ class AppDataWriter(AppData):
             (ApiTestCaseQuery.api_call_id == test_case.api_call_id)
         )
         logging.info(f"API: {test_case.api_call_id} - New Id: {doc_id} - Upserting API Test case {test_case}")
-        self.signals.api_test_case_changed.emit(doc_id)
+        self.signals.api_test_case_changed.emit(test_case.api_call_id)
 
 
 class AppDataReader(AppData):
@@ -434,37 +434,6 @@ class AppDataReader(AppData):
         return [
             ApiCall.from_json(obj)
             for obj in sorted(self.db.search(query.type == 'api'), key=itemgetter('sequence_number'))
-        ]
-
-    @staticmethod
-    def get_latest_assertion_value_from_exchange(assertion: Assertion, exchange: HttpExchange):
-        if assertion.data_from == AssertionDataSource.REQUEST_HEADER.value:
-            return exchange.request.headers.get(assertion.selector, None)
-        elif assertion.data_from == AssertionDataSource.RESPONSE_HEADER.value:
-            return exchange.response.headers.get(assertion.selector, None)
-        elif assertion.data_from == AssertionDataSource.REQUEST_BODY.value:
-            return json_path(exchange.request.request_body, assertion.selector)
-        elif assertion.data_from == AssertionDataSource.RESPONSE_BODY.value:
-            return json_path(exchange.response.response_body, assertion.selector)
-        elif assertion.data_from == AssertionDataSource.RESPONSE_CODE.value:
-            return response_code_formatter(exchange.response.http_status_code)
-        elif assertion.data_from == AssertionDataSource.RESPONSE_TIME.value:
-            return response_code_round_up(exchange.response.elapsed_time)
-
-    def __build_assertion(self, api_call: ApiCall, exchange: HttpExchange, api_test_case: ApiTestCase):
-        return {
-            assertion.var_name: self.get_latest_assertion_value_from_exchange(assertion, exchange)
-            for assertion in api_test_case.assertions
-        }
-
-    def get_all_api_test_assertions(self, api_calls):
-        return [
-            self.__build_assertion(
-                api_call,
-                self.get_last_exchange(api_call.id),
-                self.get_api_test_case(api_call.id)
-            )
-            for api_call in api_calls
         ]
 
     def get_api_call(self, doc_id):
@@ -526,34 +495,6 @@ class AppDataReader(AppData):
         return [
             f"${{{k}}}" for k in environment.data.keys()
         ]
-
-    def get_completer_model(self):
-        model: QStandardItemModel = QStandardItemModel()
-
-        envs = self.get_all_env_variables()
-        for e in envs:
-            item: QStandardItem = QStandardItem()
-            item.setText(e)
-            item.setData(e, DYNAMIC_STRING_ROLE)
-            model.appendRow(item)
-
-        api_calls = self.get_all_api_calls()
-        for api in api_calls:
-            api_test_case: ApiTestCase = self.get_api_test_case(api.id)
-            for assertion in api_test_case.assertions:
-                item: QStandardItem = QStandardItem()
-                item.setText(f"${{{api.title} > ${assertion.var_name}}}")
-                item.setData(f"${{{assertion.var_name}}}", DYNAMIC_STRING_ROLE)
-                model.appendRow(item)
-
-        # Triggers custom dialog boxes
-        for func_keyword in ["data", "file"]:
-            item: QStandardItem = QStandardItem()
-            item.setText(func_keyword)
-            item.setData(func_keyword, DYNAMIC_STRING_ROLE)
-            model.appendRow(item)
-
-        return model
 
     def get_last_exchange(self, api_call_id):
         api_call_exchanges = self.get_api_call_exchanges(api_call_id)

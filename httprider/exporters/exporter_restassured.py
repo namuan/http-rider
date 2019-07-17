@@ -1,17 +1,16 @@
-import functools
+import re
 from typing import List
 
 import attr
 from pygments.lexers.jvm import JavaLexer
 
-from ..core.constants import REPLACEMENTS
 from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSource
 
 
 def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
-    statements = ["\tgiven(BASE_SPEC)."]
+    statements = ["\tgiven()."]
     for hk, hv in last_exchange.request.headers.items():
         statements.append(f"                header(\"{hk}\", \"{hv}\").")
 
@@ -60,13 +59,9 @@ def get_base_url(api_call: ApiCall):
 
 
 def get_function_name(api_call: ApiCall):
-    norm_title = api_call.title.lower().strip().replace(' ', '_')
-    norm_input = functools.reduce(
-        lambda accum, lst: accum.replace(*lst),
-        REPLACEMENTS,
-        norm_title
-    )
-    return norm_input
+    norm_title = api_call.title.lower().strip()
+    rgx = r'[^a-zA-Z]'
+    return re.sub(rgx, '', norm_title)
 
 
 def gen_function(api_call, last_exchange, api_test_case):
@@ -118,14 +113,10 @@ import io.restassured.RestAssured.*;
 import io.restassured.matcher.RestAssuredMatchers.*;
 import org.hamcrest.Matchers.*;
 
-class AirHttpTests {{
-    private static final RequestSpecification BASE_SPEC = baseSpecBuilder()
-            .setBaseUri("{get_base_url(api_call)}")
-            .build();
-        
+class AirHttpTests {   
         """
         test_file_footer = """
-}}        
+}        
         """
         output = [
             self.__export_api_call(api_call)
@@ -139,8 +130,8 @@ class AirHttpTests {{
             highlight(test_file_footer, JavaLexer(), HtmlFormatter())
 
     def __export_api_call(self, api_call):
-        last_exchange = app_settings.app_data_reader.get_last_exchange(api_call.id)
-        api_test_case = app_settings.app_data_reader.get_api_test_case(api_call.id)
+        last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
+        api_test_case = app_settings.app_data_cache.get_api_test_case(api_call.id)
         doc = gen_function(api_call, last_exchange, api_test_case)
         return highlight(doc, JavaLexer(), HtmlFormatter())
 

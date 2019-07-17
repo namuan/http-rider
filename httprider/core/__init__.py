@@ -119,9 +119,7 @@ def replace_variables(app_settings, exchange_request):
     active_env = app_settings.app_data_reader.get_appstate_environment()
     env = app_settings.app_data_reader.get_selected_environment(active_env)
 
-    all_runtime_vars = app_settings.app_data_reader.get_all_api_test_assertions(
-        app_settings.app_data_cache.api_call_list
-    )
+    all_runtime_vars = app_settings.app_data_cache.get_all_api_test_assertions()
     flatten_runtime_vars = functools.reduce(flatten_variables, all_runtime_vars, {})
 
     env_map = {k: v.display_text for k, v in env.data.items()}
@@ -189,10 +187,7 @@ def format_json(json_str):
         return json_str
 
 
-def guess_content_type(body, form_params=None):
-    if form_params:
-        return ContentType.FORM
-
+def guess_content_type(body):
     try:
         json.loads(body)
         return ContentType.JSON
