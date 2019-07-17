@@ -1,10 +1,9 @@
-import functools
+import re
 from typing import List
 
 import attr
 from pygments.lexers.jvm import JavaLexer
 
-from ..core.constants import REPLACEMENTS
 from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSource
@@ -60,13 +59,9 @@ def get_base_url(api_call: ApiCall):
 
 
 def get_function_name(api_call: ApiCall):
-    norm_title = api_call.title.lower().strip().replace(' ', '_')
-    norm_input = functools.reduce(
-        lambda accum, lst: accum.replace(*lst),
-        REPLACEMENTS,
-        norm_title
-    )
-    return norm_input
+    norm_title = api_call.title.lower().strip()
+    rgx = r'[^a-zA-Z]'
+    return re.sub(rgx, '', norm_title)
 
 
 def gen_function(api_call, last_exchange, api_test_case):
