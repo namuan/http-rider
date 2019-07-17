@@ -8,7 +8,7 @@ from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiCall
 
-regex = r'.*\[([\S\s]+)->([\S\s][^]]+)\](.*)$'
+regex = r'.*\[([\S\s]*)->([\S\s][^]]*)\](.*)$'
 
 
 def get_actors_from_title(api_title):
