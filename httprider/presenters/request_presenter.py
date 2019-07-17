@@ -54,11 +54,9 @@ class RequestPresenter:
         app_settings.app_data_writer.signals.api_call_updated.connect(self.on_api_call_refresh)
         app_settings.app_data_writer.signals.api_test_case_changed.connect(self.refresh_completer)
         app_settings.app_data_writer.signals.environment_data_changed.connect(self.refresh_completer)
+        app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(self.refresh_completer)
 
         self.assertion_result_presenter = AssertionResultPresenter(self.view)
-
-        # setup auto completions
-        self.refresh_completer()
 
     def refresh_completer(self):
         completer_model: QStandardItemModel = get_completer_model()
