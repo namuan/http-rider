@@ -28,7 +28,9 @@ class AssertionResultPresenter:
 
         # Update API Call assertions status
         api_call = app_settings.app_data_reader.get_api_call(api_test_case.api_call_id)
-        api_call.last_assertion_result = 1 if all([o.result for o in assertions_with_output]) else 0
+        api_call.last_assertion_result = 1 if all(
+            [o.result for o in assertions_with_output if o.matcher != AssertionMatchers.SKIP.value]
+        ) else 0
         app_settings.app_data_writer.update_api_call(api_call.id, api_call)
 
     def __get_last_exchange(self, api_call_id):
