@@ -187,10 +187,7 @@ def format_json(json_str):
         return json_str
 
 
-def guess_content_type(body, form_params=None):
-    if form_params:
-        return ContentType.FORM
-
+def guess_content_type(body):
     try:
         json.loads(body)
         return ContentType.JSON

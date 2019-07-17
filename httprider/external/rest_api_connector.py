@@ -55,14 +55,12 @@ class RestApiConnector(QRunnable):
 
         content_type = ContentType.NONE.value
 
-        if req.request_body or req.form_params:
-            req.request_body_type = guess_content_type(req.request_body, req.form_params)
+        if req.request_body:
+            req.request_body_type = guess_content_type(req.request_body)
             content_type = req.headers.get('Content-Type', req.request_body_type.value)
 
         if req.form_params and 'application/x-www-form-urlencoded' in content_type:
             kwargs['data'] = req.form_params
-        elif req.request_body and 'application/json' in content_type:
-            kwargs['data'] = req.request_body
         elif req.form_params:
             if content_type:
                 del kwargs['headers']['Content-Type']
@@ -72,6 +70,9 @@ class RestApiConnector(QRunnable):
                 for k, v in req.form_params.items()
                 if is_file_function(v)
             }
+        elif req.request_body:
+            kwargs['data'] = req.request_body
+
 
         try:
             progress_message = f"{req.http_method} call to {req.http_url}"
