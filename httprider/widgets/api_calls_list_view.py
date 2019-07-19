@@ -156,10 +156,10 @@ class ApiCallItemDelegate(QStyledItemDelegate):
                 painter.drawText(code_rect, Qt.AlignCenter | Qt.AlignVCenter | Qt.TextWordWrap, api_status_code)
 
     def color_from_assertions(self, assertion_result, response_color):
-        if assertion_result == -1:
+        if assertion_result is None:
             return response_color
 
-        if assertion_result == 0:
+        if assertion_result is False:
             return self.RED_COLOR
 
         return self.GREEN_COLOR

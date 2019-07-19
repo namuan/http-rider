@@ -84,7 +84,7 @@ class ApiCall(object):
     tags: List = []
     last_response_code: Optional[int] = None
     enabled: bool = True
-    last_assertion_result: Optional[int] = -1
+    last_assertion_result: Optional[bool] = None
 
     @classmethod
     def from_json(cls, json_obj):
