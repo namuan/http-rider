@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import *
 from httprider.model.completer import get_completer_model
 from ..core import styles_from_file, split_url_qs
 from ..core.core_settings import app_settings
-from ..core.rest_api_interactor import make_http_call
+from ..core.rest_api_interactor import RestApiInteractor
 from ..exporters import api_request_body_highlighted
 from ..model.app_data import ApiCall, HttpExchange, COMMON_HEADERS, HTTP_CONTENT_TYPES
 from ..presenters import AssertionResultPresenter, KeyValueListPresenter
@@ -24,7 +24,7 @@ class RequestPresenter:
     def __init__(self, parent_view):
         self.current = None
         self.view = parent_view
-
+        self.interactor = RestApiInteractor()
         self.request_header_list_presenter = KeyValueListPresenter(
             self.view.lst_request_headers,
             self,
@@ -200,7 +200,7 @@ class RequestPresenter:
 
     def on_btn_send_request(self):
         self.update_current_api_call()
-        make_http_call(self.current, on_success=self.on_success)
+        self.interactor.make_http_call(self.current, on_success=self.on_success)
 
     def on_success(self, exchange: HttpExchange):
         api_test_case = app_settings.app_data_reader.get_api_test_case(exchange.api_call_id)

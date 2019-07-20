@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import *
 
 from ..core.constants import *
 from ..core.core_settings import app_settings
-from ..core.rest_api_interactor import make_http_call
+from ..core.rest_api_interactor import RestApiInteractor
 from ..external.rest_api_connector import http_exchange_signals
 from ..model.app_data import ApiCall, HttpExchange
 from ..presenters import AssertionResultPresenter
@@ -27,7 +27,7 @@ class ApiListPresenter:
     def __init__(self, parent_view):
         self.view = parent_view.lst_http_requests
         self.parent_view = parent_view
-
+        self.interactor = RestApiInteractor()
         self.model = QStandardItemModel()
         self.view.setModel(self.model)
         self.view.setItemDelegate(ApiCallItemDelegate())
@@ -154,7 +154,7 @@ class ApiListPresenter:
             api_call = self.model.item(n).data(API_CALL_ROLE)
             logging.debug("** Multiple APIs: API Call {}".format(api_call.id))
             if api_call.enabled:
-                make_http_call(api_call, on_success=self.on_success)
+                self.interactor.make_http_call(api_call, on_success=self.on_success)
 
     def on_success(self, exchange: HttpExchange):
         api_test_case = app_settings.app_data_reader.get_api_test_case(exchange.api_call_id)

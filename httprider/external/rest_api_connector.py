@@ -1,7 +1,7 @@
 import logging
 import time
 
-from PyQt5.QtCore import QRunnable, QObject, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread, QRunnable
 from requests.exceptions import ConnectionError
 from urllib3.exceptions import NewConnectionError
 
@@ -72,7 +72,6 @@ class RestApiConnector(QRunnable):
             }
         elif req.request_body:
             kwargs['data'] = req.request_body
-
 
         try:
             progress_message = f"{req.http_method} call to {req.http_url}"
