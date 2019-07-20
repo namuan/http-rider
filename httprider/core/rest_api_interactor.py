@@ -38,6 +38,7 @@ def __on_failure(exchange: HttpExchange, parent_on_failure):
     logging.error(f"Unable to get response: {exchange}")
     api_call = app_settings.app_data_reader.get_api_call(exchange.api_call_id)
     api_call.last_response_code = exchange.response.http_status_code
+    api_call.last_assertion_result = None
     app_settings.app_data_writer.update_api_call(api_call.id, api_call)
     new_exchange_id = app_settings.app_data_writer.add_http_exchange(exchange)
     exchange.id = new_exchange_id

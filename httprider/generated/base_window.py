@@ -64,6 +64,8 @@ class Ui_MainWindow(object):
         self.btn_send_request = QtWidgets.QPushButton(self.frame_request_response)
         font = QtGui.QFont()
         font.setPointSize(18)
+        font.setBold(True)
+        font.setWeight(75)
         self.btn_send_request.setFont(font)
         self.btn_send_request.setObjectName("btn_send_request")
         self.horizontalLayout.addWidget(self.btn_send_request)
