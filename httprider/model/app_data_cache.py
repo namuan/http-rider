@@ -22,9 +22,9 @@ def _build_filter_query(query=None, tag=None):
 
 
 class AppDataCache:
-    api_call_list: Dict[int, ApiCall] = []
-    api_test_cases: Dict[int, ApiTestCase] = {}
-    api_http_exchanges: Dict[int, HttpExchange] = {}
+    api_call_list: Dict[str, ApiCall] = {}
+    api_test_cases: Dict[str, ApiTestCase] = {}
+    api_http_exchanges: Dict[str, HttpExchange] = {}
     app_state: AppState = None
     search_query = None
 
