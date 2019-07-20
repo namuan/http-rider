@@ -80,7 +80,7 @@ class ApiCall(object):
     form_params: Dict[str, DynamicStringData] = {}
     http_request_body: str = ""
     sequence_number: Optional[int] = None
-    type: str = 'api'
+    type: str = API_CALL_RECORD_TYPE
     tags: List = []
     last_response_code: Optional[int] = None
     enabled: bool = True
