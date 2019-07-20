@@ -1,12 +1,12 @@
 import logging
 
 from .core_settings import app_settings
-from .worker_pool import single_worker
 from ..external.rest_api_connector import RestApiConnector
 from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange
 
 
 class RestApiInteractor:
+    api_worker = RestApiConnector()
 
     def make_http_call(self, api_call: ApiCall, on_success=None, on_failure=None):
         exchange_request = ExchangeRequest.from_api_call(api_call)
@@ -20,13 +20,12 @@ class RestApiInteractor:
             api_call_id=api_call.id,
             request=exchange_request
         )
-        self.schedule_call(exchange, on_success, on_failure)
 
-    def schedule_call(self, exchange, on_success, on_failure):
-        api_worker = RestApiConnector(exchange)
-        api_worker.signals.result.connect(lambda ex: self.__on_success(ex, on_success))
-        api_worker.signals.error.connect(lambda ex: self.__on_failure(ex, on_failure))
-        single_worker.schedule(api_worker)
+        logging.info(f"Scheduling API Call {api_call.id}")
+        self.api_worker.exchange = exchange
+        self.api_worker.signals.result.connect(lambda ex: self.__on_success(ex, on_success))
+        self.api_worker.signals.error.connect(lambda ex: self.__on_failure(ex, on_failure))
+        self.api_worker.start()
 
     def __on_success(self, exchange: HttpExchange, parent_on_success):
         api_call = app_settings.app_data_reader.get_api_call(exchange.api_call_id)

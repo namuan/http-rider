@@ -1,7 +1,7 @@
 import logging
 import time
 
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread, QRunnable
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
 from requests.exceptions import ConnectionError
 from urllib3.exceptions import NewConnectionError
 
@@ -27,14 +27,22 @@ class RestApiResponseSignals(QObject):
     error = pyqtSignal(HttpExchange)
 
 
-class RestApiConnector(QRunnable):
+class RestApiConnector(QThread):
 
-    def __init__(self, http_exchange: HttpExchange):
+    def __init__(self):
         super(RestApiConnector, self).__init__()
         self.halt_processing = False
         self.signals = RestApiResponseSignals()
         http_exchange_signals.interrupt.connect(self.on_halt_processing)
-        self.exchange = http_exchange
+        self._exchange = None
+
+    @property
+    def exchange(self):
+        return self._exchange
+
+    @exchange.setter
+    def exchange(self, value):
+        self._exchange = value
 
     def on_halt_processing(self):
         self.halt_processing = True

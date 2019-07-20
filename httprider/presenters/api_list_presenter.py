@@ -28,6 +28,7 @@ class ApiListPresenter:
         self.view = parent_view.lst_http_requests
         self.parent_view = parent_view
         self.interactor = RestApiInteractor()
+
         self.model = QStandardItemModel()
         self.view.setModel(self.model)
         self.view.setItemDelegate(ApiCallItemDelegate())

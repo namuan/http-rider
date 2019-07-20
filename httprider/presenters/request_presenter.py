@@ -25,6 +25,7 @@ class RequestPresenter:
         self.current = None
         self.view = parent_view
         self.interactor = RestApiInteractor()
+
         self.request_header_list_presenter = KeyValueListPresenter(
             self.view.lst_request_headers,
             self,
