@@ -1,14 +1,10 @@
-import logging
 from datetime import datetime, timedelta
 from typing import Any, Optional, Dict, List
 
 import attr
 import cattr
-from PyQt5.QtCore import QObject, pyqtSignal
 from requests.structures import CaseInsensitiveDict
-from tinydb import Query
 from tinydb.database import Table
-from tinydb.operations import set
 
 from ..core import DynamicStringData
 from ..core.constants import *
