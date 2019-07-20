@@ -21,11 +21,16 @@ class RestApiInteractor:
             request=exchange_request
         )
 
-        logging.info(f"Scheduling API Call {api_call.id}")
-        self.api_worker.exchange = exchange
-        self.api_worker.signals.result.connect(lambda ex: self.__on_success(ex, on_success))
-        self.api_worker.signals.error.connect(lambda ex: self.__on_failure(ex, on_failure))
-        self.api_worker.start()
+        if self.api_worker.isRunning():
+            running_exchange: HttpExchange = self.api_worker.exchange
+            logging.warning(f"Worker is running for API: {running_exchange.api_call_id}")
+            logging.warning(f"Should queue request for API: {exchange.api_call_id}")
+        else:
+            logging.info(f"Scheduling API Call {api_call.id}")
+            self.api_worker.exchange = exchange
+            self.api_worker.signals.result.connect(lambda ex: self.__on_success(ex, on_success))
+            self.api_worker.signals.error.connect(lambda ex: self.__on_failure(ex, on_failure))
+            self.api_worker.start()
 
     def __on_success(self, exchange: HttpExchange, parent_on_success):
         api_call = app_settings.app_data_reader.get_api_call(exchange.api_call_id)
