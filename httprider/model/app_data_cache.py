@@ -22,7 +22,7 @@ def _build_filter_query(query=None, tag=None):
 
 
 class AppDataCache:
-    api_call_list: List[ApiCall] = []
+    api_call_list: Dict[int, ApiCall] = []
     api_test_cases: Dict[int, ApiTestCase] = {}
     api_http_exchanges: Dict[int, HttpExchange] = {}
     app_state: AppState = None
@@ -52,14 +52,17 @@ class AppDataCache:
 
     def load_cache(self):
         self.api_call_list = self.app_data_reader.get_all_api_calls()
-        for api_call in self.api_call_list:
+        for _, api_call in self.api_call_list.items():
             api_test_case = self.app_data_reader.get_api_test_case(api_call.id)
             self.api_test_cases[api_call.id] = api_test_case
             http_exchanges = self.app_data_reader.get_api_call_exchanges(api_call.id)
             self.api_http_exchanges[api_call.id] = http_exchanges
 
         self.app_state = self.app_data_reader.get_app_state()
-        logging.info(f"Initial Cache Loading Completed: API Calls: {len(self.api_call_list)} - API Test Cases: {len(self.api_test_cases)} - API HTTP Exchanges: {len(self.api_http_exchanges)}")
+        logging.info(f"Initial Cache Loading Completed: "
+                     f"API Calls: {len(self.api_call_list)} - "
+                     f"API Test Cases: {len(self.api_test_cases)} - "
+                     f"API HTTP Exchanges: {len(self.api_http_exchanges)}")
         self.app_data_reader.signals.initial_cache_loading_completed.emit()
 
     def on_api_http_exchange_added(self, api_call_id, exchange):
@@ -73,7 +76,7 @@ class AppDataCache:
         self.api_http_exchanges[api_call_id] = http_exchanges
 
     def get_all_api_calls(self):
-        return self.api_call_list
+        return [obj for k, obj in self.api_call_list.items()]
 
     def refresh_api_test_case(self, api_call_id):
         api_test_case = self.app_data_reader.get_api_test_case(api_call_id)
@@ -84,31 +87,32 @@ class AppDataCache:
 
     def refresh_cache_item(self, api_call_id):
         refreshed_api_call = self.app_data_reader.get_api_call(api_call_id)
-        for ac in self.api_call_list:
+        for ac in self.get_all_api_calls():
             if ac.id == api_call_id:
-                self.api_call_list.remove(ac)
-        self.api_call_list.append(refreshed_api_call)
+                del self.api_call_list[api_call_id]
+
+        self.api_call_list[api_call_id] = refreshed_api_call
 
     def on_api_call_added(self, doc_id, api_call: ApiCall):
         api_call.id = doc_id
-        self.api_call_list.append(api_call)
+        self.api_call_list[doc_id] = api_call
 
     def on_api_call_removed(self, doc_ids):
-        for api_call in self.api_call_list:
+        for api_call in self.get_all_api_calls():
             if api_call.id in doc_ids:
-                self.api_call_list.remove(api_call)
+                del self.api_call_list[api_call.id]
 
     def on_multiple_api_calls_added(self, doc_ids: List[str], api_calls: List[ApiCall]):
         assert len(doc_ids) == len(api_calls)
         for doc_id, api_call in zip(doc_ids, api_calls):
             api_call.id = doc_id
-            self.api_call_list.append(api_call)
+            self.api_call_list[api_call.id] = api_call
 
     def filter_api_calls(self, search_query=None, search_tag=None):
         logging.info(f"Filtering API Calls by Query {search_query} and Tag {search_tag}")
         api_calls_filter = _build_filter_query(query=search_query, tag=search_tag)
         return sorted(
-            filter(api_calls_filter, self.api_call_list),
+            filter(api_calls_filter, self.get_all_api_calls()),
             key=lambda a: a.sequence_number
         )
 

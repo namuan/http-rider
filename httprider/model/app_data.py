@@ -431,10 +431,10 @@ class AppDataReader(AppData):
 
     def get_all_api_calls(self):
         query = Query()
-        return [
-            ApiCall.from_json(obj)
+        return {
+            obj.doc_id: ApiCall.from_json(obj)
             for obj in sorted(self.db.search(query.type == 'api'), key=itemgetter('sequence_number'))
-        ]
+        }
 
     def get_api_call(self, doc_id):
         return ApiCall.from_json(self.db.get(doc_id=doc_id))
