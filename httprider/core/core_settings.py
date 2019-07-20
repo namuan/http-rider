@@ -9,8 +9,9 @@ from tinydb import TinyDB
 
 import httprider.exporters as exporters
 import httprider.importers as importers
+from httprider.model.app_data_reader import AppDataReader
 from ..core import str_to_bool, import_modules, random_project_name
-from ..model.app_data import AppDataReader, AppDataWriter
+from ..model.app_data import AppDataWriter
 from ..model.app_data_cache import AppDataCache
 from ..model.user_data import UserProject, SavedState
 
