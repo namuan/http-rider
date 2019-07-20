@@ -1,10 +1,11 @@
 import logging
 from typing import List, Dict
 
-from httprider.core import json_path, response_code_formatter, response_code_round_up
-from httprider.model.app_data_reader import AppDataReader
+from ..core import json_path, response_code_formatter, response_code_round_up
+from ..model.app_data_reader import AppDataReader
+from ..model.app_data_writer import AppDataWriter
 from ..core.constants import DEFAULT_TAG, AssertionDataSource
-from ..model.app_data import ApiCall, AppDataWriter, AppState, ApiTestCase, HttpExchange, Assertion
+from ..model.app_data import ApiCall, AppState, ApiTestCase, HttpExchange, Assertion
 
 
 def _build_filter_query(query=None, tag=None):
