@@ -95,6 +95,10 @@ class AppDataWriter(AppData):
         self.db.update(exchange.to_json(), doc_ids=[exchange.id])
         self.signals.exchange_changed.emit(exchange.id, exchange)
 
+    def update_selected_exchange(self, exchange: HttpExchange):
+        logging.info(f"API: {exchange.api_call_id} - Selected Exchange {exchange}")
+        self.signals.selected_exchange_changed.emit(exchange)
+
     def add_api_call(self, api_call: ApiCall) -> str:
         doc_id = self.db.insert(api_call.to_json())
         self.signals.api_call_added.emit(doc_id, api_call)
@@ -174,10 +178,6 @@ class AppDataWriter(AppData):
         logging.info(f"Environment {updated_doc_id} - "
                      f"Updated environment data for {environment_name}")
         self.signals.environment_data_changed.emit(updated_doc_id)
-
-    def update_selected_exchange(self, exchange: HttpExchange):
-        logging.info(f"API: {exchange.api_call_id} - Selected Exchange {exchange}")
-        self.signals.selected_exchange_changed.emit(exchange)
 
     def upsert_assertions(self, test_case: ApiTestCase):
         ApiTestCaseQuery = Query()
