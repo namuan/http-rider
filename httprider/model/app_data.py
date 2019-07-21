@@ -54,7 +54,7 @@ class AppState(object):
     last_sequence_number: Optional[int] = 0
 
     @classmethod
-    def from_json(cls, json_obj):
+    def from_json(cls, json_obj=None):
         if not json_obj:
             return cls()
         return cattr.structure(json_obj, cls)

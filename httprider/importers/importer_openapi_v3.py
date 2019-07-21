@@ -7,8 +7,8 @@ import attr
 from apispec.core import VALID_METHODS_OPENAPI_V3
 from prance import ResolvingParser
 
+from httprider.core.app_state_interactor import AppStateInteractor
 from ..core import DynamicStringData
-from ..core.core_settings import app_settings
 from ..core.json_schema import json_from_schema
 from ..model.app_data import ProjectInfo, TagInfo, ApiCall
 
@@ -17,6 +17,7 @@ from ..model.app_data import ProjectInfo, TagInfo, ApiCall
 class OpenApiV3Importer:
     name: str = "OpenApi(v3)"
     input_type: str = "file"
+    app_state_interactor = AppStateInteractor()
 
     def import_data(self, file_path):
         openapi_spec: ResolvingParser = self.__load_swagger_spec(file_path)
@@ -97,7 +98,7 @@ class OpenApiV3Importer:
             http_headers=headers_params,
             http_params=query_params,
             form_params=form_params,
-            sequence_number=app_settings.app_data_writer.generate_sequence_number()
+            sequence_number=self.app_state_interactor.update_sequence_number()
         )
 
     def __extract_request_body(self, content_type, schema):

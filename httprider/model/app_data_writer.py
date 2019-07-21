@@ -5,11 +5,12 @@ from typing import List
 import cattr
 from PyQt5.QtCore import QObject, pyqtSignal
 from tinydb import Query
+from tinydb.operations import set
 
-from httprider.core.constants import APP_STATE_RECORD_TYPE, ENVIRONMENT_RECORD_TYPE, \
+from httprider.core.constants import ENVIRONMENT_RECORD_TYPE, \
     API_TEST_CASE_RECORD_TYPE
 from httprider.model import HttpExchange, ApiCall
-from httprider.model.app_data import ProjectInfo, AppData, AppState, Environment, ApiTestCase
+from httprider.model.app_data import ProjectInfo, AppData, Environment, ApiTestCase
 
 
 class AppDataSignals(QObject):
@@ -67,38 +68,20 @@ class AppDataWriter(AppData):
         )
         self.signals.project_info_updated.emit(project_info)
 
-    def generate_sequence_number(self):
-        AppStateQuery = Query()
-        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        app_state = AppState.from_json(app_state_json)
-        app_state.last_sequence_number = app_state.last_sequence_number + 1000
-        self.db.upsert(app_state.to_json(), AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        logging.info(f"Generated new sequence number: {app_state.last_sequence_number}")
-        return app_state.last_sequence_number
+    def update_app_state(self, app_state):
+        if not app_state:
+            return
 
-    def update_selected_tag(self, new_tag_name):
-        logging.info(f"Selected tag changed to {new_tag_name}")
-        AppStateQuery = Query()
-        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        app_state = AppState.from_json(app_state_json)
-        app_state.selected_tag = new_tag_name
-        self.db.upsert(app_state.to_json(), AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        # @important: For now the sequence of following events are important
-        # As we first update the cache in the first event which is then used in the second event handler
+        logging.info(f"Updating App State In DB {app_state}")
+        table = self.ldb[app_state.record_type]
+        table.upsert(
+            dict(
+                name=app_state.record_type,
+                object=json.dumps(app_state.to_json())
+            ),
+            ['name']
+        )
         self.signals.app_state_updated.emit()
-        self.signals.selected_tag_changed.emit(new_tag_name)
-
-    def update_selected_environment(self, environment_name):
-        logging.info(f"Selected environment changed to {environment_name}")
-        AppStateQuery = Query()
-        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        app_state = AppState.from_json(app_state_json)
-        app_state.selected_env = environment_name
-        self.db.upsert(app_state.to_json(), AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        # @important: For now the sequence of following events are important
-        # As we first update the cache in the first event which is then used in the second event handler
-        self.signals.app_state_updated.emit()
-        self.signals.selected_env_changed.emit(environment_name)
 
     def add_http_exchange(self, exchange: HttpExchange):
         exchange_doc_id = self.db.insert(exchange.to_json())

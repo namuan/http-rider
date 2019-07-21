@@ -7,6 +7,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import *
 
+from httprider.core.app_state_interactor import AppStateInteractor
 from ..core.constants import *
 from ..core.core_settings import app_settings
 from ..core.rest_api_interactor import RestApiInteractor
@@ -28,6 +29,7 @@ class ApiListPresenter:
         self.view = parent_view.lst_http_requests
         self.parent_view = parent_view
         self.interactor = RestApiInteractor()
+        self.app_state_interactor = AppStateInteractor()
 
         self.model = QStandardItemModel()
         self.view.setModel(self.model)
@@ -123,7 +125,7 @@ class ApiListPresenter:
             total_rows = self.model.rowCount()
             after = self.dropped_row + 1
             if after >= total_rows:
-                next_sequence_number = app_settings.app_data_writer.generate_sequence_number()
+                next_sequence_number = self.app_state_interactor.update_sequence_number()
             else:
                 next_api_call = self.model.item(after).data(API_CALL_ROLE)
                 next_sequence_number = next_api_call.sequence_number
@@ -230,7 +232,7 @@ class ApiListPresenter:
         duplicate_api_call = copy.deepcopy(api_call)
         duplicate_api_call.title = f"{duplicate_api_call.title} Duplicate"
         duplicate_api_call.last_response_code = 0
-        duplicate_api_call.sequence_number = app_settings.app_data_writer.generate_sequence_number()
+        duplicate_api_call.sequence_number = self.app_state_interactor.update_sequence_number()
         app_settings.app_data_writer.add_api_call(duplicate_api_call)
 
     def __row_for_api_call(self, api_call_id):

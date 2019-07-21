@@ -95,14 +95,16 @@ class AppDataReader(AppData):
         return ProjectInfo.from_json(project_info_json)
 
     def get_appstate_environment(self):
-        AppStateQuery = Query()
-        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        app_state = AppState.from_json(app_state_json)
+        app_state = self.get_app_state()
         return app_state.selected_env
 
     def get_app_state(self):
-        AppStateQuery = Query()
-        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
+        table = self.ldb[APP_STATE_RECORD_TYPE]
+        app_state_db = table.find_one(name=APP_STATE_RECORD_TYPE)
+        if not app_state_db:
+            return AppState.from_json()
+
+        app_state_json = json.loads(app_state_db['object'])
         return AppState.from_json(app_state_json)
 
     def get_all_env_variables(self):
