@@ -1,3 +1,4 @@
+import json
 import logging
 from operator import itemgetter
 
@@ -5,7 +6,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from tinydb import Query
 
 from httprider.core.constants import API_TEST_CASE_RECORD_TYPE, HTTP_EXCHANGE_RECORD_TYPE, ENVIRONMENT_RECORD_TYPE, \
-    PROJECT_INFO_RECORD_TYPE, APP_STATE_RECORD_TYPE
+    PROJECT_INFO_RECORD_TYPE, APP_STATE_RECORD_TYPE, API_CALL_RECORD_TYPE
 from httprider.model import ApiCall
 from httprider.model.app_data import AppData, ApiTestCase, HttpExchange, Environment, ProjectInfo, AppState
 
@@ -31,6 +32,14 @@ class AppDataReader(AppData):
             ),
             api_call_id
         )
+
+    def get_all_api_calls_from_db(self):
+        table = self.ldb[API_CALL_RECORD_TYPE]
+        api_calls_db = table.find(name=API_CALL_RECORD_TYPE)
+        return {
+            api_db['id']: ApiCall.from_json(json.loads(api_db['object']))
+            for api_db in api_calls_db
+        }
 
     def get_all_api_calls(self):
         query = Query()
@@ -77,8 +86,12 @@ class AppDataReader(AppData):
         )
 
     def get_or_create_project_info(self):
-        ProjectInfoQuery = Query()
-        project_info_json = self.db.get(ProjectInfoQuery.record_type == PROJECT_INFO_RECORD_TYPE)
+        table = self.ldb[PROJECT_INFO_RECORD_TYPE]
+        project_info_db = table.find_one(name=PROJECT_INFO_RECORD_TYPE)
+        if not project_info_db:
+            return ProjectInfo.from_json(None)
+
+        project_info_json = json.loads(project_info_db['object'])
         return ProjectInfo.from_json(project_info_json)
 
     def get_appstate_environment(self):

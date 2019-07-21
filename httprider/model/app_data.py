@@ -3,6 +3,7 @@ from typing import Any, Optional, Dict, List
 
 import attr
 import cattr
+import dataset
 from requests.structures import CaseInsensitiveDict
 from tinydb.database import Table
 
@@ -38,7 +39,6 @@ class ProjectInfo(object):
     def from_json(cls, json_obj):
         if not json_obj:
             return cls()
-        json_obj['id'] = json_obj.doc_id
         return cattr.structure(json_obj, cls)
 
     def to_json(self):
@@ -220,3 +220,4 @@ class ApiTestCase(object):
 
 class AppData:
     db: Table
+    ldb = dataset.connect("sqlite:///httprider.db")

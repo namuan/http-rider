@@ -1,10 +1,11 @@
-import logging
 import ast
 import codecs
 import functools
 import importlib
 import json
+import logging
 import pkgutil
+import uuid
 from json import JSONDecodeError
 from pathlib import Path
 from string import Template
@@ -211,3 +212,7 @@ def load_json_show_error(json_str):
         return j
     except JSONDecodeError:
         logging.error(f"Error in loading JSON: {json_str}")
+
+
+def gen_uuid():
+    return str(uuid.uuid4())

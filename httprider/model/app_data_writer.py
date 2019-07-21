@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import List
 
@@ -5,7 +6,7 @@ import cattr
 from PyQt5.QtCore import QObject, pyqtSignal
 from tinydb import Query
 
-from httprider.core.constants import PROJECT_INFO_RECORD_TYPE, APP_STATE_RECORD_TYPE, ENVIRONMENT_RECORD_TYPE, \
+from httprider.core.constants import APP_STATE_RECORD_TYPE, ENVIRONMENT_RECORD_TYPE, \
     API_TEST_CASE_RECORD_TYPE
 from httprider.model import HttpExchange, ApiCall
 from httprider.model.app_data import ProjectInfo, AppData, AppState, Environment, ApiTestCase
@@ -38,6 +39,66 @@ class AppDataWriter(AppData):
         self.db = db_table
         self.signals = AppDataSignals()
         self.selected_api_call = None
+
+    def update_http_exchange_in_db(self, exchange: HttpExchange):
+        table = self.ldb[exchange.type]
+        table.upsert(
+            dict(
+                name=exchange.type,
+                exchange_id=exchange.id,
+                api_call_id=exchange.api_call_id,
+                object=json.dumps(exchange.to_json())
+            ),
+            ['exchange_id', 'api_call_id']
+        )
+
+    def update_project_info(self, project_info):
+        if not project_info:
+            return
+
+        logging.info(f"Updating Project info In DB {project_info}")
+        table = self.ldb[project_info.record_type]
+        table.upsert(
+            dict(
+                name=project_info.record_type,
+                object=json.dumps(project_info.to_json())
+            ),
+            ['name']
+        )
+        self.signals.project_info_updated.emit(project_info)
+
+    def generate_sequence_number(self):
+        AppStateQuery = Query()
+        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
+        app_state = AppState.from_json(app_state_json)
+        app_state.last_sequence_number = app_state.last_sequence_number + 1000
+        self.db.upsert(app_state.to_json(), AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
+        logging.info(f"Generated new sequence number: {app_state.last_sequence_number}")
+        return app_state.last_sequence_number
+
+    def update_selected_tag(self, new_tag_name):
+        logging.info(f"Selected tag changed to {new_tag_name}")
+        AppStateQuery = Query()
+        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
+        app_state = AppState.from_json(app_state_json)
+        app_state.selected_tag = new_tag_name
+        self.db.upsert(app_state.to_json(), AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
+        # @important: For now the sequence of following events are important
+        # As we first update the cache in the first event which is then used in the second event handler
+        self.signals.app_state_updated.emit()
+        self.signals.selected_tag_changed.emit(new_tag_name)
+
+    def update_selected_environment(self, environment_name):
+        logging.info(f"Selected environment changed to {environment_name}")
+        AppStateQuery = Query()
+        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
+        app_state = AppState.from_json(app_state_json)
+        app_state.selected_env = environment_name
+        self.db.upsert(app_state.to_json(), AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
+        # @important: For now the sequence of following events are important
+        # As we first update the cache in the first event which is then used in the second event handler
+        self.signals.app_state_updated.emit()
+        self.signals.selected_env_changed.emit(environment_name)
 
     def add_http_exchange(self, exchange: HttpExchange):
         exchange_doc_id = self.db.insert(exchange.to_json())
@@ -76,39 +137,6 @@ class AppDataWriter(AppData):
         logging.info(f"API : {doc_id} - Updating API Call {api_call}")
         self.db.update(api_call.to_json(), doc_ids=[doc_id])
         self.signals.api_call_updated.emit(api_call.id, api_call)
-
-    def update_project_info(self, project_info):
-        if not project_info:
-            return
-
-        logging.info(f"Updating Project info {project_info}")
-        ProjectInfoQuery = Query()
-        self.db.upsert(
-            project_info.to_json(),
-            ProjectInfoQuery.record_type == PROJECT_INFO_RECORD_TYPE
-        )
-        self.signals.project_info_updated.emit(project_info)
-
-    def update_selected_tag(self, new_tag_name):
-        logging.info(f"Selected tag changed to {new_tag_name}")
-        AppStateQuery = Query()
-        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        app_state = AppState.from_json(app_state_json)
-        app_state.selected_tag = new_tag_name
-        self.db.upsert(app_state.to_json(), AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        # @important: For now the sequence of following events are important
-        # As we first update the cache in the first event which is then used in the second event handler
-        self.signals.app_state_updated.emit()
-        self.signals.selected_tag_changed.emit(new_tag_name)
-
-    def generate_sequence_number(self):
-        AppStateQuery = Query()
-        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        app_state = AppState.from_json(app_state_json)
-        app_state.last_sequence_number = app_state.last_sequence_number + 1000
-        self.db.upsert(app_state.to_json(), AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        logging.info(f"Generated new sequence number: {app_state.last_sequence_number}")
-        return app_state.last_sequence_number
 
     def add_tag_to_api_call(self, api_call: ApiCall, new_tag_name: str):
         logging.info(f"API : {api_call.id} - Adding tag {new_tag_name}")
@@ -163,18 +191,6 @@ class AppDataWriter(AppData):
         logging.info(f"Environment {updated_doc_id} - "
                      f"Updated environment data for {environment_name}")
         self.signals.environment_data_changed.emit(updated_doc_id)
-
-    def update_selected_environment(self, environment_name):
-        logging.info(f"Selected environment changed to {environment_name}")
-        AppStateQuery = Query()
-        app_state_json = self.db.get(AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        app_state = AppState.from_json(app_state_json)
-        app_state.selected_env = environment_name
-        self.db.upsert(app_state.to_json(), AppStateQuery.record_type == APP_STATE_RECORD_TYPE)
-        # @important: For now the sequence of following events are important
-        # As we first update the cache in the first event which is then used in the second event handler
-        self.signals.app_state_updated.emit()
-        self.signals.selected_env_changed.emit(environment_name)
 
     def update_selected_exchange(self, exchange: HttpExchange):
         logging.info(f"API: {exchange.api_call_id} - Selected Exchange {exchange}")
