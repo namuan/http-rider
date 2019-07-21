@@ -2,10 +2,10 @@ import logging
 from typing import List, Dict
 
 from ..core import json_path, response_code_formatter, response_code_round_up
+from ..core.constants import DEFAULT_TAG, AssertionDataSource
+from ..model.app_data import ApiCall, AppState, ApiTestCase, HttpExchange, Assertion, Environment
 from ..model.app_data_reader import AppDataReader
 from ..model.app_data_writer import AppDataWriter
-from ..core.constants import DEFAULT_TAG, AssertionDataSource
-from ..model.app_data import ApiCall, AppState, ApiTestCase, HttpExchange, Assertion
 
 
 def _build_filter_query(query=None, tag=None):
@@ -121,6 +121,17 @@ class AppDataCache:
     def update_search_query(self, search_query):
         self.search_query = search_query
 
+    def get_all_env_variables(self):
+        current_env = self.get_appstate_environment()
+        environment: Environment = self.app_data_reader.get_selected_environment(current_env)
+        return [
+            f"${{{k}}}" for k in environment.data.keys()
+        ]
+
+    def get_appstate_environment(self):
+        app_state = self.get_app_state()
+        return app_state.selected_env
+
     def get_app_state(self):
         self.app_state.selected_search = self.search_query
         return self.app_state
@@ -146,8 +157,11 @@ class AppDataCache:
             for assertion in api_test_case.assertions
         }
 
-    def get_api_call_exchanges(self, doc_id):
-        return self.api_http_exchanges.get(doc_id, [])
+    def get_http_exchange(self, exchange_id):
+        return self.app_data_reader.get_http_exchange_from_db(exchange_id)
+
+    def get_api_call_exchanges(self, api_call_id):
+        return self.api_http_exchanges.get(api_call_id, [])
 
     def get_last_exchange(self, api_call_id):
         api_call_exchanges = self.get_api_call_exchanges(api_call_id)

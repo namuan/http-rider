@@ -20,7 +20,7 @@ class TagInfo(object):
 @attr.s(auto_attribs=True)
 class ProjectInfo(object):
     record_type: str = PROJECT_INFO_RECORD_TYPE
-    id: int = ""
+    id: str = ""
     title: str = ""
     version: str = ""
     tos_url: str = ""
@@ -162,7 +162,7 @@ class Assertion(object):
 @attr.s(auto_attribs=True)
 class HttpExchange(object):
     api_call_id: int
-    id: int = None
+    id: str = None
     request: ExchangeRequest = ExchangeRequest()
     type: str = HTTP_EXCHANGE_RECORD_TYPE
     response: ExchangeResponse = ExchangeResponse()
@@ -172,7 +172,6 @@ class HttpExchange(object):
     def from_json(cls, json_obj, api_call_id=None):
         if not json_obj:
             return cls(api_call_id)
-        json_obj['id'] = json_obj.doc_id
         return cattr.structure(json_obj, cls)
 
     def to_json(self):

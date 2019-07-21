@@ -11,6 +11,9 @@ class RestApiInteractor:
     api_worker = RestApiConnector()
 
     def __init__(self):
+        self.api_worker.signals.result.connect(self.__on_success)
+        self.api_worker.signals.error.connect(self.__on_failure)
+
         http_exchange_signals.request_finished.connect(self.process_queue)
 
     def process_queue(self):
@@ -47,26 +50,22 @@ class RestApiInteractor:
     def process_exchange(self, exchange: HttpExchange, on_success, on_failure):
         logging.info(f"Scheduling API Call {exchange.api_call_id}")
         self.api_worker.exchange = exchange
-        self.api_worker.signals.result.connect(lambda ex: self.__on_success(ex, on_success))
-        self.api_worker.signals.error.connect(lambda ex: self.__on_failure(ex, on_failure))
         self.api_worker.start()
 
-    def __on_success(self, exchange: HttpExchange, parent_on_success):
+    def __on_success(self, exchange: HttpExchange):
+        logging.info(f"API Call: {exchange.api_call_id} - __on_success")
         api_call = app_settings.app_data_reader.get_api_call(exchange.api_call_id)
         api_call.last_response_code = exchange.response.http_status_code
         app_settings.app_data_writer.update_api_call(api_call.id, api_call)
-        new_exchange_id = app_settings.app_data_writer.add_http_exchange(exchange)
-        exchange.id = new_exchange_id
-        if parent_on_success:
-            parent_on_success(exchange)
+        app_settings.app_data_writer.add_http_exchange(exchange)
 
-    def __on_failure(self, exchange: HttpExchange, parent_on_failure):
-        logging.error(f"Unable to get response: {exchange}")
+    def __on_failure(self, exchange: HttpExchange):
+        logging.error(f"API Call: {exchange.api_call_id} - __on_failure -> {exchange}")
         api_call = app_settings.app_data_reader.get_api_call(exchange.api_call_id)
         api_call.last_response_code = exchange.response.http_status_code
         api_call.last_assertion_result = None
         app_settings.app_data_writer.update_api_call(api_call.id, api_call)
-        new_exchange_id = app_settings.app_data_writer.add_http_exchange(exchange)
-        exchange.id = new_exchange_id
-        if parent_on_failure:
-            parent_on_failure(exchange)
+        app_settings.app_data_writer.add_http_exchange(exchange)
+
+
+rest_api_interactor = RestApiInteractor()

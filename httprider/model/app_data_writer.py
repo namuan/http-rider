@@ -7,6 +7,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from tinydb import Query
 from tinydb.operations import set
 
+from httprider.core import gen_uuid
 from httprider.core.constants import ENVIRONMENT_RECORD_TYPE, \
     API_TEST_CASE_RECORD_TYPE
 from httprider.model import HttpExchange, ApiCall
@@ -41,18 +42,6 @@ class AppDataWriter(AppData):
         self.signals = AppDataSignals()
         self.selected_api_call = None
 
-    def update_http_exchange_in_db(self, exchange: HttpExchange):
-        table = self.ldb[exchange.type]
-        table.upsert(
-            dict(
-                name=exchange.type,
-                exchange_id=exchange.id,
-                api_call_id=exchange.api_call_id,
-                object=json.dumps(exchange.to_json())
-            ),
-            ['exchange_id', 'api_call_id']
-        )
-
     def update_project_info(self, project_info):
         if not project_info:
             return
@@ -83,16 +72,27 @@ class AppDataWriter(AppData):
         )
         self.signals.app_state_updated.emit()
 
+    def update_http_exchange_in_db(self, exchange: HttpExchange):
+        table = self.ldb[exchange.type]
+        table.upsert(
+            dict(
+                name=exchange.type,
+                exchange_id=exchange.id,
+                api_call_id=exchange.api_call_id,
+                object=json.dumps(exchange.to_json())
+            ),
+            ['exchange_id', 'api_call_id']
+        )
+
     def add_http_exchange(self, exchange: HttpExchange):
-        exchange_doc_id = self.db.insert(exchange.to_json())
-        logging.info(f"API {exchange.api_call_id} - Added http exchange {exchange_doc_id}")
-        exchange.id = exchange_doc_id
+        exchange.id = gen_uuid()
+        self.update_http_exchange_in_db(exchange)
+        logging.info(f"API {exchange.api_call_id} - Added http exchange {exchange.id}")
         self.signals.exchange_added.emit(exchange.api_call_id, exchange)
-        return exchange_doc_id
 
     def update_http_exchange(self, exchange: HttpExchange):
-        logging.info(f"API {exchange.api_call_id} - Updating http exchange {exchange}")
-        self.db.update(exchange.to_json(), doc_ids=[exchange.id])
+        logging.info(f"API {exchange.api_call_id} - Updating http exchange {exchange.id}")
+        self.update_http_exchange_in_db(exchange)
         self.signals.exchange_changed.emit(exchange.id, exchange)
 
     def update_selected_exchange(self, exchange: HttpExchange):

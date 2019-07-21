@@ -10,9 +10,9 @@ from PyQt5.QtWidgets import *
 from httprider.core.app_state_interactor import AppStateInteractor
 from ..core.constants import *
 from ..core.core_settings import app_settings
-from ..core.rest_api_interactor import RestApiInteractor
+from ..core.rest_api_interactor import rest_api_interactor
 from ..external.rest_api_connector import http_exchange_signals
-from ..model.app_data import ApiCall, HttpExchange
+from ..model.app_data import ApiCall
 from ..presenters import AssertionResultPresenter
 from ..widgets.api_calls_list_view import ApiCallItemDelegate
 
@@ -28,7 +28,8 @@ class ApiListPresenter:
     def __init__(self, parent_view):
         self.view = parent_view.lst_http_requests
         self.parent_view = parent_view
-        self.interactor = RestApiInteractor()
+        self.assertion_result_presenter = AssertionResultPresenter(self.parent_view)
+
         self.app_state_interactor = AppStateInteractor()
 
         self.model = QStandardItemModel()
@@ -62,8 +63,6 @@ class ApiListPresenter:
         app_settings.app_data_writer.signals.api_call_updated.connect(self.refresh_selected_item)
         app_settings.app_data_writer.signals.multiple_api_calls_added.connect(self.refresh_multiple_items)
         app_settings.app_data_writer.signals.selected_tag_changed.connect(self.refresh)
-
-        self.assertion_result_presenter = AssertionResultPresenter(self.parent_view)
 
     def on_toggle_request_status(self):
         selected_model_index: QModelIndex = self.index_at_selected_row()
@@ -157,11 +156,7 @@ class ApiListPresenter:
             api_call = self.model.item(n).data(API_CALL_ROLE)
             logging.debug("** Multiple APIs: API Call {}".format(api_call.id))
             if api_call.enabled:
-                self.interactor.make_http_call(api_call, on_success=self.on_success)
-
-    def on_success(self, exchange: HttpExchange):
-        api_test_case = app_settings.app_data_reader.get_api_test_case(exchange.api_call_id)
-        self.assertion_result_presenter.evaluate(api_test_case, exchange)
+                rest_api_interactor.make_http_call(api_call)
 
     def on_remove_selected_item(self):
         selected_model_index: QModelIndex = self.index_at_selected_row()

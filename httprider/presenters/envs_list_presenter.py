@@ -21,7 +21,7 @@ class EnvironmentsListPresenter:
     def refresh(self):
         all_envs = app_settings.app_data_reader.get_environments()
         envs_list_field = self.__get_combox_box()
-        selected_env = app_settings.app_data_reader.get_appstate_environment()
+        selected_env = app_settings.app_data_cache.get_appstate_environment()
         envs_list_field.clear()
         for env in all_envs:
             envs_list_field.addItem(env.name)

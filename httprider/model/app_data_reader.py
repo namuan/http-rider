@@ -51,13 +51,18 @@ class AppDataReader(AppData):
     def get_api_call(self, doc_id):
         return ApiCall.from_json(self.db.get(doc_id=doc_id))
 
-    def get_api_call_exchanges(self, doc_id):
-        query = Query()
+    def get_api_call_exchanges_from_db(self, doc_id):
+        table = self.ldb[HTTP_EXCHANGE_RECORD_TYPE]
+        http_exchanges_db = table.find(name=HTTP_EXCHANGE_RECORD_TYPE, api_call_id=doc_id)
         return [
-            HttpExchange.from_json(exchange, doc_id)
-            for exchange in
-            self.db.search((query.type == HTTP_EXCHANGE_RECORD_TYPE) & (query.api_call_id == doc_id))
+            HttpExchange.from_json(json.loads(obj['object']))
+            for obj in http_exchanges_db
+            if obj['api_call_id'] == doc_id
         ]
+
+    def get_api_call_exchanges(self, doc_id):
+        http_exchanges = self.get_api_call_exchanges_from_db(doc_id)
+        return http_exchanges
 
     # @todo: Cache and AppState to store the currently selected ApiCall
     # So everyone should look into AppState cache instead of keeping their own copy of current / current_api
@@ -66,8 +71,14 @@ class AppDataReader(AppData):
         logging.debug(f"update_selected_api_call: {doc_id} = {api_call}")
         self.signals.api_call_change_selection.emit(api_call)
 
-    def get_http_exchange(self, exchange_doc_id):
-        return HttpExchange.from_json(self.db.get(doc_id=exchange_doc_id))
+    def get_http_exchange_from_db(self, exchange_id):
+        table = self.ldb[HTTP_EXCHANGE_RECORD_TYPE]
+        http_exchange_db = table.find_one(exchange_id=exchange_id)
+        if not http_exchange_db:
+            raise LookupError(f"Unable to find exchange with id: {exchange_id}")
+
+        http_exchange_json = json.loads(http_exchange_db['object'])
+        return HttpExchange.from_json(http_exchange_json)
 
     def get_environments(self):
         query = Query()
@@ -106,17 +117,3 @@ class AppDataReader(AppData):
 
         app_state_json = json.loads(app_state_db['object'])
         return AppState.from_json(app_state_json)
-
-    def get_all_env_variables(self):
-        current_env = self.get_appstate_environment()
-        environment: Environment = self.get_selected_environment(current_env)
-        return [
-            f"${{{k}}}" for k in environment.data.keys()
-        ]
-
-    def get_last_exchange(self, api_call_id):
-        api_call_exchanges = self.get_api_call_exchanges(api_call_id)
-        if api_call_exchanges:
-            return api_call_exchanges[-1]
-        else:
-            return HttpExchange(api_call_id)

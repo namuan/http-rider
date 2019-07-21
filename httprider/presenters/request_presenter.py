@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import *
 from httprider.model.completer import get_completer_model
 from ..core import styles_from_file, split_url_qs
 from ..core.core_settings import app_settings
-from ..core.rest_api_interactor import RestApiInteractor
+from ..core.rest_api_interactor import RestApiInteractor, rest_api_interactor
 from ..exporters import api_request_body_highlighted
 from ..model.app_data import ApiCall, HttpExchange, COMMON_HEADERS, HTTP_CONTENT_TYPES
 from ..presenters import AssertionResultPresenter, KeyValueListPresenter
@@ -24,7 +24,6 @@ class RequestPresenter:
     def __init__(self, parent_view):
         self.current = None
         self.view = parent_view
-        self.interactor = RestApiInteractor()
 
         self.request_header_list_presenter = KeyValueListPresenter(
             self.view.lst_request_headers,
@@ -56,8 +55,13 @@ class RequestPresenter:
         app_settings.app_data_writer.signals.api_test_case_changed.connect(self.refresh_completer)
         app_settings.app_data_writer.signals.environment_data_changed.connect(self.refresh_completer)
         app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(self.refresh_completer)
+        app_settings.app_data_writer.signals.exchange_added.connect(self.on_exchange_added)
 
         self.assertion_result_presenter = AssertionResultPresenter(self.view)
+
+    def on_exchange_added(self, api_call_id, exchange):
+        api_test_case = app_settings.app_data_reader.get_api_test_case(api_call_id)
+        self.assertion_result_presenter.evaluate(api_test_case, exchange)
 
     def refresh_completer(self):
         completer_model: QStandardItemModel = get_completer_model()
@@ -201,11 +205,7 @@ class RequestPresenter:
 
     def on_btn_send_request(self):
         self.update_current_api_call()
-        self.interactor.make_http_call(self.current, on_success=self.on_success)
-
-    def on_success(self, exchange: HttpExchange):
-        api_test_case = app_settings.app_data_reader.get_api_test_case(exchange.api_call_id)
-        self.assertion_result_presenter.evaluate(api_test_case, exchange)
+        rest_api_interactor.make_http_call(self.current)
 
     def on_api_call_refresh(self, _, api_call):
         self.refresh(api_call)
@@ -216,5 +216,5 @@ class RequestPresenter:
         self.current = None
 
     def refresh(self, api_call: ApiCall):
-        logging.info(f"Changed API Call to {api_call.title}")
+        logging.info(f"Changed API Call to {api_call.id} => {api_call.title}")
         self.object_to_form(api_call)

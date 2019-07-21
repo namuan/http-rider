@@ -35,8 +35,8 @@ class ApiCallsHistoryPresenter:
         self.refresh()
 
     def handle_exchange_switch(self, button):
-        selected_exchange_id = int(button.objectName())
-        exchange = app_settings.app_data_reader.get_http_exchange(selected_exchange_id)
+        selected_exchange_id = button.objectName()
+        exchange = app_settings.app_data_cache.get_http_exchange(selected_exchange_id)
         self.current_exchange = exchange
         self.refresh()
         app_settings.app_data_writer.update_selected_exchange(exchange)

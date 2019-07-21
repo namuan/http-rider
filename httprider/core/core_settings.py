@@ -9,10 +9,10 @@ from tinydb import TinyDB
 
 import httprider.exporters as exporters
 import httprider.importers as importers
-from ..model.app_data_reader import AppDataReader
-from ..model.app_data_writer import AppDataWriter
 from ..core import str_to_bool, import_modules, random_project_name
 from ..model.app_data_cache import AppDataCache
+from ..model.app_data_reader import AppDataReader
+from ..model.app_data_writer import AppDataWriter
 from ..model.user_data import UserProject, SavedState
 
 
@@ -49,7 +49,7 @@ class CoreSettings:
 
         logging.basicConfig(
             handlers=handlers,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            format='%(asctime)s - %(filename)s:%(lineno)d - %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S',
             level=logging.DEBUG
         )
