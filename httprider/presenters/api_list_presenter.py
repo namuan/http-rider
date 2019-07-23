@@ -7,6 +7,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import *
 
+from httprider.core.api_call_interactor import api_call_interactor
 from httprider.core.app_state_interactor import AppStateInteractor
 from ..core.constants import *
 from ..core.core_settings import app_settings
@@ -69,9 +70,11 @@ class ApiListPresenter:
         if not selected_model_index:
             return
         api_call_id = selected_model_index.data(API_ID_ROLE)
-        api_call: ApiCall = app_settings.app_data_reader.get_api_call(api_call_id)
+        api_call: ApiCall = app_settings.app_data_cache.get_api_call(api_call_id)
         api_call.enabled = not api_call.enabled
-        app_settings.app_data_writer.update_api_call(api_call_id, api_call)
+
+        # Migration
+        api_call_interactor.update_api_call(api_call_id, api_call)
 
     def on_drop_event(self, model_index: QModelIndex):
         self.is_drop_operation = True
@@ -133,11 +136,14 @@ class ApiListPresenter:
             logging.info(f"API Call: {api_call.id} - "
                          f"New Sequence {new_sequence_number} - "
                          f"Moved between {prev_sequence_number} and {next_sequence_number}")
-            app_settings.app_data_writer.update_api_call(api_call.id, api_call)
+
+            # Migration
+            api_call_interactor.update_api_call(api_call.id, api_call)
+
             self.view.setCurrentIndex(current_index)
 
-    def add_request_widget(self, doc_id, api_call: ApiCall, select_item=True):
-        logging.info(f"Adding new item with id {doc_id} to requests list - {api_call.title}")
+    def add_request_widget(self, api_call_id, api_call: ApiCall, select_item=True):
+        logging.info(f"Adding new item with id {api_call_id} to requests list - {api_call}")
         item = QStandardItem(api_call.title)
         item.setData(api_call, API_CALL_ROLE)
         item.setData(QVariant(api_call.id), API_ID_ROLE)
@@ -164,7 +170,8 @@ class ApiListPresenter:
             return
         row_to_remove = selected_model_index.row()
         api_call: ApiCall = selected_model_index.data(API_CALL_ROLE)
-        app_settings.app_data_writer.remove_api_call([api_call.id])
+        # Migration
+        api_call_interactor.remove_api_call([api_call.id])
         previous_row = row_to_remove - 1
         if previous_row >= 0:
             previous_item: QStandardItem = self.model.item(previous_row)
@@ -175,9 +182,11 @@ class ApiListPresenter:
             return
 
         selected_api_call: ApiCall = current.data(API_CALL_ROLE)
-        app_settings.app_data_reader.update_selected_api_call(selected_api_call.id)
+        logging.info(f"List Item Selected: {selected_api_call.id}")
+        api_call_interactor.update_selected_api_call(selected_api_call.id)
 
     def on_request_started(self, _, api_call_id):
+        logging.info(f"Request started for {api_call_id}")
         api_call_row = self.__row_for_api_call(api_call_id)
         item_running = self.model.item(api_call_row)
         index_running = self.model.indexFromItem(item_running)
@@ -186,7 +195,8 @@ class ApiListPresenter:
     def refresh_selected_item(self, api_call_id):
         api_call_row = self.__row_for_api_call(api_call_id)
         if api_call_row != -1:
-            api_call = app_settings.app_data_reader.get_api_call(api_call_id)
+            api_call = app_settings.app_data_cache.get_api_call(api_call_id)
+            logging.info(f"Refreshing row {api_call_row} -> {api_call.id}")
             self.model.item(api_call_row).setData(api_call, API_CALL_ROLE)
 
     def refresh_multiple_items(self, doc_ids: List[str], api_calls: List[ApiCall]):
@@ -228,7 +238,9 @@ class ApiListPresenter:
         duplicate_api_call.title = f"{duplicate_api_call.title} Duplicate"
         duplicate_api_call.last_response_code = 0
         duplicate_api_call.sequence_number = self.app_state_interactor.update_sequence_number()
-        app_settings.app_data_writer.add_api_call(duplicate_api_call)
+
+        # Migration
+        api_call_interactor.add_api_call(duplicate_api_call)
 
     def __row_for_api_call(self, api_call_id):
         api_call_row = next(

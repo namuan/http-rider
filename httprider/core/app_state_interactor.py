@@ -13,6 +13,9 @@ class AppStateInteractor:
         return app_state.last_sequence_number
 
     def update_selected_tag(self, new_tag_name):
+        if not new_tag_name:
+            return
+
         logging.info(f"Selected tag changed to {new_tag_name}")
         app_state = app_settings.app_data_cache.get_app_state()
         app_state.selected_tag = new_tag_name

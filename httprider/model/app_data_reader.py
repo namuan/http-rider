@@ -22,7 +22,37 @@ class AppDataReader(AppData):
         self.db = db_table
         self.signals = AppDataReadSignals()
 
+    def get_all_api_calls_from_db(self):
+        table = self.ldb[API_CALL_RECORD_TYPE]
+        api_calls_db = table.find(name=API_CALL_RECORD_TYPE)
+        return {
+            api_db['api_call_id']: ApiCall.from_json(json.loads(api_db['object']))
+            for api_db in api_calls_db
+        }
+
+    def get_all_api_calls(self):
+        raise SyntaxError("Shouldn't call this method")
+        query = Query()
+        return {
+            obj.doc_id: ApiCall.from_json(obj)
+            for obj in sorted(self.db.search(query.type == 'api'), key=itemgetter('sequence_number'))
+        }
+
+    def get_api_call_from_db(self, api_call_id):
+        logging.info(f"DB: {api_call_id} - Getting API call")
+        table = self.ldb[API_CALL_RECORD_TYPE]
+        obj_db = table.find_one(name=API_CALL_RECORD_TYPE, api_call_id=api_call_id)
+        if not obj_db:
+            return ApiCall.from_json()
+
+        return ApiCall.from_json(json.loads(obj_db['object']))
+
+    def get_api_call(self, doc_id):
+        raise SyntaxError("Shouldn't call this method")
+        # return ApiCall.from_json(self.db.get(doc_id=doc_id))
+
     def get_api_test_case(self, api_call_id):
+        raise SyntaxError("Shouldn't call this method")
         logging.info(f"API: {api_call_id} - Getting API Test case")
         ApiTestCaseQuery = Query()
         return ApiTestCase.from_json(
@@ -33,23 +63,16 @@ class AppDataReader(AppData):
             api_call_id
         )
 
-    def get_all_api_calls_from_db(self):
-        table = self.ldb[API_CALL_RECORD_TYPE]
-        api_calls_db = table.find(name=API_CALL_RECORD_TYPE)
-        return {
-            api_db['id']: ApiCall.from_json(json.loads(api_db['object']))
-            for api_db in api_calls_db
-        }
+    def get_api_test_case_from_db(self, api_call_id):
+        table = self.ldb[API_TEST_CASE_RECORD_TYPE]
+        obj_db = table.find_one(name=API_TEST_CASE_RECORD_TYPE, api_call_id=api_call_id)
+        if not obj_db:
+            return ApiTestCase.from_json(None, api_call_id)
 
-    def get_all_api_calls(self):
-        query = Query()
-        return {
-            obj.doc_id: ApiCall.from_json(obj)
-            for obj in sorted(self.db.search(query.type == 'api'), key=itemgetter('sequence_number'))
-        }
-
-    def get_api_call(self, doc_id):
-        return ApiCall.from_json(self.db.get(doc_id=doc_id))
+        return ApiTestCase.from_json(
+            json.loads(obj_db['object']),
+            api_call_id
+        )
 
     def get_api_call_exchanges_from_db(self, doc_id):
         table = self.ldb[HTTP_EXCHANGE_RECORD_TYPE]
@@ -61,15 +84,15 @@ class AppDataReader(AppData):
         ]
 
     def get_api_call_exchanges(self, doc_id):
-        http_exchanges = self.get_api_call_exchanges_from_db(doc_id)
-        return http_exchanges
+        return self.get_api_call_exchanges_from_db(doc_id)
 
     # @todo: Cache and AppState to store the currently selected ApiCall
     # So everyone should look into AppState cache instead of keeping their own copy of current / current_api
     def update_selected_api_call(self, doc_id):
-        api_call = ApiCall.from_json(self.db.get(doc_id=doc_id))
-        logging.debug(f"update_selected_api_call: {doc_id} = {api_call}")
-        self.signals.api_call_change_selection.emit(api_call)
+        raise SyntaxError("Shouldn't call this method")
+        # api_call = ApiCall.from_json(self.db.get(doc_id=doc_id))
+        # logging.debug(f"update_selected_api_call: {doc_id} = {api_call}")
+        # self.signals.api_call_change_selection.emit(api_call)
 
     def get_http_exchange_from_db(self, exchange_id):
         table = self.ldb[HTTP_EXCHANGE_RECORD_TYPE]

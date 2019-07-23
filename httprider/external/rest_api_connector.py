@@ -14,7 +14,7 @@ from ..model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
 
 
 class HttpExchangeSignals(QObject):
-    request_started = pyqtSignal(str, int)
+    request_started = pyqtSignal(str, str)
     request_finished = pyqtSignal()
     interrupt = pyqtSignal()
 

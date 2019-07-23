@@ -1,6 +1,7 @@
 import logging
 from queue import Queue
 
+from httprider.core.api_call_interactor import api_call_interactor
 from .core_settings import app_settings
 from ..external.rest_api_connector import RestApiConnector, http_exchange_signals
 from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange
@@ -54,17 +55,22 @@ class RestApiInteractor:
 
     def __on_success(self, exchange: HttpExchange):
         logging.info(f"API Call: {exchange.api_call_id} - __on_success")
-        api_call = app_settings.app_data_reader.get_api_call(exchange.api_call_id)
+        api_call = app_settings.app_data_cache.get_api_call(exchange.api_call_id)
         api_call.last_response_code = exchange.response.http_status_code
-        app_settings.app_data_writer.update_api_call(api_call.id, api_call)
+
+        # Migration
+        api_call_interactor.update_api_call(api_call.id, api_call)
+
         app_settings.app_data_writer.add_http_exchange(exchange)
 
     def __on_failure(self, exchange: HttpExchange):
         logging.error(f"API Call: {exchange.api_call_id} - __on_failure -> {exchange}")
-        api_call = app_settings.app_data_reader.get_api_call(exchange.api_call_id)
+        api_call = app_settings.app_data_cache.get_api_call(exchange.api_call_id)
         api_call.last_response_code = exchange.response.http_status_code
         api_call.last_assertion_result = None
-        app_settings.app_data_writer.update_api_call(api_call.id, api_call)
+        # Migration
+        api_call_interactor.update_api_call(api_call.id, api_call)
+
         app_settings.app_data_writer.add_http_exchange(exchange)
 
 

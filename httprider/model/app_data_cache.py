@@ -26,7 +26,7 @@ def _build_filter_query(query=None, tag=None):
 class AppDataCache:
     api_call_list: Dict[str, ApiCall] = {}
     api_test_cases: Dict[str, ApiTestCase] = {}
-    api_http_exchanges: Dict[str, HttpExchange] = {}
+    api_http_exchanges: Dict[str, List[HttpExchange]] = {}
     app_state: AppState = None
     search_query = None
     environments: Dict[str, Environment] = {}
@@ -60,9 +60,9 @@ class AppDataCache:
         self.app_data_writer.signals.environment_data_changed.connect(self.refresh_environments)
 
     def load_cache(self):
-        self.api_call_list = self.app_data_reader.get_all_api_calls()
+        self.api_call_list = self.app_data_reader.get_all_api_calls_from_db()
         for _, api_call in self.api_call_list.items():
-            api_test_case = self.app_data_reader.get_api_test_case(api_call.id)
+            api_test_case = self.app_data_reader.get_api_test_case_from_db(api_call.id)
             self.api_test_cases[api_call.id] = api_test_case
             http_exchanges = self.app_data_reader.get_api_call_exchanges(api_call.id)
             self.api_http_exchanges[api_call.id] = http_exchanges
@@ -87,7 +87,7 @@ class AppDataCache:
         return self.environments.values()
 
     def get_selected_environment(self, environment_name):
-        return self.environments.get(environment_name)
+        return self.environments.get(environment_name, Environment.from_json())
 
     def on_api_http_exchange_added(self, api_call_id, exchange):
         http_exchanges = self.api_http_exchanges.get(api_call_id, [])
@@ -102,18 +102,20 @@ class AppDataCache:
     def get_all_api_calls(self):
         return self.api_call_list.values()
 
+    def get_api_call(self, api_call_id):
+        api_call = self.api_call_list.get(api_call_id)
+        assert api_call_id == api_call.id
+        return api_call
+
     def refresh_api_test_case(self, api_call_id):
-        api_test_case = self.app_data_reader.get_api_test_case(api_call_id)
+        api_test_case = self.app_data_reader.get_api_test_case_from_db(api_call_id)
         self.api_test_cases[api_call_id] = api_test_case
 
     def refresh_app_state(self):
         self.app_state = self.app_data_reader.get_app_state()
 
     def refresh_cache_item(self, api_call_id):
-        refreshed_api_call = self.app_data_reader.get_api_call(api_call_id)
-        if self.api_call_list.get(api_call_id, None):
-            del self.api_call_list[api_call_id]
-
+        refreshed_api_call = self.app_data_reader.get_api_call_from_db(api_call_id)
         self.api_call_list[api_call_id] = refreshed_api_call
 
     def on_api_call_added(self, doc_id, api_call: ApiCall):
@@ -121,9 +123,9 @@ class AppDataCache:
         self.api_call_list[doc_id] = api_call
 
     def on_api_call_removed(self, doc_ids):
-        for api_call in self.get_all_api_calls():
-            if api_call.id in doc_ids:
-                del self.api_call_list[api_call.id]
+        for doc_id in doc_ids:
+            if self.api_call_list.get(doc_id, None):
+                del self.api_call_list[doc_id]
 
     def on_multiple_api_calls_added(self, doc_ids: List[str], api_calls: List[ApiCall]):
         assert len(doc_ids) == len(api_calls)
@@ -134,9 +136,10 @@ class AppDataCache:
     def filter_api_calls(self, search_query=None, search_tag=None):
         logging.info(f"Filtering API Calls by Query {search_query} and Tag {search_tag}")
         api_calls_filter = _build_filter_query(query=search_query, tag=search_tag)
+        all_api_calls = self.get_all_api_calls()
         return sorted(
-            filter(api_calls_filter, self.get_all_api_calls()),
-            key=lambda a: a.sequence_number
+            filter(api_calls_filter, all_api_calls),
+            key=lambda a: a.sequence_number or 0
         )
 
     def update_search_query(self, search_query):

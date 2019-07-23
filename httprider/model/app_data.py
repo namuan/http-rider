@@ -65,7 +65,7 @@ class AppState(object):
 
 @attr.s(auto_attribs=True)
 class ApiCall(object):
-    id: Optional[int] = None
+    id: str = None
     description: str = ""
     title: str = ""
     http_url: str = ""
@@ -82,10 +82,10 @@ class ApiCall(object):
     last_assertion_result: Optional[bool] = None
 
     @classmethod
-    def from_json(cls, json_obj):
+    def from_json(cls, json_obj=None):
         if not json_obj:
             return cls()
-        json_obj['id'] = json_obj.doc_id
+        # json_obj['id'] = json_obj.doc_id
         return cattr.structure(json_obj, cls)
 
     def to_json(self):
@@ -161,7 +161,7 @@ class Assertion(object):
 
 @attr.s(auto_attribs=True)
 class HttpExchange(object):
-    api_call_id: int
+    api_call_id: str
     id: str = None
     request: ExchangeRequest = ExchangeRequest()
     type: str = HTTP_EXCHANGE_RECORD_TYPE
@@ -200,8 +200,8 @@ class Environment(object):
 
 @attr.s(auto_attribs=True)
 class ApiTestCase(object):
-    api_call_id: int
-    id: int = None
+    api_call_id: str
+    id: str = None
     record_type: str = API_TEST_CASE_RECORD_TYPE
     assertions: List[Assertion] = []
 
@@ -212,7 +212,7 @@ class ApiTestCase(object):
     def from_json(cls, json_obj, api_call_id):
         if not json_obj:
             return cls(api_call_id=api_call_id)
-        json_obj['id'] = json_obj.doc_id
+
         return cattr.structure(json_obj, cls)
 
 

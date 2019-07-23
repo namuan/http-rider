@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from httprider.core.api_call_interactor import api_call_interactor
 from ..core.core_settings import app_settings
 from ..generated.tag_label_widget import Ui_TagLabelWidget
 from ..model.app_data import ApiCall
@@ -56,11 +57,9 @@ class TagLabelWidget(QtWidgets.QWidget, Ui_TagLabelWidget):
     def save_changed_tag(self, new_tag):
         self.__in_view_mode()
         self.__update_data(self.api_call, new_tag)
-        app_settings.app_data_writer.rename_tag_in_api_call(
-            self.api_call,
-            self.old_tag,
-            new_tag
-        )
+
+        # Migration
+        api_call_interactor.rename_tag_in_api_call(self.current, self.old_tag, new_tag)
 
     def discard_changed_tag(self):
         self.__in_view_mode()

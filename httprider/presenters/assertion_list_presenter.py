@@ -45,7 +45,7 @@ class AssertionListPresenter:
 
     def add_response_code_assertion(self):
         api_call = self.parent_presenter.current
-        last_exchange: HttpExchange = app_settings.app_data_reader.get_last_exchange(api_call.id)
+        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         current_response_code = response_code_formatter(last_exchange.response.http_status_code)
         item = QTreeWidgetItem([
             AssertionDataSource.RESPONSE_CODE.value,
