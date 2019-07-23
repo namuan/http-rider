@@ -26,7 +26,7 @@ class ApiCallsHistoryPresenter:
             self.on_exchange_added(ex.id, ex)
 
     def refresh_on_api_call_switch(self, api_call: ApiCall):
-        last_exchange = app_settings.app_data_reader.get_last_exchange(api_call.id)
+        last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         self.current_exchange = last_exchange
         self.refresh()
 

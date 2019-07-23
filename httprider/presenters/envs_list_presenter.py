@@ -16,10 +16,13 @@ class EnvironmentsListPresenter:
         return tags_list_action.defaultWidget()
 
     def on_env_changed(self, new_env):
+        if not new_env:
+            return
+
         self.app_state_interactor.update_selected_environment(new_env)
 
     def refresh(self):
-        all_envs = app_settings.app_data_reader.get_environments()
+        all_envs = app_settings.app_data_cache.get_environments()
         envs_list_field = self.__get_combox_box()
         selected_env = app_settings.app_data_cache.get_appstate_environment()
         envs_list_field.clear()

@@ -118,7 +118,7 @@ def flatten_variables(x: dict, y: dict):
 
 def replace_variables(app_settings, exchange_request):
     active_env = app_settings.app_data_cache.get_appstate_environment()
-    env = app_settings.app_data_reader.get_selected_environment(active_env)
+    env = app_settings.app_data_cache.get_selected_environment(active_env)
 
     all_runtime_vars = app_settings.app_data_cache.get_all_api_test_assertions()
     flatten_runtime_vars = functools.reduce(flatten_variables, all_runtime_vars, {})

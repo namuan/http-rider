@@ -2,10 +2,8 @@ import json
 import logging
 from typing import List
 
-import cattr
 from PyQt5.QtCore import QObject, pyqtSignal
 from tinydb import Query
-from tinydb.operations import set
 
 from httprider.core import gen_uuid
 from httprider.core.constants import ENVIRONMENT_RECORD_TYPE, \
@@ -25,10 +23,10 @@ class AppDataSignals(QObject):
     selected_env_changed = pyqtSignal(str)
     api_call_tag_added = pyqtSignal(ApiCall, str)
     api_call_tag_removed = pyqtSignal(ApiCall, str)
-    environment_added = pyqtSignal(int)
-    environment_removed = pyqtSignal(int)
-    environment_renamed = pyqtSignal(int)
-    environment_data_changed = pyqtSignal(int)
+    environment_added = pyqtSignal(str)
+    environment_removed = pyqtSignal()
+    environment_renamed = pyqtSignal()
+    environment_data_changed = pyqtSignal(str)
     api_test_case_changed = pyqtSignal(int)
     selected_exchange_changed = pyqtSignal(HttpExchange)
     project_info_updated = pyqtSignal(ProjectInfo)
@@ -144,40 +142,21 @@ class AppDataWriter(AppData):
         self.db.update(api_call.to_json(), doc_ids=[api_call.id])
         self.signals.api_call_tag_added.emit(api_call, new_tag_name)
 
-    def add_environment(self, environment: Environment) -> str:
-        env_id = self.db.insert(environment.to_json())
-        environment.id = env_id
-        self.signals.environment_added.emit(env_id)
-        logging.info(f"Environment {env_id} - Adding new Environment {environment}")
-        return env_id
-
-    def remove_environment(self, environment_name):
-        query = Query()
-        removed_doc_id = self.db.remove(
-            (query.record_type == ENVIRONMENT_RECORD_TYPE) & (query.name == environment_name)
+    def update_environment_in_db(self, environment: Environment):
+        table = self.ldb[environment.record_type]
+        table.upsert(
+            dict(
+                name=environment.record_type,
+                environment_name=environment.name,
+                object=json.dumps(environment.to_json())
+            ),
+            ['environment_name']
         )
-        logging.info(f"Environment {removed_doc_id} - Removing environment {environment_name}")
-        self.signals.environment_removed.emit(removed_doc_id)
 
-    def update_environment_name(self, old_environment_name, new_environment_name):
-        query = Query()
-        updated_doc_id = self.db.update(
-            set('name', new_environment_name),
-            (query.record_type == ENVIRONMENT_RECORD_TYPE) & (query.name == old_environment_name)
-        )
-        logging.info(f"Environment {updated_doc_id} - "
-                     f"Renamed environment {old_environment_name} to {new_environment_name}")
-        self.signals.environment_renamed.emit(updated_doc_id)
-
-    def update_environment_data(self, environment_name, environment_data):
-        query = Query()
-        updated_doc_id = self.db.update(
-            set('data', cattr.unstructure(environment_data)),
-            (query.record_type == ENVIRONMENT_RECORD_TYPE) & (query.name == environment_name)
-        )
-        logging.info(f"Environment {updated_doc_id} - "
-                     f"Updated environment data for {environment_name}")
-        self.signals.environment_data_changed.emit(updated_doc_id)
+    def remove_environment_from_db(self, environment_name):
+        table = self.ldb[ENVIRONMENT_RECORD_TYPE]
+        table.delete(environment_name=environment_name)
+        logging.info(f"Removing environment {environment_name}")
 
     def upsert_assertions(self, test_case: ApiTestCase):
         ApiTestCaseQuery = Query()

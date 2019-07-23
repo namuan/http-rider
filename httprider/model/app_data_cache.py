@@ -29,6 +29,7 @@ class AppDataCache:
     api_http_exchanges: Dict[str, HttpExchange] = {}
     app_state: AppState = None
     search_query = None
+    environments: Dict[str, Environment] = {}
 
     def __init__(self, data_reader: AppDataReader, data_writer: AppDataWriter):
         self.app_data_reader = data_reader
@@ -52,6 +53,12 @@ class AppDataCache:
         self.app_data_writer.signals.exchange_added.connect(self.on_api_http_exchange_added)
         self.app_data_writer.signals.exchange_changed.connect(self.on_api_http_exchange_updated)
 
+        # Environments
+        self.app_data_writer.signals.environment_added.connect(self.refresh_environments)
+        self.app_data_writer.signals.environment_removed.connect(self.refresh_environments)
+        self.app_data_writer.signals.environment_renamed.connect(self.refresh_environments)
+        self.app_data_writer.signals.environment_data_changed.connect(self.refresh_environments)
+
     def load_cache(self):
         self.api_call_list = self.app_data_reader.get_all_api_calls()
         for _, api_call in self.api_call_list.items():
@@ -60,12 +67,27 @@ class AppDataCache:
             http_exchanges = self.app_data_reader.get_api_call_exchanges(api_call.id)
             self.api_http_exchanges[api_call.id] = http_exchanges
 
-        self.app_state = self.app_data_reader.get_app_state()
+        self.refresh_app_state()
+        self.refresh_environments()
         logging.info(f"Initial Cache Loading Completed: "
                      f"API Calls: {len(self.api_call_list)} - "
                      f"API Test Cases: {len(self.api_test_cases)} - "
-                     f"API HTTP Exchanges: {len(self.api_http_exchanges)}")
+                     f"API HTTP Exchanges: {len(self.api_http_exchanges)} -"
+                     f"Environments: {len(self.environments)} - "
+                     )
         self.app_data_reader.signals.initial_cache_loading_completed.emit()
+
+    def refresh_environments(self):
+        self.environments = {
+            e.name: e
+            for e in self.app_data_reader.get_environments_from_db()
+        }
+
+    def get_environments(self):
+        return self.environments.values()
+
+    def get_selected_environment(self, environment_name):
+        return self.environments.get(environment_name)
 
     def on_api_http_exchange_added(self, api_call_id, exchange):
         http_exchanges = self.api_http_exchanges.get(api_call_id, [])
@@ -78,7 +100,7 @@ class AppDataCache:
         self.api_http_exchanges[api_call_id] = http_exchanges
 
     def get_all_api_calls(self):
-        return [obj for k, obj in self.api_call_list.items()]
+        return self.api_call_list.values()
 
     def refresh_api_test_case(self, api_call_id):
         api_test_case = self.app_data_reader.get_api_test_case(api_call_id)
@@ -89,9 +111,8 @@ class AppDataCache:
 
     def refresh_cache_item(self, api_call_id):
         refreshed_api_call = self.app_data_reader.get_api_call(api_call_id)
-        for ac in self.get_all_api_calls():
-            if ac.id == api_call_id:
-                del self.api_call_list[api_call_id]
+        if self.api_call_list.get(api_call_id, None):
+            del self.api_call_list[api_call_id]
 
         self.api_call_list[api_call_id] = refreshed_api_call
 
@@ -123,7 +144,7 @@ class AppDataCache:
 
     def get_all_env_variables(self):
         current_env = self.get_appstate_environment()
-        environment: Environment = self.app_data_reader.get_selected_environment(current_env)
+        environment: Environment = self.get_selected_environment(current_env)
         return [
             f"${{{k}}}" for k in environment.data.keys()
         ]

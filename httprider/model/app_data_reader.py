@@ -80,21 +80,25 @@ class AppDataReader(AppData):
         http_exchange_json = json.loads(http_exchange_db['object'])
         return HttpExchange.from_json(http_exchange_json)
 
-    def get_environments(self):
-        query = Query()
+    def get_environments_from_db(self):
+        table = self.ldb[ENVIRONMENT_RECORD_TYPE]
+        environments_db = table.find(name=ENVIRONMENT_RECORD_TYPE)
+        if not environments_db:
+            return []
+
         return [
-            Environment.from_json(obj)
-            for obj in self.db.search(query.record_type == ENVIRONMENT_RECORD_TYPE)
+            Environment.from_json(json.loads(obj['object']))
+            for obj in environments_db
         ]
 
-    def get_selected_environment(self, environment_name):
-        query = Query()
-        return Environment.from_json(
-            self.db.get(
-                (query.record_type == ENVIRONMENT_RECORD_TYPE) &
-                (query.name == environment_name)
-            )
-        )
+    def get_selected_environment_from_db(self, environment_name):
+        table = self.ldb[ENVIRONMENT_RECORD_TYPE]
+        environment_db = table.find_one(environment_name=environment_name)
+        if not environment_db:
+            return None
+
+        environment_json = json.loads(environment_db['object'])
+        return Environment.from_json(environment_json)
 
     def get_or_create_project_info(self):
         table = self.ldb[PROJECT_INFO_RECORD_TYPE]

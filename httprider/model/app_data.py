@@ -180,16 +180,15 @@ class HttpExchange(object):
 
 @attr.s(auto_attribs=True)
 class Environment(object):
-    id: int = None
+    id: str = None
     record_type: str = ENVIRONMENT_RECORD_TYPE
     name: str = None
     data: Dict[str, DynamicStringData] = {}
 
     @classmethod
-    def from_json(cls, json_obj):
+    def from_json(cls, json_obj=None):
         if not json_obj:
             return cls()
-        json_obj['id'] = json_obj.doc_id
         return cattr.structure(json_obj, cls)
 
     def to_json(self):
