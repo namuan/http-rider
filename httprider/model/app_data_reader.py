@@ -19,7 +19,8 @@ class AppDataReadSignals(QObject):
 class AppDataReader(AppData):
 
     def __init__(self, db_table):
-        self.db = db_table
+        self.ldb = db_table
+        self.db = None
         self.signals = AppDataReadSignals()
 
     def get_all_api_calls_from_db(self):

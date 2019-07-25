@@ -65,7 +65,7 @@ def random_environment():
 
 
 def random_project_name():
-    return f"{qApp.applicationName()}-{fake.domain_word()}.tmp.json"
+    return f"{qApp.applicationName()}-{fake.domain_word()}.tmp.db"
 
 
 def elapsed_time_formatter(elapsed_time):

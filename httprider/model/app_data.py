@@ -218,4 +218,4 @@ class ApiTestCase(object):
 
 class AppData:
     db: Table
-    ldb = dataset.connect("sqlite:///httprider.db")
+    ldb = None

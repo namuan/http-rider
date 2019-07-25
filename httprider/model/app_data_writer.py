@@ -34,7 +34,8 @@ class AppDataSignals(QObject):
 class AppDataWriter(AppData):
 
     def __init__(self, db_table):
-        self.db = db_table
+        self.ldb = db_table
+        self.db = None
         self.signals = AppDataSignals()
 
     def update_project_info(self, project_info):
