@@ -1,7 +1,8 @@
 import logging
-from queue import Queue
+from queue import Queue, Empty
 
-from httprider.core.api_call_interactor import api_call_interactor
+from ..core import random_environment
+from ..core.api_call_interactor import api_call_interactor
 from .core_settings import app_settings
 from ..external.rest_api_connector import RestApiConnector, http_exchange_signals
 from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange
@@ -9,23 +10,46 @@ from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange
 
 class RestApiInteractor:
     worker_queue: Queue = Queue()
-    api_worker = RestApiConnector()
+    api_workers = []
+    api_worker = RestApiConnector(name=random_environment())
 
     def __init__(self):
+        self.bind_signals()
+
+        http_exchange_signals.request_finished.connect(self.process_queue)
+        http_exchange_signals.interrupt.connect(self.on_halt_processing)
+
+    def on_halt_processing(self):
+        logging.info(f"Terminating thread: {self.api_worker.tname}")
+        self.api_worker = RestApiConnector(name=random_environment())
+        self.bind_signals()
+
+        logging.info(f"Clearing queue - items waiting: {self.worker_queue.qsize()}")
+        while not self.worker_queue.empty():
+            try:
+                self.worker_queue.get(block=False)
+            except Empty:
+                continue
+
+            self.worker_queue.task_done()
+
+    def bind_signals(self):
         self.api_worker.signals.result.connect(self.__on_success)
         self.api_worker.signals.error.connect(self.__on_failure)
 
-        http_exchange_signals.request_finished.connect(self.process_queue)
-
     def process_queue(self):
+        logging.info(f"Status of API Worker: {self.api_worker.isRunning()}")
         if not self.worker_queue.empty():
+            self.api_worker = RestApiConnector(name=random_environment())
+            self.bind_signals()
+
             queued_exchange = self.worker_queue.get()
             logging.info(f"Processing queued exchange: {queued_exchange.api_call_id}")
-            self.process_exchange(queued_exchange, None, None)
+            self.process_exchange(queued_exchange)
         else:
             logging.debug("Nothing in the queue")
 
-    def make_http_call(self, api_call: ApiCall, on_success=None, on_failure=None):
+    def make_http_call(self, api_call: ApiCall):
         exchange_request = ExchangeRequest.from_api_call(api_call)
 
         # inject common headers respecting existing headers on the request
@@ -44,11 +68,12 @@ class RestApiInteractor:
             logging.warning(f"Should queue request for API: {exchange.api_call_id}")
             self.worker_queue.put(exchange)
         else:
-            self.process_exchange(exchange, on_success, on_failure)
+            self.process_exchange(exchange)
 
         logging.info(f"Queue Size: {self.worker_queue.qsize()}")
 
-    def process_exchange(self, exchange: HttpExchange, on_success, on_failure):
+    def process_exchange(self, exchange: HttpExchange):
+        self.api_workers.append(self.api_worker)
         logging.info(f"Scheduling API Call {exchange.api_call_id}")
         self.api_worker.exchange = exchange
         self.api_worker.start()
