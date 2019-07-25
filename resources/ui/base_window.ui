@@ -231,6 +231,57 @@
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="tab_7">
+           <attribute name="title">
+            <string>Mocked Response</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_16">
+              <item>
+               <widget class="QCheckBox" name="chk_mock_response_enabled">
+                <property name="text">
+                 <string>Enabled</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="txt_mocked_response_code">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="placeholderText">
+                 <string>200</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QListWidget" name="lst_mocked_response_headers"/>
+            </item>
+            <item>
+             <widget class="CompletionPlainTextEdit" name="txt_mocked_response_body">
+              <property name="placeholderText">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
         <item>

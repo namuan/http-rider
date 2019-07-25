@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import *
 
 from httprider.core.api_call_interactor import api_call_interactor
 from httprider.model.completer import get_completer_model
+from httprider.presenters.mocked_response_presenter import MockedResponsePresenter
 from ..core import styles_from_file, split_url_qs
 from ..core.core_settings import app_settings
 from ..core.rest_api_interactor import rest_api_interactor
@@ -34,6 +35,8 @@ class RequestPresenter:
         )
         self.request_param_list_presenter = KeyValueListPresenter(self.view.lst_request_params, self)
         self.form_params_list_presenter = KeyValueListPresenter(self.view.lst_form_params, self)
+
+        self.mocked_response_presenter = MockedResponsePresenter(self, self.view)
 
         self.pyg_styles = styles_from_file(":/themes/pyg.css")
         self.view.txt_request_body.document().setDefaultStyleSheet(self.pyg_styles)
@@ -95,6 +98,7 @@ class RequestPresenter:
         self.current.title = self.view.txt_api_title.text().strip()
         self.current.description = self.get_api_description()
         self.current.tags = self.get_all_tags()
+        self.current.mocked_response = self.get_mocked_response()
 
     def get_all_tags(self):
         all_tags = []
@@ -104,6 +108,9 @@ class RequestPresenter:
                 all_tags.append(widget_item.widget().text().strip())
 
         return all_tags
+
+    def get_mocked_response(self):
+        return self.mocked_response_presenter.form_to_object()
 
     def object_to_form(self, api_call: ApiCall):
         self.current = api_call
@@ -122,6 +129,7 @@ class RequestPresenter:
             self.view.txt_request_body.appendHtml(api_request_body_highlighted(self.current))
 
         self.update_tags_on_form(self.current, self.current.tags)
+        self.mocked_response_presenter.object_to_form(self.current.mocked_response)
 
         # Try setting the border to red
         # @todo: One way to indicate that JSON is invalid.

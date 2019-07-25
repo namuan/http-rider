@@ -1,11 +1,11 @@
 import logging
 from queue import Queue, Empty
 
+from .core_settings import app_settings
 from ..core import random_environment
 from ..core.api_call_interactor import api_call_interactor
-from .core_settings import app_settings
 from ..external.rest_api_connector import RestApiConnector, http_exchange_signals
-from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange
+from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange, ExchangeResponse
 
 
 class RestApiInteractor:
@@ -61,6 +61,9 @@ class RestApiInteractor:
             api_call_id=api_call.id,
             request=exchange_request
         )
+
+        if api_call.mocked_response.is_enabled:
+            exchange.response = ExchangeResponse.from_mocked_response(api_call.mocked_response)
 
         if self.api_worker.isRunning():
             running_exchange: HttpExchange = self.api_worker.exchange

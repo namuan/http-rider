@@ -1,6 +1,5 @@
 from httprider.core.api_call_interactor import api_call_interactor
 from httprider.core.app_state_interactor import AppStateInteractor
-from ..core.core_settings import app_settings
 from ..model.app_data import ApiCall
 
 
@@ -37,6 +36,9 @@ class EmptyFramePresenter:
 
     def focus_request_body(self):
         self.view.tabWidget.setCurrentIndex(4)
+
+    def focus_mocked_response(self):
+        self.view.tabWidget.setCurrentIndex(5)
 
     def focus_http_method(self):
         self.view.cmb_http_method.setFocus(True)

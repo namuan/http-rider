@@ -5,12 +5,12 @@ from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
 from requests.exceptions import ConnectionError
 from urllib3.exceptions import NewConnectionError
 
-from ..external.requester import Requester
-from ..core import guess_content_type, replace_variables
+from ..core import guess_content_type, replace_variables, replace_response_variables, get_variable_tokens
 from ..core.constants import ContentType
 from ..core.core_settings import app_settings
 from ..core.generators import is_file_function
 from ..external import open_form_file
+from ..external.requester import Requester
 from ..model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
 
 
@@ -51,8 +51,22 @@ class RestApiConnector(QThread):
         self.halt_processing = True
         logging.info(f"Received interrupt signal on {self.exchange}")
 
+    def convert_response(self, raw_response):
+        res = ExchangeResponse(
+            http_status_code=raw_response.status_code,
+            response_body=raw_response.text
+        )
+
+        if res.response_body:
+            res.response_body_type = guess_content_type(res.response_body)
+
+        res.elapsed_time = raw_response.elapsed
+        res.headers = raw_response.headers
+        return res
+
     def make_http_call(self):
-        self.exchange.request = replace_variables(app_settings, self.exchange.request)
+        var_tokens = get_variable_tokens(app_settings)
+        self.exchange.request = replace_variables(var_tokens, self.exchange.request)
         req: ExchangeRequest = self.exchange.request
         logging.info(
             f"==>[{self.tname}] make_http_call({self.exchange.api_call_id}): Http {req.http_method} to {req.http_url}")
@@ -84,29 +98,28 @@ class RestApiConnector(QThread):
         try:
             progress_message = f"{req.http_method} call to {req.http_url}"
             http_exchange_signals.request_started.emit(progress_message, self.exchange.api_call_id)
-            response = self.requester.make_request(req.http_method, req.http_url, kwargs)
 
-            # This is to make sure that we cleanly quit this thread
-            if self.halt_processing:
-                self.halt_processing = False
-                http_exchange_signals.request_finished.emit()
-                return
+            if self.exchange.response.is_mocked:
+                logging.info(f"<== Returning mocked Response ({self.exchange.api_call_id})")
+                self.exchange.response = replace_response_variables(var_tokens, self.exchange.response)
+            else:
+                response = self.requester.make_request(req.http_method, req.http_url, kwargs)
+                self.exchange.response = self.convert_response(response)
 
-            for fk, fv in kwargs.get('files', {}).items():
-                fv.close()
+                for fk, fv in kwargs.get('files', {}).items():
+                    fv.close()
 
-            res = ExchangeResponse(
-                http_status_code=response.status_code,
-                response_body=response.text
-            )
+                logging.info(
+                    f"<== make_http_call({self.exchange.api_call_id}): "
+                    f"Received response in {self.exchange.response.elapsed_time}"
+                )
 
-            if res.response_body:
-                res.response_body_type = guess_content_type(res.response_body)
+                # This is to make sure that we cleanly quit this thread
+                if self.halt_processing:
+                    self.halt_processing = False
+                    http_exchange_signals.request_finished.emit()
+                    return
 
-            res.elapsed_time = response.elapsed
-            res.headers = response.headers
-            self.exchange.response = res
-            logging.info(f"<== make_http_call({self.exchange.api_call_id}): Received response in {res.elapsed_time}")
             self.signals.result.emit(self.exchange)
         except ConnectionError as e:
             nce: NewConnectionError = e.args[0].reason

@@ -62,6 +62,14 @@ class AppState(object):
 
 
 @attr.s(auto_attribs=True)
+class MockedResponse(object):
+    is_enabled: bool = False
+    status_code: int = 200
+    headers: Dict[str, DynamicStringData] = {}
+    body: str = ""
+
+
+@attr.s(auto_attribs=True)
 class ApiCall(object):
     id: str = None
     description: str = ""
@@ -78,6 +86,7 @@ class ApiCall(object):
     last_response_code: Optional[int] = None
     enabled: bool = True
     last_assertion_result: Optional[bool] = None
+    mocked_response: MockedResponse = MockedResponse()
 
     @classmethod
     def from_json(cls, json_obj=None):
@@ -124,6 +133,7 @@ class ExchangeResponse(object):
     response_body: str = ""
     response_body_type: ContentType = ContentType.NONE
     response_time: float = 0.0
+    is_mocked: bool = False
 
     @property
     def elapsed_time(self):
@@ -143,6 +153,16 @@ class ExchangeResponse(object):
 
     def content_type(self):
         return self.headers.get("Content-Type", self.response_body_type.value)
+
+    @classmethod
+    def from_mocked_response(cls, mocked_response: MockedResponse):
+        return cls(
+            response_headers={k: v.display_text for k, v in mocked_response.headers.items() if v.is_enabled},
+            response_body=mocked_response.body,
+            http_status_code=mocked_response.status_code,
+            is_mocked=True,
+            response_time=0.0
+        )
 
 
 @attr.s(auto_attribs=True)

@@ -24,6 +24,9 @@ def shortcut_items(self):
     request_body = QShortcut(QKeySequence("Alt+B"), self)
     request_body.activated.connect(self.empty_frame_presenter.focus_request_body)
 
+    mocked_response = QShortcut(QKeySequence("Alt+M"), self)
+    mocked_response.activated.connect(self.empty_frame_presenter.focus_mocked_response)
+
     prev_request = QShortcut(QKeySequence("Ctrl+Up"), self)
     prev_request.activated.connect(self.api_list_presenter.selectPreviousApiCall)
 

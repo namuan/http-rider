@@ -50,6 +50,13 @@ def truncate(directory, with_parent=True):
         return p.name
 
 
+def str_to_int(int_str, default=0):
+    if int_str and type(int_str) is str:
+        return int(int_str)
+
+    return default
+
+
 def str_to_bool(bool_str):
     if type(bool_str) is bool:
         return bool_str
@@ -116,7 +123,15 @@ def flatten_variables(x: dict, y: dict):
     return x
 
 
-def replace_variables(app_settings, exchange_request):
+def replace_response_variables(vars_tokens, exchange_response):
+    for hk, hv in exchange_response.headers.items():
+        exchange_response.headers[hk] = template_sub(hv, vars_tokens)
+
+    exchange_response.response_body = template_sub(exchange_response.response_body, vars_tokens)
+    return exchange_response
+
+
+def get_variable_tokens(app_settings):
     active_env = app_settings.app_data_cache.get_appstate_environment()
     env = app_settings.app_data_cache.get_selected_environment(active_env)
 
@@ -125,7 +140,10 @@ def replace_variables(app_settings, exchange_request):
 
     env_map = {k: v.display_text for k, v in env.data.items()}
     vars_tokens = {**env_map, **flatten_runtime_vars}
+    return vars_tokens
 
+
+def replace_variables(vars_tokens, exchange_request):
     exchange_request.http_url = template_sub(exchange_request.http_url, vars_tokens)
     for hk, hv in exchange_request.headers.items():
         exchange_request.headers[hk] = template_sub(hv, vars_tokens)
