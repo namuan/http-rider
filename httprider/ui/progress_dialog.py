@@ -22,7 +22,6 @@ class ProgressDialog(QDialog, Ui_ProgressDialog):
     def cancel_processing(self):
         self.update_status("Cancelling....")
         http_exchange_signals.interrupt.emit()
-        self.hide_dialog()
 
     def show_dialog(self, message=""):
         self.lbl_progress_status.setText(message)

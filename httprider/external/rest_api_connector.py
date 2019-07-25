@@ -89,6 +89,7 @@ class RestApiConnector(QThread):
             # This is to make sure that we cleanly quit this thread
             if self.halt_processing:
                 self.halt_processing = False
+                http_exchange_signals.request_finished.emit()
                 return
 
             for fk, fv in kwargs.get('files', {}).items():
