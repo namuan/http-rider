@@ -8,7 +8,7 @@ from ..core.core_settings import app_settings
 def get_completer_model():
     model: QStandardItemModel = QStandardItemModel()
 
-    envs = app_settings.app_data_reader.get_all_env_variables()
+    envs = app_settings.app_data_cache.get_all_env_variables()
     for e in envs:
         item: QStandardItem = QStandardItem()
         item.setText(e)

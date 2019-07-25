@@ -1,3 +1,5 @@
+from httprider.core.api_call_interactor import api_call_interactor
+from httprider.core.app_state_interactor import AppStateInteractor
 from ..core.core_settings import app_settings
 from ..model.app_data import ApiCall
 
@@ -5,16 +7,20 @@ from ..model.app_data import ApiCall
 class EmptyFramePresenter:
     def __init__(self, parent_view):
         self.view = parent_view
+        self.app_state_interactor = AppStateInteractor()
         self.view.btn_add_request.pressed.connect(self.on_btn_add_request)
 
     def on_btn_add_request(self):
         api_call = ApiCall()
-        api_call.http_url = "https://httpbin.org/get"
+        api_call.http_url = "http://127.0.0.1:8000/get"
         api_call.http_method = "GET"
         api_call.title = "Get httpbin"
         api_call.description = "Httpbin call to get request data"
-        api_call.sequence_number = app_settings.app_data_writer.generate_sequence_number()
-        app_settings.app_data_writer.add_api_call(api_call)
+        api_call.sequence_number = self.app_state_interactor.update_sequence_number()
+
+        # Migration
+        api_call_interactor.add_api_call(api_call)
+
         self.focus_http_url()
 
     def focus_http_url(self):

@@ -88,7 +88,7 @@ class OpenApiv3Exporter:
             if parameters:
                 operations[http_method]['parameters'] = parameters
 
-            last_exchange = app_settings.app_data_reader.get_last_exchange(api.id)
+            last_exchange = app_settings.app_data_cache.get_last_exchange(api.id)
 
             # Request object
             if last_exchange.request.request_body:

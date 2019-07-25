@@ -7,6 +7,7 @@ PROJECT_INFO_RECORD_TYPE = "project_info"
 APP_STATE_RECORD_TYPE = "app_state"
 HTTP_EXCHANGE_RECORD_TYPE = "http_exchange"
 API_TEST_CASE_RECORD_TYPE = "api_test"
+API_CALL_RECORD_TYPE = "api"
 DEFAULT_TAG = "Show All"
 
 API_CALL_ROLE = Qt.UserRole + 100

@@ -1,3 +1,4 @@
+from httprider.core.app_state_interactor import AppStateInteractor
 from ..core.constants import *
 from ..core.core_settings import app_settings
 
@@ -5,6 +6,7 @@ from ..core.core_settings import app_settings
 class TagsListPresenter:
     def __init__(self, parent_view=None):
         self.parent_view = parent_view
+        self.app_state_interactor = AppStateInteractor()
         app_settings.app_data_writer.signals.project_info_updated.connect(self.refresh)
 
     def __get_combox_box(self):
@@ -13,7 +15,7 @@ class TagsListPresenter:
         return tags_list_action.defaultWidget()
 
     def on_tag_changed(self, tag_name):
-        app_settings.app_data_writer.update_selected_tag(tag_name)
+        self.app_state_interactor.update_selected_tag(tag_name)
 
     def refresh(self):
         project_info = app_settings.app_data_reader.get_or_create_project_info()

@@ -1,20 +1,21 @@
 import logging
 import time
 
-from PyQt5.QtCore import QRunnable, QObject, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
 from requests.exceptions import ConnectionError
 from urllib3.exceptions import NewConnectionError
 
+from ..external.requester import Requester
 from ..core import guess_content_type, replace_variables
 from ..core.constants import ContentType
 from ..core.core_settings import app_settings
 from ..core.generators import is_file_function
-from ..external import requester, open_form_file
+from ..external import open_form_file
 from ..model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
 
 
 class HttpExchangeSignals(QObject):
-    request_started = pyqtSignal(str, int)
+    request_started = pyqtSignal(str, str)
     request_finished = pyqtSignal()
     interrupt = pyqtSignal()
 
@@ -27,27 +28,34 @@ class RestApiResponseSignals(QObject):
     error = pyqtSignal(HttpExchange)
 
 
-class RestApiConnector(QRunnable):
+class RestApiConnector(QThread):
 
-    def __init__(self, http_exchange: HttpExchange):
+    def __init__(self, name):
         super(RestApiConnector, self).__init__()
+        self.tname = name
         self.halt_processing = False
         self.signals = RestApiResponseSignals()
         http_exchange_signals.interrupt.connect(self.on_halt_processing)
-        self.exchange = http_exchange
+        self._exchange = None
+        self.requester = Requester()
+
+    @property
+    def exchange(self):
+        return self._exchange
+
+    @exchange.setter
+    def exchange(self, value):
+        self._exchange = value
 
     def on_halt_processing(self):
         self.halt_processing = True
         logging.info(f"Received interrupt signal on {self.exchange}")
 
     def make_http_call(self):
-        if self.halt_processing:
-            self.halt_processing = False
-            return
-
         self.exchange.request = replace_variables(app_settings, self.exchange.request)
         req: ExchangeRequest = self.exchange.request
-        logging.info(f"==> make_http_call({self.exchange.api_call_id}): Http {req.http_method} to {req.http_url}")
+        logging.info(
+            f"==>[{self.tname}] make_http_call({self.exchange.api_call_id}): Http {req.http_method} to {req.http_url}")
         kwargs = dict(
             headers=req.headers,
             params=req.query_params
@@ -73,11 +81,16 @@ class RestApiConnector(QRunnable):
         elif req.request_body:
             kwargs['data'] = req.request_body
 
-
         try:
             progress_message = f"{req.http_method} call to {req.http_url}"
             http_exchange_signals.request_started.emit(progress_message, self.exchange.api_call_id)
-            response = requester.make_request(req.http_method, req.http_url, kwargs)
+            response = self.requester.make_request(req.http_method, req.http_url, kwargs)
+
+            # This is to make sure that we cleanly quit this thread
+            if self.halt_processing:
+                self.halt_processing = False
+                http_exchange_signals.request_finished.emit()
+                return
 
             for fk, fv in kwargs.get('files', {}).items():
                 fv.close()

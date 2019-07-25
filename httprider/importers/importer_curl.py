@@ -4,8 +4,8 @@ import attr
 import uncurl
 from uncurl.api import ParsedContext
 
+from httprider.core.app_state_interactor import AppStateInteractor
 from ..core import DynamicStringData, split_url_qs
-from ..core.core_settings import app_settings
 from ..model.app_data import ApiCall
 
 
@@ -13,6 +13,7 @@ from ..model.app_data import ApiCall
 class CurlImporter:
     name: str = "Curl"
     input_type: str = "text"
+    app_state_interactor = AppStateInteractor()
 
     def import_data(self, curl_command):
         try:
@@ -35,7 +36,7 @@ class CurlImporter:
             form_params=self.__extract_form_data(ctx),
             http_params=qs,
             http_headers=self.__extract_header_data(ctx.headers),
-            sequence_number=app_settings.app_data_writer.generate_sequence_number()
+            sequence_number=self.app_state_interactor.update_sequence_number()
         )
 
     def __extract_header_data(self, headers):

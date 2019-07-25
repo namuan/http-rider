@@ -46,7 +46,7 @@ class ExchangePresenter:
         self.view.frame_exchange.hide()
 
     def refresh(self, api_call_id, exchange: HttpExchange):
-        api_call = app_settings.app_data_reader.get_api_call(api_call_id)
+        api_call = app_settings.app_data_cache.get_api_call(api_call_id)
         logging.info(f"API Call {api_call_id} - Updating Exchange View: {api_call}")
         self.current = api_call
         http_request = exchange.request

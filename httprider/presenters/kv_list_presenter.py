@@ -34,6 +34,8 @@ class KeyValueListPresenter:
             self.header_value_completer.setFilterMode(Qt.MatchContains)
             self.header_value_completer.setCompletionMode(QCompleter.PopupCompletion)
 
+        self.completer_model = None
+
     def refresh_completer(self):
         completer_model: QStandardItemModel = get_completer_model()
         self.completer_model = completer_model

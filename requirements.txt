@@ -1,6 +1,5 @@
 sip
 PyQt5
-tinydb
 requests
 attrs
 cattrs
@@ -15,3 +14,4 @@ apispec
 apispec[yaml]
 apispec[validation]
 genson
+dataset

@@ -19,7 +19,7 @@ class FileMenuPresenter:
         file_location, _ = self.main_window.open_file(
             "Select Project File",
             current_project_folder,
-            file_filter="Project Files (*.json)"
+            file_filter="Project Files (*.db)"
         )
         if file_location and file_location != user_project.location:
             user_project.location = file_location
@@ -34,7 +34,7 @@ class FileMenuPresenter:
             file_location, _ = self.main_window.save_file(
                 "Save Project File",
                 current_project_folder,
-                file_filter="Project Files (*.json)"
+                file_filter="Project Files (*.db)"
             )
             if file_location and file_location != user_project.location:
                 if retain_current_project_file:

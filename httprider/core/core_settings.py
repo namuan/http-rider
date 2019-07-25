@@ -5,13 +5,14 @@ from typing import Any, Union, Dict
 
 from PyQt5.QtCore import QSettings, QStandardPaths
 from PyQt5.QtWidgets import qApp
-from tinydb import TinyDB
 
 import httprider.exporters as exporters
 import httprider.importers as importers
 from ..core import str_to_bool, import_modules, random_project_name
-from ..model.app_data import AppDataReader, AppDataWriter
 from ..model.app_data_cache import AppDataCache
+from ..model.app_data_reader import AppDataReader
+from ..model.app_data_writer import AppDataWriter
+from ..model.storage import Storage
 from ..model.user_data import UserProject, SavedState
 
 
@@ -48,24 +49,24 @@ class CoreSettings:
 
         logging.basicConfig(
             handlers=handlers,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            format='%(asctime)s - %(filename)s:%(lineno)d - %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S',
             level=logging.DEBUG
         )
         logging.captureWarnings(capture=True)
 
     def init_app_data(self):
-        db_table = self._db_from_current_user_project()
-        self.app_data_reader = AppDataReader(db_table)
-        self.app_data_writer = AppDataWriter(db_table)
+        storage = self._db_from_current_user_project()
+        self.app_data_reader = AppDataReader(storage.db)
+        self.app_data_writer = AppDataWriter(storage.db)
         self.app_data_cache = AppDataCache(self.app_data_reader, self.app_data_writer)
 
     def new_app_data(self):
         """Used when a new project is created/opened and we just wanted to switch underlying
         db_table from AppDataReader and AppDataWriter without creating a new instance"""
-        db_table = self._db_from_current_user_project()
-        self.app_data_reader.db = db_table
-        self.app_data_writer.db = db_table
+        storage = self._db_from_current_user_project()
+        self.app_data_reader.ldb = storage.db
+        self.app_data_writer.ldb = storage.db
 
     def init_importers(self):
         self.importers = import_modules(importers)
@@ -118,7 +119,7 @@ class CoreSettings:
     def _db_from_current_user_project(self):
         user_project: UserProject = self.load_current_project()
         data_location = user_project.location
-        return TinyDB(data_location).table("v1", cache_size=100)
+        return Storage(data_location)
 
 
 app_settings = CoreSettings()

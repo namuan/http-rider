@@ -1,13 +1,13 @@
 import json
 import re
 from pathlib import Path
+from typing import Dict, List
 
 import attr
 import cattr
-from typing import Dict, List
 
+from httprider.core.app_state_interactor import AppStateInteractor
 from ..core import kv_list_to_dict, DynamicStringData
-from ..core.core_settings import app_settings
 from ..model.app_data import ApiCall
 
 
@@ -45,6 +45,7 @@ class PostmanCollectionImporter:
     name: str = "Postman Collections v2"
     input_type: str = "file"
     var_selector = r"({{(\w+)}})+"
+    app_state_interactor = AppStateInteractor()
 
     def import_data(self, file_path):
         self.__validate_file(file_path)
@@ -68,7 +69,7 @@ class PostmanCollectionImporter:
                 k: DynamicStringData(display_text=self.__internal_variables(v))
                 for k, v in kv_list_to_dict(sub_item.request.header).items()
             },
-            sequence_number=app_settings.app_data_writer.generate_sequence_number()
+            sequence_number=self.app_state_interactor.update_sequence_number()
 
         )
         return api_call

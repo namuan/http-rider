@@ -22,7 +22,7 @@ class CurlExporter:
         return "<br/>".join(output)
 
     def __export_api_call(self, api_call):
-        last_exchange = app_settings.app_data_reader.get_last_exchange(api_call.id)
+        last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         doc = f"""# {api_call.title}
 # 
 {to_curl(api_call, last_exchange)}

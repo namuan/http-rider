@@ -1,10 +1,11 @@
-import logging
 import ast
 import codecs
 import functools
 import importlib
 import json
+import logging
 import pkgutil
+import uuid
 from json import JSONDecodeError
 from pathlib import Path
 from string import Template
@@ -64,7 +65,7 @@ def random_environment():
 
 
 def random_project_name():
-    return f"{qApp.applicationName()}-{fake.domain_word()}.tmp.json"
+    return f"{qApp.applicationName()}-{fake.domain_word()}.tmp.db"
 
 
 def elapsed_time_formatter(elapsed_time):
@@ -116,8 +117,8 @@ def flatten_variables(x: dict, y: dict):
 
 
 def replace_variables(app_settings, exchange_request):
-    active_env = app_settings.app_data_reader.get_appstate_environment()
-    env = app_settings.app_data_reader.get_selected_environment(active_env)
+    active_env = app_settings.app_data_cache.get_appstate_environment()
+    env = app_settings.app_data_cache.get_selected_environment(active_env)
 
     all_runtime_vars = app_settings.app_data_cache.get_all_api_test_assertions()
     flatten_runtime_vars = functools.reduce(flatten_variables, all_runtime_vars, {})
@@ -211,3 +212,7 @@ def load_json_show_error(json_str):
         return j
     except JSONDecodeError:
         logging.error(f"Error in loading JSON: {json_str}")
+
+
+def gen_uuid():
+    return str(uuid.uuid4())

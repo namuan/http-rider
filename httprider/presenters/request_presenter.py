@@ -4,12 +4,13 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QKeyEvent
 from PyQt5.QtWidgets import *
 
+from httprider.core.api_call_interactor import api_call_interactor
 from httprider.model.completer import get_completer_model
 from ..core import styles_from_file, split_url_qs
 from ..core.core_settings import app_settings
-from ..core.rest_api_interactor import make_http_call
+from ..core.rest_api_interactor import rest_api_interactor
 from ..exporters import api_request_body_highlighted
-from ..model.app_data import ApiCall, HttpExchange, COMMON_HEADERS, HTTP_CONTENT_TYPES
+from ..model.app_data import ApiCall, COMMON_HEADERS, HTTP_CONTENT_TYPES
 from ..presenters import AssertionResultPresenter, KeyValueListPresenter
 from ..ui.assertion_builder_dialog import AssertionBuilderDialog
 from ..widgets.completion_line_edit import CompletionLineEdit
@@ -55,8 +56,13 @@ class RequestPresenter:
         app_settings.app_data_writer.signals.api_test_case_changed.connect(self.refresh_completer)
         app_settings.app_data_writer.signals.environment_data_changed.connect(self.refresh_completer)
         app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(self.refresh_completer)
+        app_settings.app_data_writer.signals.exchange_added.connect(self.on_exchange_added)
 
         self.assertion_result_presenter = AssertionResultPresenter(self.view)
+
+    def on_exchange_added(self, api_call_id, exchange):
+        api_test_case = app_settings.app_data_cache.get_api_test_case(api_call_id)
+        self.assertion_result_presenter.evaluate(api_test_case, exchange)
 
     def refresh_completer(self):
         completer_model: QStandardItemModel = get_completer_model()
@@ -126,7 +132,8 @@ class RequestPresenter:
 
     def save_new_tag(self, new_tag):
         if new_tag not in self.current.tags:
-            app_settings.app_data_writer.add_tag_to_api_call(self.current, new_tag)
+            # Migration
+            api_call_interactor.add_tag_to_api_call(self.current, new_tag)
 
         self.txt_new_tag_input.clear()
         self.txt_new_tag_input.hide()
@@ -137,7 +144,8 @@ class RequestPresenter:
         self.view.tags_layout.insertWidget(2, tag_label_widget)
 
     def remove_selected_tag(self, tag_name):
-        app_settings.app_data_writer.remove_tag_from_api_call(self.current, tag_name)
+        # Migration
+        api_call_interactor.remove_tag_from_api_call(self.current, tag_name)
 
     def discard_new_tag(self):
         self.txt_new_tag_input.clear()
@@ -196,15 +204,12 @@ class RequestPresenter:
             return
 
         self.form_to_object()
-        app_settings.app_data_writer.update_api_call(self.current.id, self.current)
+        # Migration
+        api_call_interactor.update_api_call(self.current.id, self.current)
 
     def on_btn_send_request(self):
         self.update_current_api_call()
-        make_http_call(self.current, on_success=self.on_success)
-
-    def on_success(self, exchange: HttpExchange):
-        api_test_case = app_settings.app_data_reader.get_api_test_case(exchange.api_call_id)
-        self.assertion_result_presenter.evaluate(api_test_case, exchange)
+        rest_api_interactor.make_http_call(self.current)
 
     def on_api_call_refresh(self, _, api_call):
         self.refresh(api_call)
@@ -215,5 +220,5 @@ class RequestPresenter:
         self.current = None
 
     def refresh(self, api_call: ApiCall):
-        logging.info(f"Changed API Call to {api_call.title}")
+        logging.info(f"Changed API Call to {api_call.id} => {api_call.title}")
         self.object_to_form(api_call)

@@ -7,11 +7,13 @@ from PyQt5.QtGui import *
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import *
 
+from httprider.core.api_call_interactor import api_call_interactor
+from httprider.core.app_state_interactor import AppStateInteractor
 from ..core.constants import *
 from ..core.core_settings import app_settings
-from ..core.rest_api_interactor import make_http_call
+from ..core.rest_api_interactor import rest_api_interactor
 from ..external.rest_api_connector import http_exchange_signals
-from ..model.app_data import ApiCall, HttpExchange
+from ..model.app_data import ApiCall
 from ..presenters import AssertionResultPresenter
 from ..widgets.api_calls_list_view import ApiCallItemDelegate
 
@@ -27,6 +29,9 @@ class ApiListPresenter:
     def __init__(self, parent_view):
         self.view = parent_view.lst_http_requests
         self.parent_view = parent_view
+        self.assertion_result_presenter = AssertionResultPresenter(self.parent_view)
+
+        self.app_state_interactor = AppStateInteractor()
 
         self.model = QStandardItemModel()
         self.view.setModel(self.model)
@@ -60,16 +65,16 @@ class ApiListPresenter:
         app_settings.app_data_writer.signals.multiple_api_calls_added.connect(self.refresh_multiple_items)
         app_settings.app_data_writer.signals.selected_tag_changed.connect(self.refresh)
 
-        self.assertion_result_presenter = AssertionResultPresenter(self.parent_view)
-
     def on_toggle_request_status(self):
         selected_model_index: QModelIndex = self.index_at_selected_row()
         if not selected_model_index:
             return
         api_call_id = selected_model_index.data(API_ID_ROLE)
-        api_call: ApiCall = app_settings.app_data_reader.get_api_call(api_call_id)
+        api_call: ApiCall = app_settings.app_data_cache.get_api_call(api_call_id)
         api_call.enabled = not api_call.enabled
-        app_settings.app_data_writer.update_api_call(api_call_id, api_call)
+
+        # Migration
+        api_call_interactor.update_api_call(api_call_id, api_call)
 
     def on_drop_event(self, model_index: QModelIndex):
         self.is_drop_operation = True
@@ -122,7 +127,7 @@ class ApiListPresenter:
             total_rows = self.model.rowCount()
             after = self.dropped_row + 1
             if after >= total_rows:
-                next_sequence_number = app_settings.app_data_writer.generate_sequence_number()
+                next_sequence_number = self.app_state_interactor.update_sequence_number()
             else:
                 next_api_call = self.model.item(after).data(API_CALL_ROLE)
                 next_sequence_number = next_api_call.sequence_number
@@ -131,11 +136,14 @@ class ApiListPresenter:
             logging.info(f"API Call: {api_call.id} - "
                          f"New Sequence {new_sequence_number} - "
                          f"Moved between {prev_sequence_number} and {next_sequence_number}")
-            app_settings.app_data_writer.update_api_call(api_call.id, api_call)
+
+            # Migration
+            api_call_interactor.update_api_call(api_call.id, api_call)
+
             self.view.setCurrentIndex(current_index)
 
-    def add_request_widget(self, doc_id, api_call: ApiCall, select_item=True):
-        logging.info(f"Adding new item with id {doc_id} to requests list - {api_call.title}")
+    def add_request_widget(self, api_call_id, api_call: ApiCall, select_item=True):
+        logging.info(f"Adding new item with id {api_call_id} to requests list - {api_call}")
         item = QStandardItem(api_call.title)
         item.setData(api_call, API_CALL_ROLE)
         item.setData(QVariant(api_call.id), API_ID_ROLE)
@@ -154,11 +162,7 @@ class ApiListPresenter:
             api_call = self.model.item(n).data(API_CALL_ROLE)
             logging.debug("** Multiple APIs: API Call {}".format(api_call.id))
             if api_call.enabled:
-                make_http_call(api_call, on_success=self.on_success)
-
-    def on_success(self, exchange: HttpExchange):
-        api_test_case = app_settings.app_data_reader.get_api_test_case(exchange.api_call_id)
-        self.assertion_result_presenter.evaluate(api_test_case, exchange)
+                rest_api_interactor.make_http_call(api_call)
 
     def on_remove_selected_item(self):
         selected_model_index: QModelIndex = self.index_at_selected_row()
@@ -166,7 +170,8 @@ class ApiListPresenter:
             return
         row_to_remove = selected_model_index.row()
         api_call: ApiCall = selected_model_index.data(API_CALL_ROLE)
-        app_settings.app_data_writer.remove_api_call([api_call.id])
+        # Migration
+        api_call_interactor.remove_api_call([api_call.id])
         previous_row = row_to_remove - 1
         if previous_row >= 0:
             previous_item: QStandardItem = self.model.item(previous_row)
@@ -177,9 +182,11 @@ class ApiListPresenter:
             return
 
         selected_api_call: ApiCall = current.data(API_CALL_ROLE)
-        app_settings.app_data_reader.update_selected_api_call(selected_api_call.id)
+        logging.info(f"List Item Selected: {selected_api_call.id}")
+        api_call_interactor.update_selected_api_call(selected_api_call.id)
 
     def on_request_started(self, _, api_call_id):
+        logging.info(f"Request started for {api_call_id}")
         api_call_row = self.__row_for_api_call(api_call_id)
         item_running = self.model.item(api_call_row)
         index_running = self.model.indexFromItem(item_running)
@@ -188,7 +195,8 @@ class ApiListPresenter:
     def refresh_selected_item(self, api_call_id):
         api_call_row = self.__row_for_api_call(api_call_id)
         if api_call_row != -1:
-            api_call = app_settings.app_data_reader.get_api_call(api_call_id)
+            api_call = app_settings.app_data_cache.get_api_call(api_call_id)
+            logging.info(f"Refreshing row {api_call_row} -> {api_call.id}")
             self.model.item(api_call_row).setData(api_call, API_CALL_ROLE)
 
     def refresh_multiple_items(self, doc_ids: List[str], api_calls: List[ApiCall]):
@@ -229,8 +237,10 @@ class ApiListPresenter:
         duplicate_api_call = copy.deepcopy(api_call)
         duplicate_api_call.title = f"{duplicate_api_call.title} Duplicate"
         duplicate_api_call.last_response_code = 0
-        duplicate_api_call.sequence_number = app_settings.app_data_writer.generate_sequence_number()
-        app_settings.app_data_writer.add_api_call(duplicate_api_call)
+        duplicate_api_call.sequence_number = self.app_state_interactor.update_sequence_number()
+
+        # Migration
+        api_call_interactor.add_api_call(duplicate_api_call)
 
     def __row_for_api_call(self, api_call_id):
         api_call_row = next(
