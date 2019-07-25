@@ -1,13 +1,12 @@
 import json
 import logging
-from typing import List
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
-from httprider.core import gen_uuid
-from httprider.core.constants import ENVIRONMENT_RECORD_TYPE, API_CALL_RECORD_TYPE
-from httprider.model import HttpExchange, ApiCall
-from httprider.model.app_data import ProjectInfo, AppData, Environment, ApiTestCase
+from ..core import gen_uuid
+from ..core.constants import ENVIRONMENT_RECORD_TYPE, API_CALL_RECORD_TYPE
+from ..model import HttpExchange, ApiCall
+from ..model.app_data import ProjectInfo, AppData, Environment, ApiTestCase
 
 
 class AppDataSignals(QObject):
@@ -35,7 +34,6 @@ class AppDataWriter(AppData):
 
     def __init__(self, db_table):
         self.ldb = db_table
-        self.db = None
         self.signals = AppDataSignals()
 
     def update_project_info(self, project_info):
@@ -112,58 +110,6 @@ class AppDataWriter(AppData):
         table = self.ldb[API_CALL_RECORD_TYPE]
         for api_call_id in api_call_ids:
             table.delete(api_call_id=api_call_id)
-
-    def add_api_call(self, api_call: ApiCall) -> str:
-        raise SyntaxError("Shouldn't call this method")
-        doc_id = self.db.insert(api_call.to_json())
-        self.signals.api_call_added.emit(doc_id, api_call)
-        logging.info(f"API {doc_id} - Adding new API {api_call}")
-        return doc_id
-
-    def add_multiple_api_calls(self, api_calls: List[ApiCall]) -> List[str]:
-        raise SyntaxError("Shouldn't call this method")
-        if not api_calls:
-            return
-
-        doc_ids = self.db.insert_multiple(
-            [api_call.to_json() for api_call in api_calls]
-        )
-        self.signals.multiple_api_calls_added.emit(doc_ids, api_calls)
-        return doc_ids
-
-    def remove_api_call(self, doc_ids):
-        raise SyntaxError("Shouldn't call this method")
-        logging.info(f"Removing API Call with Id: {doc_ids}")
-        self.db.remove(doc_ids=doc_ids)
-        self.signals.api_call_removed.emit(doc_ids)
-
-    def update_api_call(self, doc_id, api_call):
-        raise SyntaxError("Shouldn't call this method")
-        logging.info(f"API : {doc_id} - Updating API Call {api_call}")
-        self.db.update(api_call.to_json(), doc_ids=[doc_id])
-        self.signals.api_call_updated.emit(api_call.id, api_call)
-
-    def add_tag_to_api_call(self, api_call: ApiCall, new_tag_name: str):
-        raise SyntaxError("Shouldn't call this method")
-        logging.info(f"API : {api_call.id} - Adding tag {new_tag_name}")
-        api_call.tags.append(new_tag_name)
-        self.db.update(api_call.to_json(), doc_ids=[api_call.id])
-        self.signals.api_call_tag_added.emit(api_call, new_tag_name)
-
-    def remove_tag_from_api_call(self, api_call: ApiCall, tag_name: str):
-        raise SyntaxError("Shouldn't call this method")
-        logging.info(f"API: {api_call.id} - Removing tag {tag_name}")
-        api_call.tags.remove(tag_name)
-        self.db.update(api_call.to_json(), doc_ids=[api_call.id])
-        self.signals.api_call_tag_removed.emit(api_call, tag_name)
-
-    def rename_tag_in_api_call(self, api_call: ApiCall, old_tag_name, new_tag_name):
-        raise SyntaxError("Shouldn't call this method")
-        logging.info(f"API: {api_call.id} - Renaming tag {old_tag_name} to {new_tag_name}")
-        api_call.tags.remove(old_tag_name)
-        api_call.tags.append(new_tag_name)
-        self.db.update(api_call.to_json(), doc_ids=[api_call.id])
-        self.signals.api_call_tag_added.emit(api_call, new_tag_name)
 
     def update_environment_in_db(self, environment: Environment):
         table = self.ldb[environment.record_type]

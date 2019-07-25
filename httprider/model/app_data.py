@@ -3,9 +3,7 @@ from typing import Any, Optional, Dict, List
 
 import attr
 import cattr
-import dataset
 from requests.structures import CaseInsensitiveDict
-from tinydb.database import Table
 
 from ..core import DynamicStringData
 from ..core.constants import *
@@ -217,5 +215,4 @@ class ApiTestCase(object):
 
 
 class AppData:
-    db: Table
     ldb = None

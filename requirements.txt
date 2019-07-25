@@ -1,6 +1,5 @@
 sip
 PyQt5
-tinydb
 requests
 attrs
 cattrs

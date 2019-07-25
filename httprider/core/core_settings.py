@@ -3,18 +3,16 @@ import logging.handlers
 from pathlib import Path
 from typing import Any, Union, Dict
 
-import dataset
 from PyQt5.QtCore import QSettings, QStandardPaths
 from PyQt5.QtWidgets import qApp
-from tinydb import TinyDB
 
 import httprider.exporters as exporters
 import httprider.importers as importers
-from httprider.model.storage import Storage
 from ..core import str_to_bool, import_modules, random_project_name
 from ..model.app_data_cache import AppDataCache
 from ..model.app_data_reader import AppDataReader
 from ..model.app_data_writer import AppDataWriter
+from ..model.storage import Storage
 from ..model.user_data import UserProject, SavedState
 
 
