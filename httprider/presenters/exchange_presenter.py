@@ -74,6 +74,8 @@ class ExchangePresenter:
         response_code = response_code_formatter(http_response.http_status_code)
         self.view.lbl_response_code.setText(f"HTTP {response_code}")
         elapsed_time = elapsed_time_formatter(http_response.elapsed_time)
+        if http_response.is_mocked:
+            elapsed_time = "Mocked Response"
         self.view.lbl_response_latency.setText(elapsed_time)
         self.view.txt_response_body.setHtml(response_body_highlighted(http_response))
 
