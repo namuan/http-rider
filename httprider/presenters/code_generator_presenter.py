@@ -4,6 +4,7 @@ from pathlib import Path
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItem
 
+from ..exporters import exporter_plugins
 from ..core import styles_from_file
 from ..core.constants import EXPORTER_COMBO_ROLE
 from ..core.core_settings import app_settings
@@ -33,7 +34,7 @@ class CodeGeneratorPresenter:
     def show_dialog(self):
         self.view.cmb_exporters.clear()
 
-        for ek, ev in app_settings.exporters.items():
+        for ek, ev in exporter_plugins.items():
             item: QStandardItem = QStandardItem()
             item.setData(ev.exporter.name, Qt.DisplayRole)
             item.setData(ek, EXPORTER_COMBO_ROLE)
@@ -51,7 +52,7 @@ class CodeGeneratorPresenter:
 
         self.view.txt_generated_code.clear()
         selected_name = item.data(EXPORTER_COMBO_ROLE)
-        selected_exporter = app_settings.exporters.get(selected_name)
+        selected_exporter = exporter_plugins.get(selected_name)
         self.generate_code(selected_exporter)
 
     def generate_code(self, selected_exporter):

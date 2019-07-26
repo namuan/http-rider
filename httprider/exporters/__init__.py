@@ -20,3 +20,22 @@ def request_body_highlighted(http_request: ExchangeRequest):
 
 def response_body_highlighted(http_response: ExchangeResponse):
     return highlight_format_json(http_response.response_body)
+
+
+from . import exporter_apickli
+from . import exporter_curl
+from . import exporter_markdown
+from . import exporter_mermaid
+from . import exporter_openapi_v3
+from . import exporter_postman_dump
+from . import exporter_restassured
+
+exporter_plugins = {
+    'apickli': exporter_apickli,
+    'curl': exporter_curl,
+    'markdown': exporter_markdown,
+    'mermaid': exporter_mermaid,
+    'openapi_v3': exporter_openapi_v3,
+    'postman_dump': exporter_postman_dump,
+    'restassured': exporter_restassured
+}

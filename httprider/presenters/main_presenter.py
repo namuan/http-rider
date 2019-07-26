@@ -11,8 +11,6 @@ class MainPresenter:
         app_settings.init()
         app_settings.init_logger()
         app_settings.init_app_data()
-        app_settings.init_importers()
-        app_settings.init_exporters()
         if app_settings.geometry():
             self.view.restoreGeometry(app_settings.geometry())
         if app_settings.window_state():

@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 
-from ..core.core_settings import app_settings
+from ..importers import importer_plugins
 from ..widgets.search_line_edit_widget import SearchLineEdit
 
 
@@ -36,7 +36,7 @@ def tool_bar_items(self):
 
     # Menu for Importers
     importers = QMenu()
-    for _, val in app_settings.importers.items():
+    for val in importer_plugins:
         imported_module = val.importer
         i_action = QAction(imported_module.name, self)
         i_action.triggered.connect(

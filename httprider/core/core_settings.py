@@ -1,14 +1,12 @@
 import logging
 import logging.handlers
 from pathlib import Path
-from typing import Any, Union, Dict
+from typing import Any, Union
 
 from PyQt5.QtCore import QSettings, QStandardPaths
 from PyQt5.QtWidgets import qApp
 
-import httprider.exporters as exporters
-import httprider.importers as importers
-from ..core import str_to_bool, import_modules, random_project_name
+from ..core import str_to_bool, random_project_name
 from ..model.app_data_cache import AppDataCache
 from ..model.app_data_reader import AppDataReader
 from ..model.app_data_writer import AppDataWriter
@@ -25,8 +23,6 @@ class CoreSettings:
         self.app_data_reader: AppDataReader = None
         self.app_data_writer: AppDataWriter = None
         self.app_data_cache: AppDataCache = None
-        self.importers: Dict = {}
-        self.exporters: Dict = {}
         self.docs_location: Path = Path(QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation))
 
     def init(self):
@@ -67,12 +63,6 @@ class CoreSettings:
         storage = self._db_from_current_user_project()
         self.app_data_reader.ldb = storage.db
         self.app_data_writer.ldb = storage.db
-
-    def init_importers(self):
-        self.importers = import_modules(importers)
-
-    def init_exporters(self):
-        self.exporters = import_modules(exporters)
 
     def save_window_state(self, geometry, window_state):
         self.settings.setValue('geometry', geometry)
