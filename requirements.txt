@@ -6,6 +6,8 @@ cattrs
 Faker
 objectpath
 jsonpath_rw
+jsonpath-rw-ext
+
 uncurl
 Pygments
 prance

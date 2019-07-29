@@ -15,7 +15,7 @@ import attr
 import genson
 from PyQt5.QtCore import QFile, QFileInfo, QTextStream
 from PyQt5.QtWidgets import qApp
-from jsonpath_rw import parser
+from jsonpath_rw_ext import parser
 
 from .constants import ContentType
 from .faker_config import fake

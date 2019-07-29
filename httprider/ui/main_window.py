@@ -118,7 +118,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 updates_action.setEnabled(True)
 
     def open_releases_page(self) -> None:
-        QDesktopServices.openUrl(self.releases_page)
+        QDesktopServices.openUrl(self.updater.latest_release_page)
 
     # @todo: Remove usages and use one under ui module
     def open_file(self, dialog_title, dialog_location, file_filter=None):

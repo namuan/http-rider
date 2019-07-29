@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import qApp, QDialog
 
 class Updater(QDialog):
     api_github_latest: QUrl = QUrl('https://api.github.com/repos/namuan/http-rider-osx/releases/latest')
+    latest_release_page: QUrl = QUrl('https://github.com/namuan/http-rider-osx/releases/latest')
 
     def __init__(self, parent=None, flags=Qt.Dialog | Qt.WindowCloseButtonHint):
         super(Updater, self).__init__(parent, flags)
