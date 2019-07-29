@@ -37,7 +37,6 @@ class AssertionListPresenter:
         header.setSectionResizeMode(6, QHeaderView.Fixed)
         header.resizeSection(6, 40)
         self.view.setItemDelegateForColumn(0, NoEditDelegate(self.view))
-        self.view.setItemDelegateForColumn(2, NoEditDelegate(self.view))
         self.view.setItemDelegateForColumn(3, NoEditDelegate(self.view))
 
         self.parent_view.btn_response_code_assertion.pressed.connect(self.add_response_code_assertion)
@@ -81,6 +80,7 @@ class AssertionListPresenter:
                 item_qombo.setCurrentText(selected_matcher)
             else:
                 item_qombo.setCurrentText("---")
+
             self.view.setItemWidget(item, 4, item_qombo)
             delete_btn = QPushButton("X")
             delete_btn.setFlat(True)
