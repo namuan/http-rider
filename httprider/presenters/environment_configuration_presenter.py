@@ -48,7 +48,7 @@ class EnvironmentConfigurationPresenter:
         environment_interactor.add_environment(selected_environment)
 
     def on_add_new_environment(self):
-        new_env = Environment(name=random_environment(), env_data={})
+        new_env = Environment(name=random_environment(), data={})
         self.__add_environment_widget_item(new_env)
         environment_interactor.add_environment(new_env)
         self.parent_view.lst_environments.setCurrentRow(
