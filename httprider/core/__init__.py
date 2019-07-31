@@ -138,7 +138,7 @@ def get_variable_tokens(app_settings):
     all_runtime_vars = app_settings.app_data_cache.get_all_api_test_assertions()
     flatten_runtime_vars = functools.reduce(flatten_variables, all_runtime_vars, {})
 
-    env_map = {k: v.display_text for k, v in env.data.items()}
+    env_map = {k: v.display_text for k, v in env.get_data().items()}
     vars_tokens = {**env_map, **flatten_runtime_vars}
     return vars_tokens
 

@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
-from typing import Any, Optional, Dict, List
 
 import attr
 import cattr
 from requests.structures import CaseInsensitiveDict
+from typing import Any, Optional, Dict, List
 
 from ..core import DynamicStringData
 from ..core.constants import *
@@ -201,7 +201,7 @@ class Environment(object):
     id: str = None
     record_type: str = ENVIRONMENT_RECORD_TYPE
     name: str = None
-    data: Dict[str, DynamicStringData] = {}
+    env_data: Dict[str, DynamicStringData] = {}
 
     @classmethod
     def from_json(cls, json_obj=None):
@@ -213,7 +213,13 @@ class Environment(object):
         return cattr.unstructure(self)
 
     def add_data(self, k, v):
-        self.data[k] = DynamicStringData(display_text=v)
+        self.env_data[k] = DynamicStringData(display_text=v)
+
+    def set_data(self, new_data):
+        self.env_data = new_data
+
+    def get_data(self):
+        return self.env_data
 
 
 @attr.s(auto_attribs=True)

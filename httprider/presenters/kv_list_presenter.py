@@ -2,9 +2,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import *
 
-from httprider.model.completer import get_completer_model
 from ..core import DynamicStringData
 from ..core.core_settings import app_settings
+from ..model.completer import get_completer_model
 from ..widgets.key_value_widget import KeyValueWidget
 from ..widgets.new_header_widget import NewItemButtonWidget
 
@@ -83,4 +83,8 @@ class KeyValueListPresenter:
         for i, (k, v) in enumerate(items.items()):
             self.add_widget(k, v, i)
 
+        self.add_new_item_widget()
+
+    def clear(self):
+        self.lst_view.clear()
         self.add_new_item_widget()

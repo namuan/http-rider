@@ -149,7 +149,7 @@ class AppDataCache:
         current_env = self.get_appstate_environment()
         environment: Environment = self.get_selected_environment(current_env)
         return [
-            f"${{{k}}}" for k in environment.data.keys()
+            f"${{{k}}}" for k in environment.get_data().keys()
         ]
 
     def get_appstate_environment(self):

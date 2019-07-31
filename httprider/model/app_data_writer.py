@@ -122,10 +122,14 @@ class AppDataWriter(AppData):
             ['environment_name']
         )
 
+    def update_environment_name_in_db(self, old_environment_name, new_environment_name):
+        self.remove_environment_from_db(old_environment_name)
+        self.update_environment_in_db(new_environment_name)
+
     def remove_environment_from_db(self, environment_name):
         table = self.ldb[ENVIRONMENT_RECORD_TYPE]
         table.delete(environment_name=environment_name)
-        logging.info(f"Removing environment {environment_name}")
+        logging.info(f"Removed environment {environment_name}")
 
     def upsert_assertions(self, test_case: ApiTestCase):
         if not test_case.id:
