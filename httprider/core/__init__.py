@@ -89,13 +89,14 @@ def response_code_round_up(response_code):
 
 
 def data_type(val):
-    norm_val = val.strip()
-    if len(norm_val) == 0:
-        return 'none'
-    if norm_val in ['true', 'True', 'false', 'False']:
-        return 'bool'
 
     try:
+        norm_val = val.strip() if isinstance(val, str) else str(val)
+        if len(norm_val) == 0:
+            return 'none'
+        if norm_val in ['true', 'True', 'false', 'False']:
+            return 'bool'
+
         return type(ast.literal_eval(norm_val)).__name__
     except ValueError:
         return 'str'
