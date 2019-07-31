@@ -82,13 +82,13 @@ class AssertionResultPresenter:
             return current_val is not None
 
         if val_type == "int":
-            current_val = int(current_val)
+            current_val = int(current_val) if current_val else None
             expected_val = int(expected_val)
         elif val_type == "float":
-            current_val = float(current_val)
+            current_val = float(current_val) if current_val else None
             expected_val = float(expected_val)
         elif val_type == "bool":
-            current_val = str_to_bool(current_val)
+            current_val = str_to_bool(current_val) if current_val else None
             expected_val = str_to_bool(expected_val)
 
         if matcher == AssertionMatchers.EQ.value:
