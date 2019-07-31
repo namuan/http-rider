@@ -5,7 +5,7 @@ import cattr
 from requests.structures import CaseInsensitiveDict
 from typing import Any, Optional, Dict, List
 
-from ..core import DynamicStringData
+from ..core import DynamicStringData, strip_comments
 from ..core.constants import *
 
 
@@ -122,7 +122,7 @@ class ExchangeRequest(object):
             headers={k: v.display_text for k, v in api_call.http_headers.items() if v.is_enabled},
             query_params={k: v.display_text for k, v in api_call.http_params.items() if v.is_enabled},
             form_params={k: v.display_text for k, v in api_call.form_params.items() if v.is_enabled},
-            request_body=api_call.http_request_body
+            request_body=strip_comments(api_call.http_request_body)
         )
 
 

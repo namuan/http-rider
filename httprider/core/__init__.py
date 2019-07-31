@@ -89,7 +89,6 @@ def response_code_round_up(response_code):
 
 
 def data_type(val):
-
     try:
         norm_val = val.strip() if isinstance(val, str) else str(val)
         if len(norm_val) == 0:
@@ -235,3 +234,9 @@ def load_json_show_error(json_str):
 
 def gen_uuid():
     return str(uuid.uuid4())
+
+
+def strip_comments(request_body):
+    return "".join(
+        [l for l in request_body.splitlines() if not l.startswith("//")]
+    )
