@@ -5,9 +5,7 @@ attrs
 cattrs
 Faker
 objectpath
-jsonpath_rw
-jsonpath-rw-ext
-
+jsonpath-ng
 uncurl
 Pygments
 prance

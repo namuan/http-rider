@@ -15,7 +15,7 @@ import attr
 import genson
 from PyQt5.QtCore import QFile, QFileInfo, QTextStream
 from PyQt5.QtWidgets import qApp
-from jsonpath_rw_ext import parser
+from jsonpath_ng.ext import parse as jsonpath_parse
 
 from .constants import ContentType
 from .faker_config import fake
@@ -106,7 +106,7 @@ def data_type(val):
 def json_path(json_doc, path_query):
     try:
         j = json.loads(json_doc)
-        parsed_query = parser.parse(path_query)
+        parsed_query = jsonpath_parse(path_query)
         key_found = parsed_query.find(j)
         if key_found:
             return key_found[0].value
