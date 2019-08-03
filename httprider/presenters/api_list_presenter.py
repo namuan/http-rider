@@ -7,8 +7,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import *
 
-from httprider.core.api_call_interactor import api_call_interactor
-from httprider.core.app_state_interactor import AppStateInteractor
+from ..core.api_call_interactor import api_call_interactor
+from ..core.app_state_interactor import AppStateInteractor
 from ..core.constants import *
 from ..core.core_settings import app_settings
 from ..core.rest_api_interactor import rest_api_interactor
@@ -60,6 +60,9 @@ class ApiListPresenter:
         self.menu.addAction(remove_action)
         self.menu.addAction(toggle_action)
 
+        self.separator_menu = QMenu()
+        self.separator_menu.addAction(remove_action)
+
         app_settings.app_data_writer.signals.api_call_added.connect(self.add_request_widget)
         app_settings.app_data_writer.signals.api_call_updated.connect(self.refresh_selected_item)
         app_settings.app_data_writer.signals.multiple_api_calls_added.connect(self.refresh_multiple_items)
@@ -73,7 +76,6 @@ class ApiListPresenter:
         api_call: ApiCall = app_settings.app_data_cache.get_api_call(api_call_id)
         api_call.enabled = not api_call.enabled
 
-        # Migration
         api_call_interactor.update_api_call(api_call_id, api_call)
 
     def on_drop_event(self, model_index: QModelIndex):
@@ -85,7 +87,12 @@ class ApiListPresenter:
         if not index.isValid():
             return
 
-        self.menu.exec_(self.view.viewport().mapToGlobal(position))
+        selected_api_call: ApiCall = index.data(API_CALL_ROLE)
+        global_position = self.view.viewport().mapToGlobal(position)
+        if selected_api_call.is_separator:
+            self.separator_menu.exec_(global_position)
+        else:
+            self.menu.exec_(global_position)
 
     def selectPreviousApiCall(self):
         selected_index = self.index_at_selected_row()
@@ -115,9 +122,11 @@ class ApiListPresenter:
     def onRowsRemoved(self):
         if self.is_drop_operation:
             self.is_drop_operation = False
+            if self.dropped_row < 0 or self.dropped_row >= self.model.rowCount():
+                self.dropped_row = self.model.rowCount() - 1
+
             current_item = self.model.item(self.dropped_row)
             current_index = self.model.indexFromItem(current_item)
-
             api_call = current_item.data(API_CALL_ROLE)
             before = self.dropped_row - 1
             prev_sequence_number = 0
@@ -137,7 +146,6 @@ class ApiListPresenter:
                          f"New Sequence {new_sequence_number} - "
                          f"Moved between {prev_sequence_number} and {next_sequence_number}")
 
-            # Migration
             api_call_interactor.update_api_call(api_call.id, api_call)
 
             self.view.setCurrentIndex(current_index)
@@ -183,7 +191,8 @@ class ApiListPresenter:
 
         selected_api_call: ApiCall = current.data(API_CALL_ROLE)
         logging.info(f"List Item Selected: {selected_api_call.id}")
-        api_call_interactor.update_selected_api_call(selected_api_call.id)
+        if not selected_api_call.is_separator:
+            api_call_interactor.update_selected_api_call(selected_api_call.id)
 
     def on_request_started(self, _, api_call_id):
         logging.info(f"Request started for {api_call_id}")

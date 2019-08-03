@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'resources/ui/environment_configuration_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -68,5 +69,3 @@ class Ui_EnvironmentsConfigurationDialog(object):
         self.btn_duplicate_environment.setText(_translate("EnvironmentsConfigurationDialog", "++"))
         self.btn_remove_environment.setText(_translate("EnvironmentsConfigurationDialog", "-"))
         self.btn_add_environment.setText(_translate("EnvironmentsConfigurationDialog", "+"))
-
-

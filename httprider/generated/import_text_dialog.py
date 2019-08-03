@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'resources/ui/import_text_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -38,5 +39,3 @@ class Ui_ImportTextDialog(object):
         _translate = QtCore.QCoreApplication.translate
         ImportTextDialog.setWindowTitle(_translate("ImportTextDialog", "Dialog"))
         self.lbl_error_message.setText(_translate("ImportTextDialog", "TextLabel"))
-
-

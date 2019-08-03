@@ -24,6 +24,14 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         bounding_rect = option.rect
 
         api_call: ApiCall = model_index.data(API_CALL_ROLE)
+
+        if api_call.is_separator:
+            size: QSize = QSize(
+                option.rect.width(),
+                5
+            )
+            return size
+
         api_title = api_call.title
         api_http_url = api_call.http_url
 
@@ -72,6 +80,12 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             painter.setPen(QColor("#000000"))
 
         api_call: ApiCall = model_index.data(API_CALL_ROLE)
+
+        if api_call.is_separator:
+            painter.fillRect(bounding_rect, QColor("#404040"))
+            painter.restore()
+            return
+
         api_title = api_call.title
         api_http_url = api_call.http_url
         api_status_code = str(api_call.last_response_code) if api_call.last_response_code else None

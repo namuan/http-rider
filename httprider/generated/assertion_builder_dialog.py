@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'resources/ui/assertion_builder_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -138,5 +139,3 @@ class Ui_AssertionBuilderDialog(object):
         self.tbl_assertions.headerItem().setText(4, _translate("AssertionBuilderDialog", "Matcher"))
         self.tbl_assertions.headerItem().setText(5, _translate("AssertionBuilderDialog", "Expected Value"))
         self.tbl_assertions.headerItem().setText(6, _translate("AssertionBuilderDialog", "X"))
-
-

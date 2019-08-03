@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'resources/ui/key_value_widget.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -40,6 +41,4 @@ class Ui_KeyValueWidget(object):
         _translate = QtCore.QCoreApplication.translate
         KeyValueWidget.setWindowTitle(_translate("KeyValueWidget", "Form"))
         self.btn_remove_header.setText(_translate("KeyValueWidget", "-"))
-
-
 from ..widgets.completion_line_edit import CompletionLineEdit

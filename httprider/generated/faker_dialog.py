@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'resources/ui/faker_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -322,5 +323,3 @@ class Ui_DataGeneratorDialog(object):
         self.cmb_address_country.setText(_translate("DataGeneratorDialog", "Country"))
         self.lbl_eg_address_country.setText(_translate("DataGeneratorDialog", "eg."))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.address), _translate("DataGeneratorDialog", "Address"))
-
-

@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'resources/ui/tag_info_widget.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -61,5 +62,3 @@ class Ui_TagInfoWidget(object):
         _translate = QtCore.QCoreApplication.translate
         TagInfoWidget.setWindowTitle(_translate("TagInfoWidget", "Form"))
         self.lbl_tag.setText(_translate("TagInfoWidget", "Registration Auth"))
-
-

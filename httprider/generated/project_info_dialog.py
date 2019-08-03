@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'resources/ui/project_info_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -155,5 +156,3 @@ class Ui_ProjectInfoDialog(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("ProjectInfoDialog", "Setup"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("ProjectInfoDialog", "Teardown"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("ProjectInfoDialog", "Tags"))
-
-

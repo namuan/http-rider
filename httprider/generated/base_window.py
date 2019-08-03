@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'resources/ui/base_window.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -328,8 +329,6 @@ class Ui_MainWindow(object):
         self.tbl_response_headers.headerItem().setText(1, _translate("MainWindow", "Value"))
         self.tabWidget_4.setTabText(self.tabWidget_4.indexOf(self.tab_4), _translate("MainWindow", "Headers"))
         self.tabWidget_4.setTabText(self.tabWidget_4.indexOf(self.tab_5), _translate("MainWindow", "Body"))
-
-
 from ..widgets.api_calls_list_view import ApiCallsListView
 from ..widgets.completion_line_edit import CompletionLineEdit
 from ..widgets.completion_plain_text import CompletionPlainTextEdit

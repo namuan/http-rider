@@ -87,12 +87,12 @@ class ApiCall(object):
     enabled: bool = True
     last_assertion_result: Optional[bool] = None
     mocked_response: MockedResponse = MockedResponse()
+    is_separator: bool = False
 
     @classmethod
     def from_json(cls, json_obj=None):
         if not json_obj:
             return cls()
-        # json_obj['id'] = json_obj.doc_id
         return cattr.structure(json_obj, cls)
 
     def to_json(self):

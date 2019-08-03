@@ -2,9 +2,10 @@
 
 # Form implementation generated from reading ui file 'resources/ui/code_generator_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -45,5 +46,3 @@ class Ui_CodeGeneratorDialog(object):
         CodeGeneratorDialog.setWindowTitle(_translate("CodeGeneratorDialog", "Dialog"))
         self.btn_copy_code.setText(_translate("CodeGeneratorDialog", "Copy"))
         self.btn_export_code.setText(_translate("CodeGeneratorDialog", "Export"))
-
-

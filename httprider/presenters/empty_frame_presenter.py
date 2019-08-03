@@ -17,10 +17,16 @@ class EmptyFramePresenter:
         api_call.description = "Httpbin call to get request data"
         api_call.sequence_number = self.app_state_interactor.update_sequence_number()
 
-        # Migration
         api_call_interactor.add_api_call(api_call)
 
         self.focus_http_url()
+
+    def on_btn_add_separator(self):
+        api_call = ApiCall()
+        api_call.title = "Separator"
+        api_call.is_separator = True
+        api_call.sequence_number = self.app_state_interactor.update_sequence_number()
+        api_call_interactor.add_api_call(api_call)
 
     def focus_http_url(self):
         self.__select_text(self.view.txt_http_url)
