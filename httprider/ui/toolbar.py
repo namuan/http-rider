@@ -28,7 +28,7 @@ def tool_bar_items(self):
     tool_bar_add_call_action.triggered.connect(self.empty_frame_presenter.on_btn_add_request)
     self.tool_bar.addAction(tool_bar_add_call_action)
 
-    tool_bar_add_separator_action = QAction(QIcon(":/images/plus-48.png"), 'Add Separator', self)
+    tool_bar_add_separator_action = QAction(QIcon(":/images/separator-48.png"), 'Add Separator', self)
     tool_bar_add_separator_action.triggered.connect(self.empty_frame_presenter.on_btn_add_separator)
     self.tool_bar.addAction(tool_bar_add_separator_action)
 
