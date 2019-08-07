@@ -98,7 +98,7 @@ setup(
 
 if py2app_build:
     print('*** Removing unused Qt frameworks ***')
-    framework_dir = os.path.join(dist_dir, "anchor.app/Contents/Resources/lib/python{0}.{1}/PyQt5/Qt/lib".format(
+    framework_dir = os.path.join(dist_dir, "httprider.app/Contents/Resources/lib/python{0}.{1}/PyQt5/Qt/lib".format(
         sys.version_info.major, sys.version_info.minor))
     frameworks = [
         'QtDeclarative.framework',
