@@ -168,8 +168,9 @@ class RequestPresenter:
         while i < self.view.tags_layout.count():
             widget_item = self.view.tags_layout.itemAt(i)
             if widget_item and (type(widget_item.widget()) is QLabel or type(widget_item.widget()) is TagLabelWidget):
-                self.view.tags_layout.removeWidget(widget_item.widget())
+                widget_in_item = widget_item.widget()
                 widget_item.widget().hide()
+                self.view.tags_layout.removeWidget(widget_in_item)
             else:
                 i = i + 1
 

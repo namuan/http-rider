@@ -16,11 +16,12 @@ class AppStateInteractor:
         if not new_tag_name:
             return
 
-        logging.info(f"Selected tag changed to {new_tag_name}")
         app_state = app_settings.app_data_cache.get_app_state()
-        app_state.selected_tag = new_tag_name
-        app_settings.app_data_writer.update_app_state(app_state)
-        app_settings.app_data_writer.signals.selected_tag_changed.emit(new_tag_name)
+        if app_state.selected_tag != new_tag_name:
+            logging.info(f"Selected tag changed to {new_tag_name}")
+            app_state.selected_tag = new_tag_name
+            app_settings.app_data_writer.update_app_state(app_state)
+            app_settings.app_data_writer.signals.selected_tag_changed.emit(new_tag_name)
 
     def update_selected_environment(self, environment_name):
         logging.info(f"Selected environment changed to {environment_name}")
