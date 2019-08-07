@@ -62,6 +62,7 @@ class ApiCallInteractor:
         api_call.tags.append(new_tag_name)
 
         app_settings.app_data_writer.update_api_call_in_db(api_call)
+        app_settings.app_data_writer.signals.api_call_tag_removed.emit(api_call, old_tag_name)
         app_settings.app_data_writer.signals.api_call_tag_added.emit(api_call, new_tag_name)
 
 

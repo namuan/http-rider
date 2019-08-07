@@ -58,8 +58,7 @@ class TagLabelWidget(QtWidgets.QWidget, Ui_TagLabelWidget):
         self.__in_view_mode()
         self.__update_data(self.api_call, new_tag)
 
-        # Migration
-        api_call_interactor.rename_tag_in_api_call(self.current, self.old_tag, new_tag)
+        api_call_interactor.rename_tag_in_api_call(self.api_call, self.old_tag, new_tag)
 
     def discard_changed_tag(self):
         self.__in_view_mode()
