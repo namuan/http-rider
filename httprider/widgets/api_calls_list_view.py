@@ -154,9 +154,9 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         code_rect: QRect = font_metrics.boundingRect(
             title_rect.right() + 2 * PADDING,
             title_rect.top(),
-            bounding_rect.width(),
+            bounding_rect.width() - 10 * PADDING,
             0,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
+            Qt.AlignLeft | Qt.AlignTop,
             code_rect_width
         )
         painter.setRenderHint(QPainter.Antialiasing)
@@ -176,7 +176,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             painter.setFont(font)
             painter.setPen(Qt.white)
             if api_call.last_response_code > 0:
-                painter.drawText(code_rect, Qt.AlignCenter | Qt.AlignVCenter | Qt.TextWordWrap, api_status_code)
+                painter.drawText(code_rect, Qt.AlignCenter | Qt.AlignVCenter, api_status_code)
 
     def color_from_assertions(self, assertion_result, response_color):
         if assertion_result is None:

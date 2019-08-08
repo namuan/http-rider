@@ -72,7 +72,7 @@
            <widget class="QComboBox" name="cmb_http_method">
             <property name="font">
              <font>
-              <pointsize>18</pointsize>
+              <pointsize>14</pointsize>
              </font>
             </property>
             <item>
@@ -116,7 +116,7 @@
            <widget class="CompletionLineEdit" name="txt_http_url">
             <property name="font">
              <font>
-              <pointsize>18</pointsize>
+              <pointsize>14</pointsize>
              </font>
             </property>
             <property name="text">
@@ -131,9 +131,9 @@
            <widget class="QPushButton" name="btn_send_request">
             <property name="font">
              <font>
-              <pointsize>18</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
+              <pointsize>16</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="text">
