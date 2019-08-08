@@ -45,7 +45,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             0,
             bounding_rect.width(),
             0,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
+            Qt.AlignLeft | Qt.AlignTop,
             api_title
         )
 
@@ -58,12 +58,12 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             0,
             bounding_rect.width(),
             0,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
+            Qt.AlignLeft | Qt.AlignTop,
             api_http_url
         )
         size: QSize = QSize(
             option.rect.width(),
-            title_rect.height() + url_rect.height() + 10 * PADDING
+            title_rect.height() + url_rect.height() + 5 * PADDING
         )
 
         return size
@@ -102,19 +102,23 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         font.setPointSize(self.TITLE_FONT_SIZE)
         font.setBold(self.TITLE_FONT_BOLD)
         font_metrics: QFontMetrics = QFontMetrics(font)
-
+        elided_title = font_metrics.elidedText(
+            api_title,
+            Qt.ElideRight,
+            bounding_rect.width() - 10 * PADDING
+        )
         # title
         title_rect = font_metrics.boundingRect(
             bounding_rect.left() + PADDING,
             bounding_rect.top() + PADDING,
             bounding_rect.width() - 10 * PADDING,
             0,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
-            api_title
+            Qt.AlignLeft | Qt.AlignTop,
+            elided_title
         )
         painter.setFont(font)
         painter.setPen(title_pen_color)
-        painter.drawText(title_rect, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, api_title)
+        painter.drawText(title_rect, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, elided_title)
 
         self.draw_status_code(title_rect, bounding_rect, painter, api_status_code, api_call)
 
@@ -122,17 +126,22 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         font.setPointSize(self.URL_FONT_SIZE)
         font.setBold(self.URL_FONT_BOLD)
         font_metrics: QFontMetrics = QFontMetrics(font)
+        elided_http_url = font_metrics.elidedText(
+            api_http_url, Qt.ElideMiddle,
+            bounding_rect.width() - 5 * PADDING
+        )
+
         url_rect = font_metrics.boundingRect(
             title_rect.left(),
             title_rect.bottom() + 2 * PADDING,
             bounding_rect.width() - PADDING,
             0,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
-            api_http_url
+            Qt.AlignLeft | Qt.AlignTop,
+            elided_http_url
         )
         painter.setFont(font)
         painter.setPen(sub_title_pen_color)
-        painter.drawText(url_rect, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, api_http_url)
+        painter.drawText(url_rect, Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, elided_http_url)
 
         painter.restore()
 
