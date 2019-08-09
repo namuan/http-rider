@@ -2,6 +2,7 @@ from typing import List
 
 import attr
 from pygments.lexers.markup import MarkdownLexer
+from pygments.formatters.other import NullFormatter
 
 from ..core.core_settings import app_settings
 from ..exporters import *
@@ -15,6 +16,9 @@ def gen_function(api_call, last_exchange, api_test_case):
     http_url = last_exchange.request.http_url
     if request_qp:
         http_url = http_url + "?" + "&".join([f"{k}={v}" for k, v in request_qp.items()])
+
+    formatted_request_body = highlight_format_json(last_exchange.request.request_body, formatter=NullFormatter())
+    formatted_response_body = highlight_format_json(last_exchange.response.response_body, formatter=NullFormatter())
 
     content = f"""
 ### {api_call.title}
@@ -31,7 +35,7 @@ def gen_function(api_call, last_exchange, api_test_case):
 ```
 *Body*
 ```
-{last_exchange.request.request_body or " "}
+{formatted_request_body or " "}
 ```    
 
 #### Response
@@ -46,7 +50,7 @@ HTTP {last_exchange.response.http_status_code}
 
 *Body*
 ```
-{last_exchange.response.response_body or " "}
+{formatted_response_body or " "}
 ```
 """
     return content

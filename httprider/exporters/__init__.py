@@ -6,8 +6,8 @@ from ..core import format_json
 from ..model.app_data import ExchangeRequest, ExchangeResponse, ApiCall
 
 
-def highlight_format_json(plain_text):
-    return highlight(format_json(plain_text), data.JsonLexer(), HtmlFormatter())
+def highlight_format_json(plain_text, formatter=HtmlFormatter()):
+    return highlight(format_json(plain_text), data.JsonLexer(), formatter)
 
 
 def api_request_body_highlighted(api_call: ApiCall):
