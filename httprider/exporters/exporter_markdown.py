@@ -11,6 +11,11 @@ from ..model.app_data import ApiCall
 def gen_function(api_call, last_exchange, api_test_case):
     request_headers = "\n".join([f"{k}: {v}" for k, v in last_exchange.request.headers.items()])
     response_headers = "\n".join([f"{k}: {v}" for k, v in last_exchange.response.headers.items()])
+    request_qp = {k: v.display_text for k, v in api_call.http_params.items()}
+    http_url = last_exchange.request.http_url
+    if request_qp:
+        http_url = http_url + "?" + "&".join([f"{k}={v}" for k, v in request_qp.items()])
+
     content = f"""
 ### {api_call.title}
 
@@ -18,7 +23,7 @@ def gen_function(api_call, last_exchange, api_test_case):
 
 #### Request
 ```
-{last_exchange.request.http_method} {last_exchange.request.http_url}
+{last_exchange.request.http_method} {http_url}
 ```
 *Headers*
 ```
