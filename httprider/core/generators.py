@@ -3,10 +3,11 @@ import re
 import string
 
 from .faker_config import fake
+from ..core.util_functions import *
 
 # Internal function arguments must be one or more of
-# \d (digit) \w (word) \" (") \* (*) \# (#) \- (-) \, (,) \s (space)
-internal_func_rgx = re.compile(r"\$\{(\w+)\(([\d\w\"\*\#\-\,\.\/\s]*)\)\}", re.MULTILINE | re.IGNORECASE)
+# \d (digit) \w (word) \" (") \* (*) \# (#) \- (-) \, (,) \s (space) \= (base64)
+internal_func_rgx = re.compile(r"\$\{(\w+)\(([\d\w\"\*\#\-\,\.\/\=\s]*)\)\}", re.MULTILINE | re.IGNORECASE)
 
 address_attributes_map = {
     'country': fake.country,
@@ -85,6 +86,11 @@ def random_string_generator(args):
     return ''.join(random.choice(selection) for i in range(int(chars)))
 
 
+def utils_func_applicator(args):
+    func_name, params = args
+    return utility_func_map.get(func_name)(params)
+
+
 def noop(args):
     return f"Invalid function called with {args}"
 
@@ -96,7 +102,8 @@ def gen_map(generator, args):
         'custom': custom_string_generator,
         'person': random_person,
         'address': random_address,
-        'file': file_func_generator
+        'file': file_func_generator,
+        'utils': utils_func_applicator
     }
 
     gen_function = m.get(generator)

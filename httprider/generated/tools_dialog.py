@@ -29,9 +29,6 @@ class Ui_UtilityFunctionsDialog(object):
         self.function_selector = QtWidgets.QComboBox(UtilityFunctionsDialog)
         self.function_selector.setGeometry(QtCore.QRect(10, 70, 391, 26))
         self.function_selector.setObjectName("function_selector")
-        self.function_selector.addItem("")
-        self.function_selector.addItem("")
-        self.function_selector.addItem("")
         self.lbl_transformed_text = QtWidgets.QLabel(UtilityFunctionsDialog)
         self.lbl_transformed_text.setGeometry(QtCore.QRect(20, 190, 331, 16))
         font = QtGui.QFont()
@@ -49,7 +46,4 @@ class Ui_UtilityFunctionsDialog(object):
         _translate = QtCore.QCoreApplication.translate
         UtilityFunctionsDialog.setWindowTitle(_translate("UtilityFunctionsDialog", "Dialog"))
         self.lbl_selected_text.setText(_translate("UtilityFunctionsDialog", "<selected text>"))
-        self.function_selector.setItemText(0, _translate("UtilityFunctionsDialog", "-- Select a function --"))
-        self.function_selector.setItemText(1, _translate("UtilityFunctionsDialog", "Url Encoder"))
-        self.function_selector.setItemText(2, _translate("UtilityFunctionsDialog", "Url Decoder"))
         self.lbl_transformed_text.setText(_translate("UtilityFunctionsDialog", "<transformed value>"))

@@ -1,5 +1,5 @@
 import ast
-import base64
+
 import codecs
 import functools
 import importlib
@@ -250,14 +250,6 @@ def strip_comments(request_body):
     )
 
 
-def str_to_base64(arg, url_safe=False):
-    if not arg:
-        return ""
-
-    if url_safe:
-        return base64.urlsafe_b64encode(bytes(arg, UTF_8_ENCODING)).decode(UTF_8_ENCODING)
-    else:
-        return base64.b64encode(bytes(arg, UTF_8_ENCODING)).decode(UTF_8_ENCODING)
 
 
 def mask_secret(str_val):

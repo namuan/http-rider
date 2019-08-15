@@ -1,9 +1,16 @@
+from httprider.core.generators import utility_func_map
+
+
 class UtilityFunctionsPresenter:
     def __init__(self, view, parent):
         self.view = view
         self.parent = parent
 
-        # Event handlers to refresh generated values
+        # update list of functions
+        for f in utility_func_map.keys():
+            self.view.function_selector.addItem(f)
+
+            # Event handlers to refresh generated values
         self.view.function_selector.currentIndexChanged[str].connect(self.transform_selected_text)
 
     def init(self):
@@ -13,7 +20,7 @@ class UtilityFunctionsPresenter:
         self.transform_selected_text()
 
     def apply_transformation(self, selected_text, func_name):
-        return f"{func_name}(\"{selected_text}\")"
+        return utility_func_map.get(func_name)(selected_text)
 
     def transform_selected_text(self):
         selected_text = self.view.lbl_selected_text.text()
@@ -25,4 +32,4 @@ class UtilityFunctionsPresenter:
     def get_function(self):
         selected_text = self.view.lbl_selected_text.text()
         func_name = self.view.function_selector.currentText()
-        return self.apply_transformation(selected_text, func_name)
+        return f"${{utils(\"{func_name}\", \"{selected_text}\")}}"

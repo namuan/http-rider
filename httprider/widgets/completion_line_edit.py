@@ -2,7 +2,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QKeyEvent, QFocusEvent, QStandardItemModel
 from PyQt5.QtWidgets import *
 
-from ..core import str_to_base64, DynamicStringData, DynamicStringType
+from ..core import DynamicStringData, DynamicStringType
 from ..core.constants import DYNAMIC_STRING_ROLE
 from ..core.generators import file_func_generator
 from ..ui import open_file
@@ -57,13 +57,9 @@ class CompletionContextMenu(QMenu):
         super().__init__(view)
         self.view = view
         # Context Menu setup
-        b64_encode = QAction("Base64 Encode", self.view)
-        b64_encode.triggered.connect(self.on_base_64_encode)
-
         enable_secret = QAction("Secret Hide/Show", self.view)
         enable_secret.triggered.connect(self.on_secret_value)
 
-        self.addAction(b64_encode)
         self.addAction(enable_secret)
 
     def on_secret_value(self):
@@ -76,16 +72,6 @@ class CompletionContextMenu(QMenu):
             dynamic_value.string_type = DynamicStringType.SECRET.value
 
         self.view.setValue(dynamic_value)
-
-    def on_base_64_encode(self):
-        whole_text = self.view.text()
-        selected_fragment = self.view.selectedText()
-        new_val = str_to_base64(selected_fragment or whole_text)
-        if selected_fragment:
-            self.view.insert(new_val)
-        else:
-            self.view.selectAll()
-            self.view.insert(new_val)
 
 
 class CompletionLineEdit(QLineEdit):
