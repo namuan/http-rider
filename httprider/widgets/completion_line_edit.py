@@ -7,6 +7,7 @@ from ..core.constants import DYNAMIC_STRING_ROLE
 from ..core.generators import file_func_generator
 from ..ui import open_file
 from ..ui.data_generator_dialog import DataGeneratorDialog
+from ..ui.utility_functions_dialog import UtilityFunctionsDialog
 
 
 class ChildLineEdit(QLineEdit):
@@ -83,7 +84,7 @@ class CompletionContextMenu(QMenu):
         if selected_fragment:
             self.view.insert(new_val)
         else:
-            self.view.setSelection(0, len(whole_text))
+            self.view.selectAll()
             self.view.insert(new_val)
 
 
@@ -93,14 +94,17 @@ class CompletionLineEdit(QLineEdit):
         super().__init__(parent)
         self.parent = parent
         self.data_generator_dialog = DataGeneratorDialog(self)
+        self.utility_functions_dialog = UtilityFunctionsDialog(self)
         self.child_edit = ChildLineEdit(self)
         self.child_edit.some_signal.connect(self.pre_completion_check)
-        self._selected_text = None
-        self._selection_start = 0
-        self._selection_end = 0
+        self.selected_text = None
+        self.selection_start = 0
+        self.selection_length = 0
 
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.on_context_menu)
+
+        # @todo: Use createStandardContextMenu to extend the existing menu
         self.menu = CompletionContextMenu(self)
 
     def on_context_menu(self, position):
@@ -120,6 +124,15 @@ class CompletionLineEdit(QLineEdit):
                 self.process_completion(f, f, rollback)
             else:
                 self.process_completion(None, None, rollback=True)
+        elif display_text == "tools":
+            r: QRect = self.child_edit.rect()
+            p = self.mapToGlobal(QPoint(r.x(), r.y() + r.height()))
+            self.utility_functions_dialog.move(p)
+            if self.utility_functions_dialog.exec_dialog() == QDialog.Accepted:
+                f = self.utility_functions_dialog.get_function()
+                self.process_completion(f, f, rollback, replace_text=True)
+            else:
+                self.process_completion(None, None, rollback=True)
         elif display_text == "file":
             file_location, _ = open_file(self, "Select File")
             file_function = file_func_generator(file_location, wrap_in_quotes=True)
@@ -127,15 +140,18 @@ class CompletionLineEdit(QLineEdit):
         else:
             self.process_completion(display_text, variable_name, rollback)
 
-    def process_completion(self, display_text, variable_name, rollback=False):
+    def process_completion(self, display_text, variable_name, rollback=False, replace_text=False):
         self.child_edit.completer().popup().hide()
         self.child_edit.hide()
         self.child_edit.setText("")
 
         self.setFocus(Qt.OtherFocusReason)
         if not rollback:
-            if self._selected_text:
-                self.setSelection(self._selection_start, self._selection_end)
+            if replace_text:
+                self.selectAll()
+
+            if self.selected_text:
+                self.setSelection(self.selection_start, self.selection_length)
 
             self.insert(variable_name)
 
@@ -155,9 +171,9 @@ class CompletionLineEdit(QLineEdit):
 
         if e.key() == Qt.Key_Dollar:
             if not popup_visible:
-                self._selected_text = self.selectedText()
-                self._selection_start = self.selectionStart()
-                self._selection_end = self.selectionEnd()
+                self.selected_text = self.selectedText()
+                self.selection_start = self.selectionStart()
+                self.selection_length = self.selectionLength()
                 self.child_edit.setGeometry(self.rect())
                 self.child_edit.setText("")
                 self.child_edit.show()

@@ -25,7 +25,7 @@ def get_completer_model():
             model.appendRow(item)
 
     # Triggers custom dialog boxes
-    for func_keyword in ["data", "file"]:
+    for func_keyword in ["data", "file", "tools"]:
         item: QStandardItem = QStandardItem()
         item.setText(func_keyword)
         item.setData(func_keyword, DYNAMIC_STRING_ROLE)

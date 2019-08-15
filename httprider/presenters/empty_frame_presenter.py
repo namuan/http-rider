@@ -56,8 +56,7 @@ class EmptyFramePresenter:
 
     def __select_text(self, txt_field):
         txt_field.setFocus(True)
-        txt_field_value = txt_field.text()
-        txt_field.setSelection(0, len(txt_field_value))
+        txt_field.selectAll()
 
     def display(self):
         """Called when all API calls are removed from list"""
