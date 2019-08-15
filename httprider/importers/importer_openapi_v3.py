@@ -86,7 +86,7 @@ class OpenApiV3Importer:
         )
 
         if content_type:
-            headers_params["Content-Type"] = DynamicStringData(display_text=content_type)
+            headers_params["Content-Type"] = DynamicStringData(display_text=content_type, value=content_type)
 
         return ApiCall(
             tags=[t for t in api_method_spec.get("tags", [])],

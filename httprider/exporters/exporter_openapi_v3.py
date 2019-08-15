@@ -130,7 +130,7 @@ class OpenApiv3Exporter:
                 'in': params_type,
                 'schema': {
                     'type': 'string',
-                    'example': param_value.display_text
+                    'example': param_value.value
                 }
             })
 

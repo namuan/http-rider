@@ -1,7 +1,8 @@
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QKeyEvent, QFocusEvent, QStandardItemModel, QCursor
+from PyQt5.QtGui import QKeyEvent, QFocusEvent, QStandardItemModel
 from PyQt5.QtWidgets import *
 
+from ..core import str_to_base64, DynamicStringData, DynamicStringType
 from ..core.constants import DYNAMIC_STRING_ROLE
 from ..core.generators import file_func_generator
 from ..ui import open_file
@@ -32,7 +33,11 @@ class ChildLineEdit(QLineEdit):
         self.completer().activated[QModelIndex].connect(self.on_completion)
 
     def on_completion(self, index: QModelIndex):
-        self.some_signal.emit(index.data(Qt.DisplayRole), index.data(DYNAMIC_STRING_ROLE), False)
+        self.some_signal.emit(
+            index.data(Qt.DisplayRole),
+            index.data(DYNAMIC_STRING_ROLE),
+            False
+        )
 
     def focusOutEvent(self, e: QFocusEvent):
         if self.completer().popup().isVisible():
@@ -46,6 +51,42 @@ class ChildLineEdit(QLineEdit):
         super().keyPressEvent(e)
 
 
+class CompletionContextMenu(QMenu):
+    def __init__(self, view):
+        super().__init__(view)
+        self.view = view
+        # Context Menu setup
+        b64_encode = QAction("Base64 Encode", self.view)
+        b64_encode.triggered.connect(self.on_base_64_encode)
+
+        enable_secret = QAction("Secret Hide/Show", self.view)
+        enable_secret.triggered.connect(self.on_secret_value)
+
+        self.addAction(b64_encode)
+        self.addAction(enable_secret)
+
+    def on_secret_value(self):
+        dynamic_value: DynamicStringData = self.view.getValue()
+
+        # Switch from secret -> plain, plain -> secret
+        if self.view.echoMode() == QLineEdit.PasswordEchoOnEdit:
+            dynamic_value.string_type = DynamicStringType.PLAIN.value
+        else:
+            dynamic_value.string_type = DynamicStringType.SECRET.value
+
+        self.view.setValue(dynamic_value)
+
+    def on_base_64_encode(self):
+        whole_text = self.view.text()
+        selected_fragment = self.view.selectedText()
+        new_val = str_to_base64(selected_fragment or whole_text)
+        if selected_fragment:
+            self.view.insert(new_val)
+        else:
+            self.view.setSelection(0, len(whole_text))
+            self.view.insert(new_val)
+
+
 class CompletionLineEdit(QLineEdit):
 
     def __init__(self, parent=None):
@@ -57,6 +98,13 @@ class CompletionLineEdit(QLineEdit):
         self._selected_text = None
         self._selection_start = 0
         self._selection_end = 0
+
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.on_context_menu)
+        self.menu = CompletionContextMenu(self)
+
+    def on_context_menu(self, position):
+        self.menu.exec_(self.mapToGlobal(position))
 
     def pre_completion_check(self, display_text, variable_name, rollback=False):
         """Checks if one of the keyword is entered
@@ -117,3 +165,24 @@ class CompletionLineEdit(QLineEdit):
                 return
 
         super().keyPressEvent(e)
+
+    def setValue(self, new_val: DynamicStringData):
+        if new_val.string_type == DynamicStringType.SECRET.value:
+            self.setEchoMode(QLineEdit.PasswordEchoOnEdit)
+        else:
+            self.setEchoMode(QLineEdit.Normal)
+
+        self.setText(new_val.display_text)
+
+    def getValue(self):
+        field_val = self.text().strip()
+        display_text = self.text().strip()
+        string_type = DynamicStringType.PLAIN.value
+        if self.echoMode() == QLineEdit.PasswordEchoOnEdit:
+            string_type = DynamicStringType.SECRET.value
+
+        return DynamicStringData(
+            display_text=display_text,
+            value=field_val,
+            string_type=string_type
+        )

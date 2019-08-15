@@ -1,4 +1,5 @@
 import ast
+import base64
 import codecs
 import functools
 import importlib
@@ -6,6 +7,7 @@ import json
 import logging
 import pkgutil
 import uuid
+from enum import Enum
 from json import JSONDecodeError
 from pathlib import Path
 from string import Template
@@ -17,16 +19,21 @@ from PyQt5.QtCore import QFile, QFileInfo, QTextStream
 from PyQt5.QtWidgets import qApp
 from jsonpath_ng.ext import parse as jsonpath_parse
 
-from .constants import ContentType
+from .constants import ContentType, UTF_8_ENCODING
 from .faker_config import fake
 from .generators import random_string_generator, internal_func_rgx, replacer
+
+
+class DynamicStringType(Enum):
+    PLAIN = "plain"
+    SECRET = "secret"
 
 
 @attr.s(auto_attribs=True)
 class DynamicStringData(object):
     display_text: str = ""
     value: str = ""
-    string_type: str = "plain"  # | secret
+    string_type: str = DynamicStringType.PLAIN.value
     is_enabled: bool = True
 
 
@@ -138,7 +145,7 @@ def get_variable_tokens(app_settings):
     all_runtime_vars = app_settings.app_data_cache.get_all_api_test_assertions()
     flatten_runtime_vars = functools.reduce(flatten_variables, all_runtime_vars, {})
 
-    env_map = {k: v.display_text for k, v in env.get_data().items()}
+    env_map = {k: v.value for k, v in env.get_data().items()}
     vars_tokens = {**env_map, **flatten_runtime_vars}
     return vars_tokens
 
@@ -190,7 +197,8 @@ def split_url_qs(url: str):
     url_qs = url.split('?', 1)
     if len(url_qs) > 1:
         qs = parse.parse_qs(url_qs[1])
-        return url_qs[0], {qk: DynamicStringData(display_text=",".join(qv)) for qk, qv in qs.items()}
+        return url_qs[0], {qk: DynamicStringData(display_text=",".join(qv), value=",".join(qv)) for qk, qv in
+                           qs.items()}
     else:
         return url_qs[0], {}
 
@@ -240,3 +248,17 @@ def strip_comments(request_body):
     return "".join(
         [l for l in request_body.splitlines() if not l.startswith("//")]
     )
+
+
+def str_to_base64(arg, url_safe=False):
+    if not arg:
+        return ""
+
+    if url_safe:
+        return base64.urlsafe_b64encode(bytes(arg, UTF_8_ENCODING)).decode(UTF_8_ENCODING)
+    else:
+        return base64.b64encode(bytes(arg, UTF_8_ENCODING)).decode(UTF_8_ENCODING)
+
+
+def mask_secret(str_val):
+    return "*" * len(str_val)

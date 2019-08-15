@@ -54,7 +54,7 @@ class RestApiInteractor:
 
         # inject common headers respecting existing headers on the request
         project_info = app_settings.app_data_reader.get_or_create_project_info()
-        common_headers = {k: v.display_text for k, v in project_info.common_headers.items()}
+        common_headers = {k: v.value for k, v in project_info.common_headers.items()}
         exchange_request.headers = {**common_headers, **exchange_request.headers}
 
         exchange = HttpExchange(

@@ -4,8 +4,8 @@ from .app_data import ApiCall, HttpExchange
 def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True):
     http_method = api_call.http_method
     http_url = api_call.http_url
-    req_headers = {k: v.display_text for k, v in api_call.http_headers.items()}
-    req_qp = {k: v.display_text for k, v in api_call.http_params.items()}
+    req_headers = {k: v.value for k, v in api_call.http_headers.items()}
+    req_qp = {k: v.value for k, v in api_call.http_params.items()}
     req_body = api_call.http_request_body
 
     if exchange.response.http_status_code != 0:

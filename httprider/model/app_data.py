@@ -119,9 +119,9 @@ class ExchangeRequest(object):
             request_time=datetime.now().strftime("%c"),
             http_method=api_call.http_method,
             http_url=api_call.http_url,
-            headers={k: v.display_text for k, v in api_call.http_headers.items() if v.is_enabled},
-            query_params={k: v.display_text for k, v in api_call.http_params.items() if v.is_enabled},
-            form_params={k: v.display_text for k, v in api_call.form_params.items() if v.is_enabled},
+            headers={k: v.value for k, v in api_call.http_headers.items() if v.is_enabled},
+            query_params={k: v.value for k, v in api_call.http_params.items() if v.is_enabled},
+            form_params={k: v.value for k, v in api_call.form_params.items() if v.is_enabled},
             request_body=strip_comments(api_call.http_request_body)
         )
 
@@ -157,7 +157,7 @@ class ExchangeResponse(object):
     @classmethod
     def from_mocked_response(cls, mocked_response: MockedResponse):
         return cls(
-            response_headers={k: v.display_text for k, v in mocked_response.headers.items() if v.is_enabled},
+            response_headers={k: v.value for k, v in mocked_response.headers.items() if v.is_enabled},
             response_body=mocked_response.body,
             http_status_code=mocked_response.status_code,
             is_mocked=True,
@@ -213,7 +213,7 @@ class Environment(object):
         return cattr.unstructure(self)
 
     def add_data(self, k, v):
-        self.data[k] = DynamicStringData(display_text=v)
+        self.data[k] = DynamicStringData(display_text=v, value=v)
 
     def set_data(self, new_data):
         self.data = new_data

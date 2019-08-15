@@ -66,7 +66,7 @@ class PostmanCollectionImporter:
             http_method=sub_item.request.method,
             http_request_body=self.__internal_variables(sub_item.request.body.get('raw')),
             http_headers={
-                k: DynamicStringData(display_text=self.__internal_variables(v))
+                k: DynamicStringData(display_text=self.__internal_variables(v), value=self.__internal_variables(v))
                 for k, v in kv_list_to_dict(sub_item.request.header).items()
             },
             sequence_number=self.app_state_interactor.update_sequence_number()

@@ -16,6 +16,8 @@ ASSERTION_TYPE_ROLE = Qt.UserRole + 300
 DYNAMIC_STRING_ROLE = Qt.UserRole + 400
 EXPORTER_COMBO_ROLE = Qt.UserRole + 500
 
+UTF_8_ENCODING = 'utf-8'
+
 
 class AssertionDataSource(Enum):
     REQUEST_HEADER = "request_header"

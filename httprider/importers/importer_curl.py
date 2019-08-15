@@ -40,12 +40,12 @@ class CurlImporter:
         )
 
     def __extract_header_data(self, headers):
-        return {hk: DynamicStringData(display_text=hv) for hk, hv in headers.items()}
+        return {hk: DynamicStringData(display_text=hv, value=hv) for hk, hv in headers.items()}
 
     def __extract_form_data(self, ctx: ParsedContext):
         form_content_type = ctx.headers.get('Content-Type', None) == 'application/x-www-form-urlencoded'
         if form_content_type:
-            return {fk: DynamicStringData(display_text=",".join(fv)) for fk, fv in parse.parse_qs(ctx.data).items()}
+            return {fk: DynamicStringData(display_text=",".join(fv), value=",".join(fv)) for fk, fv in parse.parse_qs(ctx.data).items()}
         else:
             return {}
 
