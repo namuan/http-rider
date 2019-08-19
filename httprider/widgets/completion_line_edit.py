@@ -11,7 +11,7 @@ from ..ui.utility_functions_dialog import UtilityFunctionsDialog
 
 
 class ChildLineEdit(QLineEdit):
-    some_signal = pyqtSignal(str, str, bool)
+    entry_completed = pyqtSignal(str, str, bool)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -34,7 +34,7 @@ class ChildLineEdit(QLineEdit):
         self.completer().activated[QModelIndex].connect(self.on_completion)
 
     def on_completion(self, index: QModelIndex):
-        self.some_signal.emit(
+        self.entry_completed.emit(
             index.data(Qt.DisplayRole),
             index.data(DYNAMIC_STRING_ROLE),
             False
@@ -42,25 +42,42 @@ class ChildLineEdit(QLineEdit):
 
     def focusOutEvent(self, e: QFocusEvent):
         if self.completer().popup().isVisible():
-            self.some_signal.emit("", "", True)
+            self.entry_completed.emit("", "", True)
 
     def keyPressEvent(self, e: QKeyEvent):
         if e.key() == Qt.Key_Escape:
-            self.some_signal.emit("", "", True)
+            self.entry_completed.emit("", "", True)
             e.ignore()
 
         super().keyPressEvent(e)
 
 
-class CompletionContextMenu(QMenu):
+class CompletionContextMenuHandler:
     def __init__(self, view):
-        super().__init__(view)
         self.view = view
+
+    def setup_actions(self, menu):
         # Context Menu setup
+        menu.addSeparator()
+
         enable_secret = QAction("Secret Hide/Show", self.view)
         enable_secret.triggered.connect(self.on_secret_value)
 
-        self.addAction(enable_secret)
+        data_dialog = QAction("Fake Data", self.view)
+        data_dialog.triggered.connect(self.on_show_data_dialog)
+
+        tools_dialog = QAction("Utility Functions", self.view)
+        tools_dialog.triggered.connect(self.on_show_tools_dialog)
+
+        menu.addActions([enable_secret, data_dialog, tools_dialog])
+
+    def on_show_data_dialog(self):
+        self.view.setup_selections()
+        self.view.show_data_dialog(rollback=False)
+
+    def on_show_tools_dialog(self):
+        self.view.setup_selections()
+        self.view.show_tools_dialog(rollback=False)
 
     def on_secret_value(self):
         dynamic_value: DynamicStringData = self.view.getValue()
@@ -82,7 +99,7 @@ class CompletionLineEdit(QLineEdit):
         self.data_generator_dialog = DataGeneratorDialog(self)
         self.utility_functions_dialog = UtilityFunctionsDialog(self)
         self.child_edit = ChildLineEdit(self)
-        self.child_edit.some_signal.connect(self.pre_completion_check)
+        self.child_edit.entry_completed.connect(self.pre_completion_check)
         self.selected_text = None
         self.selection_start = 0
         self.selection_length = 0
@@ -90,11 +107,37 @@ class CompletionLineEdit(QLineEdit):
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.on_context_menu)
 
-        # @todo: Use createStandardContextMenu to extend the existing menu
-        self.menu = CompletionContextMenu(self)
+        self.menu_item_handler = CompletionContextMenuHandler(self)
 
     def on_context_menu(self, position):
-        self.menu.exec_(self.mapToGlobal(position))
+        menu = self.createStandardContextMenu()
+        self.menu_item_handler.setup_actions(menu)
+        menu.exec_(self.mapToGlobal(position))
+
+    def show_data_dialog(self, rollback):
+        cur_pos: QRect = self.cursorRect()
+        global_position = self.mapToGlobal(cur_pos.bottomLeft())
+        self.data_generator_dialog.move(global_position)
+        if self.data_generator_dialog.exec_dialog() == QDialog.Accepted:
+            f = self.data_generator_dialog.get_function()
+            self.process_completion(f, f, rollback)
+        else:
+            self.process_completion(None, None, rollback=True)
+
+    def show_tools_dialog(self, rollback):
+        cur_pos: QRect = self.cursorRect()
+        global_position = self.mapToGlobal(cur_pos.bottomLeft())
+        self.utility_functions_dialog.move(global_position)
+        if self.utility_functions_dialog.exec_dialog() == QDialog.Accepted:
+            f = self.utility_functions_dialog.get_function()
+            self.process_completion(f, f, rollback, replace_text=True)
+        else:
+            self.process_completion(None, None, rollback=True)
+
+    def setup_selections(self):
+        self.selected_text = self.selectedText()
+        self.selection_start = self.selectionStart()
+        self.selection_length = self.selectionLength()
 
     def pre_completion_check(self, display_text, variable_name, rollback=False):
         """Checks if one of the keyword is entered
@@ -102,23 +145,9 @@ class CompletionLineEdit(QLineEdit):
         Otherwise pass it to process completion
         """
         if display_text == "data":
-            r: QRect = self.child_edit.rect()
-            p = self.mapToGlobal(QPoint(r.x(), r.y() + r.height()))
-            self.data_generator_dialog.move(p)
-            if self.data_generator_dialog.exec_dialog() == QDialog.Accepted:
-                f = self.data_generator_dialog.get_function()
-                self.process_completion(f, f, rollback)
-            else:
-                self.process_completion(None, None, rollback=True)
+            self.show_data_dialog(rollback)
         elif display_text == "tools":
-            r: QRect = self.child_edit.rect()
-            p = self.mapToGlobal(QPoint(r.x(), r.y() + r.height()))
-            self.utility_functions_dialog.move(p)
-            if self.utility_functions_dialog.exec_dialog() == QDialog.Accepted:
-                f = self.utility_functions_dialog.get_function()
-                self.process_completion(f, f, rollback, replace_text=True)
-            else:
-                self.process_completion(None, None, rollback=True)
+            self.show_tools_dialog(rollback)
         elif display_text == "file":
             file_location, _ = open_file(self, "Select File")
             file_function = file_func_generator(file_location, wrap_in_quotes=True)
@@ -157,9 +186,7 @@ class CompletionLineEdit(QLineEdit):
 
         if e.key() == Qt.Key_Dollar:
             if not popup_visible:
-                self.selected_text = self.selectedText()
-                self.selection_start = self.selectionStart()
-                self.selection_length = self.selectionLength()
+                self.setup_selections()
                 self.child_edit.setGeometry(self.rect())
                 self.child_edit.setText("")
                 self.child_edit.show()

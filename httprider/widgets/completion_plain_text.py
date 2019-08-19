@@ -11,10 +11,10 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         super().__init__(parent)
         self.data_generator_dialog = DataGeneratorDialog(self)
         self.child_edit = ChildLineEdit(self)
-        self.child_edit.some_signal.connect(self.pre_completion_check)
-        self._selected_text = None
-        self._selection_start = 0
-        self._selection_end = 0
+        self.child_edit.entry_completed.connect(self.pre_completion_check)
+        self.selected_text = None
+        self.selection_start = 0
+        self.selection_end = 0
 
     def pre_completion_check(self, display_text, variable_name, rollback=False):
         """Checks if one of the keyword is entered
@@ -40,9 +40,9 @@ class CompletionPlainTextEdit(QPlainTextEdit):
 
         self.setFocus(Qt.OtherFocusReason)
         if not rollback:
-            if self._selected_text:
+            if self.selected_text:
                 tc: QTextCursor = self.textCursor()
-                tc.setPosition(self._selection_start)
+                tc.setPosition(self.selection_start)
                 tc.setPosition(self._selection_end, QTextCursor.KeepAnchor)
                 self.setTextCursor(tc)
 
@@ -70,8 +70,8 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         if e.key() == Qt.Key_Dollar:
             if not popup_visible:
                 tc: QTextCursor = self.textCursor()
-                self._selected_text = tc.selectedText()
-                self._selection_start = tc.selectionStart()
+                self.selected_text = tc.selectedText()
+                self.selection_start = tc.selectionStart()
                 self._selection_end = tc.selectionEnd()
                 tc.setPosition(tc.selectionStart())
                 self.setTextCursor(tc)
