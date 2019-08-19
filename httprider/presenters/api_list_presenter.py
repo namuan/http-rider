@@ -178,8 +178,9 @@ class ApiListPresenter:
             return
         row_to_remove = selected_model_index.row()
         api_call: ApiCall = selected_model_index.data(API_CALL_ROLE)
-        # Migration
         api_call_interactor.remove_api_call([api_call.id])
+
+        self.model.removeRow(row_to_remove)
         previous_row = row_to_remove - 1
         if previous_row >= 0:
             previous_item: QStandardItem = self.model.item(previous_row)
