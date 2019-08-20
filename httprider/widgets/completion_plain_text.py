@@ -1,20 +1,86 @@
 from PyQt5.QtCore import QRect, Qt
 from PyQt5.QtGui import QTextCursor, QKeyEvent, QTextCharFormat
-from PyQt5.QtWidgets import QPlainTextEdit, QDialog
+from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QAction
 
 from ..ui.data_generator_dialog import DataGeneratorDialog
-from ..widgets.completion_line_edit import ChildLineEdit, QPoint
+from ..ui.utility_functions_dialog import UtilityFunctionsDialog
+from ..widgets.completion_line_edit import ChildLineEdit
+
+
+class PlainTextContextMenuHandler:
+    def __init__(self, view):
+        self.view = view
+
+    def setup_actions(self, menu):
+        # Context Menu setup
+        menu.addSeparator()
+
+        data_dialog = QAction("Fake Data", self.view)
+        data_dialog.triggered.connect(self.on_show_data_dialog)
+
+        tools_dialog = QAction("Utility Functions", self.view)
+        tools_dialog.triggered.connect(self.on_show_tools_dialog)
+
+        menu.addActions([data_dialog, tools_dialog])
+
+    def on_show_data_dialog(self):
+        self.view.setup_selections()
+        self.view.show_data_dialog(rollback=False)
+
+    def on_show_tools_dialog(self):
+        self.view.setup_selections()
+        self.view.show_tools_dialog(rollback=False)
 
 
 class CompletionPlainTextEdit(QPlainTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.data_generator_dialog = DataGeneratorDialog(self)
+        self.utility_functions_dialog = UtilityFunctionsDialog(self)
         self.child_edit = ChildLineEdit(self)
         self.child_edit.entry_completed.connect(self.pre_completion_check)
         self.selected_text = None
         self.selection_start = 0
         self.selection_end = 0
+
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.on_context_menu)
+
+        self.menu_item_handler = PlainTextContextMenuHandler(self)
+
+    def text(self):
+        return "Select some text"
+
+    def on_context_menu(self, position):
+        menu = self.createStandardContextMenu()
+        self.menu_item_handler.setup_actions(menu)
+        menu.exec_(self.mapToGlobal(position))
+
+    def setup_selections(self):
+        tc: QTextCursor = self.textCursor()
+        self.selected_text = tc.selectedText()
+        self.selection_start = tc.selectionStart()
+        self.selection_end = tc.selectionEnd()
+
+    def show_data_dialog(self, rollback):
+        cur_pos: QRect = self.cursorRect()
+        global_position = self.mapToGlobal(cur_pos.bottomLeft())
+        self.data_generator_dialog.move(global_position)
+        if self.data_generator_dialog.exec_dialog() == QDialog.Accepted:
+            f = self.data_generator_dialog.get_function()
+            self.process_completion(f, f, rollback)
+        else:
+            self.process_completion(None, None, rollback=True)
+
+    def show_tools_dialog(self, rollback):
+        cur_pos: QRect = self.cursorRect()
+        global_position = self.mapToGlobal(cur_pos.bottomLeft())
+        self.utility_functions_dialog.move(global_position)
+        if self.utility_functions_dialog.exec_dialog() == QDialog.Accepted:
+            f = self.utility_functions_dialog.get_function()
+            self.process_completion(f, f, rollback)
+        else:
+            self.process_completion(None, None, rollback=True)
 
     def pre_completion_check(self, display_text, variable_name, rollback=False):
         """Checks if one of the keyword is entered
@@ -22,14 +88,9 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         Otherwise pass it to process completion
         """
         if display_text == "data":
-            r: QRect = self.child_edit.rect()
-            p = self.mapToGlobal(QPoint(r.x(), r.y() + r.height()))
-            self.data_generator_dialog.move(p)
-            if self.data_generator_dialog.exec_dialog() == QDialog.Accepted:
-                f = self.data_generator_dialog.get_function()
-                self.process_completion(f, f, rollback)
-            else:
-                self.process_completion(None, None, rollback=True)
+            self.show_data_dialog(rollback)
+        elif display_text == "tools":
+            self.show_tools_dialog(rollback)
         else:
             self.process_completion(display_text, variable_name, rollback)
 
@@ -43,7 +104,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
             if self.selected_text:
                 tc: QTextCursor = self.textCursor()
                 tc.setPosition(self.selection_start)
-                tc.setPosition(self._selection_end, QTextCursor.KeepAnchor)
+                tc.setPosition(self.selection_end, QTextCursor.KeepAnchor)
                 self.setTextCursor(tc)
 
             existing_format = self.currentCharFormat()
@@ -72,7 +133,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
                 tc: QTextCursor = self.textCursor()
                 self.selected_text = tc.selectedText()
                 self.selection_start = tc.selectionStart()
-                self._selection_end = tc.selectionEnd()
+                self.selection_end = tc.selectionEnd()
                 tc.setPosition(tc.selectionStart())
                 self.setTextCursor(tc)
                 popup_rect = self.boundingRect()
