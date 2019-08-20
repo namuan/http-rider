@@ -49,7 +49,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         self.menu_item_handler = PlainTextContextMenuHandler(self)
 
     def text(self):
-        return "Select some text"
+        return None
 
     def on_context_menu(self, position):
         menu = self.createStandardContextMenu()

@@ -16,7 +16,7 @@ class UtilityFunctionsPresenter:
     def init(self):
         whole_text = self.parent.text()
         selected_text = self.parent.selected_text
-        self.view.lbl_selected_text.setText(selected_text or whole_text)
+        self.view.lbl_selected_text.setText(selected_text or whole_text or "Select some text")
         self.transform_selected_text()
 
     def apply_transformation(self, selected_text, func_name):

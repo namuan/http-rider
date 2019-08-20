@@ -7,6 +7,9 @@ from ..model.app_data import ExchangeRequest, ExchangeResponse, ApiCall
 
 
 def highlight_format_json(plain_text, formatter=HtmlFormatter()):
+    if not plain_text:
+        return ""
+
     return highlight(format_json(plain_text), data.JsonLexer(), formatter)
 
 
