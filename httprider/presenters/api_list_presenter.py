@@ -249,7 +249,6 @@ class ApiListPresenter:
         duplicate_api_call.last_response_code = 0
         duplicate_api_call.sequence_number = self.app_state_interactor.update_sequence_number()
 
-        # Migration
         api_call_interactor.add_api_call(duplicate_api_call)
 
     def __row_for_api_call(self, api_call_id):

@@ -140,7 +140,6 @@ class RequestPresenter:
 
     def save_new_tag(self, new_tag):
         if new_tag not in self.current.tags:
-            # Migration
             api_call_interactor.add_tag_to_api_call(self.current, new_tag)
 
         self.txt_new_tag_input.clear()
@@ -152,7 +151,6 @@ class RequestPresenter:
         self.view.tags_layout.insertWidget(2, tag_label_widget)
 
     def remove_selected_tag(self, tag_name):
-        # Migration
         api_call_interactor.remove_tag_from_api_call(self.current, tag_name)
 
     def discard_new_tag(self):
@@ -213,7 +211,6 @@ class RequestPresenter:
             return
 
         self.form_to_object()
-        # Migration
         api_call_interactor.update_api_call(self.current.id, self.current)
 
     def on_btn_send_request(self):

@@ -86,7 +86,6 @@ class RestApiInteractor:
         api_call = app_settings.app_data_cache.get_api_call(exchange.api_call_id)
         api_call.last_response_code = exchange.response.http_status_code
 
-        # Migration
         api_call_interactor.update_api_call(api_call.id, api_call)
 
         app_settings.app_data_writer.add_http_exchange(exchange)
@@ -96,7 +95,6 @@ class RestApiInteractor:
         api_call = app_settings.app_data_cache.get_api_call(exchange.api_call_id)
         api_call.last_response_code = exchange.response.http_status_code
         api_call.last_assertion_result = None
-        # Migration
         api_call_interactor.update_api_call(api_call.id, api_call)
 
         app_settings.app_data_writer.add_http_exchange(exchange)
