@@ -7,10 +7,11 @@ from httprider.model import ApiCall
 
 
 class ApiCallInteractor:
-    def add_api_call(self, api_call: ApiCall) -> str:
+    def add_api_call(self, api_call: ApiCall, suppress_event=False) -> str:
         api_call.id = gen_uuid()
         app_settings.app_data_writer.update_api_call_in_db(api_call)
-        app_settings.app_data_writer.signals.api_call_added.emit(api_call.id, api_call)
+        if not suppress_event:
+            app_settings.app_data_writer.signals.api_call_added.emit(api_call.id, api_call)
 
         logging.info(f"DB {api_call.id} - Successfully added new API {api_call}")
         return api_call.id
@@ -20,7 +21,7 @@ class ApiCallInteractor:
             return []
 
         doc_ids = [
-            self.add_api_call(api_call)
+            self.add_api_call(api_call, suppress_event=True)
             for api_call in api_calls
         ]
 
