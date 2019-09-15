@@ -33,7 +33,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             return size
 
         api_title = api_call.title
-        api_http_url = api_call.http_url
+        api_http_url = f"{api_call.http_method} {api_call.http_url}"
 
         # title
         font: QFont = QApplication.font()
@@ -49,7 +49,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             api_title
         )
 
-        # http url
+        # http url + method
         font.setPointSize(self.URL_FONT_SIZE)
         font.setBold(self.URL_FONT_BOLD)
         font_metrics: QFontMetrics = QFontMetrics(font)
@@ -87,7 +87,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             return
 
         api_title = api_call.title
-        api_http_url = api_call.http_url
+        api_http_url = f"{api_call.http_method} {api_call.http_url}"
         api_status_code = str(api_call.last_response_code) if api_call.last_response_code else None
 
         title_pen_color = Qt.black
