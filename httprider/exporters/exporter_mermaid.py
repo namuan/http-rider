@@ -24,7 +24,7 @@ def gen_function(api_call, last_exchange, api_test_case):
         return ""
 
     statements = [
-        f"    {source.strip()}->>{target.strip()}: {title.strip()}"
+        f"    {source.strip()}->>{target.strip()}: {last_exchange.request.http_method} {last_exchange.request.http_url}"
     ]
 
     return "\n".join(statements)

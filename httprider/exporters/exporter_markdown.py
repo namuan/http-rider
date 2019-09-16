@@ -57,7 +57,7 @@ HTTP {last_exchange.response.http_status_code}
 
 
 @attr.s
-class MermaidExporter:
+class MarkdownExporter:
     name: str = "Markdown Syntax"
     output_ext: str = "md"
 
@@ -77,4 +77,4 @@ class MermaidExporter:
         return gen_function(api_call, last_exchange, api_test_case)
 
 
-exporter = MermaidExporter()
+exporter = MarkdownExporter()
