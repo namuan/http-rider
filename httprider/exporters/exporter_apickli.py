@@ -1,7 +1,6 @@
-from typing import List
-
 import attr
 from pygments.lexers.testing import GherkinLexer
+from typing import List
 
 from ..core.core_settings import app_settings
 from ..exporters import *
@@ -9,11 +8,16 @@ from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSo
 
 
 def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
-    statements = ["GIVEN:"]
+    first_statement = True
+    statements = []
     for hk, hv in last_exchange.request.headers.items():
-        statements.append(f"    I set {hk} header to {hv}")
+        if first_statement:
+            statements.append(f"Given I set {hk} header to {hv}")
+            first_statement = False
+        else:
+            statements.append(f"And I set {hk} header to {hv}")
 
-    if len(statements) == 1:
+    if not statements:
         return ""
 
     return "\n".join(statements)
@@ -21,33 +25,29 @@ def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
 
 def gen_when(api_call: ApiCall, last_exchange: HttpExchange):
     statements = [
-        "WHEN:",
-        f"    I request {last_exchange.request.http_method} for {last_exchange.request.http_url}"
+        f"When I request {last_exchange.request.http_method} for {last_exchange.request.http_url}"
     ]
     return "\n".join(statements)
 
 
 def gen_then(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
-    statements = ["THEN:"]
-    for a in api_test_case.assertions:
-        if a.data_from == AssertionDataSource.RESPONSE_CODE.value:
-            statements.append(f"    response code should {converter(a)}")
-
-        if a.data_from == AssertionDataSource.RESPONSE_HEADER.value:
-            statements.append(f"    response header {a.selector} should {converter(a)}")
-
-        if a.data_from == AssertionDataSource.RESPONSE_BODY.value:
-            statements.append(f"    response path {a.selector} should {converter(a)}")
+    statements = [
+        f"Then response code should be {last_exchange.response.http_status_code}"
+    ]
 
     for a in api_test_case.assertions:
         if a.data_from == AssertionDataSource.RESPONSE_HEADER.value:
-            statements.append(f"    I store the value of response header {a.selector} as {a.var_name}")
+            statements.append(f"And response header {a.selector} should {converter(a)}")
 
         if a.data_from == AssertionDataSource.RESPONSE_BODY.value:
-            statements.append(f"    I store the value of body path {a.selector} as {a.var_name}")
+            statements.append(f"And response path {a.selector} should {converter(a)}")
 
-    if len(statements) == 1:
-        return ""
+    for a in api_test_case.assertions:
+        if a.data_from == AssertionDataSource.RESPONSE_HEADER.value:
+            statements.append(f"And I store the value of response header {a.selector} as {a.var_name}")
+
+        if a.data_from == AssertionDataSource.RESPONSE_BODY.value:
+            statements.append(f"And I store the value of body path {a.selector} as {a.var_name}")
 
     return "\n".join(statements)
 
