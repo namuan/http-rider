@@ -1,8 +1,6 @@
-import re
-from typing import List
-
 import attr
 from pygments.lexers.jvm import JavaLexer
+from typing import List
 
 from ..core.core_settings import app_settings
 from ..exporters import *
@@ -11,11 +9,16 @@ from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSo
 
 def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
     statements = ["\tgiven()."]
-    for hk, hv in last_exchange.request.headers.items():
-        statements.append(f"                header(\"{hk}\", \"{hv}\").")
+    statements.append(
+        dict_formatter(
+            last_exchange.request.headers.items(),
+            "                header(\"{k}\", \"{v}\").",
+            splitter="\n"
+        )
+    )
 
     if last_exchange.request.request_body:
-        encoded_json_string = last_exchange.request.request_body.replace('"', '\\"')
+        encoded_json_string = encode_json_string(last_exchange.request.request_body)
         statements.append(f"                body(\"{encoded_json_string}\").")
 
     if len(statements) == 0:
@@ -52,16 +55,6 @@ def gen_then(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiT
 
 def converter(assertion):
     return "exist" if assertion.expected_value == "Not Null" else f"{assertion.expected_value}"
-
-
-def get_base_url(api_call: ApiCall):
-    return api_call.http_url
-
-
-def get_function_name(api_call: ApiCall):
-    norm_title = api_call.title.lower().strip()
-    rgx = r'[^a-zA-Z]'
-    return re.sub(rgx, '', norm_title)
 
 
 def gen_function(api_call, last_exchange, api_test_case):
