@@ -48,6 +48,14 @@ def dict_formatter(dict_items, form, splitter=","):
     ])
 
 
+def extract_uri(url, servers):
+    matched_server = next((server for server in servers if url.startswith(server)), None)
+    if matched_server:
+        return url.replace(matched_server, "")
+
+    return url
+
+
 from . import exporter_apickli
 from . import exporter_curl
 from . import exporter_markdown
@@ -56,8 +64,10 @@ from . import exporter_openapi_v3
 from . import exporter_postman_dump
 from . import exporter_restassured
 from . import exporter_python_requests
+from . import exporter_plantuml
 
 exporter_plugins = {
+    'plant_uml': exporter_plantuml,
     'python_requests': exporter_python_requests,
     'apickli': exporter_apickli,
     'curl': exporter_curl,

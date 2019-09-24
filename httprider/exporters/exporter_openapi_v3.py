@@ -1,14 +1,14 @@
 import logging
 import operator
 from itertools import groupby
-from typing import List
 
 import attr
 from apispec import APISpec
+from typing import List
 
 from ..core import schema_from_json
 from ..core.core_settings import app_settings
-from ..exporters import highlight, data, HtmlFormatter
+from ..exporters import *
 from ..model.app_data import ApiCall, ProjectInfo, HttpExchange, ExchangeRequest, ExchangeResponse
 
 
@@ -54,18 +54,11 @@ class OpenApiv3Exporter:
             servers=[{'url': s} for s in project_info.servers]
         )
 
-    def extract_uri(self, url, servers):
-        matched_server = next((server for server in servers if url.startswith(server)), None)
-        if matched_server:
-            return url.replace(matched_server, "")
-
-        return url
-
     def export_api_calls(self, api_spec, api_path, api_calls, servers):
         # api_call = api_calls[0]
         # last_exchange = app_settings.app_data_reader.get_last_exchange(api_call.id)
         # http_relative_uri = self.extract_uri(last_exchange.request.http_url, servers)
-        http_relative_uri = self.extract_uri(api_path, servers)
+        http_relative_uri = extract_uri(api_path, servers)
 
         operations = {}
 
