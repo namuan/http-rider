@@ -21,11 +21,11 @@ def gen_function(api_call, last_exchange, api_test_case):
     formatted_response_body = highlight_format_json(last_exchange.response.response_body, formatter=NullFormatter())
 
     content = f"""
-### {api_call.title}
+#### {api_call.title}
 
 {api_call.description}
 
-#### Request
+##### Request
 ```
 {last_exchange.request.http_method} {http_url}
 ```
@@ -38,7 +38,7 @@ def gen_function(api_call, last_exchange, api_test_case):
 {formatted_request_body or " "}
 ```    
 
-#### Response
+##### Response
 ```
 HTTP {last_exchange.response.http_status_code}
 ```
