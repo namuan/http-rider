@@ -63,7 +63,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         )
         size: QSize = QSize(
             option.rect.width(),
-            title_rect.height() + url_rect.height() + 5 * PADDING
+            title_rect.height() + url_rect.height() + 10 * PADDING
         )
 
         return size

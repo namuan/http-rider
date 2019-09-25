@@ -19,7 +19,7 @@ def get_actors_from_title(api_title):
 
 def gen_function(api_call, last_exchange, api_test_case, project_info):
     source, target, title = get_actors_from_title(api_call.title)
-    api_uri = extract_uri(last_exchange.request.http_url, project_info.servers)
+    api_uri = last_exchange.request.http_url
     if not source:
         return ""
     headers = dict_formatter(
@@ -34,7 +34,8 @@ def gen_function(api_call, last_exchange, api_test_case, project_info):
     )
     formatted_request_body = format_json(last_exchange.request.request_body)
     statements = [
-        f"rnote left {source.strip()}",
+        f"{source.strip()}->{target.strip()}: **{last_exchange.request.http_method}** \"{api_uri}\"",
+        f"rnote right {source.strip()}",
         f"{api_call.title}",
         f"",
         f"**Headers**",
@@ -44,7 +45,6 @@ def gen_function(api_call, last_exchange, api_test_case, project_info):
         f"**Payload**",
         f"{formatted_request_body}",
         f"end note",
-        f"{source.strip()}->{target.strip()}: **{last_exchange.request.http_method}** \"{api_uri}\""
     ]
 
     return "\n".join(statements)
