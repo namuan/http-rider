@@ -27,8 +27,8 @@ def to_slow_cooker(api_call: ApiCall, exchange: HttpExchange, compressed=False, 
     parts = [
         ('slow_cooker', None),
         ('-method', http_method),
-        ('-qps 100', None),
-        ('-concurrency 10', None)
+        ('-qps ${QPS}', None),
+        ('-concurrency ${CONCURRENT_REQUESTS}', None)
     ]
 
     for k, v in sorted(req_headers.items()):
@@ -67,6 +67,10 @@ class SlowCookerExporter:
 ## -header: Adds additional headers to each request. Can be specified multiple times. Format is key: value<br/>
 ## -interval: How often to report stats to stdout<br/>
 ## -method: Determines which HTTP method to use when making the request<br/>
+<br/>
+# Global Variables<br/>
+QPS=100<br/>
+CONCURRENT_REQUESTS=10<br/>
         """
         output = [
             self.__export_api_call(api_call)
