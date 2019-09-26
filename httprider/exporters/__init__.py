@@ -65,8 +65,10 @@ from . import exporter_postman_dump
 from . import exporter_restassured
 from . import exporter_python_requests
 from . import exporter_plantuml
+from . import exporter_slow_cooker
 
 exporter_plugins = {
+    'slow_cooker': exporter_slow_cooker,
     'plant_uml': exporter_plantuml,
     'python_requests': exporter_python_requests,
     'apickli': exporter_apickli,
