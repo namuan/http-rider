@@ -2,7 +2,7 @@
 
 Simple and Powerful cross-platform Rest API client
 
-See https://deskriders.dev/tags/httprider/ for development updates.
+See https://twitter.com/deskriders_twt for development updates.
 
 ### Installation
 
