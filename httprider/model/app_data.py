@@ -221,6 +221,9 @@ class Environment(object):
     def get_data(self):
         return self.data
 
+    def get_env_map(self):
+        return {k: v.value for k, v in self.get_data().items()}
+
 
 @attr.s(auto_attribs=True)
 class ApiTestCase(object):

@@ -1,5 +1,4 @@
 import ast
-
 import codecs
 import functools
 import importlib
@@ -145,7 +144,7 @@ def get_variable_tokens(app_settings):
     all_runtime_vars = app_settings.app_data_cache.get_all_api_test_assertions()
     flatten_runtime_vars = functools.reduce(flatten_variables, all_runtime_vars, {})
 
-    env_map = {k: v.value for k, v in env.get_data().items()}
+    env_map = env.get_env_map()
     vars_tokens = {**env_map, **flatten_runtime_vars}
     return vars_tokens
 
@@ -248,8 +247,6 @@ def strip_comments(request_body):
     return "".join(
         [l for l in request_body.splitlines() if not l.startswith("//")]
     )
-
-
 
 
 def mask_secret(str_val):
