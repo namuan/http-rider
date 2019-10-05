@@ -34,7 +34,7 @@ def gen_function(api_call, last_exchange, api_test_case, project_info):
     )
     formatted_request_body = format_json(last_exchange.request.request_body)
     statements = [
-        f"{source.strip()}->{target.strip()}: **{last_exchange.request.http_method}** \"{api_uri}\"",
+        f"\"{source.strip()}\"->\"{target.strip()}\": **{last_exchange.request.http_method}** \"{api_uri}\"",
         f"rnote right {source.strip()}",
         f"{api_call.title}",
         f"",
