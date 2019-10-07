@@ -14,29 +14,37 @@ def to_python_requests(api_call, last_exchange):
     has_qp = True if last_exchange.request.query_params else False
     query_params = dict_formatter(
         last_exchange.request.query_params.items(),
-        "\"{k}\"=\"{v}\""
+        "\"{k}\": \"{v}\""
     )
     has_headers = True if last_exchange.request.headers else False
     headers = dict_formatter(
         last_exchange.request.headers.items(),
-        "\"{k}\"=\"{v}\"",
+        "\"{k}\": \"{v}\"",
         splitter=",\n"
     )
     has_json_body = True if last_exchange.request.request_body else False
-    json_body = "data=\"{}\"".format(
-        encode_json_string(last_exchange.request.request_body) if last_exchange.request.request_body else "")
 
+    json_body = "data=\"{}\"".format(
+        encode_json_string(last_exchange.request.request_body) if has_json_body else "")
+
+    params_code = f"""
+    params={{
+        {query_params if has_qp else ""}
+    }},
+    """
+
+    headers_code = f"""
+    headers={{
+        {headers if has_headers else ""}
+    }},
+    """
     py_func = f"""
 def {func_name}():
     try:
         response = requests.{method.lower()}(
                 url="{url}",
-                params={{
-                {query_params if has_qp else ""}
-                }},
-                headers={{
-                {headers if has_headers else ""}
-                }}
+                {params_code if has_qp else ""}
+                {headers_code if has_headers else ""}
                 {json_body if has_json_body else ""}
         )
         print(f'Response HTTP Status Code: {{response.status_code}}')
