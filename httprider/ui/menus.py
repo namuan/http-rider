@@ -53,3 +53,14 @@ def menu_items(self):
     r.addAction(multiple_export)
     r.addSeparator()
     r.addAction(generate_data)
+
+    # Environments Menu
+    export_env_action = QAction('&Export', self)
+    export_env_action.triggered.connect(self.env_menu_presenter.on_export)
+
+    import_env_action = QAction('&Import', self)
+    import_env_action.triggered.connect(self.env_menu_presenter.on_import)
+
+    r: QMenu = self.menu_bar.addMenu("&Environments")
+    r.addAction(export_env_action)
+    r.addAction(import_env_action)

@@ -55,3 +55,4 @@ from .api_calls_history_presenter import ApiCallsHistoryPresenter
 from .code_generator_presenter import CodeGeneratorPresenter
 from .file_menu_presenter import FileMenuPresenter
 from .data_generator_presenter import DataGeneratorPresenter
+from .environments_menu_presenter import EnvironmentMenuPresenter
