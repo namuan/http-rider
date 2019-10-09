@@ -1,17 +1,27 @@
 import logging
 import logging.handlers
 from pathlib import Path
-from typing import Any, Union
 
 from PyQt5.QtCore import QSettings, QStandardPaths
 from PyQt5.QtWidgets import qApp
+from typing import Any, Union
 
+from httprider.model.app_configuration import AppConfiguration
 from ..core import str_to_bool, random_project_name
 from ..model.app_data_cache import AppDataCache
 from ..model.app_data_reader import AppDataReader
 from ..model.app_data_writer import AppDataWriter
 from ..model.storage import Storage
 from ..model.user_data import UserProject, SavedState
+
+CURRENT_PROJECT_STATE_KEY = 'currentProjectState'
+CURRENT_PROJECT_LOCATION_KEY = 'currentProjectLocation'
+HTTPS_PROXY_KEY = 'httpsProxy'
+HTTP_PROXY_KEY = 'httpProxy'
+TLS_VERIFICATION_KEY = 'tlsVerification'
+STARTUP_CHECK_KEY = 'startupCheck'
+WINDOW_STATE_KEY = 'windowState'
+GEOMETRY_KEY = 'geometry'
 
 
 class CoreSettings:
@@ -65,37 +75,45 @@ class CoreSettings:
         self.app_data_writer.ldb = storage.db
 
     def save_window_state(self, geometry, window_state):
-        self.settings.setValue('geometry', geometry)
-        self.settings.setValue('windowState', window_state)
+        self.settings.setValue(GEOMETRY_KEY, geometry)
+        self.settings.setValue(WINDOW_STATE_KEY, window_state)
         self.settings.sync()
 
-    def save_configuration(self, updates_check):
-        self.settings.setValue('startupCheck', updates_check)
+    def save_configuration(self, app_config: AppConfiguration):
+        self.settings.setValue(STARTUP_CHECK_KEY, app_config.update_check_on_startup)
+        self.settings.setValue(TLS_VERIFICATION_KEY, app_config.tls_verification)
+        self.settings.setValue(HTTP_PROXY_KEY, app_config.http_proxy)
+        self.settings.setValue(HTTPS_PROXY_KEY, app_config.https_proxy)
         self.settings.sync()
 
-    def load_updates_configuration(self):
-        return str_to_bool(self.settings.value("startupCheck", True))
+    def load_configuration(self):
+        app_config = AppConfiguration()
+        app_config.update_check_on_startup = str_to_bool(self.settings.value(STARTUP_CHECK_KEY, True))
+        app_config.tls_verification = str_to_bool(self.settings.value(TLS_VERIFICATION_KEY, True))
+        app_config.http_proxy = self.settings.value(HTTP_PROXY_KEY, "")
+        app_config.https_proxy = self.settings.value(HTTPS_PROXY_KEY, "")
+        return app_config
 
     def geometry(self):
-        return self.settings.value("geometry", None)
+        return self.settings.value(GEOMETRY_KEY, None)
 
     def window_state(self):
-        return self.settings.value("windowState", None)
+        return self.settings.value(WINDOW_STATE_KEY, None)
 
     def save_current_project(self, user_project: UserProject):
-        self.settings.setValue('currentProjectLocation', user_project.location)
-        self.settings.setValue('currentProjectState', user_project.state)
+        self.settings.setValue(CURRENT_PROJECT_LOCATION_KEY, user_project.location)
+        self.settings.setValue(CURRENT_PROJECT_STATE_KEY, user_project.state)
         self.settings.sync()
 
     def load_current_project(self):
-        current_project_location = self.settings.value('currentProjectLocation', None)
+        current_project_location = self.settings.value(CURRENT_PROJECT_LOCATION_KEY, None)
 
         if not current_project_location:
             return self.create_new_project()
 
         return UserProject(
             location=current_project_location,
-            state=self.settings.value('currentProjectState')
+            state=self.settings.value(CURRENT_PROJECT_STATE_KEY)
         )
 
     def create_new_project(self):

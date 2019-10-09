@@ -49,7 +49,7 @@ class MainPresenter:
             self.view.exchange_presenter.cleanup()
 
     def check_updates(self):
-        if app_settings.load_updates_configuration():
+        if app_settings.load_configuration().update_check_on_startup:
             self.view.updater.check()
 
     def save_settings(self):
