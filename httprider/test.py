@@ -1,40 +1,36 @@
 import logging
-
-handlers = [
-    logging.StreamHandler()
-]
+from threading import Thread
+from multiprocessing import Process
+import requests
+import urllib.request
 
 logging.basicConfig(
-    handlers=handlers,
-    format='%(asctime)s - %(filename)s:%(lineno)d - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
+    format='%(threadName)-10s - %(message)s',
     level=logging.DEBUG
 )
-logging.captureWarnings(capture=True)
 
-from threading import Thread
-
-import requests
-from requests.adapters import HTTPAdapter
-
-
-def thread_get(name, url):
+def thread_get(delay, url):
     s = requests.Session()
-    s.mount('https://', HTTPAdapter(pool_connections=10, pool_maxsize=10))
-    logging.info(f"Thread: {name}")
-    s.get(url)
+    logging.debug(f"Making request with {delay} seconds delay")
+    r = s.get(url)
+    logging.debug(f"Received Response - {r.status_code}")
 
+def thread_urllib(delay, url):
+    logging.debug(f"Making request with {delay} seconds delay")
+    with urllib.request.urlopen(url) as response:
+        j = response.read()
+        logging.debug(f"Received Response - {j}")
 
-for i in range(20):
-    t1 = Thread(target=thread_get, args=(i, 'http://127.0.0.1:8000/delay/1',))
-    t1.start()
+# host = "https://httpbin.org"
+host = "http://localhost:8000"
 
-t2 = Thread(target=thread_get, args=(20, 'http://127.0.0.1:8000/delay/3',))
+worker_thread = thread_get
+
+t1 = Process(target=worker_thread, args=(10, f"{host}/delay/10",))
+t1.start()
+
+t2 = Process(target=worker_thread, args=(3, f"{host}/delay/3",))
 t2.start()
-# t2.join()
-#
-# t3 = Thread(target=thread_get, args=(3, 'http://127.0.0.1:8000/delay/3',))
-# t4 = Thread(target=thread_get, args=(4, 'http://127.0.0.1:8000/delay/3',))
-#
-# t3.start()
-# t4.start()
+
+t3 = Process(target=worker_thread, args=(15, f"{host}/delay/15",))
+t3.start()

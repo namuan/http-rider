@@ -12,10 +12,10 @@ def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
     statements = []
     for hk, hv in last_exchange.request.headers.items():
         if first_statement:
-            statements.append(f"Given I set {hk} header to {hv}")
+            statements.append(f"    Given I set {hk} header to {hv}")
             first_statement = False
         else:
-            statements.append(f"And I set {hk} header to {hv}")
+            statements.append(f"    And I set {hk} header to {hv}")
 
     if not statements:
         return ""
@@ -25,29 +25,29 @@ def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
 
 def gen_when(api_call: ApiCall, last_exchange: HttpExchange):
     statements = [
-        f"When I request {last_exchange.request.http_method} for {last_exchange.request.http_url}"
+        f"    When I request {last_exchange.request.http_method} for {last_exchange.request.http_url}"
     ]
     return "\n".join(statements)
 
 
 def gen_then(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
     statements = [
-        f"Then response code should be {last_exchange.response.http_status_code}"
+        f"    Then response code should be {last_exchange.response.http_status_code}"
     ]
 
     for a in api_test_case.assertions:
         if a.data_from == AssertionDataSource.RESPONSE_HEADER.value:
-            statements.append(f"And response header {a.selector} should {converter(a)}")
+            statements.append(f"    And response header {a.selector} should {converter(a)}")
 
         if a.data_from == AssertionDataSource.RESPONSE_BODY.value:
-            statements.append(f"And response path {a.selector} should {converter(a)}")
+            statements.append(f"    And response path {a.selector} should {converter(a)}")
 
     for a in api_test_case.assertions:
         if a.data_from == AssertionDataSource.RESPONSE_HEADER.value:
-            statements.append(f"And I store the value of response header {a.selector} as {a.var_name}")
+            statements.append(f"    And I store the value of response header {a.selector} as {a.var_name}")
 
         if a.data_from == AssertionDataSource.RESPONSE_BODY.value:
-            statements.append(f"And I store the value of body path {a.selector} as {a.var_name}")
+            statements.append(f"    And I store the value of body path {a.selector} as {a.var_name}")
 
     return "\n".join(statements)
 
@@ -62,11 +62,20 @@ class ApickliExporter:
     output_ext: str = "text"
 
     def export_data(self, api_calls: List[ApiCall]):
+        test_file_header = """
+## See https://github.com/namuan/apickli_functional_tests for starting up a new project. 
+
+## The following feature definitions should go in tests/Functional.feature file.           
+
+Feature Validating API requests
+    As a user, I want to validate that all the user scenarios are correct
+"""
         output = [
             self.__export_api_call(api_call)
             for api_call in api_calls
         ]
-        return "<br/>".join(output)
+
+        return highlight(test_file_header, GherkinLexer(), HtmlFormatter()) + "<br/>".join(output)
 
     def __export_api_call(self, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
