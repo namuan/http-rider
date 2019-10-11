@@ -160,7 +160,7 @@ def replace_variables(vars_tokens, exchange_request):
     for fk, fv in exchange_request.form_params.items():
         exchange_request.form_params[fk] = template_sub(fv, vars_tokens)
 
-    exchange_request.request_body = template_sub(exchange_request.request_body, vars_tokens)
+    exchange_request.request_body = compact_json(template_sub(exchange_request.request_body, vars_tokens))
     return exchange_request
 
 
@@ -209,6 +209,17 @@ def format_json(json_str):
     try:
         j = json.loads(json_str)
         return json.dumps(j, indent=4)
+    except JSONDecodeError:
+        return json_str
+
+
+def compact_json(json_str):
+    if not json_str:
+        return ""
+
+    try:
+        j = json.loads(json_str)
+        return json.dumps(j)
     except JSONDecodeError:
         return json_str
 

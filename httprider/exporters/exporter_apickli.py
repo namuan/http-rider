@@ -7,15 +7,30 @@ from ..exporters import *
 from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSource
 
 
+def gen_tags(tags: List):
+    return " ".join([f"@{t}" for t in tags])
+
+
 def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
     first_statement = True
     statements = []
+    test_tags = gen_tags(api_call.tags)
     for hk, hv in last_exchange.request.headers.items():
         if first_statement:
+            if test_tags:
+                statements.append(f"    {test_tags}")
             statements.append(f"    Given I set {hk} header to {hv}")
             first_statement = False
         else:
             statements.append(f"    And I set {hk} header to {hv}")
+
+    request_body = last_exchange.request.request_body
+    if request_body:
+        if first_statement:
+            statements.append(f"    Given I set body to {request_body}")
+            first_statement = False
+        else:
+            statements.append(f"    And I set body to {request_body}")
 
     if not statements:
         return ""
