@@ -47,23 +47,23 @@ See https://twitter.com/deskriders_twt for development updates.
   
 🚀 Export Markdown for documenting API requests/responses  
   
-🙈 Export [RestAssured](http://rest-assured.io) functional tests  - [Github Issue](https://github.com/namuan/http-rider/issues/2)
+🙈 Export [RestAssured](http://rest-assured.io) functional tests
   
-🙈 Export [Apickli](https://github.com/apickli/apickli) functional tests  - [Github Issue](https://github.com/namuan/http-rider/issues/3)
+🙈 Export [Apickli](https://github.com/apickli/apickli) functional tests
   
 🚀 Export curl requests  
   
 🚀 Export [MermaidJS](https://mermaidjs.github.io/) Sequence diagram  
   
-🙈 Export [OpenApi V3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) document  - [Github Issue](https://github.com/namuan/http-rider/issues/4)
+🙈 Export [OpenApi V3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) document
   
-🙈 Export [Runscope](https://www.runscope.com) monitoring tests  - [Github Issue](https://github.com/namuan/http-rider/issues/5)
+🙈 Export [Runscope](https://www.runscope.com) monitoring tests
   
 **Importers**
   
 🚀 Import [OpenApi V3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) document  
   
-🙈 Import Postman collections - [Github Issue](https://github.com/namuan/http-rider/issues/6)
+🙈 Import Postman collections
   
 ### Installation  
   
