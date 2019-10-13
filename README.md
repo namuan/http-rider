@@ -39,7 +39,7 @@ See https://twitter.com/deskriders_twt for development updates.
   
 **Exporters**
   
-🚀 Export [PlantUML](https://twitter.com/plantuml) Sequence diagram  
+🚀 Export [PlantUML](https://twitter.com/plantuml) Sequence diagram - [Demo](https://www.youtube.com/watch?v=4Asr_4iOxUM)
   
 🚀 Export [Slow Cooker](https://github.com/buoyantio/slow_cooker) performance tests  
   
