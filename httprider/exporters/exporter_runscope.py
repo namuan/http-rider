@@ -64,36 +64,26 @@ class Step(object):
 
 
 @attr.s(auto_attribs=True)
-class Data(object):
-    id: str
+class RunscopeTest(object):
+    # id: str
     name: str
     description: str
-    environments: List[RunscopeEnvironment]
-    schedules: List[Any]
+    # environments: List[RunscopeEnvironment]
+    # schedules: List[Any]
     steps: List[Step]
-    created_at: Optional[int] = None
-    created_by: Optional[CreatedBy] = None
-    default_environment_id: Optional[str] = ""
+    version: str = "1.0"
     trigger_url: Optional[str] = ""
-    last_run: Optional[int] = None
-
-
-@attr.s(auto_attribs=True)
-class Meta(object):
-    status: str
-
-
-@attr.s(auto_attribs=True)
-class RunscopeTest(object):
-    data: List[Data]
-    error: None
-    meta: Meta
 
     def to_json(self):
         return cattr.unstructure(self)
 
     def to_raw_json(self):
         return json.dumps(self.to_json())
+
+
+@attr.s(auto_attribs=True)
+class Meta(object):
+    status: str
 
 
 def to_runscope_env(env: Environment):
@@ -113,9 +103,9 @@ def to_runscope_env(env: Environment):
     )
 
 
-def to_runscope_matcher(matcher):
+def to_runscope_matcher(matcher, assertion_var_type):
     mapper = {
-        AssertionMatchers.EQ.value: "is_equal"
+        AssertionMatchers.EQ.value: "equal_number" if assertion_var_type == "int" else "equal"
     }
 
     return mapper.get(matcher, None)
@@ -131,7 +121,7 @@ def to_runscope_source(data_source):
 
 def to_runscope_assertion(assertion: Assertion):
     return RunscopeAssertion(
-        comparison=to_runscope_matcher(assertion.matcher),
+        comparison=to_runscope_matcher(assertion.matcher, assertion.var_type),
         source=to_runscope_source(assertion.data_from),
         value=assertion.expected_value
     )
@@ -142,7 +132,7 @@ def to_runscope_step(
         last_exchange: HttpExchange,
         api_test_case: ApiTestCase):
     return Step(
-        assertions=[to_runscope_assertion(a) for a in api_test_case.assertions],
+        assertions=[to_runscope_assertion(a) for a in api_test_case.comparable_assertions()],
         auth={},
         body=last_exchange.request.request_body,
         form=last_exchange.request.form_params,
@@ -169,21 +159,13 @@ class RunscopeExporter:
             for api_call in api_calls
         ]
 
-        runscope_data = Data(
-            id=gen_uuid(),
+        runscope_test = RunscopeTest(
+            # id=gen_uuid(),
             name=project_info.title,
             description=project_info.info,
-            environments=[to_runscope_env(env) for env in environments],
-            schedules=[],
+            # environments=[to_runscope_env(env) for env in environments],
+            # schedules=[],
             steps=output_steps
-        )
-
-        runscope_test = RunscopeTest(
-            data=[runscope_data],
-            error=None,
-            meta=Meta(
-                status="success"
-            )
         )
 
         return highlight_format_json(runscope_test.to_raw_json())

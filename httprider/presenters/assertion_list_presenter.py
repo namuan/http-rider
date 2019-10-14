@@ -52,7 +52,7 @@ class AssertionListPresenter:
             None,
             current_response_code
         ])
-        item.setData(3, ASSERTION_TYPE_ROLE, 'str')
+        item.setData(3, ASSERTION_TYPE_ROLE, 'int')
         self.add_item(item, current_data=current_response_code)
 
     def add_response_time_assertion(self):

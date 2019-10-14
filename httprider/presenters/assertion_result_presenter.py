@@ -22,8 +22,7 @@ class AssertionResultPresenter:
         logging.info(f"Running {len(api_test_case.assertions)} assertions against exchange {exchange}")
         assertions_with_output = [
             self.__evaluate_assertion(assertion, exchange)
-            for assertion in api_test_case.assertions
-            if assertion.matcher != AssertionMatchers.SKIP.value
+            for assertion in api_test_case.comparable_assertions()
         ]
         exchange.assertions = assertions_with_output
         app_settings.app_data_writer.update_http_exchange(exchange)
@@ -62,7 +61,7 @@ class AssertionResultPresenter:
 
     def __evaluate_assertion(self, assertion: Assertion, exchange: HttpExchange):
         current_val = app_settings.app_data_cache.get_latest_assertion_value_from_exchange(assertion, exchange)
-        if assertion.expected_value == "None" or assertion.matcher == AssertionMatchers.SKIP.value:
+        if assertion.expected_value == "None":
             assertion.output = None
         else:
             res = self.__get_result_for_matcher(

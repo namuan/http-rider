@@ -242,6 +242,9 @@ class ApiTestCase(object):
 
         return cattr.structure(json_obj, cls)
 
+    def comparable_assertions(self):
+        return [a for a in self.assertions if a.matcher != AssertionMatchers.SKIP.value]
+
 
 class AppData:
     ldb = None
