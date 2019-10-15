@@ -5,8 +5,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 
 from ..core import gen_uuid
 from ..core.constants import ENVIRONMENT_RECORD_TYPE, API_CALL_RECORD_TYPE
-from ..model import HttpExchange, ApiCall
-from ..model.app_data import ProjectInfo, AppData, Environment, ApiTestCase
+from ..model.app_data import HttpExchange, ApiCall, ProjectInfo, AppData, Environment, ApiTestCase
 
 
 class AppDataSignals(QObject):

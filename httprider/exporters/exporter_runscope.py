@@ -46,6 +46,7 @@ class RunscopeAssertion(object):
     comparison: str
     source: str
     value: int
+    property: str
 
 
 @attr.s(auto_attribs=True)
@@ -68,7 +69,7 @@ class RunscopeTest(object):
     # id: str
     name: str
     description: str
-    # environments: List[RunscopeEnvironment]
+    environments: List[RunscopeEnvironment]
     # schedules: List[Any]
     steps: List[Step]
     version: str = "1.0"
@@ -93,7 +94,7 @@ def to_runscope_env(env: Environment):
         name=env.name,
         parent_environment_id=None,
         preserve_cookies=False,
-        regions=[],
+        regions=["us1"],
         remote_agents=[],
         script="",
         test_id="",
@@ -105,7 +106,15 @@ def to_runscope_env(env: Environment):
 
 def to_runscope_matcher(matcher, assertion_var_type):
     mapper = {
-        AssertionMatchers.EQ.value: "equal_number" if assertion_var_type == "int" else "equal"
+        AssertionMatchers.EQ.value: "equal_number" if assertion_var_type == "int" else "equal",
+        AssertionMatchers.NOT_EQ.value: "not_equal",
+        AssertionMatchers.NOT_NULL.value: "not_empty",
+        AssertionMatchers.EMPTY.value: "empty",
+        AssertionMatchers.NOT_EMPTY.value: "not_empty",
+        AssertionMatchers.CONTAINS.value: "contains",
+        AssertionMatchers.NOT_CONTAINS.value: "does_not_contain",
+        AssertionMatchers.LT.value: "is_less_than",
+        AssertionMatchers.GT.value: "is_greater_than"
     }
 
     return mapper.get(matcher, None)
@@ -113,17 +122,27 @@ def to_runscope_matcher(matcher, assertion_var_type):
 
 def to_runscope_source(data_source):
     mapper = {
-        AssertionDataSource.RESPONSE_CODE.value: "response_status"
+        AssertionDataSource.RESPONSE_CODE.value: "response_status",
+        AssertionDataSource.RESPONSE_BODY.value: "response_json"
     }
 
     return mapper.get(data_source, None)
+
+
+def to_runscope_property(selector):
+    return selector.replace("$.", "")
+
+
+def to_runscope_value(expected_value):
+    return expected_value
 
 
 def to_runscope_assertion(assertion: Assertion):
     return RunscopeAssertion(
         comparison=to_runscope_matcher(assertion.matcher, assertion.var_type),
         source=to_runscope_source(assertion.data_from),
-        value=assertion.expected_value
+        property=to_runscope_property(assertion.selector),
+        value=to_runscope_value(assertion.expected_value)
     )
 
 
@@ -163,7 +182,7 @@ class RunscopeExporter:
             # id=gen_uuid(),
             name=project_info.title,
             description=project_info.info,
-            # environments=[to_runscope_env(env) for env in environments],
+            environments=[to_runscope_env(env) for env in environments],
             # schedules=[],
             steps=output_steps
         )

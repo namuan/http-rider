@@ -1,9 +1,9 @@
 import logging
 from typing import List
 
-from httprider.core import gen_uuid
-from httprider.core.core_settings import app_settings
-from httprider.model import ApiCall
+from ..core import gen_uuid
+from ..core.core_settings import app_settings
+from ..model.app_data import ApiCall
 
 
 class ApiCallInteractor:

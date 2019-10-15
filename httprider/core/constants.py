@@ -35,9 +35,13 @@ class AssertionOutput(Enum):
 
 class AssertionMatchers(Enum):
     SKIP = "---"
-    NOT_NULL = "notNull"
     EQ = "equalTo"
+    NOT_EQ = "notEqualTo"
+    NOT_NULL = "notNull"
+    EMPTY = "isEmpty"
+    NOT_EMPTY = "isNotEmpty"
     CONTAINS = "containsString"
+    NOT_CONTAINS = "notContainsString"
     LT = "lessThan"
     GT = "greaterThan"
 

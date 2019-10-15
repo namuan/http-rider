@@ -8,7 +8,7 @@ from ..exporters import exporter_plugins
 from ..core import styles_from_file
 from ..core.constants import EXPORTER_COMBO_ROLE
 from ..core.core_settings import app_settings
-from ..model import ApiCall
+from ..model.app_data import ApiCall
 
 
 class DisplayMode(Enum):

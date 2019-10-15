@@ -93,8 +93,20 @@ class AssertionResultPresenter:
         if matcher == AssertionMatchers.EQ.value:
             return current_val == expected_val
 
+        if matcher == AssertionMatchers.NOT_EQ.value:
+            return current_val != expected_val
+
+        if matcher == AssertionMatchers.EMPTY.value:
+            return current_val.strip() == ""
+
+        if matcher == AssertionMatchers.NOT_EMPTY.value:
+            return current_val.strip() != ""
+
         if matcher == AssertionMatchers.CONTAINS.value:
             return current_val.find(expected_val) >= 0
+
+        if matcher == AssertionMatchers.NOT_CONTAINS.value:
+            return current_val.find(expected_val) < 0
 
         if val_type in ["int", "float"]:
             if matcher == AssertionMatchers.LT.value:
