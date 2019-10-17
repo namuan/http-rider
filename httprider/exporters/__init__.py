@@ -56,6 +56,9 @@ def extract_uri(url, servers):
     return url
 
 
+# Import statements after any function definitions as they are using
+# from the exporters
+
 from . import exporter_apickli
 from . import exporter_curl
 from . import exporter_markdown
@@ -79,4 +82,3 @@ exporter_plugins = {
     'openapi_v3': exporter_openapi_v3,
     'restassured': exporter_restassured,
 }
-

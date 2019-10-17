@@ -1,13 +1,14 @@
 import json
 import re
 from pathlib import Path
-from typing import Dict, List
 
 import attr
 import cattr
+from typing import Dict, List
 
-from httprider.core.app_state_interactor import AppStateInteractor
 from ..core import kv_list_to_dict, DynamicStringData
+from ..core.app_state_interactor import AppStateInteractor
+from ..importers import structure_attrs_from_dict
 from ..model.app_data import ApiCall
 
 
@@ -75,11 +76,14 @@ class PostmanCollectionImporter:
         return api_call
 
     def __internal_variables(self, input_str):
-        return re.sub(self.var_selector, r"${\2}", input_str, count=0)
+        return re.sub(self.var_selector, r"${\2}", input_str, count=0) if input_str else ""
 
     def __validate_file(self, file_path):
         if not (Path(file_path).exists() and Path(file_path).is_file()):
             raise FileNotFoundError(f"Path {file_path} should be a valid file path")
 
+
+for cls in [PostmanDataModel, PostmanItem, PostmanSubItem, PostmanRequest]:
+    cattr.register_structure_hook(cls, structure_attrs_from_dict)
 
 importer = PostmanCollectionImporter()
