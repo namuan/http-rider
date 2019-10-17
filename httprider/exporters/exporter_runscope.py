@@ -146,6 +146,10 @@ def to_runscope_assertion(assertion: Assertion):
     )
 
 
+def to_runscope_variable(str_with_variable):
+    return str_with_variable
+
+
 def to_runscope_step(
         api_call: ApiCall,
         last_exchange: HttpExchange,
@@ -159,7 +163,7 @@ def to_runscope_step(
         method=last_exchange.request.http_method,
         note=api_call.title,
         step_type="request",
-        url=last_exchange.request.http_url,
+        url=to_runscope_variable(api_call.http_url),
         id=gen_uuid(),
         variables={}
     )

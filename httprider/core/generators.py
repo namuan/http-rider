@@ -115,6 +115,11 @@ def gen_map(generator, args):
         return noop(args)
 
 
+# Accepts a regex match object which should match the regex for internal_func_rgx
+# So the task for this method is to extract the function name and any arguments
+# Then it calls gen_map to call the function (with args) and return the result back
+# The result is then substituted in place of the function in the original string (templated_string)
+# for eg. ${random(32, True, True)} will be substituted with the random value generated
 def replacer(s):
     args = None if not s.group(2) else eval(s.group(2))
     return gen_map(s.group(1), args)
