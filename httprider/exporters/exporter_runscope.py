@@ -4,11 +4,13 @@ import attr
 import cattr
 from typing import List, Any, Optional, Dict
 
-from httprider.core import gen_uuid
-from httprider.core.constants import AssertionMatchers, AssertionDataSource
+from ..core import gen_uuid
+from ..core.constants import AssertionMatchers, AssertionDataSource
 from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiTestCase, HttpExchange, Environment, Assertion
+
+internal_var_selector = re.compile(r'\$\{(\w+)\}')
 
 
 @attr.s(auto_attribs=True)
@@ -39,6 +41,13 @@ class RunscopeEnvironment(object):
     id: str
     verify_ssl: bool
     webhooks: None
+
+
+@attr.s(auto_attribs=True)
+class RunscopeVariable(object):
+    source: str
+    property: str
+    name: str
 
 
 @attr.s(auto_attribs=True)
@@ -146,8 +155,17 @@ def to_runscope_assertion(assertion: Assertion):
     )
 
 
-def to_runscope_variable(str_with_variable):
-    return str_with_variable
+def to_runscope_variable(assertion: Assertion):
+    runscope_var = RunscopeVariable(
+        property=to_runscope_property(assertion.selector),
+        source=to_runscope_source(assertion.data_from),
+        name=assertion.var_name
+    )
+    return runscope_var
+
+
+def convert_internal_variable(str_with_variable):
+    return internal_var_selector.sub(r"{{\1}}", str_with_variable, count=0) if str_with_variable else ""
 
 
 def to_runscope_step(
@@ -157,15 +175,15 @@ def to_runscope_step(
     return Step(
         assertions=[to_runscope_assertion(a) for a in api_test_case.comparable_assertions()],
         auth={},
-        body=last_exchange.request.request_body,
+        body=convert_internal_variable(last_exchange.request.request_body),
         form=last_exchange.request.form_params,
-        headers=last_exchange.request.headers,
+        headers={k: convert_internal_variable(v) for k, v in last_exchange.request.headers.items()},
         method=last_exchange.request.http_method,
         note=api_call.title,
         step_type="request",
-        url=to_runscope_variable(api_call.http_url),
+        url=convert_internal_variable(api_call.http_url),
         id=gen_uuid(),
-        variables={}
+        variables=[to_runscope_variable(a) for a in api_test_case.variables()]
     )
 
 

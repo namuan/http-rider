@@ -231,6 +231,7 @@ class ApiTestCase(object):
     id: str = None
     record_type: str = API_TEST_CASE_RECORD_TYPE
     assertions: List[Assertion] = []
+    DEFAULT_VAR_PREFIX = "var"
 
     def to_json(self):
         return cattr.unstructure(self)
@@ -244,6 +245,9 @@ class ApiTestCase(object):
 
     def comparable_assertions(self):
         return [a for a in self.assertions if a.matcher != AssertionMatchers.SKIP.value]
+
+    def variables(self):
+        return [a for a in self.assertions if not a.var_name.startswith(self.DEFAULT_VAR_PREFIX)]
 
 
 class AppData:

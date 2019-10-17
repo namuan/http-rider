@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 
 from ..core.constants import REPLACEMENTS
+from ..model.app_data import ApiTestCase
 
 
 def string_to_variable_name(api_call_title, assertion_source, input_str):
@@ -14,9 +15,9 @@ def string_to_variable_name(api_call_title, assertion_source, input_str):
         input_str.lower()
     )
     if norm_input:
-        return f"var_{norm_title}_{assertion_source}_{norm_input}"
+        return f"{ApiTestCase.DEFAULT_VAR_PREFIX}_{norm_title}_{assertion_source}_{norm_input}"
     else:
-        return f"var_{norm_title}_{assertion_source}"
+        return f"{ApiTestCase.DEFAULT_VAR_PREFIX}_{norm_title}_{assertion_source}"
 
 
 def populate_tree_with_json(json_data, json_model, tree_view):
