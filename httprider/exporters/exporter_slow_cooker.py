@@ -27,8 +27,9 @@ def to_slow_cooker(api_call: ApiCall, exchange: HttpExchange, compressed=False, 
     parts = [
         ('slow_cooker', None),
         ('-method', http_method),
-        ('-qps ${QPS}', None),
-        ('-concurrency ${CONCURRENT_REQUESTS}', None)
+        ('-qps 100', None),
+        ('-concurrency 10', None),
+        ('-totalRequests 1000', None)
     ]
 
     for k, v in sorted(req_headers.items()):
@@ -59,18 +60,28 @@ class SlowCookerExporter:
 
     def export_data(self, api_calls: List[ApiCall]):
         header = """
-## Download and setup slow_cooker from https://github.com/buoyantio/slow_cooker<br/>
-## Brief description about the parameters used<br/>
-## -qps: QPS to send to backends per request thread<br/>
-## -concurrency: Number of goroutines to run, each at the specified QPS level. Measure total QPS as qps * concurrency<br/>
-## -iterations: Number of iterations for the experiment. Exits gracefully after iterations * interval (default 0, meaning infinite)<br/>
-## -header: Adds additional headers to each request. Can be specified multiple times. Format is key: value<br/>
-## -interval: How often to report stats to stdout<br/>
-## -method: Determines which HTTP method to use when making the request<br/>
+## Download and setup slow_cooker from https://github.com/buoyantio/slow_cooker
+<br/>## Brief description about common parameters
+<br/>## <strong>-qps</strong>: QPS to send to backends per request thread
+<br/>## <strong>-concurrency</strong>: Number of goroutines to run, each at the specified QPS level. Measure total QPS as qps * concurrency
+<br/>## <strong>-iterations</strong>: Number of iterations for the experiment. Exits gracefully after iterations * interval (default 0, meaning infinite)
+<br/>## <strong>-interval</strong>: How often to report stats to stdout. (Default 10s)
+<br/>## <strong>-header</strong>: Adds additional headers to each request. Can be specified multiple times. Format is key: value
+<br/>## <strong>-interval</strong>: How often to report stats to stdout
+<br/>## <strong>-method</strong>: Determines which HTTP method to use when making the request
+<br/>## <strong>-totalRequests</strong>: Exit after sending this many requests.
+<br/>## <strong>-timeout</strong>: Individual request timeout. (Default 10s)
 <br/>
-# Global Variables<br/>
-QPS=100<br/>
-CONCURRENT_REQUESTS=10<br/>
+<br/>## Log/Output format
+<br/>## $timestamp $good/$bad/$failed $trafficGoal $percentGoal $interval $min [$p50 $p95 $p99 $p999] $max $bhash
+<br/>## <strong>bad</strong> means a status code in the 500 range. <strong>failed</strong> means a connection failure. 
+<br/>## <strong>percentGoal</strong> is calculated as the total number of good and bad requests as a percentage of <strong>trafficGoal</strong>.
+<br/>## <strong>bhash</strong> is the number of failed hashes of body content. A value greater than 0 indicates a real problem.
+<br/>## p50: 50% of requests completed took this long
+<br/>## p95: 5% of requests completed took this long
+<br/>## p99: 1% of requests completed took this long
+<br/>## p999: 01% of requests completed took this long
+<br/>
         """
         output = [
             self.__export_api_call(api_call)
