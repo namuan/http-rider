@@ -100,7 +100,7 @@ class AssertionResultPresenter:
             return current_val.strip() == ""
 
         if matcher == AssertionMatchers.NOT_EMPTY.value:
-            return current_val.strip() != ""
+            return current_val is not None and current_val.strip() != ""
 
         if matcher == AssertionMatchers.CONTAINS.value:
             return current_val.find(expected_val) >= 0

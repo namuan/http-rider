@@ -256,7 +256,7 @@ def gen_uuid():
 
 def strip_comments(request_body):
     return "".join(
-        [l for l in request_body.splitlines() if not l.startswith("//")]
+        [l for l in request_body.splitlines() if not l.lstrip().startswith("//")]
     )
 
 

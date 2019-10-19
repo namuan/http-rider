@@ -5,7 +5,7 @@ import cattr
 from requests.structures import CaseInsensitiveDict
 from typing import Any, Optional, Dict, List
 
-from ..core import DynamicStringData, strip_comments
+from ..core import DynamicStringData, strip_comments, compact_json
 from ..core.constants import *
 
 
@@ -98,6 +98,18 @@ class ApiCall(object):
     def to_json(self):
         return cattr.unstructure(self)
 
+    def enabled_headers(self):
+        return {k: v.value for k, v in self.http_headers.items() if v.is_enabled}
+
+    def enabled_query_params(self):
+        return {k: v.value for k, v in self.http_params.items() if v.is_enabled}
+
+    def enabled_form_params(self):
+        return {k: v.value for k, v in self.form_params.items() if v.is_enabled}
+
+    def request_body_without_comments(self):
+        return compact_json(strip_comments(self.http_request_body))
+
 
 @attr.s(auto_attribs=True)
 class ExchangeRequest(object):
@@ -119,10 +131,10 @@ class ExchangeRequest(object):
             request_time=datetime.now().strftime("%c"),
             http_method=api_call.http_method,
             http_url=api_call.http_url,
-            headers={k: v.value for k, v in api_call.http_headers.items() if v.is_enabled},
-            query_params={k: v.value for k, v in api_call.http_params.items() if v.is_enabled},
-            form_params={k: v.value for k, v in api_call.form_params.items() if v.is_enabled},
-            request_body=strip_comments(api_call.http_request_body)
+            headers=api_call.enabled_headers(),
+            query_params=api_call.enabled_query_params(),
+            form_params=api_call.enabled_form_params(),
+            request_body=api_call.request_body_without_comments()
         )
 
 

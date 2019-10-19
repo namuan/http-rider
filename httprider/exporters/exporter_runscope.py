@@ -10,8 +10,6 @@ from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiTestCase, HttpExchange, Environment, Assertion
 
-internal_var_selector = re.compile(r'\$\{(\w+)\}')
-
 
 @attr.s(auto_attribs=True)
 class CreatedBy(object):

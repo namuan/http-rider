@@ -7,6 +7,8 @@ from pygments.lexers import data
 from ..core import format_json
 from ..model.app_data import ExchangeRequest, ExchangeResponse, ApiCall
 
+internal_var_selector = re.compile(r'\$\{(\w+)\}')
+
 
 def highlight_format_json(plain_text, formatter=HtmlFormatter()):
     if not plain_text:
@@ -71,11 +73,11 @@ from . import exporter_plantuml
 from . import exporter_slow_cooker
 
 exporter_plugins = {
+    'apickli': exporter_apickli,
     'runscope': exporter_runscope,
     'slow_cooker': exporter_slow_cooker,
     'plant_uml': exporter_plantuml,
     'python_requests': exporter_python_requests,
-    'apickli': exporter_apickli,
     'curl': exporter_curl,
     'markdown': exporter_markdown,
     'mermaid': exporter_mermaid,

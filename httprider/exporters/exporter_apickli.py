@@ -2,6 +2,8 @@ import attr
 from pygments.lexers.testing import GherkinLexer
 from typing import List
 
+from ..core import evaluate_functions
+from ..core.constants import AssertionMatchers
 from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSource, ProjectInfo
@@ -9,6 +11,10 @@ from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSo
 
 def gen_tags(tags: List):
     return " ".join([f"@{t}" for t in tags])
+
+
+def convert_internal_variable(str_with_variable):
+    return internal_var_selector.sub(r"`\1`", str_with_variable, count=0) if str_with_variable else ""
 
 
 def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
@@ -19,21 +25,22 @@ def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
         statements.append(f"{test_tags}")
 
     statements.append(f"Scenario: {api_call.title}")
-    for hk, hv in last_exchange.request.headers.items():
+    for hk, hv in api_call.enabled_headers().items():
+        converted_hv = evaluate_functions(convert_internal_variable(hv))
         if first_statement:
-
-            statements.append(f"    Given I set {hk} header to {hv}")
+            statements.append(f"    Given I set {hk} header to {converted_hv}")
             first_statement = False
         else:
-            statements.append(f"    And I set {hk} header to {hv}")
+            statements.append(f"    And I set {hk} header to {converted_hv}")
 
-    request_body = last_exchange.request.request_body
+    request_body = api_call.request_body_without_comments()
     if request_body:
+        converted_request_body = evaluate_functions(convert_internal_variable(request_body))
         if first_statement:
-            statements.append(f"    Given I set body to {request_body}")
+            statements.append(f"    Given I set body to {converted_request_body}")
             first_statement = False
         else:
-            statements.append(f"    And I set body to {request_body}")
+            statements.append(f"    And I set body to {converted_request_body}")
 
     if not statements:
         return ""
@@ -65,23 +72,31 @@ def gen_then(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiT
 
     for a in api_test_case.assertions:
         if a.data_from == AssertionDataSource.RESPONSE_HEADER.value:
-            statements.append(f"    And response header {a.selector} should {converter(a)}")
+            statements.append(f"    And response header {a.selector} {converter(a)}")
 
         if a.data_from == AssertionDataSource.RESPONSE_BODY.value:
-            statements.append(f"    And response path {a.selector} should {converter(a)}")
+            statements.append(f"    And response body path {a.selector} {converter_path_statement(a)}")
 
-    for a in api_test_case.assertions:
+    for a in api_test_case.variables():
         if a.data_from == AssertionDataSource.RESPONSE_HEADER.value:
             statements.append(f"    And I store the value of response header {a.selector} as {a.var_name}")
 
         if a.data_from == AssertionDataSource.RESPONSE_BODY.value:
-            statements.append(f"    And I store the value of body path {a.selector} as {a.var_name}")
+            statements.append(f"    And I store the value of body path {a.selector} as {a.var_name} in global scope")
 
     return "\n".join(statements)
 
 
 def converter(assertion):
-    return "exist" if assertion.expected_value == "Not Null" else f"be {assertion.expected_value}"
+    return "should exist" \
+        if assertion.matcher in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value] \
+        else f"should be {assertion.expected_value}"
+
+
+def converter_path_statement(assertion):
+    return "should not be empty" \
+        if assertion.matcher in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value] \
+        else f"should be {assertion.expected_value}"
 
 
 @attr.s
