@@ -20,7 +20,7 @@ from jsonpath_ng.ext import parse as jsonpath_parse
 
 from .constants import ContentType, UTF_8_ENCODING
 from .faker_config import fake
-from .generators import random_string_generator, internal_func_rgx, replacer
+from .generators import random_string_generator, internal_func_rgx, return_func_result
 
 
 class DynamicStringType(Enum):
@@ -171,7 +171,7 @@ def template_sub(templated_string, tokens):
 
 
 def evaluate_functions(templated_string):
-    return internal_func_rgx.sub(replacer, templated_string, count=0)
+    return internal_func_rgx.sub(return_func_result, templated_string, count=0)
 
 
 def import_modules(package):

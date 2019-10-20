@@ -95,7 +95,8 @@ def noop(args):
     return f"Invalid function called with {args}"
 
 
-def gen_map(generator, args):
+def call_generator_func(func_name, parsed_args):
+    args = None if not parsed_args else eval(parsed_args)
     m = {
         'random': random_string_generator,
         'uuid': random_uuid,
@@ -106,11 +107,11 @@ def gen_map(generator, args):
         'utils': utils_func_applicator
     }
 
-    gen_function = m.get(generator)
-    if gen_function and args:
-        return gen_function(args)
-    elif gen_function and not args:
-        return gen_function()
+    generator_function = m.get(func_name)
+    if generator_function and args:
+        return generator_function(args)
+    elif generator_function and not args:
+        return generator_function()
     else:
         return noop(args)
 
@@ -120,9 +121,8 @@ def gen_map(generator, args):
 # Then it calls gen_map to call the function (with args) and return the result back
 # The result is then substituted in place of the function in the original string (templated_string)
 # for eg. ${random(32, True, True)} will be substituted with the random value generated
-def replacer(s):
-    args = None if not s.group(2) else eval(s.group(2))
-    return gen_map(s.group(1), args)
+def return_func_result(s):
+    return call_generator_func(s.group(1), s.group(2))
 
 
 def file_func_generator(args, wrap_in_quotes=False):

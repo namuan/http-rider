@@ -73,8 +73,8 @@ from . import exporter_plantuml
 from . import exporter_slow_cooker
 
 exporter_plugins = {
-    'apickli': exporter_apickli,
     'runscope': exporter_runscope,
+    'apickli': exporter_apickli,
     'slow_cooker': exporter_slow_cooker,
     'plant_uml': exporter_plantuml,
     'python_requests': exporter_python_requests,

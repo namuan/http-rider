@@ -10,9 +10,9 @@ from ..model.app_data import ApiCall, HttpExchange
 def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True):
     http_method = api_call.http_method
     http_url = api_call.http_url
-    req_headers = {k: v.value for k, v in api_call.http_headers.items()}
-    req_qp = {k: v.value for k, v in api_call.http_params.items()}
-    req_body = api_call.http_request_body
+    req_headers = api_call.enabled_headers()
+    req_qp = api_call.enabled_query_params()
+    req_body = api_call.request_body_without_comments()
 
     if exchange.response.http_status_code != 0:
         http_method = exchange.request.http_method

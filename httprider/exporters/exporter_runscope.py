@@ -1,44 +1,27 @@
 import json
+from collections import defaultdict
 
 import attr
 import cattr
 from typing import List, Any, Optional, Dict
 
+from httprider.core import internal_func_rgx
+from httprider.core.generators import call_generator_func
 from ..core import gen_uuid
 from ..core.constants import AssertionMatchers, AssertionDataSource
 from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiTestCase, HttpExchange, Environment, Assertion
 
-
-@attr.s(auto_attribs=True)
-class CreatedBy(object):
-    email: str
-    name: str
-    id: str
-
-
-@attr.s(auto_attribs=True)
-class Integration(object):
-    description: str
-    integration_type: str
-    id: str
+internal_func_map = defaultdict(str)
 
 
 @attr.s(auto_attribs=True)
 class RunscopeEnvironment(object):
     initial_variables: Dict
-    integrations: List[Integration]
     name: str
-    parent_environment_id: None
-    preserve_cookies: bool
-    regions: List[str]
-    remote_agents: List[str]
-    script: str
-    test_id: str
     id: str
     verify_ssl: bool
-    webhooks: None
 
 
 @attr.s(auto_attribs=True)
@@ -73,11 +56,9 @@ class Step(object):
 
 @attr.s(auto_attribs=True)
 class RunscopeTest(object):
-    # id: str
     name: str
     description: str
     environments: List[RunscopeEnvironment]
-    # schedules: List[Any]
     steps: List[Step]
     version: str = "1.0"
     trigger_url: Optional[str] = ""
@@ -89,25 +70,12 @@ class RunscopeTest(object):
         return json.dumps(self.to_json())
 
 
-@attr.s(auto_attribs=True)
-class Meta(object):
-    status: str
-
-
-def to_runscope_env(env: Environment):
+def to_runscope_env(env: Environment, func_map: Dict):
     return RunscopeEnvironment(
-        initial_variables=env.get_env_map(),
-        integrations=[],
+        initial_variables={**env.get_env_map(), **func_map},
         name=env.name,
-        parent_environment_id=None,
-        preserve_cookies=False,
-        regions=["us1"],
-        remote_agents=[],
-        script="",
-        test_id="",
         id=env.id,
-        verify_ssl=True,
-        webhooks=None
+        verify_ssl=True
     )
 
 
@@ -166,20 +134,62 @@ def convert_internal_variable(str_with_variable):
     return internal_var_selector.sub(r"{{\1}}", str_with_variable, count=0) if str_with_variable else ""
 
 
+ENV_PREFIX = "env_var"
+
+
+def convert_internal_functions(str_with_internal_func):
+    return internal_func_rgx.sub(r"{{{0}_\1}}".format(ENV_PREFIX), str_with_internal_func, count=0)
+
+
+def find_internal_functions(str_with_internal_func):
+    return internal_func_rgx.findall(str_with_internal_func)
+
+
+def to_runscope_format(str_with_internal_keywords):
+    """
+    Using a global variable to store function map. It creates a map of variable name -> evaluated function value
+    The global variable is then passed to to_runscope_env where the variables are set as initial variables
+    :param str_with_internal_keywords: It could be URL, Header/Query param value or the request body
+    :return: string with the internal keywords replaced by runscope syntax
+    """
+    global internal_func_map
+    func_map = {
+        f"{ENV_PREFIX}_{k[0]}": call_generator_func(k[0], k[1])
+        for k in find_internal_functions(str_with_internal_keywords)
+    }
+    internal_func_map = {**internal_func_map, **func_map}
+    return convert_internal_functions(convert_internal_variable(str_with_internal_keywords))
+
+
+def to_runscope_request_body(request_body):
+    return to_runscope_format(request_body)
+
+
+def to_runscope_url(api_call):
+    """Build URL from ApiCall combing with query parameters
+    """
+    req_qp = api_call.enabled_query_params()
+    http_url = api_call.http_url
+    if req_qp:
+        http_url = api_call.http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
+    return to_runscope_format(http_url)
+
+
 def to_runscope_step(
         api_call: ApiCall,
         last_exchange: HttpExchange,
         api_test_case: ApiTestCase):
+    transformed_request_body = to_runscope_request_body(api_call.http_request_body)
     return Step(
         assertions=[to_runscope_assertion(a) for a in api_test_case.comparable_assertions()],
         auth={},
-        body=convert_internal_variable(last_exchange.request.request_body),
-        form=last_exchange.request.form_params,
-        headers={k: convert_internal_variable(v) for k, v in last_exchange.request.headers.items()},
+        body=transformed_request_body,
+        form={k: to_runscope_format(v) for k, v in api_call.enabled_form_params().items()},
+        headers={k: to_runscope_format(v) for k, v in api_call.enabled_headers().items()},
         method=last_exchange.request.http_method,
         note=api_call.title,
         step_type="request",
-        url=convert_internal_variable(api_call.http_url),
+        url=to_runscope_url(api_call),
         id=gen_uuid(),
         variables=[to_runscope_variable(a) for a in api_test_case.variables()]
     )
@@ -199,11 +209,9 @@ class RunscopeExporter:
         ]
 
         runscope_test = RunscopeTest(
-            # id=gen_uuid(),
             name=project_info.title,
             description=project_info.info,
-            environments=[to_runscope_env(env) for env in environments],
-            # schedules=[],
+            environments=[to_runscope_env(env, internal_func_map) for env in environments],
             steps=output_steps
         )
 
