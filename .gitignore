@@ -5,7 +5,6 @@ web/.firebase/
 *.retry
 *.log
 certs/
-*.db
 venv
 target
 __pycache__/
