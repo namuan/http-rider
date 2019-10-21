@@ -82,19 +82,19 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         else:
             self.process_completion(None, None, rollback=True)
 
-    def pre_completion_check(self, display_text, variable_name, rollback=False):
+    def pre_completion_check(self, text_in_field, variable_name, rollback=False):
         """Checks if one of the keyword is entered
         So that it can display appropriate dialog box
         Otherwise pass it to process completion
         """
-        if display_text == "data":
+        if text_in_field == "data":
             self.show_data_dialog(rollback)
-        elif display_text == "tools":
+        elif text_in_field == "tools":
             self.show_tools_dialog(rollback)
         else:
-            self.process_completion(display_text, variable_name, rollback)
+            self.process_completion(text_in_field, variable_name, rollback)
 
-    def process_completion(self, display_text, variable_name, rollback=False):
+    def process_completion(self, text_in_field, variable_name, rollback=False):
         self.child_edit.completer().popup().hide()
         self.child_edit.hide()
         self.child_edit.setText("")
@@ -109,7 +109,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
 
             existing_format = self.currentCharFormat()
             tf: QTextCharFormat = QTextCharFormat()
-            tf.setToolTip(display_text)
+            tf.setToolTip(text_in_field)
             self.setCurrentCharFormat(tf)
             self.insertPlainText(variable_name)
             self.setCurrentCharFormat(existing_format)

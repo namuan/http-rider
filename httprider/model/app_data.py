@@ -98,14 +98,26 @@ class ApiCall(object):
     def to_json(self):
         return cattr.unstructure(self)
 
-    def enabled_headers(self):
-        return {k: v.value for k, v in self.http_headers.items() if v.is_enabled}
+    def enabled_headers(self, hide_secrets=True):
+        return {
+            k: v.display_value() if hide_secrets else v.value
+            for k, v in self.http_headers.items()
+            if v.is_enabled
+        }
 
-    def enabled_query_params(self):
-        return {k: v.value for k, v in self.http_params.items() if v.is_enabled}
+    def enabled_query_params(self, hide_secrets=True):
+        return {
+            k: v.display_value() if hide_secrets else v.value
+            for k, v in self.http_params.items()
+            if v.is_enabled
+        }
 
-    def enabled_form_params(self):
-        return {k: v.value for k, v in self.form_params.items() if v.is_enabled}
+    def enabled_form_params(self, hide_secrets=True):
+        return {
+            k: v.display_value() if hide_secrets else v.value
+            for k, v in self.form_params.items()
+            if v.is_enabled
+        }
 
     def request_body_without_comments(self):
         return compact_json(strip_comments(self.http_request_body))
@@ -225,7 +237,7 @@ class Environment(object):
         return cattr.unstructure(self)
 
     def add_data(self, k, v):
-        self.data[k] = DynamicStringData(display_text=v, value=v)
+        self.data[k] = DynamicStringData(value=v)
 
     def set_data(self, new_data):
         self.data = new_data

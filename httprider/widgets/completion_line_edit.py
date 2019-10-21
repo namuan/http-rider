@@ -139,23 +139,23 @@ class CompletionLineEdit(QLineEdit):
         self.selection_start = self.selectionStart()
         self.selection_length = self.selectionLength()
 
-    def pre_completion_check(self, display_text, variable_name, rollback=False):
+    def pre_completion_check(self, text_in_field, variable_name, rollback=False):
         """Checks if one of the keyword is entered
         So that it can display appropriate dialog box
         Otherwise pass it to process completion
         """
-        if display_text == "data":
+        if text_in_field == "data":
             self.show_data_dialog(rollback)
-        elif display_text == "tools":
+        elif text_in_field == "tools":
             self.show_tools_dialog(rollback)
-        elif display_text == "file":
+        elif text_in_field == "file":
             file_location, _ = open_file(self, "Select File")
             file_function = file_func_generator(file_location, wrap_in_quotes=True)
             self.process_completion(file_function, file_function, rollback)
         else:
-            self.process_completion(display_text, variable_name, rollback)
+            self.process_completion(text_in_field, variable_name, rollback)
 
-    def process_completion(self, display_text, variable_name, rollback=False, replace_text=False):
+    def process_completion(self, text_in_field, variable_name, rollback=False, replace_text=False):
         self.child_edit.completer().popup().hide()
         self.child_edit.hide()
         self.child_edit.setText("")
@@ -201,17 +201,15 @@ class CompletionLineEdit(QLineEdit):
         else:
             self.setEchoMode(QLineEdit.Normal)
 
-        self.setText(new_val.display_text)
+        self.setText(new_val.value)
 
     def getValue(self):
         field_val = self.text().strip()
-        display_text = self.text().strip()
         string_type = DynamicStringType.PLAIN.value
         if self.echoMode() == QLineEdit.PasswordEchoOnEdit:
             string_type = DynamicStringType.SECRET.value
 
         return DynamicStringData(
-            display_text=display_text,
             value=field_val,
             string_type=string_type
         )

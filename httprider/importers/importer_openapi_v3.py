@@ -72,7 +72,7 @@ class OpenApiV3Importer:
         grouped_data = groupby(data, key=itemgetter("in"))
 
         def params(pv):
-            return {p["name"]: DynamicStringData(display_text="") for p in pv}
+            return {p["name"]: DynamicStringData(value="") for p in pv}
 
         gp = {k: params(data) for k, data in grouped_data}
 
@@ -86,7 +86,7 @@ class OpenApiV3Importer:
         )
 
         if content_type:
-            headers_params["Content-Type"] = DynamicStringData(display_text=content_type, value=content_type)
+            headers_params["Content-Type"] = DynamicStringData(value=content_type)
 
         return ApiCall(
             tags=[t for t in api_method_spec.get("tags", [])],

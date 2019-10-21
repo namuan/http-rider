@@ -30,10 +30,16 @@ class DynamicStringType(Enum):
 
 @attr.s(auto_attribs=True)
 class DynamicStringData(object):
-    display_text: str = ""
+    # Deprecated property display_text
+    display_text: str = "NOT_USED"
     value: str = ""
     string_type: str = DynamicStringType.PLAIN.value
     is_enabled: bool = True
+
+    def display_value(self):
+        return self.value \
+            if self.string_type == DynamicStringType.PLAIN.value \
+            else "*" * len(self.value)
 
 
 def rot13(in_str: str):
@@ -196,8 +202,10 @@ def split_url_qs(url: str):
     url_qs = url.split('?', 1)
     if len(url_qs) > 1:
         qs = parse.parse_qs(url_qs[1])
-        return url_qs[0], {qk: DynamicStringData(display_text=",".join(qv), value=",".join(qv)) for qk, qv in
-                           qs.items()}
+        return url_qs[0], {
+            qk: DynamicStringData(value=",".join(qv))
+            for qk, qv in qs.items()
+        }
     else:
         return url_qs[0], {}
 

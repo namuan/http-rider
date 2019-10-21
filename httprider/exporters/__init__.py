@@ -71,8 +71,10 @@ from . import exporter_restassured
 from . import exporter_python_requests
 from . import exporter_plantuml
 from . import exporter_slow_cooker
+from . import exporter_confluence
 
 exporter_plugins = {
+    'confluence': exporter_confluence,
     'runscope': exporter_runscope,
     'apickli': exporter_apickli,
     'slow_cooker': exporter_slow_cooker,
