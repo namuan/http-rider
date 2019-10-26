@@ -138,7 +138,7 @@ ENV_PREFIX = "env_var"
 
 
 def convert_internal_functions(str_with_internal_func):
-    return internal_func_rgx.sub(r"{{{0}_\1}}".format(ENV_PREFIX), str_with_internal_func, count=0)
+    return internal_func_rgx.sub(r"{{{{{0}_\1}}}}".format(ENV_PREFIX), str_with_internal_func, count=0)
 
 
 def find_internal_functions(str_with_internal_func):

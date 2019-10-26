@@ -47,23 +47,23 @@ See https://twitter.com/deskriders_twt for development updates.
   
 🚀 Export Markdown for documenting API requests/responses  
   
-🙈 Export [RestAssured](http://rest-assured.io) functional tests
-  
-🙈 Export [Apickli](https://github.com/apickli/apickli) functional tests
+🚀 Export [Apickli](https://github.com/apickli/apickli) functional tests
   
 🚀 Export curl requests  
   
 🚀 Export [MermaidJS](https://mermaidjs.github.io/) Sequence diagram  
   
+🚀 Export [Runscope](https://www.runscope.com) monitoring tests
+
 🙈 Export [OpenApi V3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) document
-  
-🙈 Export [Runscope](https://www.runscope.com) monitoring tests
+
+🙈 Export [RestAssured](http://rest-assured.io) functional tests
   
 **Importers**
   
 🚀 Import [OpenApi V3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) document  
   
-🙈 Import Postman collections
+🚀 Import Postman collections
   
 ### Installation  
   
