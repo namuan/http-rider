@@ -5,8 +5,8 @@ import attr
 import cattr
 from typing import List, Any, Optional, Dict
 
-from httprider.core import internal_func_rgx
-from httprider.core.generators import call_generator_func
+from ..core import internal_func_rgx
+from ..core.generators import call_generator_func
 from ..core import gen_uuid
 from ..core.constants import AssertionMatchers, AssertionDataSource
 from ..core.core_settings import app_settings
