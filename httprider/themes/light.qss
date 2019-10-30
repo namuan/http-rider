@@ -128,7 +128,7 @@ QPushButton[accessibleName="selectedamberbox"] {
 }
 
 QTabWidget::pane {
-    padding: 0px -20px -20px -20px;
+    padding: 0px -10px -20px -10px;
     background-color: #eff0f1;
     border: none;
 }

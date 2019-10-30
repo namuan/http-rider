@@ -4,9 +4,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QKeyEvent
 from PyQt5.QtWidgets import *
 
-from httprider.core.api_call_interactor import api_call_interactor
-from httprider.model.completer import get_completer_model
-from httprider.presenters.mocked_response_presenter import MockedResponsePresenter
+from ..core.api_call_interactor import api_call_interactor
+from ..model.completer import get_completer_model
+from ..presenters.mocked_response_presenter import MockedResponsePresenter
 from ..core import styles_from_file, split_url_qs
 from ..core.core_settings import app_settings
 from ..core.rest_api_interactor import rest_api_interactor
