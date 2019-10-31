@@ -31,6 +31,37 @@
    <property name="currentIndex">
     <number>0</number>
    </property>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>Requests</string>
+    </attribute>
+    <widget class="QLineEdit" name="timeout_in_secs">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>20</y>
+       <width>113</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>10</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>25</x>
+       <y>21</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Timeout (secs)</string>
+     </property>
+    </widget>
+   </widget>
    <widget class="QWidget" name="tab">
     <attribute name="title">
      <string>HTTP Proxy</string>

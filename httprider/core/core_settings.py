@@ -22,6 +22,7 @@ TLS_VERIFICATION_KEY = 'tlsVerification'
 STARTUP_CHECK_KEY = 'startupCheck'
 WINDOW_STATE_KEY = 'windowState'
 GEOMETRY_KEY = 'geometry'
+REQUEST_TIMEOUT_SECS = 'requestTimeoutSecs'
 
 
 class CoreSettings:
@@ -84,14 +85,16 @@ class CoreSettings:
         self.settings.setValue(TLS_VERIFICATION_KEY, app_config.tls_verification)
         self.settings.setValue(HTTP_PROXY_KEY, app_config.http_proxy)
         self.settings.setValue(HTTPS_PROXY_KEY, app_config.https_proxy)
+        self.settings.setValue(REQUEST_TIMEOUT_SECS, app_config.timeout_in_secs)
         self.settings.sync()
 
     def load_configuration(self):
         app_config = AppConfiguration()
-        app_config.update_check_on_startup = str_to_bool(self.settings.value(STARTUP_CHECK_KEY, True))
-        app_config.tls_verification = str_to_bool(self.settings.value(TLS_VERIFICATION_KEY, True))
-        app_config.http_proxy = self.settings.value(HTTP_PROXY_KEY, "")
-        app_config.https_proxy = self.settings.value(HTTPS_PROXY_KEY, "")
+        app_config.update_check_on_startup = str_to_bool(self.settings.value(STARTUP_CHECK_KEY, AppConfiguration.update_check_on_startup))
+        app_config.tls_verification = str_to_bool(self.settings.value(TLS_VERIFICATION_KEY, AppConfiguration.tls_verification))
+        app_config.http_proxy = self.settings.value(HTTP_PROXY_KEY, AppConfiguration.http_proxy)
+        app_config.https_proxy = self.settings.value(HTTPS_PROXY_KEY, AppConfiguration.https_proxy)
+        app_config.timeout_in_secs = self.settings.value(REQUEST_TIMEOUT_SECS, AppConfiguration.timeout_in_secs)
         return app_config
 
     def geometry(self):

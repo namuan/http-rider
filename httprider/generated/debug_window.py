@@ -18,6 +18,10 @@ class Ui_DebugWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(70, 80, 302, 255))
+        self.tabWidget.setStyleSheet("QTabWidget::pane {\n"
+"    border: 1px solid black;\n"
+"    background: white;\n"
+"}")
         self.tabWidget.setObjectName("tabWidget")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
@@ -40,6 +44,7 @@ class Ui_DebugWindow(object):
         DebugWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(DebugWindow)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(DebugWindow)
 
     def retranslateUi(self, DebugWindow):

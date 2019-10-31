@@ -7,12 +7,12 @@ MAX_RETRIES = 0
 
 
 class Requester:
-    def __init__(self, timeout_secs=5):
-        self.timeout_secs = timeout_secs
+    def __init__(self):
         self.session = requests.sessions.Session()
 
     def make_request(self, http_method, resource, kwargs):
         app_config = app_settings.load_configuration()
+        kwargs['timeout'] = int(app_config.timeout_in_secs)
         kwargs['verify'] = app_config.tls_verification
 
         if app_config.http_proxy and app_config.https_proxy:

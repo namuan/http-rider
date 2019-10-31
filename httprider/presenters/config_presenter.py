@@ -33,6 +33,7 @@ class ConfigPresenter:
         config.tls_verification = self.view.chk_tls_verficiation.isChecked()
         config.http_proxy = self.view.txt_http_proxy.text()
         config.https_proxy = self.view.txt_https_proxy.text()
+        config.timeout_in_secs = self.view.timeout_in_secs.text()
         return config
 
     def object_to_form(self, app_config: AppConfiguration):
@@ -40,3 +41,4 @@ class ConfigPresenter:
         self.view.chk_tls_verficiation.setChecked(app_config.tls_verification)
         self.view.txt_http_proxy.setText(app_config.http_proxy)
         self.view.txt_https_proxy.setText(app_config.https_proxy)
+        self.view.timeout_in_secs.setText(app_config.timeout_in_secs)
