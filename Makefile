@@ -9,6 +9,14 @@ setup: ## Setup virtual environment and install dependencies
 	echo "pip install -r requirements.txt"
 	echo "Once everything is installed, 'make run' to run the application"
 
+release: ## Step to prepare a new release
+	echo "Update version in httprider/__init__.py"
+	echo "Update version in .travis.yml"
+	echo "Commit and push latest version"
+	echo "Once the build is completed, git pull http-rider-osx"
+	echo "Update the build version in http-rider-osx/.travis.yml"
+	echo "Commit with Release notes"
+
 venv:
 	source venv/bin/activate
 
