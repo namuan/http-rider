@@ -5,7 +5,7 @@ from pygments.formatters.html import HtmlFormatter
 from pygments.lexers import data
 
 from ..core import format_json
-from ..model.app_data import ExchangeRequest, ExchangeResponse, ApiCall
+from ..model.app_data import ExchangeRequest, ExchangeResponse, ApiCall, HttpExchange
 
 internal_var_selector = re.compile(r'\$\{(\w+)\}')
 
@@ -56,6 +56,55 @@ def extract_uri(url, servers):
         return url.replace(matched_server, "")
 
     return url
+
+
+def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True):
+    http_method = api_call.http_method
+    http_url = api_call.http_url
+    req_headers = api_call.enabled_headers()
+    req_qp = api_call.enabled_query_params()
+    req_body = api_call.request_body_without_comments()
+
+    if exchange.response.http_status_code != 0:
+        http_method = exchange.request.http_method
+        http_url = exchange.request.http_url
+        req_qp = exchange.request.query_params
+        req_headers = exchange.request.headers
+        req_body = exchange.request.request_body
+
+    if req_qp:
+        http_url = http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
+
+    parts = [
+        ('curl', None),
+        ('-X', http_method),
+    ]
+
+    for k, v in sorted(req_headers.items()):
+        parts += [('-H', '{0}: {1}'.format(k, v))]
+
+    if req_body:
+        body = req_body
+        if isinstance(body, bytes):
+            body = body.decode('utf-8')
+        parts += [('-d', body)]
+
+    if compressed:
+        parts += [('--compressed', None)]
+
+    if not verify:
+        parts += [('--insecure', None)]
+
+    parts += [(None, http_url)]
+
+    flat_parts = []
+    for k, v in parts:
+        if k:
+            flat_parts.append(k)
+        if v:
+            flat_parts.append("'{0}'".format(v))
+
+    return ' '.join(flat_parts)
 
 
 # Import statements after any function definitions as they are using

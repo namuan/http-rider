@@ -52,6 +52,11 @@ HTTP {last_exchange.response.http_status_code}
 ```
 {formatted_response_body or " "}
 ```
+
+*Sample Call*
+```
+{to_curl(api_call, last_exchange)}
+```
 """
     return content
 
