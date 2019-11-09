@@ -27,12 +27,19 @@ def gen_function(api_call, last_exchange, api_test_case, project_info):
         form="{k}<font color=\"red\">*</font> //<string>//",
         splitter="\n"
     )
+    response_headers = dict_formatter(
+        dict_items=last_exchange.response.headers.items(),
+        form="{k}<font color=\"red\">*</font> //<string>//",
+        splitter="\n"
+    )
     query_params = dict_formatter(
         dict_items=last_exchange.request.query_params.items(),
         form="{k}<font color=\"red\">*</font> //<string>//",
         splitter="\n"
     )
     formatted_request_body = format_json(last_exchange.request.request_body)
+    formatted_response_body = format_json(last_exchange.response.response_body)
+
     statements = [
         f"\"{source.strip()}\"->\"{target.strip()}\": **{last_exchange.request.http_method}** \"{api_uri}\"",
         f"rnote right {source.strip()}",
@@ -44,6 +51,12 @@ def gen_function(api_call, last_exchange, api_test_case, project_info):
         f"{query_params}",
         f"**Payload**",
         f"{formatted_request_body}",
+        f"",
+        f"**Response**",
+        f"**Headers**",
+        f"{response_headers}",
+        f"**Payload**",
+        f"{formatted_response_body}",
         f"end note",
     ]
 
