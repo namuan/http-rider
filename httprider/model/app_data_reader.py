@@ -3,9 +3,23 @@ import logging
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
-from ..core.constants import API_TEST_CASE_RECORD_TYPE, HTTP_EXCHANGE_RECORD_TYPE, ENVIRONMENT_RECORD_TYPE, \
-    PROJECT_INFO_RECORD_TYPE, APP_STATE_RECORD_TYPE, API_CALL_RECORD_TYPE
-from ..model.app_data import ApiCall, AppData, ApiTestCase, HttpExchange, Environment, ProjectInfo, AppState
+from ..core.constants import (
+    API_TEST_CASE_RECORD_TYPE,
+    HTTP_EXCHANGE_RECORD_TYPE,
+    ENVIRONMENT_RECORD_TYPE,
+    PROJECT_INFO_RECORD_TYPE,
+    APP_STATE_RECORD_TYPE,
+    API_CALL_RECORD_TYPE,
+)
+from ..model.app_data import (
+    ApiCall,
+    AppData,
+    ApiTestCase,
+    HttpExchange,
+    Environment,
+    ProjectInfo,
+    AppState,
+)
 
 
 class AppDataReadSignals(QObject):
@@ -14,7 +28,6 @@ class AppDataReadSignals(QObject):
 
 
 class AppDataReader(AppData):
-
     def __init__(self, db_table):
         self.ldb = db_table
         self.signals = AppDataReadSignals()
@@ -23,7 +36,7 @@ class AppDataReader(AppData):
         table = self.ldb[API_CALL_RECORD_TYPE]
         api_calls_db = table.find(name=API_CALL_RECORD_TYPE)
         return {
-            api_db['api_call_id']: ApiCall.from_json(json.loads(api_db['object']))
+            api_db["api_call_id"]: ApiCall.from_json(json.loads(api_db["object"]))
             for api_db in api_calls_db
         }
 
@@ -34,7 +47,7 @@ class AppDataReader(AppData):
         if not obj_db:
             return ApiCall.from_json()
 
-        return ApiCall.from_json(json.loads(obj_db['object']))
+        return ApiCall.from_json(json.loads(obj_db["object"]))
 
     def get_api_test_case_from_db(self, api_call_id):
         table = self.ldb[API_TEST_CASE_RECORD_TYPE]
@@ -42,18 +55,17 @@ class AppDataReader(AppData):
         if not obj_db:
             return ApiTestCase.from_json(None, api_call_id)
 
-        return ApiTestCase.from_json(
-            json.loads(obj_db['object']),
-            api_call_id
-        )
+        return ApiTestCase.from_json(json.loads(obj_db["object"]), api_call_id)
 
     def get_api_call_exchanges_from_db(self, doc_id):
         table = self.ldb[HTTP_EXCHANGE_RECORD_TYPE]
-        http_exchanges_db = table.find(name=HTTP_EXCHANGE_RECORD_TYPE, api_call_id=doc_id)
+        http_exchanges_db = table.find(
+            name=HTTP_EXCHANGE_RECORD_TYPE, api_call_id=doc_id
+        )
         return [
-            HttpExchange.from_json(json.loads(obj['object']))
+            HttpExchange.from_json(json.loads(obj["object"]))
             for obj in http_exchanges_db
-            if obj['api_call_id'] == doc_id
+            if obj["api_call_id"] == doc_id
         ]
 
     def get_api_call_exchanges(self, doc_id):
@@ -65,7 +77,7 @@ class AppDataReader(AppData):
         if not http_exchange_db:
             raise LookupError(f"Unable to find exchange with id: {exchange_id}")
 
-        http_exchange_json = json.loads(http_exchange_db['object'])
+        http_exchange_json = json.loads(http_exchange_db["object"])
         return HttpExchange.from_json(http_exchange_json)
 
     def get_environments_from_db(self):
@@ -75,8 +87,7 @@ class AppDataReader(AppData):
             return []
 
         return [
-            Environment.from_json(json.loads(obj['object']))
-            for obj in environments_db
+            Environment.from_json(json.loads(obj["object"])) for obj in environments_db
         ]
 
     def get_selected_environment_from_db(self, environment_name):
@@ -85,7 +96,7 @@ class AppDataReader(AppData):
         if not environment_db:
             return None
 
-        environment_json = json.loads(environment_db['object'])
+        environment_json = json.loads(environment_db["object"])
         return Environment.from_json(environment_json)
 
     def get_or_create_project_info(self):
@@ -94,7 +105,7 @@ class AppDataReader(AppData):
         if not project_info_db:
             return ProjectInfo.from_json(None)
 
-        project_info_json = json.loads(project_info_db['object'])
+        project_info_json = json.loads(project_info_db["object"])
         return ProjectInfo.from_json(project_info_json)
 
     def get_appstate_environment(self):
@@ -107,5 +118,5 @@ class AppDataReader(AppData):
         if not app_state_db:
             return AppState.from_json()
 
-        app_state_json = json.loads(app_state_db['object'])
+        app_state_json = json.loads(app_state_db["object"])
         return AppState.from_json(app_state_json)

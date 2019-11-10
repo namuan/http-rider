@@ -49,9 +49,7 @@ class TagLabelWidget(QtWidgets.QWidget, Ui_TagLabelWidget):
     def editTag(self):
         self.old_tag = self.text()
         self.edit_tag.setText(self.text())
-        self.edit_tag.setSelection(
-            0, len(self.edit_tag.text())
-        )
+        self.edit_tag.setSelection(0, len(self.edit_tag.text()))
         self.__in_edit_mode()
 
     def save_changed_tag(self, new_tag):

@@ -16,12 +16,14 @@ class ChildLineEdit(QLineEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setFrame(False)
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
         background-color: #2882af;
         color: white;
         border-style: none;
         border-radius: 2px;        
-        """)
+        """
+        )
         self.hide()
 
     def setup_completer(self, model: QStandardItemModel):
@@ -35,9 +37,7 @@ class ChildLineEdit(QLineEdit):
 
     def on_completion(self, index: QModelIndex):
         self.entry_completed.emit(
-            index.data(Qt.DisplayRole),
-            index.data(DYNAMIC_STRING_ROLE),
-            False
+            index.data(Qt.DisplayRole), index.data(DYNAMIC_STRING_ROLE), False
         )
 
     def focusOutEvent(self, e: QFocusEvent):
@@ -92,7 +92,6 @@ class CompletionContextMenuHandler:
 
 
 class CompletionLineEdit(QLineEdit):
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent = parent
@@ -155,7 +154,9 @@ class CompletionLineEdit(QLineEdit):
         else:
             self.process_completion(text_in_field, variable_name, rollback)
 
-    def process_completion(self, text_in_field, variable_name, rollback=False, replace_text=False):
+    def process_completion(
+        self, text_in_field, variable_name, rollback=False, replace_text=False
+    ):
         self.child_edit.completer().popup().hide()
         self.child_edit.hide()
         self.child_edit.setText("")
@@ -209,7 +210,4 @@ class CompletionLineEdit(QLineEdit):
         if self.echoMode() == QLineEdit.PasswordEchoOnEdit:
             string_type = DynamicStringType.SECRET.value
 
-        return DynamicStringData(
-            value=field_val,
-            string_type=string_type
-        )
+        return DynamicStringData(value=field_val, string_type=string_type)

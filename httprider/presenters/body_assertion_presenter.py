@@ -31,11 +31,7 @@ class BodyAssertionPresenter:
         self.view.customContextMenuRequested.connect(self.show_context_menu)
 
     def refresh(self, request_body):
-        populate_tree_with_json(
-            request_body or "{}",
-            self.json_model,
-            self.view
-        )
+        populate_tree_with_json(request_body or "{}", self.json_model, self.view)
 
     def on_select_json(self):
         selected_index = self.view.currentIndex()

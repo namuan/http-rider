@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QDialog, QHeaderView
 
-from ..generated.environment_configuration_dialog import Ui_EnvironmentsConfigurationDialog
+from ..generated.environment_configuration_dialog import (
+    Ui_EnvironmentsConfigurationDialog,
+)
 from ..presenters import EnvironmentConfigurationPresenter
 
 

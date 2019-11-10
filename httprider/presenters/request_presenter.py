@@ -31,10 +31,14 @@ class RequestPresenter:
             self.view.lst_request_headers,
             self,
             key_completions=COMMON_HEADERS,
-            value_completions=HTTP_CONTENT_TYPES
+            value_completions=HTTP_CONTENT_TYPES,
         )
-        self.request_param_list_presenter = KeyValueListPresenter(self.view.lst_request_params, self)
-        self.form_params_list_presenter = KeyValueListPresenter(self.view.lst_form_params, self)
+        self.request_param_list_presenter = KeyValueListPresenter(
+            self.view.lst_request_params, self
+        )
+        self.form_params_list_presenter = KeyValueListPresenter(
+            self.view.lst_form_params, self
+        )
 
         self.mocked_response_presenter = MockedResponsePresenter(self, self.view)
 
@@ -44,22 +48,38 @@ class RequestPresenter:
         self.assertion_builder_dialog = AssertionBuilderDialog(self.view)
         self.txt_new_tag_input = NewTagEntryLineEdit(self.view)
         self.view.tags_layout.addWidget(self.txt_new_tag_input)
-        self.spacer_item = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.spacer_item = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
         self.view.tags_layout.addItem(self.spacer_item)
         self.view.btn_send_request.pressed.connect(self.on_btn_send_request)
         self.view.btn_add_tag.pressed.connect(self.add_new_tag_label)
         self.txt_new_tag_input.save_tag_signal.connect(self.save_new_tag)
         self.txt_new_tag_input.discard_tag_signal.connect(self.discard_new_tag)
-        self.view.btn_open_assertions_dialog.pressed.connect(self.on_show_assertions_dialog)
+        self.view.btn_open_assertions_dialog.pressed.connect(
+            self.on_show_assertions_dialog
+        )
 
-        app_settings.app_data_reader.signals.api_call_change_selection.connect(self.refresh)
+        app_settings.app_data_reader.signals.api_call_change_selection.connect(
+            self.refresh
+        )
         app_settings.app_data_writer.signals.api_call_tag_added.connect(self.refresh)
         app_settings.app_data_writer.signals.api_call_tag_removed.connect(self.refresh)
-        app_settings.app_data_writer.signals.api_call_updated.connect(self.on_api_call_refresh)
-        app_settings.app_data_writer.signals.api_test_case_changed.connect(self.refresh_completer)
-        app_settings.app_data_writer.signals.environment_data_changed.connect(self.refresh_completer)
-        app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(self.refresh_completer)
-        app_settings.app_data_writer.signals.exchange_added.connect(self.on_exchange_added)
+        app_settings.app_data_writer.signals.api_call_updated.connect(
+            self.on_api_call_refresh
+        )
+        app_settings.app_data_writer.signals.api_test_case_changed.connect(
+            self.refresh_completer
+        )
+        app_settings.app_data_writer.signals.environment_data_changed.connect(
+            self.refresh_completer
+        )
+        app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(
+            self.refresh_completer
+        )
+        app_settings.app_data_writer.signals.exchange_added.connect(
+            self.on_exchange_added
+        )
 
         self.assertion_result_presenter = AssertionResultPresenter(self.view)
 
@@ -69,10 +89,7 @@ class RequestPresenter:
 
     def refresh_completer(self):
         completer_model: QStandardItemModel = get_completer_model()
-        self.view.txt_http_url.setup_completions(
-            None,
-            completer_model
-        )
+        self.view.txt_http_url.setup_completions(None, completer_model)
         self.view.txt_request_body.child_edit.setup_completer(completer_model)
 
     def on_show_data_generator_dialog(self):
@@ -104,7 +121,10 @@ class RequestPresenter:
         all_tags = []
         for i in range(self.view.tags_layout.count()):
             widget_item = self.view.tags_layout.itemAt(i)
-            if widget_item and (type(widget_item.widget()) is QLabel or type(widget_item.widget()) is TagLabelWidget):
+            if widget_item and (
+                type(widget_item.widget()) is QLabel
+                or type(widget_item.widget()) is TagLabelWidget
+            ):
                 all_tags.append(widget_item.widget().text().strip())
 
         return all_tags
@@ -119,14 +139,18 @@ class RequestPresenter:
         self.view.txt_api_title.setText(self.current.title)
         if self.get_api_description() != self.current.description:
             self.view.txt_api_description.setPlainText(self.current.description)
-        index_to_set = self.view.cmb_http_method.findText(self.current.http_method.upper())
+        index_to_set = self.view.cmb_http_method.findText(
+            self.current.http_method.upper()
+        )
         self.view.cmb_http_method.setCurrentIndex(index_to_set)
         self.update_headers_on_form(self.current.http_headers)
         self.update_query_params_on_form(self.current.http_params)
         self.update_form_params_on_form(self.current.form_params)
         if self.get_request_body() != self.current.http_request_body:
             self.view.txt_request_body.clear()
-            self.view.txt_request_body.appendHtml(api_request_body_highlighted(self.current))
+            self.view.txt_request_body.appendHtml(
+                api_request_body_highlighted(self.current)
+            )
 
         self.update_tags_on_form(self.current, self.current.tags)
         self.mocked_response_presenter.object_to_form(self.current.mocked_response)
@@ -165,7 +189,10 @@ class RequestPresenter:
         i = 0
         while i < self.view.tags_layout.count():
             widget_item = self.view.tags_layout.itemAt(i)
-            if widget_item and (type(widget_item.widget()) is QLabel or type(widget_item.widget()) is TagLabelWidget):
+            if widget_item and (
+                type(widget_item.widget()) is QLabel
+                or type(widget_item.widget()) is TagLabelWidget
+            ):
                 widget_in_item = widget_item.widget()
                 widget_item.widget().hide()
                 self.view.tags_layout.removeWidget(widget_in_item)

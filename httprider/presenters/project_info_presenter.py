@@ -13,19 +13,27 @@ class ProjectInfoPresenter:
         self.parent_view.finished.connect(self.on_close)
 
         self.parent_view.btn_add_server.pressed.connect(self.on_add_new_server)
-        self.parent_view.btn_remove_server.pressed.connect(self.on_remove_selected_server)
+        self.parent_view.btn_remove_server.pressed.connect(
+            self.on_remove_selected_server
+        )
 
         self.common_header_list_presenter = KeyValueListPresenter(
             self.parent_view.lst_common_headers,
             self,
             key_completions=COMMON_HEADERS,
-            value_completions=HTTP_CONTENT_TYPES
+            value_completions=HTTP_CONTENT_TYPES,
         )
 
-        app_settings.app_data_writer.signals.api_call_tag_added.connect(self.on_tag_added)
-        app_settings.app_data_writer.signals.api_call_tag_removed.connect(self.reload_tags)
+        app_settings.app_data_writer.signals.api_call_tag_added.connect(
+            self.on_tag_added
+        )
+        app_settings.app_data_writer.signals.api_call_tag_removed.connect(
+            self.reload_tags
+        )
         app_settings.app_data_writer.signals.api_call_removed.connect(self.reload_tags)
-        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(self.reload_tags)
+        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(
+            self.reload_tags
+        )
 
     def show_dialog(self):
         project: ProjectInfo = app_settings.app_data_reader.get_or_create_project_info()
@@ -77,11 +85,7 @@ class ProjectInfoPresenter:
 
     def reload_tags(self):
         api_calls = app_settings.app_data_cache.filter_api_calls()
-        all_tags = {
-            tag_name
-            for api in api_calls
-            for tag_name in api.tags
-        }
+        all_tags = {tag_name for api in api_calls for tag_name in api.tags}
         project: ProjectInfo = app_settings.app_data_reader.get_or_create_project_info()
         project.tags = [TagInfo(name=tag_name) for tag_name in all_tags]
         app_settings.app_data_writer.update_project_info(project)

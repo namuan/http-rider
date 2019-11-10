@@ -13,4 +13,3 @@ class AssertionBuilderDialog(QDialog, Ui_AssertionBuilderDialog):
 
     def show_dialog(self, api_call):
         self.presenter.load_configuration_dialog(api_call)
-

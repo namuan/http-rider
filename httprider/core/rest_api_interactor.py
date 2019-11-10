@@ -57,17 +57,18 @@ class RestApiInteractor:
         common_headers = {k: v.value for k, v in project_info.common_headers.items()}
         exchange_request.headers = {**common_headers, **exchange_request.headers}
 
-        exchange = HttpExchange(
-            api_call_id=api_call.id,
-            request=exchange_request
-        )
+        exchange = HttpExchange(api_call_id=api_call.id, request=exchange_request)
 
         if api_call.mocked_response.is_enabled:
-            exchange.response = ExchangeResponse.from_mocked_response(api_call.mocked_response)
+            exchange.response = ExchangeResponse.from_mocked_response(
+                api_call.mocked_response
+            )
 
         if self.api_worker.isRunning():
             running_exchange: HttpExchange = self.api_worker.exchange
-            logging.warning(f"Worker is running for API: {running_exchange.api_call_id}")
+            logging.warning(
+                f"Worker is running for API: {running_exchange.api_call_id}"
+            )
             logging.warning(f"Should queue request for API: {exchange.api_call_id}")
             self.worker_queue.put(exchange)
         else:

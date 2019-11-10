@@ -7,7 +7,7 @@ from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiCall
 
-regex = r'.*\[([\S\s]*)->([\S\s][^]]*)\](.*)$'
+regex = r".*\[([\S\s]*)->([\S\s][^]]*)\](.*)$"
 
 
 def get_actors_from_title(api_title):
@@ -24,24 +24,24 @@ def gen_function(api_call, last_exchange, api_test_case, project_info):
         return ""
     headers = dict_formatter(
         dict_items=last_exchange.request.headers.items(),
-        form="{k}<font color=\"red\">*</font> //<string>//",
-        splitter="\n"
+        form='{k}<font color="red">*</font> //<string>//',
+        splitter="\n",
     )
     response_headers = dict_formatter(
         dict_items=last_exchange.response.headers.items(),
-        form="{k}<font color=\"red\">*</font> //<string>//",
-        splitter="\n"
+        form='{k}<font color="red">*</font> //<string>//',
+        splitter="\n",
     )
     query_params = dict_formatter(
         dict_items=last_exchange.request.query_params.items(),
-        form="{k}<font color=\"red\">*</font> //<string>//",
-        splitter="\n"
+        form='{k}<font color="red">*</font> //<string>//',
+        splitter="\n",
     )
     formatted_request_body = format_json(last_exchange.request.request_body)
     formatted_response_body = format_json(last_exchange.response.response_body)
 
     statements = [
-        f"\"{source.strip()}\"->\"{target.strip()}\": **{last_exchange.request.http_method}** \"{api_uri}\"",
+        f'"{source.strip()}"->"{target.strip()}": **{last_exchange.request.http_method}** "{api_uri}"',
         f"rnote right {source.strip()}",
         f"{api_call.title}",
         f"",
@@ -81,11 +81,12 @@ ActorA -> ActorB: Get product details
 @enduml
             
 """
-        sorted_apis_by_sequence = sorted(api_calls, key=lambda a: a.sequence_number or 0)
+        sorted_apis_by_sequence = sorted(
+            api_calls, key=lambda a: a.sequence_number or 0
+        )
 
         output = [
-            self.__export_api_call(api_call)
-            for api_call in sorted_apis_by_sequence
+            self.__export_api_call(api_call) for api_call in sorted_apis_by_sequence
         ]
 
         combined_output = "\n".join(output)

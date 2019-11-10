@@ -146,7 +146,7 @@ class ExchangeRequest(object):
             headers=api_call.enabled_headers(),
             query_params=api_call.enabled_query_params(),
             form_params=api_call.enabled_form_params(),
-            request_body=api_call.request_body_without_comments()
+            request_body=api_call.request_body_without_comments(),
         )
 
 
@@ -181,11 +181,13 @@ class ExchangeResponse(object):
     @classmethod
     def from_mocked_response(cls, mocked_response: MockedResponse):
         return cls(
-            response_headers={k: v.value for k, v in mocked_response.headers.items() if v.is_enabled},
+            response_headers={
+                k: v.value for k, v in mocked_response.headers.items() if v.is_enabled
+            },
             response_body=mocked_response.body,
             http_status_code=mocked_response.status_code,
             is_mocked=True,
-            response_time=0.0
+            response_time=0.0,
         )
 
 
@@ -271,7 +273,11 @@ class ApiTestCase(object):
         return [a for a in self.assertions if a.matcher != AssertionMatchers.SKIP.value]
 
     def variables(self):
-        return [a for a in self.assertions if not a.var_name.startswith(self.DEFAULT_VAR_PREFIX)]
+        return [
+            a
+            for a in self.assertions
+            if not a.var_name.startswith(self.DEFAULT_VAR_PREFIX)
+        ]
 
 
 class AppData:

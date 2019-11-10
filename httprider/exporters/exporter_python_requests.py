@@ -13,18 +13,17 @@ def to_python_requests(api_call, last_exchange):
     url = last_exchange.request.http_url
     has_qp = True if last_exchange.request.query_params else False
     query_params = dict_formatter(
-        last_exchange.request.query_params.items(),
-        "\"{k}\": \"{v}\""
+        last_exchange.request.query_params.items(), '"{k}": "{v}"'
     )
     has_headers = True if last_exchange.request.headers else False
     headers = dict_formatter(
-        last_exchange.request.headers.items(),
-        "\"{k}\": \"{v}\"",
-        splitter=",\n"
+        last_exchange.request.headers.items(), '"{k}": "{v}"', splitter=",\n"
     )
     has_json_body = True if last_exchange.request.request_body else False
 
-    json_body = "json={}".format(last_exchange.request.request_body) if has_json_body else ""
+    json_body = (
+        "json={}".format(last_exchange.request.request_body) if has_json_body else ""
+    )
 
     params_code = f"""
     params={{
@@ -70,10 +69,7 @@ import string
 import uuid
 
         """
-        output = [
-            self.__export_api_call(api_call)
-            for api_call in api_calls
-        ]
+        output = [self.__export_api_call(api_call) for api_call in api_calls]
 
         unformatted_code = file_header + "\n".join(output)
         formatted_code, _ = format_python_code(unformatted_code)

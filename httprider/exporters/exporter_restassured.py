@@ -12,14 +12,14 @@ def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
     statements.append(
         dict_formatter(
             last_exchange.request.headers.items(),
-            "                header(\"{k}\", \"{v}\").",
-            splitter="\n"
+            '                header("{k}", "{v}").',
+            splitter="\n",
         )
     )
 
     if last_exchange.request.request_body:
         encoded_json_string = encode_json_string(last_exchange.request.request_body)
-        statements.append(f"                body(\"{encoded_json_string}\").")
+        statements.append(f'                body("{encoded_json_string}").')
 
     if len(statements) == 0:
         return ""
@@ -30,22 +30,26 @@ def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
 def gen_when(api_call: ApiCall, last_exchange: HttpExchange):
     statements = [
         "\twhen().",
-        f"                request(\"{last_exchange.request.http_method}\", \"{last_exchange.request.http_url}\")"
+        f'                request("{last_exchange.request.http_method}", "{last_exchange.request.http_url}")',
     ]
     return "\n".join(statements)
 
 
-def gen_then(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
+def gen_then(
+    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
+):
     statements = ["\tthen()."]
     for a in api_test_case.assertions:
         if a.data_from == AssertionDataSource.RESPONSE_CODE.value:
             statements.append(f"                statusCode({converter(a)})")
 
         if a.data_from == AssertionDataSource.RESPONSE_HEADER.value:
-            statements.append(f"                header(\"{a.selector}\", \"{converter(a)}\")")
+            statements.append(
+                f'                header("{a.selector}", "{converter(a)}")'
+            )
 
         if a.data_from == AssertionDataSource.RESPONSE_BODY.value:
-            statements.append(f"                body(\"{a.selector}\", \"{converter(a)}\")")
+            statements.append(f'                body("{a.selector}", "{converter(a)}")')
 
     if len(statements) == 1:
         return ""
@@ -54,7 +58,11 @@ def gen_then(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiT
 
 
 def converter(assertion):
-    return "exist" if assertion.expected_value == "Not Null" else f"{assertion.expected_value}"
+    return (
+        "exist"
+        if assertion.expected_value == "Not Null"
+        else f"{assertion.expected_value}"
+    )
 
 
 def gen_function(api_call, last_exchange, api_test_case):
@@ -111,16 +119,14 @@ class AirHttpTests {
         test_file_footer = """
 }        
         """
-        output = [
-            self.__export_api_call(api_call)
-            for api_call in api_calls
-        ]
-        return \
-            highlight(test_file_header, JavaLexer(), HtmlFormatter()) + \
-            "<br/>" + \
-            "<br/>".join(output) + \
-            "<br/>" + \
-            highlight(test_file_footer, JavaLexer(), HtmlFormatter())
+        output = [self.__export_api_call(api_call) for api_call in api_calls]
+        return (
+            highlight(test_file_header, JavaLexer(), HtmlFormatter())
+            + "<br/>"
+            + "<br/>".join(output)
+            + "<br/>"
+            + highlight(test_file_footer, JavaLexer(), HtmlFormatter())
+        )
 
     def __export_api_call(self, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)

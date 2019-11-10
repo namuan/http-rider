@@ -37,17 +37,19 @@ class DynamicStringData(object):
     is_enabled: bool = True
 
     def display_value(self):
-        return self.value \
-            if self.string_type == DynamicStringType.PLAIN.value \
+        return (
+            self.value
+            if self.string_type == DynamicStringType.PLAIN.value
             else "*" * len(self.value)
+        )
 
 
 def rot13(in_str: str):
-    return codecs.encode(in_str, 'rot13')
+    return codecs.encode(in_str, "rot13")
 
 
 def tor31(in_str: str):
-    return codecs.decode(in_str, 'rot13')
+    return codecs.decode(in_str, "rot13")
 
 
 def abbreviate(in_str: str, length=30):
@@ -104,15 +106,15 @@ def data_type(val):
     try:
         norm_val = val.strip() if isinstance(val, str) else str(val)
         if len(norm_val) == 0:
-            return 'none'
-        if norm_val in ['true', 'True', 'false', 'False']:
-            return 'bool'
+            return "none"
+        if norm_val in ["true", "True", "false", "False"]:
+            return "bool"
 
         return type(ast.literal_eval(norm_val)).__name__
     except ValueError:
-        return 'str'
+        return "str"
     except SyntaxError:
-        return 'str'
+        return "str"
 
 
 def json_path(json_doc, path_query):
@@ -139,7 +141,9 @@ def replace_response_variables(vars_tokens, exchange_response):
     for hk, hv in exchange_response.headers.items():
         exchange_response.headers[hk] = template_sub(hv, vars_tokens)
 
-    exchange_response.response_body = template_sub(exchange_response.response_body, vars_tokens)
+    exchange_response.response_body = template_sub(
+        exchange_response.response_body, vars_tokens
+    )
     return exchange_response
 
 
@@ -166,7 +170,9 @@ def replace_variables(vars_tokens, exchange_request):
     for fk, fv in exchange_request.form_params.items():
         exchange_request.form_params[fk] = template_sub(fv, vars_tokens)
 
-    exchange_request.request_body = compact_json(template_sub(exchange_request.request_body, vars_tokens))
+    exchange_request.request_body = compact_json(
+        template_sub(exchange_request.request_body, vars_tokens)
+    )
     return exchange_request
 
 
@@ -183,8 +189,9 @@ def evaluate_functions(templated_string):
 def import_modules(package):
     return {
         name: importlib.import_module(name)
-        for finder, name, ispkg
-        in pkgutil.iter_modules(package.__path__, package.__name__ + ".")
+        for finder, name, ispkg in pkgutil.iter_modules(
+            package.__path__, package.__name__ + "."
+        )
     }
 
 
@@ -199,13 +206,13 @@ def styles_from_file(filename):
 
 
 def split_url_qs(url: str):
-    url_qs = url.split('?', 1)
+    url_qs = url.split("?", 1)
     if len(url_qs) > 1:
         qs = parse.parse_qs(url_qs[1])
-        return url_qs[0], {
-            qk: DynamicStringData(value=",".join(qv))
-            for qk, qv in qs.items()
-        }
+        return (
+            url_qs[0],
+            {qk: DynamicStringData(value=",".join(qv)) for qk, qv in qs.items()},
+        )
     else:
         return url_qs[0], {}
 
@@ -245,14 +252,14 @@ def schema_from_json(json_body):
         j = json.loads(json_body)
         s = genson.SchemaBuilder(schema_uri=None)
         s.add_object(j)
-        return {'schema': s.to_schema()}
+        return {"schema": s.to_schema()}
     except JSONDecodeError:
         return {}
 
 
 def load_json_show_error(json_str):
     try:
-        j = json.loads(json_str, encoding='utf-8')
+        j = json.loads(json_str, encoding="utf-8")
         return j
     except JSONDecodeError:
         logging.error(f"Error in loading JSON: {json_str}")

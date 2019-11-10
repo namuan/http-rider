@@ -8,11 +8,9 @@ from ..model.app_data import ApiTestCase
 
 
 def string_to_variable_name(api_call_title, assertion_source, input_str):
-    norm_title = api_call_title.lower().strip().replace(' ', '_')
+    norm_title = api_call_title.lower().strip().replace(" ", "_")
     norm_input = functools.reduce(
-        lambda accum, lst: accum.replace(*lst),
-        REPLACEMENTS,
-        input_str.lower()
+        lambda accum, lst: accum.replace(*lst), REPLACEMENTS, input_str.lower()
     )
     if norm_input:
         return f"{ApiTestCase.DEFAULT_VAR_PREFIX}_{norm_title}_{assertion_source}_{norm_input}"

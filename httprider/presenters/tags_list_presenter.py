@@ -11,7 +11,7 @@ class TagsListPresenter:
 
     def __get_combox_box(self):
         toolbar_actions = self.parent_view.tool_bar.actions()
-        tags_list_action = next(act for act in toolbar_actions if act.text() == 'Tags')
+        tags_list_action = next(act for act in toolbar_actions if act.text() == "Tags")
         return tags_list_action.defaultWidget()
 
     def on_tag_changed(self, tag_name):

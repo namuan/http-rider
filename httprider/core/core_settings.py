@@ -14,19 +14,18 @@ from ..model.app_data_writer import AppDataWriter
 from ..model.storage import Storage
 from ..model.user_data import UserProject, SavedState
 
-CURRENT_PROJECT_STATE_KEY = 'currentProjectState'
-CURRENT_PROJECT_LOCATION_KEY = 'currentProjectLocation'
-HTTPS_PROXY_KEY = 'httpsProxy'
-HTTP_PROXY_KEY = 'httpProxy'
-TLS_VERIFICATION_KEY = 'tlsVerification'
-STARTUP_CHECK_KEY = 'startupCheck'
-WINDOW_STATE_KEY = 'windowState'
-GEOMETRY_KEY = 'geometry'
-REQUEST_TIMEOUT_SECS = 'requestTimeoutSecs'
+CURRENT_PROJECT_STATE_KEY = "currentProjectState"
+CURRENT_PROJECT_LOCATION_KEY = "currentProjectLocation"
+HTTPS_PROXY_KEY = "httpsProxy"
+HTTP_PROXY_KEY = "httpProxy"
+TLS_VERIFICATION_KEY = "tlsVerification"
+STARTUP_CHECK_KEY = "startupCheck"
+WINDOW_STATE_KEY = "windowState"
+GEOMETRY_KEY = "geometry"
+REQUEST_TIMEOUT_SECS = "requestTimeoutSecs"
 
 
 class CoreSettings:
-
     def __init__(self):
         self.settings: QSettings = None
         self.app_name: str = None
@@ -34,31 +33,36 @@ class CoreSettings:
         self.app_data_reader: AppDataReader = None
         self.app_data_writer: AppDataWriter = None
         self.app_data_cache: AppDataCache = None
-        self.docs_location: Path = Path(QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation))
+        self.docs_location: Path = Path(
+            QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
+        )
 
     def init(self):
         self.app_name = qApp.applicationName().lower()
-        self.app_dir = Path(QStandardPaths.writableLocation(QStandardPaths.AppConfigLocation))
+        self.app_dir = Path(
+            QStandardPaths.writableLocation(QStandardPaths.AppConfigLocation)
+        )
         self.app_dir.mkdir(exist_ok=True)
         settings_file = f"{self.app_name}.ini"
-        self.settings = QSettings(self.app_dir.joinpath(settings_file).as_posix(), QSettings.IniFormat)
+        self.settings = QSettings(
+            self.app_dir.joinpath(settings_file).as_posix(), QSettings.IniFormat
+        )
         self.settings.sync()
 
     def init_logger(self):
         log_file = f"{self.app_name}.log"
         handlers = [
             logging.handlers.RotatingFileHandler(
-                self.app_dir.joinpath(log_file),
-                maxBytes=1000000, backupCount=1
+                self.app_dir.joinpath(log_file), maxBytes=1_000_000, backupCount=1
             ),
-            logging.StreamHandler()
+            logging.StreamHandler(),
         ]
 
         logging.basicConfig(
             handlers=handlers,
-            format='%(asctime)s - %(filename)s:%(lineno)d - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S',
-            level=logging.DEBUG
+            format="%(asctime)s - %(filename)s:%(lineno)d - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+            level=logging.DEBUG,
         )
         logging.captureWarnings(capture=True)
 
@@ -90,11 +94,23 @@ class CoreSettings:
 
     def load_configuration(self):
         app_config = AppConfiguration()
-        app_config.update_check_on_startup = str_to_bool(self.settings.value(STARTUP_CHECK_KEY, AppConfiguration.update_check_on_startup))
-        app_config.tls_verification = str_to_bool(self.settings.value(TLS_VERIFICATION_KEY, AppConfiguration.tls_verification))
-        app_config.http_proxy = self.settings.value(HTTP_PROXY_KEY, AppConfiguration.http_proxy)
-        app_config.https_proxy = self.settings.value(HTTPS_PROXY_KEY, AppConfiguration.https_proxy)
-        app_config.timeout_in_secs = self.settings.value(REQUEST_TIMEOUT_SECS, AppConfiguration.timeout_in_secs)
+        app_config.update_check_on_startup = str_to_bool(
+            self.settings.value(
+                STARTUP_CHECK_KEY, AppConfiguration.update_check_on_startup
+            )
+        )
+        app_config.tls_verification = str_to_bool(
+            self.settings.value(TLS_VERIFICATION_KEY, AppConfiguration.tls_verification)
+        )
+        app_config.http_proxy = self.settings.value(
+            HTTP_PROXY_KEY, AppConfiguration.http_proxy
+        )
+        app_config.https_proxy = self.settings.value(
+            HTTPS_PROXY_KEY, AppConfiguration.https_proxy
+        )
+        app_config.timeout_in_secs = self.settings.value(
+            REQUEST_TIMEOUT_SECS, AppConfiguration.timeout_in_secs
+        )
         return app_config
 
     def geometry(self):
@@ -109,20 +125,22 @@ class CoreSettings:
         self.settings.sync()
 
     def load_current_project(self):
-        current_project_location = self.settings.value(CURRENT_PROJECT_LOCATION_KEY, None)
+        current_project_location = self.settings.value(
+            CURRENT_PROJECT_LOCATION_KEY, None
+        )
 
         if not current_project_location:
             return self.create_new_project()
 
         return UserProject(
             location=current_project_location,
-            state=self.settings.value(CURRENT_PROJECT_STATE_KEY)
+            state=self.settings.value(CURRENT_PROJECT_STATE_KEY),
         )
 
     def create_new_project(self):
         user_project = UserProject(
             location=self.docs_location.joinpath(random_project_name()).as_posix(),
-            state=SavedState.UN_SAVED
+            state=SavedState.UN_SAVED,
         )
         self.save_current_project(user_project)
         return user_project

@@ -39,25 +39,40 @@ class OpenApiV3Importer:
             version=openapi_info["version"].strip(),
             contact_email=openapi_info.get("contact", {}).get("email", "").strip(),
             contact_name=openapi_info.get("contact", {}).get("name", "").strip(),
-            tags=[TagInfo(t["name"].strip(), t["description"].strip()) for t in openapi_tags],
-            servers=[server.get("url", "") for server in openapi_servers]
+            tags=[
+                TagInfo(t["name"].strip(), t["description"].strip())
+                for t in openapi_tags
+            ],
+            servers=[server.get("url", "") for server in openapi_servers],
         )
         return info
 
     def __extract_api_calls(self, base_path, openapi_spec):
         openapi_paths = openapi_spec.specification["paths"]
         return [
-            self.__convert_to_api_call(base_path, path, path_spec, api_method, api_method_spec, content_type, schema)
+            self.__convert_to_api_call(
+                base_path,
+                path,
+                path_spec,
+                api_method,
+                api_method_spec,
+                content_type,
+                schema,
+            )
             for path, path_spec in openapi_paths.items()
             for api_method, api_method_spec in path_spec.items()
-            for content_type, schema in self.__request_content_types(api_method_spec).items()
+            for content_type, schema in self.__request_content_types(
+                api_method_spec
+            ).items()
             if api_method.strip().lower() in VALID_METHODS_OPENAPI_V3
         ]
 
     def __request_content_types(self, api_method_spec):
-        has_request_body = type(api_method_spec) is dict \
-                           and api_method_spec.get("requestBody", False) \
-                           and api_method_spec.get("requestBody").get("content", False)
+        has_request_body = (
+            type(api_method_spec) is dict
+            and api_method_spec.get("requestBody", False)
+            and api_method_spec.get("requestBody").get("content", False)
+        )
 
         if not has_request_body:
             return {None: None}
@@ -78,11 +93,19 @@ class OpenApiV3Importer:
 
         return gp.get("header", {}), gp.get("query", {}), gp.get("form", {})
 
-    def __convert_to_api_call(self, base_path, path, path_spec, api_method, api_method_spec, content_type, schema):
+    def __convert_to_api_call(
+        self,
+        base_path,
+        path,
+        path_spec,
+        api_method,
+        api_method_spec,
+        content_type,
+        schema,
+    ):
         logging.info(f"Converting {api_method} - {content_type} - {path}")
         headers_params, query_params, form_params = self.__process_parameters(
-            path_spec,
-            api_method_spec
+            path_spec, api_method_spec
         )
 
         if content_type:
@@ -98,7 +121,7 @@ class OpenApiV3Importer:
             http_headers=headers_params,
             http_params=query_params,
             form_params=form_params,
-            sequence_number=self.app_state_interactor.update_sequence_number()
+            sequence_number=self.app_state_interactor.update_sequence_number(),
         )
 
     def __extract_request_body(self, content_type, schema):

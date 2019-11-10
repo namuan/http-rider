@@ -7,16 +7,18 @@ from ..core.util_functions import *
 
 # Internal function arguments must be one or more of
 # \d (digit) \w (word) \" (") \* (*) \# (#) \- (-) \, (,) \s (space) \= (base64)
-internal_func_rgx = re.compile(r"\$\{(\w+)\(([\d\w\"\*\#\-\,\.\/\=\s]*)\)\}", re.MULTILINE | re.IGNORECASE)
+internal_func_rgx = re.compile(
+    r"\$\{(\w+)\(([\d\w\"\*\#\-\,\.\/\=\s]*)\)\}", re.MULTILINE | re.IGNORECASE
+)
 
 address_attributes_map = {
-    'country': fake.country,
-    'address': fake.address,
-    'secondary': fake.secondary_address,
-    'street': fake.street_address,
-    'city': fake.city,
-    'zipcode': fake.zipcode,
-    'state': fake.state
+    "country": fake.country,
+    "address": fake.address,
+    "secondary": fake.secondary_address,
+    "street": fake.street_address,
+    "city": fake.city,
+    "zipcode": fake.zipcode,
+    "state": fake.state,
 }
 
 
@@ -26,20 +28,20 @@ def random_address(args):
 
 
 person_attributes_map = {
-    'male': {
-        'prefix': fake.prefix_male,
-        'first_name': fake.first_name_male,
-        'last_name': fake.last_name_male,
-        'full_name': fake.name_male,
-        'suffix': fake.suffix_male
+    "male": {
+        "prefix": fake.prefix_male,
+        "first_name": fake.first_name_male,
+        "last_name": fake.last_name_male,
+        "full_name": fake.name_male,
+        "suffix": fake.suffix_male,
     },
-    'female': {
-        'prefix': fake.prefix_female,
-        'first_name': fake.first_name_female,
-        'last_name': fake.last_name_female,
-        'full_name': fake.name_female,
-        'suffix': fake.suffix_female
-    }
+    "female": {
+        "prefix": fake.prefix_female,
+        "first_name": fake.first_name_female,
+        "last_name": fake.last_name_female,
+        "full_name": fake.name_female,
+        "suffix": fake.suffix_female,
+    },
 }
 
 
@@ -83,7 +85,7 @@ def random_string_generator(args):
     if not selection:
         selection = string.digits + string.ascii_letters + string.punctuation
 
-    return ''.join(random.choice(selection) for i in range(int(chars)))
+    return "".join(random.choice(selection) for i in range(int(chars)))
 
 
 def utils_func_applicator(args):
@@ -98,13 +100,13 @@ def noop(args):
 def call_generator_func(func_name, parsed_args):
     args = None if not parsed_args else eval(parsed_args)
     m = {
-        'random': random_string_generator,
-        'uuid': random_uuid,
-        'custom': custom_string_generator,
-        'person': random_person,
-        'address': random_address,
-        'file': file_func_generator,
-        'utils': utils_func_applicator
+        "random": random_string_generator,
+        "uuid": random_uuid,
+        "custom": custom_string_generator,
+        "person": random_person,
+        "address": random_address,
+        "file": file_func_generator,
+        "utils": utils_func_applicator,
     }
 
     generator_function = m.get(func_name)
@@ -127,7 +129,7 @@ def return_func_result(s):
 
 def file_func_generator(args, wrap_in_quotes=False):
     if wrap_in_quotes:
-        return f"${{file(\"{args}\")}}"
+        return f'${{file("{args}")}}'
     else:
         return f"${{file({args})}}"
 

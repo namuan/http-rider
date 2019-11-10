@@ -8,7 +8,7 @@ from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiCall
 
-regex = r'.*\[([\S\s]*)->([\S\s][^]]*)\](.*)$'
+regex = r".*\[([\S\s]*)->([\S\s][^]]*)\](.*)$"
 
 
 def get_actors_from_title(api_title):
@@ -46,11 +46,12 @@ The above will generate the following syntax
 sequenceDiagram
     ActorA ->> ActorB: Get product details        
 """
-        sorted_apis_by_sequence = sorted(api_calls, key=lambda a: a.sequence_number or 0)
+        sorted_apis_by_sequence = sorted(
+            api_calls, key=lambda a: a.sequence_number or 0
+        )
 
         output = [
-            self.__export_api_call(api_call)
-            for api_call in sorted_apis_by_sequence
+            self.__export_api_call(api_call) for api_call in sorted_apis_by_sequence
         ]
 
         combined_output = "\n".join(output)

@@ -4,7 +4,6 @@ from httprider.core.core_settings import app_settings
 
 
 class AppStateInteractor:
-
     def update_sequence_number(self):
         app_state = app_settings.app_data_cache.get_app_state()
         app_state.last_sequence_number = app_state.last_sequence_number + 1000

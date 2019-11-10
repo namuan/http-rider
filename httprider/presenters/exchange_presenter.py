@@ -14,24 +14,48 @@ class ExchangePresenter:
         self.current: ApiCall = None
         self.view = parent_view
         self.pyg_styles = styles_from_file(":/themes/pyg.css")
-        self.view.txt_exchange_request_body.document().setDefaultStyleSheet(self.pyg_styles)
+        self.view.txt_exchange_request_body.document().setDefaultStyleSheet(
+            self.pyg_styles
+        )
         self.view.txt_response_body.document().setDefaultStyleSheet(self.pyg_styles)
 
-        self.view.tbl_exchange_request_headers.header().setSectionResizeMode(0, QHeaderView.Stretch)
-        self.view.tbl_exchange_request_headers.header().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.view.tbl_exchange_request_params.header().setSectionResizeMode(0, QHeaderView.Stretch)
-        self.view.tbl_exchange_request_params.header().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.view.tbl_exchange_form_params.header().setSectionResizeMode(0, QHeaderView.Stretch)
-        self.view.tbl_exchange_form_params.header().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.view.tbl_response_headers.header().setSectionResizeMode(0, QHeaderView.Stretch)
-        self.view.tbl_response_headers.header().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.view.tbl_exchange_request_headers.header().setSectionResizeMode(
+            0, QHeaderView.Stretch
+        )
+        self.view.tbl_exchange_request_headers.header().setSectionResizeMode(
+            1, QHeaderView.Stretch
+        )
+        self.view.tbl_exchange_request_params.header().setSectionResizeMode(
+            0, QHeaderView.Stretch
+        )
+        self.view.tbl_exchange_request_params.header().setSectionResizeMode(
+            1, QHeaderView.Stretch
+        )
+        self.view.tbl_exchange_form_params.header().setSectionResizeMode(
+            0, QHeaderView.Stretch
+        )
+        self.view.tbl_exchange_form_params.header().setSectionResizeMode(
+            1, QHeaderView.Stretch
+        )
+        self.view.tbl_response_headers.header().setSectionResizeMode(
+            0, QHeaderView.Stretch
+        )
+        self.view.tbl_response_headers.header().setSectionResizeMode(
+            1, QHeaderView.Stretch
+        )
 
         app_settings.app_data_writer.signals.exchange_added.connect(self.refresh)
-        app_settings.app_data_reader.signals.api_call_change_selection.connect(self.display_last_exchange)
-        app_settings.app_data_writer.signals.selected_exchange_changed.connect(self.on_exchange_changed)
+        app_settings.app_data_reader.signals.api_call_change_selection.connect(
+            self.display_last_exchange
+        )
+        app_settings.app_data_writer.signals.selected_exchange_changed.connect(
+            self.on_exchange_changed
+        )
 
     def display_last_exchange(self, api_call: ApiCall):
-        api_call_exchanges = app_settings.app_data_cache.get_api_call_exchanges(api_call.id)
+        api_call_exchanges = app_settings.app_data_cache.get_api_call_exchanges(
+            api_call.id
+        )
         if api_call_exchanges:
             last_exchange = api_call_exchanges[-1]
             self.refresh(api_call.id, last_exchange)
@@ -51,21 +75,22 @@ class ExchangePresenter:
         self.current = api_call
         http_request = exchange.request
         # Request rendering
-        self.view.lbl_request_title.setText(f"{http_request.http_method} {http_request.http_url}")
+        self.view.lbl_request_title.setText(
+            f"{http_request.http_method} {http_request.http_url}"
+        )
         self.view.lbl_request_time.setText(http_request.request_time)
 
-        self.view.txt_exchange_request_body.setHtml(request_body_highlighted(http_request))
-        populate_tree_with_kv_dict(
-            http_request.headers.items(),
-            self.view.tbl_exchange_request_headers
+        self.view.txt_exchange_request_body.setHtml(
+            request_body_highlighted(http_request)
         )
         populate_tree_with_kv_dict(
-            http_request.query_params.items(),
-            self.view.tbl_exchange_request_params
+            http_request.headers.items(), self.view.tbl_exchange_request_headers
         )
         populate_tree_with_kv_dict(
-            http_request.form_params.items(),
-            self.view.tbl_exchange_form_params
+            http_request.query_params.items(), self.view.tbl_exchange_request_params
+        )
+        populate_tree_with_kv_dict(
+            http_request.form_params.items(), self.view.tbl_exchange_form_params
         )
 
         http_response = exchange.response
@@ -80,6 +105,5 @@ class ExchangePresenter:
         self.view.txt_response_body.setHtml(response_body_highlighted(http_response))
 
         populate_tree_with_kv_dict(
-            http_response.headers.items(),
-            self.view.tbl_response_headers
+            http_response.headers.items(), self.view.tbl_response_headers
         )

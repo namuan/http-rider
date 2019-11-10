@@ -3,7 +3,14 @@ from typing import List, Dict
 
 from ..core import json_path, response_code_formatter, response_code_round_up
 from ..core.constants import DEFAULT_TAG, AssertionDataSource
-from ..model.app_data import ApiCall, AppState, ApiTestCase, HttpExchange, Assertion, Environment
+from ..model.app_data import (
+    ApiCall,
+    AppState,
+    ApiTestCase,
+    HttpExchange,
+    Assertion,
+    Environment,
+)
 from ..model.app_data_reader import AppDataReader
 from ..model.app_data_writer import AppDataWriter
 
@@ -11,8 +18,10 @@ from ..model.app_data_writer import AppDataWriter
 def _build_filter_query(query=None, tag=None):
     selected_tag = tag if tag != DEFAULT_TAG else None
     if selected_tag and query:
-        return lambda api_call: query.lower() in api_call.title.lower() \
-                                and selected_tag in api_call.tags
+        return (
+            lambda api_call: query.lower() in api_call.title.lower()
+            and selected_tag in api_call.tags
+        )
 
     if selected_tag:
         return lambda api_call: selected_tag in api_call.tags
@@ -38,26 +47,46 @@ class AppDataCache:
         # API Calls
         self.app_data_writer.signals.api_call_added.connect(self.on_api_call_added)
         self.app_data_writer.signals.api_call_removed.connect(self.on_api_call_removed)
-        self.app_data_writer.signals.multiple_api_calls_added.connect(self.on_multiple_api_calls_added)
-        self.app_data_writer.signals.api_call_tag_added.connect(lambda c: self.refresh_cache_item(c.id))
-        self.app_data_writer.signals.api_call_tag_removed.connect(lambda c: self.refresh_cache_item(c.id))
+        self.app_data_writer.signals.multiple_api_calls_added.connect(
+            self.on_multiple_api_calls_added
+        )
+        self.app_data_writer.signals.api_call_tag_added.connect(
+            lambda c: self.refresh_cache_item(c.id)
+        )
+        self.app_data_writer.signals.api_call_tag_removed.connect(
+            lambda c: self.refresh_cache_item(c.id)
+        )
         self.app_data_writer.signals.api_call_updated.connect(self.refresh_cache_item)
 
         # AppState
         self.app_data_writer.signals.app_state_updated.connect(self.refresh_app_state)
 
         # API Test Cases
-        self.app_data_writer.signals.api_test_case_changed.connect(self.refresh_api_test_case)
+        self.app_data_writer.signals.api_test_case_changed.connect(
+            self.refresh_api_test_case
+        )
 
         # API Exchange
-        self.app_data_writer.signals.exchange_added.connect(self.on_api_http_exchange_added)
-        self.app_data_writer.signals.exchange_changed.connect(self.on_api_http_exchange_updated)
+        self.app_data_writer.signals.exchange_added.connect(
+            self.on_api_http_exchange_added
+        )
+        self.app_data_writer.signals.exchange_changed.connect(
+            self.on_api_http_exchange_updated
+        )
 
         # Environments
-        self.app_data_writer.signals.environment_added.connect(self.refresh_environments)
-        self.app_data_writer.signals.environment_removed.connect(self.refresh_environments)
-        self.app_data_writer.signals.environment_renamed.connect(self.refresh_environments)
-        self.app_data_writer.signals.environment_data_changed.connect(self.refresh_environments)
+        self.app_data_writer.signals.environment_added.connect(
+            self.refresh_environments
+        )
+        self.app_data_writer.signals.environment_removed.connect(
+            self.refresh_environments
+        )
+        self.app_data_writer.signals.environment_renamed.connect(
+            self.refresh_environments
+        )
+        self.app_data_writer.signals.environment_data_changed.connect(
+            self.refresh_environments
+        )
 
     def load_cache(self):
         self.api_call_list = self.app_data_reader.get_all_api_calls_from_db()
@@ -69,18 +98,18 @@ class AppDataCache:
 
         self.refresh_app_state()
         self.refresh_environments()
-        logging.info(f"Initial Cache Loading Completed: "
-                     f"API Calls: {len(self.api_call_list)} - "
-                     f"API Test Cases: {len(self.api_test_cases)} - "
-                     f"API HTTP Exchanges: {len(self.api_http_exchanges)} -"
-                     f"Environments: {len(self.environments)} - "
-                     )
+        logging.info(
+            f"Initial Cache Loading Completed: "
+            f"API Calls: {len(self.api_call_list)} - "
+            f"API Test Cases: {len(self.api_test_cases)} - "
+            f"API HTTP Exchanges: {len(self.api_http_exchanges)} -"
+            f"Environments: {len(self.environments)} - "
+        )
         self.app_data_reader.signals.initial_cache_loading_completed.emit()
 
     def refresh_environments(self):
         self.environments = {
-            e.name: e
-            for e in self.app_data_reader.get_environments_from_db()
+            e.name: e for e in self.app_data_reader.get_environments_from_db()
         }
 
     def get_environments(self):
@@ -134,12 +163,14 @@ class AppDataCache:
             self.api_call_list[api_call.id] = api_call
 
     def filter_api_calls(self, search_query=None, search_tag=None):
-        logging.info(f"Filtering API Calls by Query {search_query} and Tag {search_tag}")
+        logging.info(
+            f"Filtering API Calls by Query {search_query} and Tag {search_tag}"
+        )
         api_calls_filter = _build_filter_query(query=search_query, tag=search_tag)
         all_api_calls = self.get_all_api_calls()
         return sorted(
             filter(api_calls_filter, all_api_calls),
-            key=lambda a: a.sequence_number or 0
+            key=lambda a: a.sequence_number or 0,
         )
 
     def update_search_query(self, search_query):
@@ -148,9 +179,7 @@ class AppDataCache:
     def get_all_env_variables(self):
         current_env = self.get_appstate_environment()
         environment: Environment = self.get_selected_environment(current_env)
-        return [
-            f"${{{k}}}" for k in environment.get_data().keys()
-        ]
+        return [f"${{{k}}}" for k in environment.get_data().keys()]
 
     def get_appstate_environment(self):
         app_state = self.get_app_state()
@@ -161,7 +190,9 @@ class AppDataCache:
         return self.app_state
 
     @staticmethod
-    def get_latest_assertion_value_from_exchange(assertion: Assertion, exchange: HttpExchange):
+    def get_latest_assertion_value_from_exchange(
+        assertion: Assertion, exchange: HttpExchange
+    ):
         if assertion.data_from == AssertionDataSource.REQUEST_HEADER.value:
             return exchange.request.headers.get(assertion.selector, None)
         elif assertion.data_from == AssertionDataSource.RESPONSE_HEADER.value:
@@ -175,9 +206,13 @@ class AppDataCache:
         elif assertion.data_from == AssertionDataSource.RESPONSE_TIME.value:
             return response_code_round_up(exchange.response.elapsed_time)
 
-    def __build_assertion(self, api_call: ApiCall, exchange: HttpExchange, api_test_case: ApiTestCase):
+    def __build_assertion(
+        self, api_call: ApiCall, exchange: HttpExchange, api_test_case: ApiTestCase
+    ):
         return {
-            assertion.var_name: self.get_latest_assertion_value_from_exchange(assertion, exchange)
+            assertion.var_name: self.get_latest_assertion_value_from_exchange(
+                assertion, exchange
+            )
             for assertion in api_test_case.assertions
         }
 
@@ -195,7 +230,9 @@ class AppDataCache:
             return HttpExchange(api_call_id)
 
     def get_api_test_case(self, api_call_id):
-        return self.api_test_cases.get(api_call_id, ApiTestCase.from_json(None, api_call_id))
+        return self.api_test_cases.get(
+            api_call_id, ApiTestCase.from_json(None, api_call_id)
+        )
 
     def get_all_api_test_assertions(self):
         api_calls = self.get_all_api_calls()
@@ -203,7 +240,7 @@ class AppDataCache:
             self.__build_assertion(
                 api_call,
                 self.get_last_exchange(api_call.id),
-                self.get_api_test_case(api_call.id)
+                self.get_api_test_case(api_call.id),
             )
             for api_call in api_calls
         ]

@@ -5,7 +5,14 @@ from PyQt5.QtCore import QObject, pyqtSignal
 
 from ..core import gen_uuid
 from ..core.constants import ENVIRONMENT_RECORD_TYPE, API_CALL_RECORD_TYPE
-from ..model.app_data import HttpExchange, ApiCall, ProjectInfo, AppData, Environment, ApiTestCase
+from ..model.app_data import (
+    HttpExchange,
+    ApiCall,
+    ProjectInfo,
+    AppData,
+    Environment,
+    ApiTestCase,
+)
 
 
 class AppDataSignals(QObject):
@@ -30,7 +37,6 @@ class AppDataSignals(QObject):
 
 
 class AppDataWriter(AppData):
-
     def __init__(self, db_table):
         self.ldb = db_table
         self.signals = AppDataSignals()
@@ -43,10 +49,9 @@ class AppDataWriter(AppData):
         table = self.ldb[project_info.record_type]
         table.upsert(
             dict(
-                name=project_info.record_type,
-                object=json.dumps(project_info.to_json())
+                name=project_info.record_type, object=json.dumps(project_info.to_json())
             ),
-            ['name']
+            ["name"],
         )
         self.signals.project_info_updated.emit(project_info)
 
@@ -57,11 +62,8 @@ class AppDataWriter(AppData):
         logging.info(f"Updating App State In DB {app_state}")
         table = self.ldb[app_state.record_type]
         table.upsert(
-            dict(
-                name=app_state.record_type,
-                object=json.dumps(app_state.to_json())
-            ),
-            ['name']
+            dict(name=app_state.record_type, object=json.dumps(app_state.to_json())),
+            ["name"],
         )
         self.signals.app_state_updated.emit()
 
@@ -72,9 +74,9 @@ class AppDataWriter(AppData):
                 name=exchange.type,
                 exchange_id=exchange.id,
                 api_call_id=exchange.api_call_id,
-                object=json.dumps(exchange.to_json())
+                object=json.dumps(exchange.to_json()),
             ),
-            ['exchange_id', 'api_call_id']
+            ["exchange_id", "api_call_id"],
         )
 
     def add_http_exchange(self, exchange: HttpExchange):
@@ -84,7 +86,9 @@ class AppDataWriter(AppData):
         self.signals.exchange_added.emit(exchange.api_call_id, exchange)
 
     def update_http_exchange(self, exchange: HttpExchange):
-        logging.info(f"API {exchange.api_call_id} - Updating http exchange {exchange.id}")
+        logging.info(
+            f"API {exchange.api_call_id} - Updating http exchange {exchange.id}"
+        )
         self.update_http_exchange_in_db(exchange)
         self.signals.exchange_changed.emit(exchange.id, exchange)
 
@@ -99,9 +103,9 @@ class AppDataWriter(AppData):
             dict(
                 name=api_call.type,
                 api_call_id=api_call.id,
-                object=json.dumps(api_call.to_json())
+                object=json.dumps(api_call.to_json()),
             ),
-            ['api_call_id']
+            ["api_call_id"],
         )
         return api_call.id
 
@@ -116,9 +120,9 @@ class AppDataWriter(AppData):
             dict(
                 name=environment.record_type,
                 environment_name=environment.name,
-                object=json.dumps(environment.to_json())
+                object=json.dumps(environment.to_json()),
             ),
-            ['environment_name']
+            ["environment_name"],
         )
 
     def update_environment_name_in_db(self, old_environment_name, new_environment_name):
@@ -140,10 +144,12 @@ class AppDataWriter(AppData):
                 name=test_case.record_type,
                 test_case_id=test_case.id,
                 api_call_id=test_case.api_call_id,
-                object=json.dumps(test_case.to_json())
+                object=json.dumps(test_case.to_json()),
             ),
-            ['test_case_id']
+            ["test_case_id"],
         )
 
-        logging.info(f"API: {test_case.api_call_id} - Test Id: {test_case.id} - Upserting API Test case {test_case}")
+        logging.info(
+            f"API: {test_case.api_call_id} - Test Id: {test_case.id} - Upserting API Test case {test_case}"
+        )
         self.signals.api_test_case_changed.emit(test_case.api_call_id)

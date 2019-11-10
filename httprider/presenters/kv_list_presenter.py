@@ -10,15 +10,23 @@ from ..widgets.new_header_widget import NewItemButtonWidget
 
 
 class KeyValueListPresenter:
-    def __init__(self, lst_view, parent=None, key_completions=None, value_completions=None):
+    def __init__(
+        self, lst_view, parent=None, key_completions=None, value_completions=None
+    ):
         self.lst_view = lst_view
         self.parent_view = parent
         self._completer = None
         self.add_new_item_widget()
 
-        app_settings.app_data_writer.signals.api_test_case_changed.connect(self.refresh_completer)
-        app_settings.app_data_writer.signals.environment_data_changed.connect(self.refresh_completer)
-        app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(self.refresh_completer)
+        app_settings.app_data_writer.signals.api_test_case_changed.connect(
+            self.refresh_completer
+        )
+        app_settings.app_data_writer.signals.environment_data_changed.connect(
+            self.refresh_completer
+        )
+        app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(
+            self.refresh_completer
+        )
 
         self.header_name_completer = None
         if key_completions:
@@ -42,13 +50,17 @@ class KeyValueListPresenter:
         for i in range(self.lst_view.count() - 1):
             item = self.lst_view.item(i)
             widget = self.lst_view.itemWidget(item)
-            widget.txt_value.setup_completions(self.header_value_completer, self.completer_model)
+            widget.txt_value.setup_completions(
+                self.header_value_completer, self.completer_model
+            )
 
     def add_widget(self, header_name, header_value, item_position):
         item = QListWidgetItem()
         kv_widget = KeyValueWidget(self.lst_view, item, self.remove_item)
         kv_widget.txt_name.setCompleter(self.header_name_completer)
-        kv_widget.txt_value.setup_completions(self.header_value_completer, self.completer_model)
+        kv_widget.txt_value.setup_completions(
+            self.header_value_completer, self.completer_model
+        )
         kv_widget.set_data(header_name, header_value)
         item.setSizeHint(kv_widget.sizeHint())
         self.lst_view.insertItem(item_position, item)

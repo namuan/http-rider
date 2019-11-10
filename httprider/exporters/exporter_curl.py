@@ -13,10 +13,7 @@ class CurlExporter:
     output_ext: str = "sh"
 
     def export_data(self, api_calls: List[ApiCall]):
-        output = [
-            self.__export_api_call(api_call)
-            for api_call in api_calls
-        ]
+        output = [self.__export_api_call(api_call) for api_call in api_calls]
         return "<br/>".join(output)
 
     def __export_api_call(self, api_call):

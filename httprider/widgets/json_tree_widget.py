@@ -45,13 +45,21 @@ class JsonTreeItem(object):
                 child = self.load_json(item, f"Index {index}", topItem)
                 topItem.appendChild(child)
         else:
-            topItem.itemValue = self.__flatten_string(json_data) if isinstance(json_data, str) else json_data
-            topItem.itemValue = self.__flatten_string(json_data) if isinstance(json_data, str) else json_data
+            topItem.itemValue = (
+                self.__flatten_string(json_data)
+                if isinstance(json_data, str)
+                else json_data
+            )
+            topItem.itemValue = (
+                self.__flatten_string(json_data)
+                if isinstance(json_data, str)
+                else json_data
+            )
 
         return topItem
 
     def __flatten_string(self, input):
-        return input.strip().replace('\r', '').replace('\n', '')
+        return input.strip().replace("\r", "").replace("\n", "")
 
 
 class JsonModel(QAbstractItemModel):

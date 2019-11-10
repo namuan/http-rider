@@ -20,10 +20,12 @@ class EnvironmentMenuPresenter:
         file_location, _ = self.main_window.save_file(
             "Export Environments",
             current_project_folder,
-            file_filter="Environment Files (*.envs.json)"
+            file_filter="Environment Files (*.envs.json)",
         )
         if file_location:
-            envs: List[Environment] = app_settings.app_data_reader.get_environments_from_db()
+            envs: List[
+                Environment
+            ] = app_settings.app_data_reader.get_environments_from_db()
             envs_json = cattr.unstructure(envs)
             Path(file_location).write_text(json.dumps(envs_json))
 
@@ -33,7 +35,7 @@ class EnvironmentMenuPresenter:
         file_location, _ = self.main_window.open_file(
             "Import Environments",
             current_project_folder,
-            file_filter="Environment Files (*.envs.json)"
+            file_filter="Environment Files (*.envs.json)",
         )
         if file_location:
             envs_raw_json = Path(file_location).read_text()

@@ -19,9 +19,7 @@ class CurlImporter:
         try:
             ctx: ParsedContext = uncurl.parse_context(curl_command)
             api_call = self.__extract_api_call(ctx)
-            return None, [
-                api_call
-            ]
+            return None, [api_call]
         except BaseException:
             raise SyntaxError("Unable to parse curl command")
 
@@ -36,21 +34,28 @@ class CurlImporter:
             form_params=self.__extract_form_data(ctx),
             http_params=qs,
             http_headers=self.__extract_header_data(ctx.headers),
-            sequence_number=self.app_state_interactor.update_sequence_number()
+            sequence_number=self.app_state_interactor.update_sequence_number(),
         )
 
     def __extract_header_data(self, headers):
         return {hk: DynamicStringData(value=hv) for hk, hv in headers.items()}
 
     def __extract_form_data(self, ctx: ParsedContext):
-        form_content_type = ctx.headers.get('Content-Type', None) == 'application/x-www-form-urlencoded'
+        form_content_type = (
+            ctx.headers.get("Content-Type", None) == "application/x-www-form-urlencoded"
+        )
         if form_content_type:
-            return {fk: DynamicStringData(value=",".join(fv)) for fk, fv in parse.parse_qs(ctx.data).items()}
+            return {
+                fk: DynamicStringData(value=",".join(fv))
+                for fk, fv in parse.parse_qs(ctx.data).items()
+            }
         else:
             return {}
 
     def __extract_request_body(self, ctx: ParsedContext):
-        form_content_type = ctx.headers.get('Content-Type', None) == 'application/x-www-form-urlencoded'
+        form_content_type = (
+            ctx.headers.get("Content-Type", None) == "application/x-www-form-urlencoded"
+        )
         if not form_content_type:
             return ctx.data or ""
         else:

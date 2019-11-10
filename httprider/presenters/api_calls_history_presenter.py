@@ -11,17 +11,25 @@ class ApiCallsHistoryPresenter:
         self.calls_layout = parent.horizontalLayout_6
         self.current_exchange: HttpExchange = None
         self.button_group = QButtonGroup()
-        self.button_group.buttonClicked[QAbstractButton].connect(self.handle_exchange_switch)
+        self.button_group.buttonClicked[QAbstractButton].connect(
+            self.handle_exchange_switch
+        )
 
-        app_settings.app_data_writer.signals.exchange_added.connect(self.refresh_on_new_exchange)
-        app_settings.app_data_reader.signals.api_call_change_selection.connect(self.refresh_on_api_call_switch)
+        app_settings.app_data_writer.signals.exchange_added.connect(
+            self.refresh_on_new_exchange
+        )
+        app_settings.app_data_reader.signals.api_call_change_selection.connect(
+            self.refresh_on_api_call_switch
+        )
 
     def refresh(self):
         for existing_button in self.button_group.buttons():
             existing_button.hide()
             self.calls_layout.removeWidget(existing_button)
 
-        exchanges = app_settings.app_data_cache.get_api_call_exchanges(self.current_exchange.api_call_id)
+        exchanges = app_settings.app_data_cache.get_api_call_exchanges(
+            self.current_exchange.api_call_id
+        )
         for ex in exchanges[-10:]:
             self.on_exchange_added(ex.id, ex)
 
@@ -45,9 +53,15 @@ class ApiCallsHistoryPresenter:
         btn = QPushButton(self.parent_view.frame_exchange)
         btn.setMaximumSize(QSize(20, 20))
         if exchange_id == self.current_exchange.id:
-            btn.setAccessibleName(self.color_from_response(exchange.response.http_status_code, is_selected=True))
+            btn.setAccessibleName(
+                self.color_from_response(
+                    exchange.response.http_status_code, is_selected=True
+                )
+            )
         else:
-            btn.setAccessibleName(self.color_from_response(exchange.response.http_status_code))
+            btn.setAccessibleName(
+                self.color_from_response(exchange.response.http_status_code)
+            )
 
         btn.setObjectName(f"{exchange_id}")
         self.calls_layout.addWidget(btn)

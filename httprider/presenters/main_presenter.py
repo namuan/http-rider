@@ -17,7 +17,9 @@ class MainPresenter:
             self.view.restoreState(app_settings.window_state())
         app_settings.app_data_writer.signals.api_call_added.connect(self.show_frame)
         app_settings.app_data_writer.signals.api_call_removed.connect(self.show_frame)
-        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(self.show_frame)
+        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(
+            self.show_frame
+        )
 
     def after_window_loaded(self):
         if not self.initial_load:
@@ -55,8 +57,7 @@ class MainPresenter:
     def save_settings(self):
         logging.info("Saving settings for Main Window")
         app_settings.save_window_state(
-            geometry=self.view.saveGeometry(),
-            window_state=self.view.saveState()
+            geometry=self.view.saveGeometry(), window_state=self.view.saveState()
         )
 
     def shutdown(self):

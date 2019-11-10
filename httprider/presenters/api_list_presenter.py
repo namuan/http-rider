@@ -63,9 +63,15 @@ class ApiListPresenter:
         self.separator_menu = QMenu()
         self.separator_menu.addAction(remove_action)
 
-        app_settings.app_data_writer.signals.api_call_added.connect(self.add_request_widget)
-        app_settings.app_data_writer.signals.api_call_updated.connect(self.refresh_selected_item)
-        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(self.refresh_multiple_items)
+        app_settings.app_data_writer.signals.api_call_added.connect(
+            self.add_request_widget
+        )
+        app_settings.app_data_writer.signals.api_call_updated.connect(
+            self.refresh_selected_item
+        )
+        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(
+            self.refresh_multiple_items
+        )
         app_settings.app_data_writer.signals.selected_tag_changed.connect(self.refresh)
 
     def on_toggle_request_status(self):
@@ -136,22 +142,30 @@ class ApiListPresenter:
             total_rows = self.model.rowCount()
             after = self.dropped_row + 1
             if after >= total_rows:
-                next_sequence_number = self.app_state_interactor.update_sequence_number()
+                next_sequence_number = (
+                    self.app_state_interactor.update_sequence_number()
+                )
             else:
                 next_api_call = self.model.item(after).data(API_CALL_ROLE)
                 next_sequence_number = next_api_call.sequence_number
-            new_sequence_number = prev_sequence_number + (next_sequence_number - prev_sequence_number) / 2
+            new_sequence_number = (
+                prev_sequence_number + (next_sequence_number - prev_sequence_number) / 2
+            )
             api_call.sequence_number = new_sequence_number
-            logging.info(f"API Call: {api_call.id} - "
-                         f"New Sequence {new_sequence_number} - "
-                         f"Moved between {prev_sequence_number} and {next_sequence_number}")
+            logging.info(
+                f"API Call: {api_call.id} - "
+                f"New Sequence {new_sequence_number} - "
+                f"Moved between {prev_sequence_number} and {next_sequence_number}"
+            )
 
             api_call_interactor.update_api_call(api_call.id, api_call)
 
             self.view.setCurrentIndex(current_index)
 
     def add_request_widget(self, api_call_id, api_call: ApiCall, select_item=True):
-        logging.info(f"Adding new item with id {api_call_id} to requests list - {api_call}")
+        logging.info(
+            f"Adding new item with id {api_call_id} to requests list - {api_call}"
+        )
         item = QStandardItem(api_call.title)
         item.setData(api_call, API_CALL_ROLE)
         item.setData(QVariant(api_call.id), API_ID_ROLE)
@@ -223,8 +237,7 @@ class ApiListPresenter:
         self.model.clear()
         app_state = app_settings.app_data_cache.get_app_state()
         api_calls = app_settings.app_data_cache.filter_api_calls(
-            search_query=app_state.selected_search,
-            search_tag=app_state.selected_tag
+            search_query=app_state.selected_search, search_tag=app_state.selected_tag
         )
         for api in api_calls:
             self.add_request_widget(api.id, api, select_item=False)
@@ -247,13 +260,19 @@ class ApiListPresenter:
         duplicate_api_call = copy.deepcopy(api_call)
         duplicate_api_call.title = f"{duplicate_api_call.title} Duplicate"
         duplicate_api_call.last_response_code = 0
-        duplicate_api_call.sequence_number = self.app_state_interactor.update_sequence_number()
+        duplicate_api_call.sequence_number = (
+            self.app_state_interactor.update_sequence_number()
+        )
 
         api_call_interactor.add_api_call(duplicate_api_call)
 
     def __row_for_api_call(self, api_call_id):
         api_call_row = next(
-            (n for n in range(self.model.rowCount()) if self.model.item(n).data(API_ID_ROLE) == api_call_id),
-            -1
+            (
+                n
+                for n in range(self.model.rowCount())
+                if self.model.item(n).data(API_ID_ROLE) == api_call_id
+            ),
+            -1,
         )
         return api_call_row

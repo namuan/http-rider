@@ -11,12 +11,16 @@ class UtilityFunctionsPresenter:
             self.view.function_selector.addItem(f)
 
             # Event handlers to refresh generated values
-        self.view.function_selector.currentIndexChanged[str].connect(self.transform_selected_text)
+        self.view.function_selector.currentIndexChanged[str].connect(
+            self.transform_selected_text
+        )
 
     def init(self):
         whole_text = self.parent.text()
         selected_text = self.parent.selected_text
-        self.view.lbl_selected_text.setText(selected_text or whole_text or "Select some text")
+        self.view.lbl_selected_text.setText(
+            selected_text or whole_text or "Select some text"
+        )
         self.transform_selected_text()
 
     def apply_transformation(self, selected_text, func_name):
@@ -32,4 +36,4 @@ class UtilityFunctionsPresenter:
     def get_function(self):
         selected_text = self.view.lbl_selected_text.text()
         func_name = self.view.function_selector.currentText()
-        return f"${{utils(\"{func_name}\", \"{selected_text}\")}}"
+        return f'${{utils("{func_name}", "{selected_text}")}}'

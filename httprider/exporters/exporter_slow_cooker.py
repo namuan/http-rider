@@ -7,7 +7,9 @@ from ..exporters import *
 from ..model.app_data import ApiCall, HttpExchange
 
 
-def to_slow_cooker(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True):
+def to_slow_cooker(
+    api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True
+):
     http_method = api_call.http_method
     http_url = api_call.http_url
     req_headers = api_call.enabled_headers()
@@ -25,21 +27,21 @@ def to_slow_cooker(api_call: ApiCall, exchange: HttpExchange, compressed=False, 
         http_url = http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
 
     parts = [
-        ('slow_cooker', None),
-        ('-method', http_method),
-        ('-qps 100', None),
-        ('-concurrency 10', None),
-        ('-totalRequests 1000', None)
+        ("slow_cooker", None),
+        ("-method", http_method),
+        ("-qps 100", None),
+        ("-concurrency 10", None),
+        ("-totalRequests 1000", None),
     ]
 
     for k, v in sorted(req_headers.items()):
-        parts += [('-header', '{0}: {1}'.format(k, v))]
+        parts += [("-header", "{0}: {1}".format(k, v))]
 
     if req_body:
         body = req_body
         if isinstance(body, bytes):
-            body = body.decode('utf-8')
-        parts += [('-data', body)]
+            body = body.decode("utf-8")
+        parts += [("-data", body)]
 
     parts += [(None, http_url)]
 
@@ -50,7 +52,7 @@ def to_slow_cooker(api_call: ApiCall, exchange: HttpExchange, compressed=False, 
         if v:
             flat_parts.append("'{0}'".format(v))
 
-    return ' '.join(flat_parts)
+    return " ".join(flat_parts)
 
 
 @attr.s
@@ -83,10 +85,7 @@ class SlowCookerExporter:
 <br/>## p999: 01% of requests completed took this long
 <br/>
         """
-        output = [
-            self.__export_api_call(api_call)
-            for api_call in api_calls
-        ]
+        output = [self.__export_api_call(api_call) for api_call in api_calls]
         return header + "<br/>".join(output)
 
     def __export_api_call(self, api_call):

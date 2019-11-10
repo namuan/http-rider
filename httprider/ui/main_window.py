@@ -28,7 +28,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menu_bar = self.menuBar()
         self.tool_bar = QToolBar()
         self.status_bar = self.statusBar()
-        self.status_bar.showMessage('Ready', 5000)
+        self.status_bar.showMessage("Ready", 5000)
 
         # Initialise Presenters
         self.presenter = MainPresenter(self)
@@ -72,7 +72,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btn_add_request.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.btn_add_request.sizePolicy().hasHeightForWidth()
+        )
         self.btn_add_request.setSizePolicy(sizePolicy)
         self.gridLayout.addWidget(self.btn_add_request, 0, 1, 1, 1)
         self.btn_add_request.setText("Add Request")
@@ -83,8 +85,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @staticmethod
     def log_uncaught_exceptions(cls, exc, tb) -> None:
-        logging.critical(''.join(traceback.format_tb(tb)))
-        logging.critical('{0}: {1}'.format(cls, exc))
+        logging.critical("".join(traceback.format_tb(tb)))
+        logging.critical("{0}: {1}".format(cls, exc))
 
     # Main Window events
     def resizeEvent(self, event):
@@ -110,10 +112,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def update_available(self, latest, current):
         update_available = True if latest > current else False
-        logging.info(f"Update Available ({latest} > {current}) ? ({update_available}) Enable Toolbar Icon")
+        logging.info(
+            f"Update Available ({latest} > {current}) ? ({update_available}) Enable Toolbar Icon"
+        )
         if update_available:
             toolbar_actions = self.tool_bar.actions()
-            updates_action = next(act for act in toolbar_actions if act.text() == 'Update Available')
+            updates_action = next(
+                act for act in toolbar_actions if act.text() == "Update Available"
+            )
             if updates_action:
                 updates_action.setIcon(QIcon(":/images/download-48.png"))
                 updates_action.setEnabled(True)
@@ -124,17 +130,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # @todo: Remove usages and use one under ui module
     def open_file(self, dialog_title, dialog_location, file_filter=None):
         return QFileDialog.getOpenFileName(
-            self,
-            dialog_title,
-            dialog_location,
-            filter=file_filter
+            self, dialog_title, dialog_location, filter=file_filter
         )
 
     # @todo: Remove usages and use one under ui module
     def save_file(self, dialog_title, dialog_location, file_filter=None):
         return QFileDialog.getSaveFileName(
-            self,
-            dialog_title,
-            dialog_location,
-            filter=file_filter
+            self, dialog_title, dialog_location, filter=file_filter
         )

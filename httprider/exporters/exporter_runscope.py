@@ -75,13 +75,15 @@ def to_runscope_env(env: Environment, func_map: Dict):
         initial_variables={**env.get_env_map(), **func_map},
         name=env.name,
         id=env.id,
-        verify_ssl=True
+        verify_ssl=True,
     )
 
 
 def to_runscope_matcher(matcher, assertion_var_type):
     mapper = {
-        AssertionMatchers.EQ.value: "equal_number" if assertion_var_type == "int" else "equal",
+        AssertionMatchers.EQ.value: "equal_number"
+        if assertion_var_type == "int"
+        else "equal",
         AssertionMatchers.NOT_EQ.value: "not_equal",
         AssertionMatchers.NOT_NULL.value: "not_empty",
         AssertionMatchers.EMPTY.value: "empty",
@@ -89,7 +91,7 @@ def to_runscope_matcher(matcher, assertion_var_type):
         AssertionMatchers.CONTAINS.value: "contains",
         AssertionMatchers.NOT_CONTAINS.value: "does_not_contain",
         AssertionMatchers.LT.value: "is_less_than",
-        AssertionMatchers.GT.value: "is_greater_than"
+        AssertionMatchers.GT.value: "is_greater_than",
     }
 
     return mapper.get(matcher, None)
@@ -98,7 +100,7 @@ def to_runscope_matcher(matcher, assertion_var_type):
 def to_runscope_source(data_source):
     mapper = {
         AssertionDataSource.RESPONSE_CODE.value: "response_status",
-        AssertionDataSource.RESPONSE_BODY.value: "response_json"
+        AssertionDataSource.RESPONSE_BODY.value: "response_json",
     }
 
     return mapper.get(data_source, None)
@@ -117,7 +119,7 @@ def to_runscope_assertion(assertion: Assertion):
         comparison=to_runscope_matcher(assertion.matcher, assertion.var_type),
         source=to_runscope_source(assertion.data_from),
         property=to_runscope_property(assertion.selector),
-        value=to_runscope_value(assertion.expected_value)
+        value=to_runscope_value(assertion.expected_value),
     )
 
 
@@ -125,20 +127,26 @@ def to_runscope_variable(assertion: Assertion):
     runscope_var = RunscopeVariable(
         property=to_runscope_property(assertion.selector),
         source=to_runscope_source(assertion.data_from),
-        name=assertion.var_name
+        name=assertion.var_name,
     )
     return runscope_var
 
 
 def convert_internal_variable(str_with_variable):
-    return internal_var_selector.sub(r"{{\1}}", str_with_variable, count=0) if str_with_variable else ""
+    return (
+        internal_var_selector.sub(r"{{\1}}", str_with_variable, count=0)
+        if str_with_variable
+        else ""
+    )
 
 
 ENV_PREFIX = "env_var"
 
 
 def convert_internal_functions(str_with_internal_func):
-    return internal_func_rgx.sub(r"{{{{{0}_\1}}}}".format(ENV_PREFIX), str_with_internal_func, count=0)
+    return internal_func_rgx.sub(
+        r"{{{{{0}_\1}}}}".format(ENV_PREFIX), str_with_internal_func, count=0
+    )
 
 
 def find_internal_functions(str_with_internal_func):
@@ -158,7 +166,9 @@ def to_runscope_format(str_with_internal_keywords):
         for k in find_internal_functions(str_with_internal_keywords)
     }
     internal_func_map = {**internal_func_map, **func_map}
-    return convert_internal_functions(convert_internal_variable(str_with_internal_keywords))
+    return convert_internal_functions(
+        convert_internal_variable(str_with_internal_keywords)
+    )
 
 
 def to_runscope_request_body(request_body):
@@ -171,27 +181,34 @@ def to_runscope_url(api_call):
     req_qp = api_call.enabled_query_params()
     http_url = api_call.http_url
     if req_qp:
-        http_url = api_call.http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
+        http_url = (
+            api_call.http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
+        )
     return to_runscope_format(http_url)
 
 
 def to_runscope_step(
-        api_call: ApiCall,
-        last_exchange: HttpExchange,
-        api_test_case: ApiTestCase):
+    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
+):
     transformed_request_body = to_runscope_request_body(api_call.http_request_body)
     return Step(
-        assertions=[to_runscope_assertion(a) for a in api_test_case.comparable_assertions()],
+        assertions=[
+            to_runscope_assertion(a) for a in api_test_case.comparable_assertions()
+        ],
         auth={},
         body=transformed_request_body,
-        form={k: to_runscope_format(v) for k, v in api_call.enabled_form_params().items()},
-        headers={k: to_runscope_format(v) for k, v in api_call.enabled_headers().items()},
+        form={
+            k: to_runscope_format(v) for k, v in api_call.enabled_form_params().items()
+        },
+        headers={
+            k: to_runscope_format(v) for k, v in api_call.enabled_headers().items()
+        },
         method=last_exchange.request.http_method,
         note=api_call.title,
         step_type="request",
         url=to_runscope_url(api_call),
         id=gen_uuid(),
-        variables=[to_runscope_variable(a) for a in api_test_case.variables()]
+        variables=[to_runscope_variable(a) for a in api_test_case.variables()],
     )
 
 
@@ -203,16 +220,15 @@ class RunscopeExporter:
         project_info = app_settings.app_data_reader.get_or_create_project_info()
         environments = app_settings.app_data_cache.get_environments()
 
-        output_steps = [
-            self.__export_api_call(api_call)
-            for api_call in api_calls
-        ]
+        output_steps = [self.__export_api_call(api_call) for api_call in api_calls]
 
         runscope_test = RunscopeTest(
             name=project_info.title,
             description=project_info.info,
-            environments=[to_runscope_env(env, internal_func_map) for env in environments],
-            steps=output_steps
+            environments=[
+                to_runscope_env(env, internal_func_map) for env in environments
+            ],
+            steps=output_steps,
         )
 
         return highlight_format_json(runscope_test.to_raw_json())

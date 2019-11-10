@@ -5,7 +5,12 @@ from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
 from requests.exceptions import ConnectionError
 from urllib3.exceptions import NewConnectionError
 
-from ..core import guess_content_type, replace_variables, replace_response_variables, get_variable_tokens
+from ..core import (
+    guess_content_type,
+    replace_variables,
+    replace_response_variables,
+    get_variable_tokens,
+)
 from ..core.constants import ContentType
 from ..core.core_settings import app_settings
 from ..core.generators import is_file_function
@@ -29,7 +34,6 @@ class RestApiResponseSignals(QObject):
 
 
 class RestApiConnector(QThread):
-
     def __init__(self, name):
         super(RestApiConnector, self).__init__()
         self.tname = name
@@ -53,8 +57,7 @@ class RestApiConnector(QThread):
 
     def convert_response(self, raw_response):
         res = ExchangeResponse(
-            http_status_code=raw_response.status_code,
-            response_body=raw_response.text
+            http_status_code=raw_response.status_code, response_body=raw_response.text
         )
 
         if res.response_body:
@@ -69,44 +72,50 @@ class RestApiConnector(QThread):
         self.exchange.request = replace_variables(var_tokens, self.exchange.request)
         req: ExchangeRequest = self.exchange.request
         logging.info(
-            f"==>[{self.tname}] make_http_call({self.exchange.api_call_id}): Http {req.http_method} to {req.http_url}")
-        kwargs = dict(
-            headers=req.headers,
-            params=req.query_params
+            f"==>[{self.tname}] make_http_call({self.exchange.api_call_id}): Http {req.http_method} to {req.http_url}"
         )
+        kwargs = dict(headers=req.headers, params=req.query_params)
 
-        content_type = req.headers.get('Content-Type', ContentType.NONE.value)
+        content_type = req.headers.get("Content-Type", ContentType.NONE.value)
 
         if req.request_body:
             req.request_body_type = guess_content_type(req.request_body)
-            content_type = req.headers.get('Content-Type', req.request_body_type.value)
+            content_type = req.headers.get("Content-Type", req.request_body_type.value)
 
-        if req.form_params and 'application/x-www-form-urlencoded' in content_type:
-            kwargs['data'] = req.form_params
+        if req.form_params and "application/x-www-form-urlencoded" in content_type:
+            kwargs["data"] = req.form_params
         elif req.form_params:
             if content_type:
-                del kwargs['headers']['Content-Type']
+                del kwargs["headers"]["Content-Type"]
 
-            kwargs['files'] = {
+            kwargs["files"] = {
                 k: open_form_file(is_file_function(v).group(2))
                 for k, v in req.form_params.items()
                 if is_file_function(v)
             }
         elif req.request_body:
-            kwargs['data'] = req.request_body
+            kwargs["data"] = req.request_body
 
         try:
             progress_message = f"{req.http_method} call to {req.http_url}"
-            http_exchange_signals.request_started.emit(progress_message, self.exchange.api_call_id)
+            http_exchange_signals.request_started.emit(
+                progress_message, self.exchange.api_call_id
+            )
 
             if self.exchange.response.is_mocked:
-                logging.info(f"<== Returning mocked Response ({self.exchange.api_call_id})")
-                self.exchange.response = replace_response_variables(var_tokens, self.exchange.response)
+                logging.info(
+                    f"<== Returning mocked Response ({self.exchange.api_call_id})"
+                )
+                self.exchange.response = replace_response_variables(
+                    var_tokens, self.exchange.response
+                )
             else:
-                response = self.requester.make_request(req.http_method, req.http_url, kwargs)
+                response = self.requester.make_request(
+                    req.http_method, req.http_url, kwargs
+                )
                 self.exchange.response = self.convert_response(response)
 
-                for fk, fv in kwargs.get('files', {}).items():
+                for fk, fv in kwargs.get("files", {}).items():
                     fv.close()
 
                 logging.info(
@@ -124,17 +133,13 @@ class RestApiConnector(QThread):
         except ConnectionError as e:
             nce: NewConnectionError = e.args[0].reason
             error_response = ExchangeResponse(
-                http_status_code=-1,
-                response_body=nce.args[0]
+                http_status_code=-1, response_body=nce.args[0]
             )
             self.exchange.response = error_response
             self.signals.error.emit(self.exchange)
         except Exception as e:
             logging.error(e)
-            error_response = ExchangeResponse(
-                http_status_code=-1,
-                response_body=str(e)
-            )
+            error_response = ExchangeResponse(http_status_code=-1, response_body=str(e))
             self.exchange.response = error_response
             self.signals.error.emit(self.exchange)
 

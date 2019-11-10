@@ -25,11 +25,15 @@ class CodeGeneratorPresenter:
         self.pyg_styles = styles_from_file(":/themes/pyg.css")
         self.view.txt_generated_code.document().setDefaultStyleSheet(self.pyg_styles)
 
-        self.view.cmb_exporters.currentIndexChanged[int].connect(self.on_exporter_change)
+        self.view.cmb_exporters.currentIndexChanged[int].connect(
+            self.on_exporter_change
+        )
         self.view.btn_copy_code.pressed.connect(self.on_copy_clipboard)
         self.view.btn_export_code.pressed.connect(self.on_export_file)
 
-        app_settings.app_data_reader.signals.api_call_change_selection.connect(self.on_updated_selected_api)
+        app_settings.app_data_reader.signals.api_call_change_selection.connect(
+            self.on_updated_selected_api
+        )
 
     def show_dialog(self):
         self.view.cmb_exporters.clear()
@@ -62,7 +66,7 @@ class CodeGeneratorPresenter:
             app_state = app_settings.app_data_cache.get_app_state()
             api_calls = app_settings.app_data_cache.filter_api_calls(
                 search_query=app_state.selected_search,
-                search_tag=app_state.selected_tag
+                search_tag=app_state.selected_tag,
             )
             generated_code = selected_exporter.exporter.export_data(api_calls)
 
@@ -71,10 +75,12 @@ class CodeGeneratorPresenter:
     def on_copy_clipboard(self):
         self.view.txt_generated_code.selectAll()
         self.view.txt_generated_code.copy()
-        self.main_window.status_bar.showMessage('Copied to clipboard', 2000)
+        self.main_window.status_bar.showMessage("Copied to clipboard", 2000)
 
     def on_export_file(self):
-        file_location, _ = self.main_window.save_file("Select File", Path("~").expanduser().as_posix())
+        file_location, _ = self.main_window.save_file(
+            "Select File", Path("~").expanduser().as_posix()
+        )
         if file_location:
             file = Path(file_location)
             file.write_text(self.view.txt_generated_code.toPlainText())

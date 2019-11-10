@@ -17,7 +17,9 @@ def get_completer_model():
 
     api_calls = app_settings.app_data_cache.get_all_api_calls()
     for api in api_calls:
-        api_test_case: ApiTestCase = app_settings.app_data_cache.get_api_test_case(api.id)
+        api_test_case: ApiTestCase = app_settings.app_data_cache.get_api_test_case(
+            api.id
+        )
         for assertion in api_test_case.assertions:
             item: QStandardItem = QStandardItem()
             item.setText(f"${{{api.title} > ${assertion.var_name}}}")

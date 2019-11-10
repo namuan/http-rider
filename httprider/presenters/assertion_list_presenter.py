@@ -2,7 +2,14 @@ import logging
 from functools import partial
 
 from PyQt5.QtCore import Qt, QModelIndex
-from PyQt5.QtWidgets import QTreeWidgetItem, QHeaderView, QStyledItemDelegate, QComboBox, QTreeWidget, QPushButton
+from PyQt5.QtWidgets import (
+    QTreeWidgetItem,
+    QHeaderView,
+    QStyledItemDelegate,
+    QComboBox,
+    QTreeWidget,
+    QPushButton,
+)
 
 from ..core import elapsed_time_formatter, response_code_formatter
 from ..core.constants import ASSERTION_TYPE_ROLE, AssertionMatchers
@@ -39,33 +46,53 @@ class AssertionListPresenter:
         self.view.setItemDelegateForColumn(0, NoEditDelegate(self.view))
         self.view.setItemDelegateForColumn(3, NoEditDelegate(self.view))
 
-        self.parent_view.btn_response_code_assertion.pressed.connect(self.add_response_code_assertion)
-        self.parent_view.btn_response_time_assertion.pressed.connect(self.add_response_time_assertion)
+        self.parent_view.btn_response_code_assertion.pressed.connect(
+            self.add_response_code_assertion
+        )
+        self.parent_view.btn_response_time_assertion.pressed.connect(
+            self.add_response_time_assertion
+        )
 
     def add_response_code_assertion(self):
         api_call = self.parent_presenter.current
-        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
-        current_response_code = response_code_formatter(last_exchange.response.http_status_code)
-        item = QTreeWidgetItem([
-            AssertionDataSource.RESPONSE_CODE.value,
-            string_to_variable_name(api_call.title, AssertionDataSource.RESPONSE_CODE.value, ""),
-            None,
-            current_response_code
-        ])
-        item.setData(3, ASSERTION_TYPE_ROLE, 'int')
+        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(
+            api_call.id
+        )
+        current_response_code = response_code_formatter(
+            last_exchange.response.http_status_code
+        )
+        item = QTreeWidgetItem(
+            [
+                AssertionDataSource.RESPONSE_CODE.value,
+                string_to_variable_name(
+                    api_call.title, AssertionDataSource.RESPONSE_CODE.value, ""
+                ),
+                None,
+                current_response_code,
+            ]
+        )
+        item.setData(3, ASSERTION_TYPE_ROLE, "int")
         self.add_item(item, current_data=current_response_code)
 
     def add_response_time_assertion(self):
         api_call = self.parent_presenter.current
-        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
-        current_elapsed_time = elapsed_time_formatter(last_exchange.response.elapsed_time)
-        item = QTreeWidgetItem([
-            AssertionDataSource.RESPONSE_TIME.value,
-            string_to_variable_name(api_call.title, AssertionDataSource.RESPONSE_TIME.value, ""),
-            None,
-            current_elapsed_time
-        ])
-        item.setData(3, ASSERTION_TYPE_ROLE, 'float')
+        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(
+            api_call.id
+        )
+        current_elapsed_time = elapsed_time_formatter(
+            last_exchange.response.elapsed_time
+        )
+        item = QTreeWidgetItem(
+            [
+                AssertionDataSource.RESPONSE_TIME.value,
+                string_to_variable_name(
+                    api_call.title, AssertionDataSource.RESPONSE_TIME.value, ""
+                ),
+                None,
+                current_elapsed_time,
+            ]
+        )
+        item.setData(3, ASSERTION_TYPE_ROLE, "float")
         self.add_item(item, current_data=current_elapsed_time)
 
     def add_item(self, item: QTreeWidgetItem, selected_matcher=None, current_data=None):
@@ -113,7 +140,7 @@ class AssertionListPresenter:
                 selector=selector,
                 matcher=selected_matcher,
                 expected_value=expected_value,
-                var_type=assertion_value_type
+                var_type=assertion_value_type,
             )
 
             tests.append(new_assertion)
@@ -126,7 +153,10 @@ class AssertionListPresenter:
         assertion_found = None
         for i in range(self.view.topLevelItemCount()):
             widget_item: QTreeWidgetItem = self.view.topLevelItem(i)
-            if widget_item.data(0, Qt.DisplayRole) == data_from and widget_item.data(2, Qt.DisplayRole) == selector:
+            if (
+                widget_item.data(0, Qt.DisplayRole) == data_from
+                and widget_item.data(2, Qt.DisplayRole) == selector
+            ):
                 assertion_found = widget_item
                 break
         return assertion_found
@@ -137,8 +167,12 @@ class AssertionListPresenter:
 
     def refresh(self, api_test_case, last_exchange: HttpExchange):
         self.parent_view.tbl_assertions.clear()
-        formatted_response_code = response_code_formatter(last_exchange.response.http_status_code)
-        self.parent_view.btn_response_code_assertion.setText(f"HTTP {formatted_response_code}")
+        formatted_response_code = response_code_formatter(
+            last_exchange.response.http_status_code
+        )
+        self.parent_view.btn_response_code_assertion.setText(
+            f"HTTP {formatted_response_code}"
+        )
         elapsed_time = elapsed_time_formatter(last_exchange.response.elapsed_time)
         self.parent_view.btn_response_time_assertion.setText(elapsed_time)
 
@@ -148,8 +182,9 @@ class AssertionListPresenter:
             current_value_from_exchange = "Unable to retrieve value"
 
             try:
-                current_value_from_exchange = \
-                    app_settings.app_data_cache.get_latest_assertion_value_from_exchange(assertion, last_exchange)
+                current_value_from_exchange = app_settings.app_data_cache.get_latest_assertion_value_from_exchange(
+                    assertion, last_exchange
+                )
             except Exception as e:
                 logging.error("Unable to retrieve value")
                 logging.error(assertion)
@@ -165,5 +200,5 @@ class AssertionListPresenter:
             self.add_item(
                 item,
                 selected_matcher=assertion.matcher,
-                current_data=current_value_from_exchange
+                current_data=current_value_from_exchange,
             )

@@ -16,7 +16,7 @@ ASSERTION_TYPE_ROLE = Qt.UserRole + 300
 DYNAMIC_STRING_ROLE = Qt.UserRole + 400
 EXPORTER_COMBO_ROLE = Qt.UserRole + 500
 
-UTF_8_ENCODING = 'utf-8'
+UTF_8_ENCODING = "utf-8"
 
 
 class AssertionDataSource(Enum):
@@ -47,19 +47,15 @@ class AssertionMatchers(Enum):
 
 
 HTTP_CONTENT_TYPES = [
-    'application/json',
-    'application/x-www-form-urlencoded',
-    'multipart/form-data',
-    'application/octet-stream',
-    'application/pdf',
-    'application/xml'
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data",
+    "application/octet-stream",
+    "application/pdf",
+    "application/xml",
 ]
 
-COMMON_HEADERS = [
-    "Content-Type",
-    "Accept",
-    "Authorization"
-]
+COMMON_HEADERS = ["Content-Type", "Accept", "Authorization"]
 
 
 class ContentType(Enum):
@@ -70,11 +66,4 @@ class ContentType(Enum):
     FORM = "application/x-www-form-urlencoded"
 
 
-REPLACEMENTS = [
-    ('-', '_'),
-    (' ', '_'),
-    ('[', ''),
-    (']', ''),
-    ('$', ''),
-    ('.', '_')
-]
+REPLACEMENTS = [("-", "_"), (" ", "_"), ("[", ""), ("]", ""), ("$", ""), (".", "_")]

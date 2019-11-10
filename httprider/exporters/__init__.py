@@ -8,7 +8,7 @@ from yapf.yapflib.yapf_api import FormatCode
 from ..core import format_json
 from ..model.app_data import ExchangeRequest, ExchangeResponse, ApiCall, HttpExchange
 
-internal_var_selector = re.compile(r'\$\{(\w+)\}')
+internal_var_selector = re.compile(r"\$\{(\w+)\}")
 
 
 def highlight_format_json(plain_text, formatter=HtmlFormatter()):
@@ -40,19 +40,18 @@ def get_base_url(api_call: ApiCall):
 
 def get_function_name(api_call: ApiCall):
     norm_title = api_call.title.lower().strip()
-    rgx = r'[^a-zA-Z]'
-    return re.sub(rgx, '', norm_title)
+    rgx = r"[^a-zA-Z]"
+    return re.sub(rgx, "", norm_title)
 
 
 def dict_formatter(dict_items, form, splitter=","):
-    return splitter.join([
-        form.format(**locals())
-        for k, v in dict_items
-    ])
+    return splitter.join([form.format(**locals()) for k, v in dict_items])
 
 
 def extract_uri(url, servers):
-    matched_server = next((server for server in servers if url.startswith(server)), None)
+    matched_server = next(
+        (server for server in servers if url.startswith(server)), None
+    )
     if matched_server:
         return url.replace(matched_server, "")
 
@@ -76,25 +75,22 @@ def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=
     if req_qp:
         http_url = http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
 
-    parts = [
-        ('curl', None),
-        ('-X', http_method),
-    ]
+    parts = [("curl", None), ("-X", http_method)]
 
     for k, v in sorted(req_headers.items()):
-        parts += [('-H', '{0}: {1}'.format(k, v))]
+        parts += [("-H", "{0}: {1}".format(k, v))]
 
     if req_body:
         body = req_body
         if isinstance(body, bytes):
-            body = body.decode('utf-8')
-        parts += [('-d', body)]
+            body = body.decode("utf-8")
+        parts += [("-d", body)]
 
     if compressed:
-        parts += [('--compressed', None)]
+        parts += [("--compressed", None)]
 
     if not verify:
-        parts += [('--insecure', None)]
+        parts += [("--insecure", None)]
 
     parts += [(None, http_url)]
 
@@ -105,11 +101,11 @@ def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=
         if v:
             flat_parts.append("'{0}'".format(v))
 
-    return ' '.join(flat_parts)
+    return " ".join(flat_parts)
 
 
 def format_python_code(unformatted_code):
-    return FormatCode(unformatted_code, style_config='pep8')
+    return FormatCode(unformatted_code, style_config="pep8")
 
 
 # Import statements after any function definitions as they are using
@@ -129,16 +125,16 @@ from . import exporter_confluence
 from . import exporter_locust_tests
 
 exporter_plugins = {
-    'locust': exporter_locust_tests,
-    'confluence': exporter_confluence,
-    'runscope': exporter_runscope,
-    'apickli': exporter_apickli,
-    'slow_cooker': exporter_slow_cooker,
-    'plant_uml': exporter_plantuml,
-    'python_requests': exporter_python_requests,
-    'curl': exporter_curl,
-    'markdown': exporter_markdown,
-    'mermaid': exporter_mermaid,
-    'openapi_v3': exporter_openapi_v3,
-    'restassured': exporter_restassured,
+    "locust": exporter_locust_tests,
+    "confluence": exporter_confluence,
+    "runscope": exporter_runscope,
+    "apickli": exporter_apickli,
+    "slow_cooker": exporter_slow_cooker,
+    "plant_uml": exporter_plantuml,
+    "python_requests": exporter_python_requests,
+    "curl": exporter_curl,
+    "markdown": exporter_markdown,
+    "mermaid": exporter_mermaid,
+    "openapi_v3": exporter_openapi_v3,
+    "restassured": exporter_restassured,
 }

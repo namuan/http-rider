@@ -18,23 +18,30 @@ def fuzz_date_time():
     minute = rand_int(60, 1)
     second = rand_int(60, 1)
 
-    return "%s-%02d-%02dT%02d:%02d:%02d.000+00:00" % (year, month, day, hour, minute, second)
+    return "%s-%02d-%02dT%02d:%02d:%02d.000+00:00" % (
+        year,
+        month,
+        day,
+        hour,
+        minute,
+        second,
+    )
 
 
 def fuzz_string(string_schema):
     if string_schema.get("example"):
         return string_schema.get("example")
 
-    is_enum = string_schema.get('enum')
-    string_format = string_schema.get('format')
+    is_enum = string_schema.get("enum")
+    string_format = string_schema.get("format")
     if is_enum:
         # get a random item from list
         return is_enum[rand_int(len(is_enum) - 1)]
 
-    if string_format == 'date-time':
+    if string_format == "date-time":
         return fuzz_date_time()
 
-    return ''.join(choices(string.ascii_uppercase + string.digits, k=rand_int(100)))
+    return "".join(choices(string.ascii_uppercase + string.digits, k=rand_int(100)))
 
 
 def fuzz_int(int_schema):
@@ -45,7 +52,7 @@ def fuzz_int(int_schema):
 
 
 def fuzz_file(file_schema):
-    return ''
+    return ""
 
 
 def fuzz_array_length(num_items=2):
@@ -56,11 +63,13 @@ def fuzz_array(arr_schema, arr_length=fuzz_array_length()):
     if arr_schema.get("example"):
         return arr_schema.get("example")
 
-    items = arr_schema['items']
-    arr_items_type = items.get('type', 'object')
+    items = arr_schema["items"]
+    arr_items_type = items.get("type", "object")
     fuzz_func = type_mapping.get(arr_items_type)
-    if arr_items_type == 'object':
-        return [fuzz_object(arr_schema['items']['properties']) for o in range(arr_length)]
+    if arr_items_type == "object":
+        return [
+            fuzz_object(arr_schema["items"]["properties"]) for o in range(arr_length)
+        ]
     else:
         return [fuzz_func(items) for _ in range(arr_length)]
 
@@ -68,21 +77,21 @@ def fuzz_array(arr_schema, arr_length=fuzz_array_length()):
 def fuzz_object(root_properties):
     obj_root = {}
     for k, v in root_properties.items():
-        prop_type = v.get('type', 'object')
-        if prop_type != 'object':
+        prop_type = v.get("type", "object")
+        if prop_type != "object":
             fuzz_func = type_mapping.get(prop_type)
             obj_root[k] = fuzz_func(v)
         else:
-            obj_root[k] = fuzz_object(v.get('properties', {}))
+            obj_root[k] = fuzz_object(v.get("properties", {}))
 
     return obj_root
 
 
 type_mapping = {
-    'integer': fuzz_int,
-    'number': fuzz_int,
-    'boolean': fuzz_boolean,
-    'string': fuzz_string,
-    'array': fuzz_array,
-    'file': fuzz_file,
+    "integer": fuzz_int,
+    "number": fuzz_int,
+    "boolean": fuzz_boolean,
+    "string": fuzz_string,
+    "array": fuzz_array,
+    "file": fuzz_file,
 }

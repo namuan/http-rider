@@ -16,6 +16,5 @@ class TagInfoWidget(QWidget, Ui_TagInfoWidget):
 
     def getData(self):
         return TagInfo(
-            name=self.lbl_tag.text(),
-            description=self.txt_tag_info.toPlainText()
+            name=self.lbl_tag.text(), description=self.txt_tag_info.toPlainText()
         )

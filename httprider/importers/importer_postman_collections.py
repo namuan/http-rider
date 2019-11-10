@@ -52,31 +52,37 @@ class PostmanCollectionImporter:
         self.__validate_file(file_path)
         json_data = json.loads(Path(file_path).read_text())
         postman_data: PostmanDataModel = cattr.structure(json_data, PostmanDataModel)
-        return None, [
-            self.__extract_api_call(item, sub_item)
-            for item in postman_data.item
-            for sub_item in item.item
-        ]
+        return (
+            None,
+            [
+                self.__extract_api_call(item, sub_item)
+                for item in postman_data.item
+                for sub_item in item.item
+            ],
+        )
 
     def __extract_api_call(self, item: PostmanItem, sub_item: PostmanSubItem):
         api_call = ApiCall(
             tags=[item.name],
             title=sub_item.name,
             description=sub_item.name,
-            http_url=self.__internal_variables(sub_item.request.url.get('raw')),
+            http_url=self.__internal_variables(sub_item.request.url.get("raw")),
             http_method=sub_item.request.method,
-            http_request_body=self.__internal_variables(sub_item.request.body.get('raw')),
+            http_request_body=self.__internal_variables(
+                sub_item.request.body.get("raw")
+            ),
             http_headers={
                 k: DynamicStringData(value=self.__internal_variables(v))
                 for k, v in kv_list_to_dict(sub_item.request.header).items()
             },
-            sequence_number=self.app_state_interactor.update_sequence_number()
-
+            sequence_number=self.app_state_interactor.update_sequence_number(),
         )
         return api_call
 
     def __internal_variables(self, input_str):
-        return re.sub(self.var_selector, r"${\2}", input_str, count=0) if input_str else ""
+        return (
+            re.sub(self.var_selector, r"${\2}", input_str, count=0) if input_str else ""
+        )
 
     def __validate_file(self, file_path):
         if not (Path(file_path).exists() and Path(file_path).is_file()):

@@ -1,13 +1,12 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeyEvent
-from PyQt5.QtWidgets import (QDialog)
+from PyQt5.QtWidgets import QDialog
 
 from ..external.rest_api_connector import http_exchange_signals
 from ..generated.progress_dialog import Ui_ProgressDialog
 
 
 class ProgressDialog(QDialog, Ui_ProgressDialog):
-
     def __init__(self, parent=None):
         super(ProgressDialog, self).__init__(parent)
         self.initialize()

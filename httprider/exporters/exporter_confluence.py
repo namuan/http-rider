@@ -10,15 +10,23 @@ from ..model.app_data import ApiCall
 
 
 def gen_function(api_call, last_exchange, api_test_case):
-    request_headers = dict_formatter(last_exchange.request.headers.items(), "{k}: {v}", splitter="\n")
-    response_headers = dict_formatter(last_exchange.response.headers.items(), "{k}: {v}", splitter="\n")
+    request_headers = dict_formatter(
+        last_exchange.request.headers.items(), "{k}: {v}", splitter="\n"
+    )
+    response_headers = dict_formatter(
+        last_exchange.response.headers.items(), "{k}: {v}", splitter="\n"
+    )
     request_qp = {k: v for k, v in last_exchange.request.query_params.items()}
     http_url = last_exchange.request.http_url
     if request_qp:
         http_url = http_url + "?" + dict_formatter(request_qp.items(), "{k}={v}", "&")
 
-    formatted_request_body = highlight_format_json(last_exchange.request.request_body, formatter=NullFormatter())
-    formatted_response_body = highlight_format_json(last_exchange.response.response_body, formatter=NullFormatter())
+    formatted_request_body = highlight_format_json(
+        last_exchange.request.request_body, formatter=NullFormatter()
+    )
+    formatted_response_body = highlight_format_json(
+        last_exchange.response.response_body, formatter=NullFormatter()
+    )
 
     content = f"""
 h3. {api_call.title}
@@ -62,10 +70,7 @@ class ConfluenceWikiExporter:
     output_ext: str = "txt"
 
     def export_data(self, api_calls: List[ApiCall]):
-        output = [
-            self.__export_api_call(api_call)
-            for api_call in api_calls
-        ]
+        output = [self.__export_api_call(api_call) for api_call in api_calls]
 
         combined_output = "\n".join(output)
 
