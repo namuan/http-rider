@@ -7,7 +7,7 @@ from ..exporters import *
 from ..model.app_data import ApiCall
 
 
-def to_python_requests(idx, api_call, last_exchange):
+def to_python_requests(idx, api_call: ApiCall, last_exchange: HttpExchange):
     func_name = get_function_name(api_call)
     method = last_exchange.request.http_method
     url = last_exchange.request.http_url
@@ -21,8 +21,8 @@ def to_python_requests(idx, api_call, last_exchange):
     )
     has_json_body = True if last_exchange.request.request_body else False
 
-    json_body = 'data="{}"'.format(
-        encode_json_string(last_exchange.request.request_body) if has_json_body else ""
+    json_body = "json={}".format(
+        last_exchange.request.request_body if has_json_body else ""
     )
 
     params_code = f"""
@@ -36,6 +36,7 @@ def to_python_requests(idx, api_call, last_exchange):
         {headers if has_headers else ""}
     }},
     """
+
     py_func = f"""
     @seq_task({idx + 1})
     # @task(10) # To run this test 10 times
@@ -61,13 +62,12 @@ class LocustTestsExporter:
     def export_data(self, api_calls: List[ApiCall]):
         file_header = """
 # python3 -m pip install locustio - See https://docs.locust.io/en/stable/installation.html
-# Running the tests
+# Running the tests with web ui
 # locust -f this_file.py
-# For improving performance
-# Install - python3 -m pip install geventhttpclient
-# Then use FastHttpLocust instead of HttpLocust
+# Or to run it without web ui for 20(secs) with 10 users and 2 users to spawn every second
+# locust -f locust_test.py --no-web -c 10 -r 2 --run-time 20s
 
-from locust import HttpLocust, TaskSet, TaskSequence
+from locust import HttpLocust, TaskSet, TaskSequence, seq_task
 import json
 import random
 import string
@@ -84,11 +84,11 @@ def random_str(length=10, with_punctuation=False):
 def random_int(min=0, max=100):
     return random.randint(min, max)
     
-class ApiBehaviour(TaskSequence):
+class ApiTestSteps(TaskSequence):
         """
         file_footer = """
 class ApiUser(HttpLocust):
-    task_set = ApiBehavior
+    task_set = ApiTestSteps
     host = "localhost"
         
         """
