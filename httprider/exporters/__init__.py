@@ -3,6 +3,7 @@ import re
 from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
 from pygments.lexers import data
+from yapf.yapflib.yapf_api import FormatCode
 
 from ..core import format_json
 from ..model.app_data import ExchangeRequest, ExchangeResponse, ApiCall, HttpExchange
@@ -107,6 +108,10 @@ def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=
     return ' '.join(flat_parts)
 
 
+def format_python_code(unformatted_code):
+    return FormatCode(unformatted_code, style_config='pep8')
+
+
 # Import statements after any function definitions as they are using
 # from the exporters
 
@@ -121,8 +126,10 @@ from . import exporter_python_requests
 from . import exporter_plantuml
 from . import exporter_slow_cooker
 from . import exporter_confluence
+from . import exporter_locust_tests
 
 exporter_plugins = {
+    'locust': exporter_locust_tests,
     'confluence': exporter_confluence,
     'runscope': exporter_runscope,
     'apickli': exporter_apickli,

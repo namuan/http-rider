@@ -24,8 +24,7 @@ def to_python_requests(api_call, last_exchange):
     )
     has_json_body = True if last_exchange.request.request_body else False
 
-    json_body = "data=\"{}\"".format(
-        encode_json_string(last_exchange.request.request_body) if has_json_body else "")
+    json_body = "json={}".format(last_exchange.request.request_body) if has_json_body else ""
 
     params_code = f"""
     params={{
@@ -75,15 +74,17 @@ import uuid
             self.__export_api_call(api_call)
             for api_call in api_calls
         ]
-        return highlight(file_header, Python3Lexer(), HtmlFormatter()) + "<br/>".join(output)
+
+        unformatted_code = file_header + "\n".join(output)
+        formatted_code, _ = format_python_code(unformatted_code)
+        return highlight(formatted_code, Python3Lexer(), HtmlFormatter())
 
     def __export_api_call(self, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         doc = f"""# {api_call.title}
-# 
 {to_python_requests(api_call, last_exchange)}
 """
-        return highlight(doc, Python3Lexer(), HtmlFormatter())
+        return doc
 
 
 exporter = PythonRequestsExporter()
