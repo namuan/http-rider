@@ -16,3 +16,4 @@ apispec[validation]
 genson
 dataset
 yapf
+stringcase

@@ -123,8 +123,10 @@ from . import exporter_plantuml
 from . import exporter_slow_cooker
 from . import exporter_confluence
 from . import exporter_locust_tests
+from . import exporter_spring_boot_api_java
 
 exporter_plugins = {
+    'boot_api_java': exporter_spring_boot_api_java,
     "locust": exporter_locust_tests,
     "confluence": exporter_confluence,
     "runscope": exporter_runscope,
