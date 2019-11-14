@@ -2,16 +2,16 @@ import attr
 from pygments.lexers.jvm import JavaLexer
 from typing import List
 
-from ..codegen.json_schema_code_generator import code_from_schema
+from ..codegen.schema_to_java_generator import (
+    code_from_schema,
+    to_java_class_name,
+    to_java_function_name,
+)
 from ..core import schema_from_json
 from ..core.constants import AssertionMatchers
 from ..core.core_settings import app_settings
 from ..exporters import *
-from ..model.app_data import (
-    ApiCall,
-    HttpExchange,
-    ApiTestCase,
-    ProjectInfo)
+from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, ProjectInfo
 
 
 def gen_tags(tags: List):
@@ -28,7 +28,7 @@ def convert_internal_variable(str_with_variable):
 
 def to_spring_http_method(http_method: str):
     if http_method.lower() not in ["options", "head"]:
-        return f"@{http_method.upper()}Mapping"
+        return f"@{to_java_class_name(http_method)}Mapping"
     else:
         return f"@GetMapping"
 
@@ -37,7 +37,9 @@ def to_spring_response_status(http_status_code):
     return f"HttpStatus.OK", http_status_code, "ok"
 
 
-def gen_api_request_class(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
+def gen_api_request_class(
+    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
+):
     if not last_exchange.request.request_body:
         return
     request_json_schema = schema_from_json(last_exchange.request.request_body)
@@ -52,7 +54,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
     return request_clazz_header + "\n" + clazz_definition
 
 
-def gen_api_response_class(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
+def gen_api_response_class(
+    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
+):
     if not last_exchange.response.response_body:
         return
     response_json_schema = schema_from_json(last_exchange.response.response_body)
@@ -63,17 +67,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
     """
-    clazz_definition = code_from_schema("ApiResponse", response_json_schema.get("schema"))
+    clazz_definition = code_from_schema(
+        "ApiResponse", response_json_schema.get("schema")
+    )
     return response_clazz_header + "\n" + clazz_definition
 
 
 def gen_controller(
-        api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
+    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
 ):
     mapping = to_spring_http_method(api_call.http_method)
     response_status, response_status_code, response_status_message = to_spring_response_status(
-        last_exchange.response.http_status_code)
-    function_name = get_function_name(api_call)
+        last_exchange.response.http_status_code
+    )
+    function_name = to_java_function_name(api_call.title)
     controller = f"""
 // Controller method
 {mapping}(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -94,7 +101,7 @@ def converter(assertion):
     return (
         "should exist"
         if assertion.matcher
-           in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value]
+        in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value]
         else f"should be {assertion.expected_value}"
     )
 
@@ -103,7 +110,7 @@ def converter_path_statement(assertion):
     return (
         "should not be empty"
         if assertion.matcher
-           in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value]
+        in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value]
         else f"should be {assertion.expected_value}"
     )
 

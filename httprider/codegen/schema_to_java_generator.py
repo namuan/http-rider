@@ -1,5 +1,6 @@
-import stringcase
 import re
+
+import stringcase
 
 __type_mapping = {
     "integer": "int",
@@ -9,11 +10,20 @@ __type_mapping = {
 }
 
 
+def __norm(name):
+    return re.sub(r"[^a-zA-Z]", "", name)
+
+
+def to_java_function_name(name):
+    return stringcase.camelcase(__norm(name))
+
+
+def to_java_class_name(name):
+    return __norm(name).capitalize()
+
+
 def to_java_variable(var_name):
-    without_hyphens = re.sub(r"\-", "", var_name)
-    converted = stringcase.camelcase(without_hyphens)
-    # print("---> Converting {} to {}".format(without_hyphens, converted))
-    return converted
+    return stringcase.camelcase(__norm(var_name))
 
 
 def gen_class_variable(var_name, var_type, is_array=False):
@@ -22,9 +32,9 @@ def gen_class_variable(var_name, var_type, is_array=False):
     if json_type == "object":
         class_declaration = f"{var_name.capitalize()} {var_name};"
         return (
-                class_declaration
-                + "\n"
-                + gen_class(var_name.capitalize(), var_type.get("properties"))
+            class_declaration
+            + "\n"
+            + gen_class(var_name.capitalize(), var_type.get("properties"))
         )
     if json_type == "array":
         return gen_array(var_name, var_type)
@@ -38,7 +48,11 @@ def gen_class_variable(var_name, var_type, is_array=False):
 
 def gen_class(clazz_name, clazz_properties):
     # print("-> Class {}".format(clazz_name))
-    properties = [gen_class_variable(*j) for j in clazz_properties.items()] if clazz_properties else []
+    properties = (
+        [gen_class_variable(*j) for j in clazz_properties.items()]
+        if clazz_properties
+        else []
+    )
     properties_str = "\n".join(properties)
     return f"""
 public class {clazz_name} {{

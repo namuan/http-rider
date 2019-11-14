@@ -5,6 +5,7 @@ from typing import List
 from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSource
+from ..codegen.schema_to_java_generator import to_java_function_name
 
 
 def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
@@ -67,7 +68,7 @@ def converter(assertion):
 
 def gen_function(api_call, last_exchange, api_test_case):
     return f"""
-    void {get_function_name(api_call)}() {{
+    void {to_java_function_name(api_call.title)}() {{
 {gen_given(api_call, last_exchange)}
 {gen_when(api_call, last_exchange)}                
 {gen_then(api_call, last_exchange, api_test_case)};

@@ -126,7 +126,7 @@ from . import exporter_locust_tests
 from . import exporter_spring_boot_api_java
 
 exporter_plugins = {
-    'boot_api_java': exporter_spring_boot_api_java,
+    "boot_api_java": exporter_spring_boot_api_java,
     "locust": exporter_locust_tests,
     "confluence": exporter_confluence,
     "runscope": exporter_runscope,
