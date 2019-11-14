@@ -2,6 +2,7 @@ import attr
 from pygments.lexers.jvm import JavaLexer
 from typing import List
 
+from ..codegen.http_status_code_mapping import Languages, to_http_status
 from ..codegen.schema_to_java_generator import (
     code_from_schema,
     to_java_class_name,
@@ -34,17 +35,19 @@ def to_spring_http_method(http_method: str):
 
 
 def to_spring_response_status(http_status_code):
-    return f"HttpStatus.OK", http_status_code, "ok"
+    status, message = to_http_status(http_status_code, Languages.JAVA)
+    return status, message, http_status_code
 
 
 def gen_api_request_class(
     api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
 ):
     if not last_exchange.request.request_body:
-        return
+        return ""
+
     request_json_schema = schema_from_json(last_exchange.request.request_body)
     request_clazz_header = """
-// API Request definition
+// 2. API Request definition
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,10 +61,11 @@ def gen_api_response_class(
     api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
 ):
     if not last_exchange.response.response_body:
-        return
+        return ""
+
     response_json_schema = schema_from_json(last_exchange.response.response_body)
     response_clazz_header = """
-// API Response definition
+// 3. API Response definition
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,16 +81,16 @@ def gen_controller(
     api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
 ):
     mapping = to_spring_http_method(api_call.http_method)
-    response_status, response_status_code, response_status_message = to_spring_response_status(
+    resp_status, resp_message, resp_code = to_spring_response_status(
         last_exchange.response.http_status_code
     )
     function_name = to_java_function_name(api_call.title)
     controller = f"""
-// Controller method
+// 4. Controller method
 {mapping}(produces = MediaType.APPLICATION_JSON_VALUE)
-@ResponseStatus({response_status})
+@ResponseStatus({resp_status})
 @ApiResponses({{
-        @ApiResponse(code = {response_status_code}, message = "{response_status_message}")
+        @ApiResponse(code = {resp_code}, message = "{resp_message}")
 }})
 public ApiResponse {function_name}() {{    
     ApiResponse response = new ApiResponse();
@@ -95,6 +99,21 @@ public ApiResponse {function_name}() {{
     """
 
     return controller
+
+
+def gen_test(
+    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
+):
+    mapping = to_spring_http_method(api_call.http_method)
+    resp_status, resp_code, resp_message = to_spring_response_status(
+        last_exchange.response.http_status_code
+    )
+    function_name = to_java_function_name(api_call.title)
+    test_code = f"""
+// 5. MockMvc test generator
+    """
+
+    return test_code
 
 
 def converter(assertion):
@@ -220,6 +239,7 @@ The generated code is divided into different sections
 {gen_api_request_class(api_call, last_exchange, api_test_case)}
 {gen_api_response_class(api_call, last_exchange, api_test_case)}
 {gen_controller(api_call, last_exchange, api_test_case)}
+{gen_test(api_call, last_exchange, api_test_case)}
 """
         return highlight(doc, JavaLexer(), HtmlFormatter())
 
