@@ -12,7 +12,7 @@ from ..core import schema_from_json
 from ..core.constants import AssertionMatchers
 from ..core.core_settings import app_settings
 from ..exporters import *
-from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, ProjectInfo
+from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, ProjectInfo, Assertion
 
 
 def gen_tags(tags: List):
@@ -32,6 +32,10 @@ def to_spring_http_method(http_method: str):
         return f"@{to_java_class_name(http_method)}Mapping"
     else:
         return f"@GetMapping"
+
+
+def to_mock_mvc_http_method(http_method: str):
+    return http_method.lower()
 
 
 def to_spring_response_status(http_status_code):
@@ -101,16 +105,75 @@ public ApiResponse {function_name}() {{
     return controller
 
 
+def to_json_result_matcher(a: Assertion):
+    mapper = {
+        AssertionMatchers.EQ.value: 'jsonPath("{}").value({})'.format(
+            a.selector, a.expected_value
+        )
+        if a.var_type == "int"
+        else 'jsonPath("{}").value("{}")'.format(a.selector, a.expected_value),
+        AssertionMatchers.NOT_EQ.value: '!jsonPath("{}").value({})'.format(
+            a.selector, a.expected_value
+        )
+        if a.var_type == "int"
+        else 'jsonPath("{}").value("{}")'.format(a.selector, a.expected_value),
+        AssertionMatchers.NOT_NULL.value: 'jsonPath("{}").exists()'.format(a.selector),
+        AssertionMatchers.EMPTY.value: 'jsonPath("{}").isEmpty()'.format(a.selector),
+        AssertionMatchers.NOT_EMPTY.value: 'jsonPath("{}").isNotEmpty()'.format(
+            a.selector
+        ),
+        AssertionMatchers.CONTAINS.value: 'jsonPath("{}").value("//Hamcrest contains")'.format(
+            a.selector
+        ),
+        AssertionMatchers.NOT_CONTAINS.value: '!jsonPath("{}").value("//Hamcrest contains")'.format(
+            a.selector
+        ),
+        AssertionMatchers.LT.value: 'jsonPath("{}").value("//Hamcrest less than")'.format(
+            a.selector
+        ),
+        AssertionMatchers.GT.value: 'jsonPath("{}").value("//Hamcrest greater than")'.format(
+            a.selector
+        ),
+    }
+    return mapper.get(a.matcher, None)
+
+
+def gen_test_assertions(api_test_case: ApiTestCase):
+    for assertion in api_test_case.comparable_assertions():
+        yield ".andExpect({})".format(to_json_result_matcher(assertion))
+
+
 def gen_test(
     api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
 ):
-    mapping = to_spring_http_method(api_call.http_method)
+    mapping = to_mock_mvc_http_method(api_call.http_method)
+    url = api_call.http_url
     resp_status, resp_code, resp_message = to_spring_response_status(
         last_exchange.response.http_status_code
     )
     function_name = to_java_function_name(api_call.title)
+    encoded_json_string = encode_json_string(last_exchange.request.request_body)
+
+    json_path_assertions = "\n".join(
+        [statement for statement in gen_test_assertions(api_test_case)]
+    )
+
     test_code = f"""
 // 5. MockMvc test generator
+// Add related imports here
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+// Add note on sample project
+
+@Test
+public void test{function_name}() throws Exception {{
+    mockMvc.perform(
+        {mapping}("{url}")
+            .contentType(APPLICATION_JSON)
+            .content("{encoded_json_string}"))
+        .andExpect(status().is({resp_code}))
+        {json_path_assertions}
+        .andReturn();
+}}
     """
 
     return test_code
