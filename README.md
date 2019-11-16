@@ -43,6 +43,8 @@ See https://twitter.com/deskriders_twt for development updates.
   
 🚀 Export [Slow Cooker](https://github.com/buoyantio/slow_cooker) performance tests  
   
+🚀 Export [Locust.io](https://locust.io) performance tests - [Demo](https://www.youtube.com/watch?v=7zqcYmZIdVs)
+  
 🚀 Export Python code using requests module  
   
 🚀 Export Markdown for documenting API requests/responses  
