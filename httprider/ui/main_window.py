@@ -7,6 +7,7 @@ from PyQt5.QtGui import QDesktopServices, QCloseEvent, QIcon
 from ..presenters import *
 from ..generated.base_window import Ui_MainWindow
 from ..ui.code_generator_dialog import CodeGeneratorDialog
+from ..ui.fuzz_test_dialog import FuzzTestDialog
 from ..ui.configuration_dialog import ConfigurationDialog
 from ..ui.environment_configuration_dialog import EnvironmentConfigurationDialog
 from ..ui.menus import menu_items
@@ -50,6 +51,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.environment_configuration_dialog = EnvironmentConfigurationDialog(self)
         self.project_info_dialog = ProjectInfoDialog(self)
         self.code_generator_dialog = CodeGeneratorDialog(self)
+        self.fuzz_test_dialog = FuzzTestDialog(self)
 
         # Initialise Components
         menu_items(self)
