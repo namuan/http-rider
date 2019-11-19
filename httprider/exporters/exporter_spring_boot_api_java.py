@@ -52,10 +52,7 @@ def gen_api_request_class(
     request_json_schema = schema_from_json(last_exchange.request.request_body)
     request_clazz_header = """
 // 2. API Request definition
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
     """
     clazz_definition = code_from_schema("ApiRequest", request_json_schema.get("schema"))
     return request_clazz_header + "\n" + clazz_definition
@@ -70,15 +67,22 @@ def gen_api_response_class(
     response_json_schema = schema_from_json(last_exchange.response.response_body)
     response_clazz_header = """
 // 3. API Response definition
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
     """
     clazz_definition = code_from_schema(
         "ApiResponse", response_json_schema.get("schema")
     )
     return response_clazz_header + "\n" + clazz_definition
+
+
+def _to_fox_implicit_param(params, param_type):
+    return dict_formatter(
+        params,
+        '@ApiImplicitParam(name="{k}", value="{v}", required=true, paramType="'
+        + param_type
+        + '")',
+        splitter=",",
+    )
 
 
 def gen_controller(
@@ -91,10 +95,19 @@ def gen_controller(
     function_name = to_java_function_name(api_call.title)
     controller = f"""
 // 4. Controller method
+import io.swagger.annotations.*;
+import org.springframework.web.bind.annotation.*;
+
+
 {mapping}(produces = MediaType.APPLICATION_JSON_VALUE)
 @ResponseStatus({resp_status})
+@ApiOperation(value="{api_call.title}")
+@ApiImplicitParams({{
+    {_to_fox_implicit_param(last_exchange.request.headers.items(), "header")},
+    {_to_fox_implicit_param(last_exchange.request.query_params.items(), "query")}
+}})
 @ApiResponses({{
-        @ApiResponse(code = {resp_code}, message = "{resp_message}")
+        @ApiResponse(code = {resp_code}, message = "{resp_message}", response = ApiResponse.class)
 }})
 public ApiResponse {function_name}() {{    
     ApiResponse response = new ApiResponse();
@@ -200,13 +213,9 @@ def converter_path_statement(assertion):
 def gen_fox_config(project_info: ProjectInfo):
     output = f"""
 // 1. SpringFox configuration
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
+import org.springframework.context.annotation.*;
+import springfox.documentation.builders.*;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.*;
