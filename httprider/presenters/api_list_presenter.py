@@ -55,10 +55,14 @@ class ApiListPresenter:
         toggle_action = QAction("Toggle Enable/Disable", self.view)
         toggle_action.triggered.connect(self.on_toggle_request_status)
 
+        fuzz_action = QAction("Fuzz Test", self.view)
+        fuzz_action.triggered.connect(self.on_fuzz_test)
+
         self.menu = QMenu()
         self.menu.addAction(duplicate_action)
         self.menu.addAction(remove_action)
         self.menu.addAction(toggle_action)
+        self.menu.addAction(fuzz_action)
 
         self.separator_menu = QMenu()
         self.separator_menu.addAction(remove_action)
@@ -73,6 +77,9 @@ class ApiListPresenter:
             self.refresh_multiple_items
         )
         app_settings.app_data_writer.signals.selected_tag_changed.connect(self.refresh)
+
+    def on_fuzz_test(self):
+        self.parent_view.fuzz_test_dialog.fuzz_single_dialog()
 
     def on_toggle_request_status(self):
         selected_model_index: QModelIndex = self.index_at_selected_row()
