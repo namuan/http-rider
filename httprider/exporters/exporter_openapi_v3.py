@@ -6,7 +6,7 @@ import attr
 from apispec import APISpec
 from typing import List
 
-from ..core import schema_from_json
+from ..core.json_schema import schema_from_json
 from ..core.core_settings import app_settings
 from ..exporters import *
 from ..model.app_data import (

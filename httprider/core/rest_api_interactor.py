@@ -2,7 +2,7 @@ import logging
 from queue import Queue, Empty
 
 from .core_settings import app_settings
-from ..core import random_environment
+from ..core import random_environment, combine_request_headers
 from ..core.api_call_interactor import api_call_interactor
 from ..external.rest_api_connector import RestApiConnector, http_exchange_signals
 from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange, ExchangeResponse
@@ -51,12 +51,9 @@ class RestApiInteractor:
 
     def make_http_call(self, api_call: ApiCall):
         exchange_request = ExchangeRequest.from_api_call(api_call)
-
-        # inject common headers respecting existing headers on the request
-        project_info = app_settings.app_data_reader.get_or_create_project_info()
-        common_headers = {k: v.value for k, v in project_info.common_headers.items()}
-        exchange_request.headers = {**common_headers, **exchange_request.headers}
-
+        exchange_request.headers = combine_request_headers(
+            app_settings, exchange_request
+        )
         exchange = HttpExchange(api_call_id=api_call.id, request=exchange_request)
 
         if api_call.mocked_response.is_enabled:

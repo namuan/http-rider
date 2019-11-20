@@ -8,7 +8,7 @@ from ..codegen.schema_to_java_generator import (
     to_java_class_name,
     to_java_function_name,
 )
-from ..core import schema_from_json
+from ..core.json_schema import schema_from_json
 from ..core.constants import AssertionMatchers
 from ..core.core_settings import app_settings
 from ..exporters import *

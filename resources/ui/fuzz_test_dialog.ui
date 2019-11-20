@@ -36,6 +36,20 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="lbl_api_call">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -49,7 +63,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="btn_copy_code">
+      <widget class="QPushButton" name="btn_fuzz_test">
        <property name="text">
         <string>Test</string>
        </property>
