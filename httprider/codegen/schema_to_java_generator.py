@@ -64,13 +64,14 @@ public class {clazz_name} {{
 def gen_array(var_name, json_schema):
     # print("--> Array {}".format(var_name))
     array_items = json_schema.get("items")
-    if array_items.get("type") == "object":
+    if not array_items:
+        return "Object {};".format(var_name)
+    elif array_items and array_items.get("type") == "object":
         clazz_name = var_name.capitalize()
         item_class = gen_class(clazz_name, array_items.get("properties"))
         return item_class + "\n" + "List<{}> {};".format(clazz_name, var_name)
     else:
-        rv = gen_class_variable(var_name, array_items, is_array=True)
-        return rv
+        return gen_class_variable(var_name, array_items, is_array=True)
 
 
 def code_from_schema(root_clazz, json_schema):
