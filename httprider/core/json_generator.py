@@ -29,9 +29,6 @@ def fuzz_date_time():
 
 
 def fuzz_string(string_schema):
-    if string_schema.get("example"):
-        return string_schema.get("example")
-
     is_enum = string_schema.get("enum")
     string_format = string_schema.get("format")
     if is_enum:
@@ -45,9 +42,6 @@ def fuzz_string(string_schema):
 
 
 def fuzz_int(int_schema):
-    if int_schema.get("example"):
-        return int_schema.get("example")
-
     return rand_int(1000, 1)
 
 
@@ -60,10 +54,10 @@ def fuzz_array_length(num_items=2):
 
 
 def fuzz_array(arr_schema, arr_length=fuzz_array_length()):
-    if arr_schema.get("example"):
-        return arr_schema.get("example")
+    items = arr_schema.get("items")
+    if not items:
+        return []
 
-    items = arr_schema["items"]
     arr_items_type = items.get("type", "object")
     fuzz_func = type_mapping.get(arr_items_type)
     if arr_items_type == "object":

@@ -1,7 +1,7 @@
 from ..core import get_variable_tokens, replace_variables, combine_request_headers
 from ..core.core_settings import app_settings
-from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange
 from ..core.json_schema import schema_from_json, json_from_schema
+from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange
 
 
 class FuzzTestPresenter:
@@ -17,14 +17,8 @@ class FuzzTestPresenter:
         )
 
     def on_fuzz_test(self):
-        # Generate a sample json request from API call using variable substitution
-        exchange = self.__generate_prepared_exchange_from_api_call(self.selected_api)
-        request_schema = schema_from_json(exchange.request.request_body)
-        self.view.txt_fuzz_output.appendHtml(exchange.request.request_body)
-        print(request_schema)
-        fuzz_payload = json_from_schema(request_schema)
-        print(fuzz_payload)
-        self.view.txt_fuzz_output.appendHtml(fuzz_payload)
+        exchange = self.__prepare_fuzzed_exchange_from_api_call(self.selected_api)
+        self.view.txt_fuzz_output.appendHtml(str(exchange))
 
     def show_dialog(self):
         lbl = "Generating fuzz data for {} {}".format(
@@ -33,8 +27,11 @@ class FuzzTestPresenter:
         self.view.lbl_api_call.setText(lbl)
         self.view.show()
 
-    def __generate_prepared_exchange_from_api_call(self, api_call: ApiCall):
+    def __prepare_fuzzed_exchange_from_api_call(self, api_call: ApiCall):
         exchange_request = self.__get_prepared_request(api_call)
+        exchange_request.request_body = self.__generate_fuzzed_payload(
+            exchange_request.request_body
+        )
         return HttpExchange(api_call_id=api_call.id, request=exchange_request)
 
     def __get_prepared_request(self, api_call: ApiCall):
@@ -46,6 +43,10 @@ class FuzzTestPresenter:
         exchange_request = replace_variables(var_tokens, exchange_request)
 
         return exchange_request
+
+    def __generate_fuzzed_payload(self, request_json_body):
+        request_schema = schema_from_json(request_json_body)
+        return json_from_schema(request_schema.get("schema"))
 
     def __on_updated_selected_api(self, api_call):
         self.selected_api = api_call
