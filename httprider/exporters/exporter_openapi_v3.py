@@ -38,7 +38,7 @@ class OpenApiv3Exporter:
             self.export_api_calls(spec, api_path, grouped_apis, project_info.servers)
             for api in grouped_apis:
                 if api.tags:
-                    api_call_tags.append(*api.tags)
+                    api_call_tags.extend(api.tags)
 
         for tag in project_info.tags:
             if tag.name in api_call_tags:
@@ -75,7 +75,7 @@ class OpenApiv3Exporter:
             }
 
             if api.tags:
-                operations[http_method]["tags"].append(*api.tags)
+                operations[http_method]["tags"].extend(api.tags)
 
             parameters = []
             self.add_params(parameters, api.http_headers, "header")
