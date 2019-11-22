@@ -61,6 +61,9 @@ class RestApiInteractor:
                 api_call.mocked_response
             )
 
+        self.queue_exchange(exchange)
+
+    def queue_exchange(self, exchange: HttpExchange):
         if self.api_worker.isRunning():
             running_exchange: HttpExchange = self.api_worker.exchange
             logging.warning(

@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 from PyQt5.QtCore import Qt
 
@@ -64,6 +64,11 @@ class ContentType(Enum):
     XML = "application/xml"
     JSON = "application/json"
     FORM = "application/x-www-form-urlencoded"
+
+
+class ExchangeRequestType(Enum):
+    NORMAL = auto()
+    FUZZED = auto()
 
 
 REPLACEMENTS = [("-", "_"), (" ", "_"), ("[", ""), ("]", ""), ("$", ""), (".", "_")]

@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
+from typing import Any, Optional, Dict, List
 
 import attr
 import cattr
 from requests.structures import CaseInsensitiveDict
-from typing import Any, Optional, Dict, List
 
 from ..core import DynamicStringData, strip_comments, compact_json
 from ..core.constants import *
@@ -133,9 +133,16 @@ class ExchangeRequest(object):
     form_params: Dict = {}
     request_body: str = ""
     request_body_type: ContentType = ContentType.NONE
+    request_type: ExchangeRequestType = ExchangeRequestType.NORMAL
 
     def content_type(self):
         return self.headers.get("Content-Type", self.request_body_type.value)
+
+    def is_fuzzed(self):
+        return (
+            self.request_type
+            and self.request_type.value == ExchangeRequestType.FUZZED.value
+        )
 
     @classmethod
     def from_api_call(cls, api_call: ApiCall):

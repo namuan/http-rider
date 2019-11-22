@@ -22,6 +22,8 @@ from ..model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
 class HttpExchangeSignals(QObject):
     request_started = pyqtSignal(str, str)
     request_finished = pyqtSignal()
+    fuzzed_request_started = pyqtSignal(str, str)
+    fuzzed_request_finished = pyqtSignal()
     interrupt = pyqtSignal()
 
 
@@ -33,12 +35,18 @@ class RestApiResponseSignals(QObject):
     error = pyqtSignal(HttpExchange)
 
 
+class FuzzedRestApiResponseSignals(QObject):
+    result = pyqtSignal(HttpExchange)
+    error = pyqtSignal(HttpExchange)
+
+
 class RestApiConnector(QThread):
     def __init__(self, name):
         super(RestApiConnector, self).__init__()
         self.tname = name
         self.halt_processing = False
         self.signals = RestApiResponseSignals()
+        self.fuzzed_signals = FuzzedRestApiResponseSignals()
         http_exchange_signals.interrupt.connect(self.on_halt_processing)
         self._exchange = None
         self.requester = Requester()
@@ -98,9 +106,14 @@ class RestApiConnector(QThread):
 
         try:
             progress_message = f"{req.http_method} call to {req.http_url}"
-            http_exchange_signals.request_started.emit(
-                progress_message, self.exchange.api_call_id
-            )
+            if req.is_fuzzed():
+                http_exchange_signals.fuzzed_request_started.emit(
+                    progress_message, self.exchange.api_call_id
+                )
+            else:
+                http_exchange_signals.request_started.emit(
+                    progress_message, self.exchange.api_call_id
+                )
 
             if self.exchange.response.is_mocked:
                 logging.info(
@@ -129,21 +142,34 @@ class RestApiConnector(QThread):
                     http_exchange_signals.request_finished.emit()
                     return
 
-            self.signals.result.emit(self.exchange)
+            if req.is_fuzzed():
+                self.fuzzed_signals.result.emit(self.exchange)
+            else:
+                self.signals.result.emit(self.exchange)
         except ConnectionError as e:
             nce: NewConnectionError = e.args[0].reason
             error_response = ExchangeResponse(
                 http_status_code=-1, response_body=nce.args[0]
             )
             self.exchange.response = error_response
-            self.signals.error.emit(self.exchange)
+
+            if req.is_fuzzed():
+                self.fuzzed_signals.error.emit(self.exchange)
+            else:
+                self.signals.error.emit(self.exchange)
         except Exception as e:
             logging.error(e)
             error_response = ExchangeResponse(http_status_code=-1, response_body=str(e))
             self.exchange.response = error_response
-            self.signals.error.emit(self.exchange)
+            if req.is_fuzzed():
+                self.fuzzed_signals.error.emit(self.exchange)
+            else:
+                self.signals.error.emit(self.exchange)
 
-        http_exchange_signals.request_finished.emit()
+        if req.is_fuzzed():
+            http_exchange_signals.fuzzed_request_finished.emit()
+        else:
+            http_exchange_signals.request_finished.emit()
 
     @pyqtSlot()
     def run(self):

@@ -1,7 +1,10 @@
+import json
+
+from ..core.rest_api_interactor import rest_api_interactor
 from ..core import get_variable_tokens, replace_variables, combine_request_headers
 from ..core.core_settings import app_settings
 from ..core.json_schema import schema_from_json, json_from_schema
-from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange
+from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange, ExchangeRequestType
 
 
 class FuzzTestPresenter:
@@ -18,17 +21,22 @@ class FuzzTestPresenter:
 
     def on_fuzz_test(self):
         exchange = self.__prepare_fuzzed_exchange_from_api_call(self.selected_api)
-        self.view.txt_fuzz_output.appendHtml(str(exchange))
+        request_counter = self.view.txt_fuzz_count.value()
+        for _ in range(request_counter):
+            self.view.txt_fuzz_output.appendHtml(str(exchange))
+            rest_api_interactor.queue_exchange(exchange)
 
     def show_dialog(self):
         lbl = "Generating fuzz data for {} {}".format(
             self.selected_api.http_method, self.selected_api.http_url
         )
         self.view.lbl_api_call.setText(lbl)
+        self.view.txt_fuzz_output.clear()
         self.view.show()
 
     def __prepare_fuzzed_exchange_from_api_call(self, api_call: ApiCall):
-        exchange_request = self.__get_prepared_request(api_call)
+        exchange_request: ExchangeRequest = self.__get_prepared_request(api_call)
+        exchange_request.request_type = ExchangeRequestType.FUZZED
         exchange_request.request_body = self.__generate_fuzzed_payload(
             exchange_request.request_body
         )
@@ -46,7 +54,7 @@ class FuzzTestPresenter:
 
     def __generate_fuzzed_payload(self, request_json_body):
         request_schema = schema_from_json(request_json_body)
-        return json_from_schema(request_schema.get("schema"))
+        return json.dumps(json_from_schema(request_schema.get("schema")))
 
     def __on_updated_selected_api(self, api_call):
         self.selected_api = api_call
