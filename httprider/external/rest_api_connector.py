@@ -140,6 +140,7 @@ class RestApiConnector(QThread):
                 if self.halt_processing:
                     self.halt_processing = False
                     http_exchange_signals.request_finished.emit()
+                    http_exchange_signals.fuzzed_request_finished.emit()
                     return
 
             if req.is_fuzzed():

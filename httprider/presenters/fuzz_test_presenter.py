@@ -1,6 +1,6 @@
 import json
 
-from ..core.rest_api_interactor import rest_api_interactor
+from ..core.safe_rest_api_interactor import rest_api_interactor
 from ..core import get_variable_tokens, replace_variables, combine_request_headers
 from ..core.core_settings import app_settings
 from ..core.json_schema import schema_from_json, json_from_schema
@@ -14,6 +14,7 @@ class FuzzTestPresenter:
         self.selected_api: ApiCall = None
         # ui events
         self.view.btn_fuzz_test.clicked.connect(self.on_fuzz_test)
+
         # domain events
         app_settings.app_data_reader.signals.api_call_change_selection.connect(
             self.__on_updated_selected_api
