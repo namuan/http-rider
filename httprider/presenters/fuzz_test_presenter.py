@@ -38,9 +38,7 @@ class FuzzTestPresenter:
         )
 
     def show_dialog(self):
-        lbl = "Generating fuzz data for {} {}".format(
-            self.selected_api.http_method, self.selected_api.http_url
-        )
+        lbl = "{} {}".format(self.selected_api.http_method, self.selected_api.http_url)
         self.view.lbl_api_call.setText(lbl)
         self.__clear_results()
         self.view.show()
@@ -149,6 +147,8 @@ class FuzzTestPresenter:
         return exchange_request
 
     def __generate_fuzzed_payload(self, request_json_body):
+        if not request_json_body:
+            return ""
         request_schema = schema_from_json(request_json_body)
         return json.dumps(jdg.json_from_schema(request_schema.get("schema")))
 
