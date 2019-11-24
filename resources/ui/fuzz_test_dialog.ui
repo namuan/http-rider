@@ -63,6 +63,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QLabel" name="lbl_fuzz_results">
+       <property name="text">
+        <string>Results</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="btn_fuzz_test">
        <property name="text">
         <string>Test</string>

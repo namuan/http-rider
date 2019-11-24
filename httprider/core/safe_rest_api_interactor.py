@@ -1,6 +1,9 @@
 import logging
 from queue import Queue, Empty
 
+import attr
+from typing import Any
+
 from .core_settings import app_settings
 from ..core import random_environment, combine_request_headers
 from ..core.api_call_interactor import api_call_interactor
@@ -8,23 +11,28 @@ from ..external.rest_api_connector import RestApiConnector, http_exchange_signal
 from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange, ExchangeResponse
 
 
+@attr.s(auto_attribs=True)
+class ApiWorkerData(object):
+    exchange: HttpExchange
+    on_success: Any
+    on_failure: Any
+
+
 class SafeRestApiInteractor:
     """
     Singleton class
-    Should manages requests and invoking new RestApiConnector
-    Should queues requests and sequentially call RestApiConnector
-    Should provide callback hooks on success and failure for caller
+    [x] Should manages requests and invoking new RestApiConnector
+    [x] Should queues requests and sequentially call RestApiConnector
+    [x] Should provide callback hooks on success and failure for caller
     """
     worker_queue: Queue = Queue()
     api_workers = []
-    api_worker = RestApiConnector(name=random_environment())
+    any_worker_running: bool = False
 
     def __init__(self):
-        self.__bind_signals()
-
         # domain events
-        http_exchange_signals.request_finished.connect(self.__process_queue)
-        http_exchange_signals.fuzzed_request_finished.connect(self.__process_queue)
+        http_exchange_signals.request_finished.connect(self.__request_finished)
+        http_exchange_signals.fuzzed_request_finished.connect(self.__request_finished)
         http_exchange_signals.interrupt.connect(self.__on_halt_processing)
 
     def make_http_call(self, api_call: ApiCall):
@@ -39,57 +47,47 @@ class SafeRestApiInteractor:
                 api_call.mocked_response
             )
 
-        self.queue_exchange(exchange)
+        api_worker_data = ApiWorkerData(
+            exchange=exchange,
+            on_success=self.__on_success,
+            on_failure=self.__on_failure
+        )
+        self.queue_worker_task(api_worker_data)
 
-    def queue_exchange(self, exchange: HttpExchange):
-        if self.api_worker.isRunning():
-            running_exchange: HttpExchange = self.api_worker.exchange
-            logging.warning(
-                f"Worker is running for API: {running_exchange.api_call_id}"
-            )
-            logging.warning(f"Should queue request for API: {exchange.api_call_id}")
-            self.worker_queue.put(exchange)
-        else:
-            self.__process_exchange(exchange)
-
+    def queue_worker_task(self, api_worker_data: ApiWorkerData):
+        logging.warning(f"Queuing request for API: {api_worker_data.exchange.api_call_id}")
+        self.worker_queue.put(api_worker_data)
+        self.__process_queue()
         logging.info(f"Queue Size: {self.worker_queue.qsize()}")
 
-    def __on_halt_processing(self):
-        logging.info(f"Terminating thread: {self.api_worker.tname}")
-        # @todo: Check why is this necessary?
-        # self.api_worker = RestApiConnector(name=random_environment())
-        # self.bind_signals()
-
-        logging.info(f"Clearing queue - items waiting: {self.worker_queue.qsize()}")
-        while not self.worker_queue.empty():
-            try:
-                self.worker_queue.get(block=False)
-            except Empty:
-                continue
-
-            self.worker_queue.task_done()
-
-    def __bind_signals(self):
-        self.api_worker.signals.result.connect(self.__on_success)
-        self.api_worker.signals.error.connect(self.__on_failure)
+    def __request_finished(self, api_call_id):
+        logging.info("Api Call: {} - Worker completed".format(api_call_id))
+        self.any_worker_running = False
+        self.__process_queue()
 
     def __process_queue(self):
-        logging.info(f"Status of API Worker: {self.api_worker.isRunning()}")
-        if not self.worker_queue.empty():
-            self.api_worker = RestApiConnector(name=random_environment())
-            self.__bind_signals()
-
-            queued_exchange = self.worker_queue.get()
-            logging.info(f"Processing queued exchange: {queued_exchange.api_call_id}")
-            self.__process_exchange(queued_exchange)
+        if self.any_worker_running:
+            logging.info("Worker running. Will check again once it finished processing")
+        elif not self.worker_queue.empty():
+            wrapped_queued_exchange: ApiWorkerData = self.worker_queue.get()
+            logging.info(f"Processing queued exchange: {wrapped_queued_exchange.exchange.api_call_id}")
+            self.__process_exchange(wrapped_queued_exchange)
         else:
             logging.debug("Nothing in the queue")
 
-    def __process_exchange(self, exchange: HttpExchange):
-        self.api_workers.append(self.api_worker)
-        logging.info(f"Scheduling API Call {exchange.api_call_id}")
-        self.api_worker.exchange = exchange
-        self.api_worker.start()
+    def __process_exchange(self, api_worker_data: ApiWorkerData):
+        busy_worker = RestApiConnector(name=random_environment())
+        self.__bind_signals(busy_worker, api_worker_data)
+
+        # @todo: Check where do we remove workers.
+        # Can we then use this instead of any_worker_running flag
+        # Why do we need to create a list of workers if we are only running one at a time
+        self.api_workers.append(busy_worker)
+
+        logging.info(f"Scheduling API Call {api_worker_data.exchange.api_call_id}")
+        busy_worker.exchange = api_worker_data.exchange
+        busy_worker.start()
+        self.any_worker_running = True
 
     def __on_success(self, exchange: HttpExchange):
         logging.info(f"API Call: {exchange.api_call_id} - __on_success")
@@ -108,6 +106,20 @@ class SafeRestApiInteractor:
         api_call_interactor.update_api_call(api_call.id, api_call)
 
         app_settings.app_data_writer.add_http_exchange(exchange)
+
+    def __on_halt_processing(self):
+        logging.info(f"Clearing queue - items waiting: {self.worker_queue.qsize()}")
+        while not self.worker_queue.empty():
+            try:
+                self.worker_queue.get(block=False)
+            except Empty:
+                continue
+
+            self.worker_queue.task_done()
+
+    def __bind_signals(self, rest_api_connector, api_worker_data: ApiWorkerData):
+        rest_api_connector.signals.result.connect(api_worker_data.on_success)
+        rest_api_connector.signals.error.connect(api_worker_data.on_failure)
 
 
 rest_api_interactor = SafeRestApiInteractor()
