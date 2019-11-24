@@ -9,7 +9,7 @@ from ..model.completer import get_completer_model
 from ..presenters.mocked_response_presenter import MockedResponsePresenter
 from ..core import styles_from_file, split_url_qs
 from ..core.core_settings import app_settings
-from ..core.rest_api_interactor import rest_api_interactor
+from ..core.safe_rest_api_interactor import rest_api_interactor
 from ..exporters import api_request_body_highlighted
 from ..model.app_data import ApiCall, COMMON_HEADERS, HTTP_CONTENT_TYPES
 from ..presenters import AssertionResultPresenter, KeyValueListPresenter

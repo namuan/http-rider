@@ -49,7 +49,7 @@ def fuzz_file(file_schema):
     return ""
 
 
-def fuzz_array_length(num_items=2):
+def fuzz_array_length(num_items=10):
     return rand_int(num_items)
 
 

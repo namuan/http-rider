@@ -11,7 +11,7 @@ from ..core.api_call_interactor import api_call_interactor
 from ..core.app_state_interactor import AppStateInteractor
 from ..core.constants import *
 from ..core.core_settings import app_settings
-from ..core.rest_api_interactor import rest_api_interactor
+from ..core.safe_rest_api_interactor import rest_api_interactor
 from ..external.rest_api_connector import http_exchange_signals
 from ..model.app_data import ApiCall
 from ..presenters import AssertionResultPresenter

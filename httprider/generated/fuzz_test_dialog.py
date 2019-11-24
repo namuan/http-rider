@@ -36,6 +36,9 @@ class Ui_FuzzTestDialog(object):
         self.horizontalLayout.addWidget(self.lbl_api_call)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
+        self.lbl_fuzz_results = QtWidgets.QLabel(FuzzTestDialog)
+        self.lbl_fuzz_results.setObjectName("lbl_fuzz_results")
+        self.horizontalLayout.addWidget(self.lbl_fuzz_results)
         self.btn_fuzz_test = QtWidgets.QPushButton(FuzzTestDialog)
         self.btn_fuzz_test.setObjectName("btn_fuzz_test")
         self.horizontalLayout.addWidget(self.btn_fuzz_test)
@@ -53,4 +56,5 @@ class Ui_FuzzTestDialog(object):
         _translate = QtCore.QCoreApplication.translate
         FuzzTestDialog.setWindowTitle(_translate("FuzzTestDialog", "Dialog"))
         self.lbl_api_call.setText(_translate("FuzzTestDialog", "TextLabel"))
+        self.lbl_fuzz_results.setText(_translate("FuzzTestDialog", "Results"))
         self.btn_fuzz_test.setText(_translate("FuzzTestDialog", "Test"))
