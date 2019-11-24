@@ -1,14 +1,12 @@
 import json
-from mistune import markdown
 
-from pygments import highlight
-from pygments.formatters.html import HtmlFormatter
+from mistune import markdown
 from pygments.formatters.other import NullFormatter
-from pygments.lexers.markup import MarkdownLexer
 
 from ..core import get_variable_tokens, replace_variables, combine_request_headers
 from ..core import styles_from_file
 from ..core.core_settings import app_settings
+from ..core.http_statuses import *
 from ..core.json_schema import schema_from_json, json_from_schema
 from ..core.safe_rest_api_interactor import rest_api_interactor, ApiWorkerData
 from ..exporters import dict_formatter, highlight_format_json
@@ -76,7 +74,7 @@ class FuzzTestPresenter:
         http_url = exchange.request.http_url
         if request_qp:
             http_url = (
-                    http_url + "?" + dict_formatter(request_qp.items(), "{k}={v}", "&")
+                http_url + "?" + dict_formatter(request_qp.items(), "{k}={v}", "&")
             )
 
         formatted_request_body = highlight_format_json(
@@ -96,7 +94,7 @@ class FuzzTestPresenter:
 ```
 ### Response
 
-*HTTP {exchange.response.http_status_code} ({exchange.response.elapsed_time} ms)*
+**HTTP {exchange.response.http_status_code} ({exchange.response.elapsed_time} ms)**
 ```
 {response_headers}
 ```
@@ -107,26 +105,14 @@ class FuzzTestPresenter:
         """
         return content
 
-    def __is_2xx(self, response_code):
-        return 200 <= response_code < 300
-
-    def __is_3xx(self, response_code):
-        return 300 <= response_code < 400
-
-    def __is_4xx(self, response_code):
-        return 400 <= response_code < 500
-
-    def __is_5xx(self, response_code):
-        return response_code >= 500
-
     def __update_results(self, exchange_response: ExchangeResponse):
-        if self.__is_2xx(exchange_response.http_status_code):
+        if is_2xx(exchange_response.http_status_code):
             self.results_2xx += 1
-        elif self.__is_3xx(exchange_response.http_status_code):
+        elif is_3xx(exchange_response.http_status_code):
             self.results_3xx += 1
-        elif self.__is_4xx(exchange_response.http_status_code):
+        elif is_4xx(exchange_response.http_status_code):
             self.results_4xx += 1
-        elif self.__is_5xx(exchange_response.http_status_code):
+        elif is_5xx(exchange_response.http_status_code):
             self.results_5xx += 1
 
         output = "2XX: {}, 3XX: {}, 4XX: {}, 5XX: {}".format(
