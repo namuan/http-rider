@@ -7,7 +7,8 @@ from ..core import get_variable_tokens, replace_variables, combine_request_heade
 from ..core import styles_from_file
 from ..core.core_settings import app_settings
 from ..core.http_statuses import *
-from ..core.json_schema import schema_from_json, json_from_schema
+from ..core.json_schema import schema_from_json
+from ..core.json_data_generator import jdg
 from ..core.safe_rest_api_interactor import rest_api_interactor, ApiWorkerData
 from ..exporters import dict_formatter, highlight_format_json
 from ..model.app_data import (
@@ -45,7 +46,11 @@ class FuzzTestPresenter:
         self.view.show()
 
     def on_fuzz_test(self):
-        request_counter = self.view.txt_fuzz_count.value()
+        request_counter = self.view.int_fuzz_count.value()
+        max_array_items = self.view.int_max_array_items.value()
+        max_string_length = self.view.int_max_string_length.value()
+        jdg.update_limits(string_ml=max_string_length, array_ml=max_array_items)
+
         self.__clear_results()
         for _ in range(request_counter):
             exchange = self.__prepare_fuzzed_exchange_from_api_call(self.selected_api)
@@ -145,7 +150,7 @@ class FuzzTestPresenter:
 
     def __generate_fuzzed_payload(self, request_json_body):
         request_schema = schema_from_json(request_json_body)
-        return json.dumps(json_from_schema(request_schema.get("schema")))
+        return json.dumps(jdg.json_from_schema(request_schema.get("schema")))
 
     def __on_updated_selected_api(self, api_call):
         self.selected_api = api_call

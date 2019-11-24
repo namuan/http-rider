@@ -9,7 +9,7 @@ from prance import ResolvingParser
 
 from httprider.core.app_state_interactor import AppStateInteractor
 from ..core import DynamicStringData
-from ..core.json_schema import json_from_schema
+from ..core.json_data_generator import jdg
 from ..model.app_data import ProjectInfo, TagInfo, ApiCall
 
 
@@ -126,7 +126,7 @@ class OpenApiV3Importer:
 
     def __extract_request_body(self, content_type, schema):
         if schema:
-            return json.dumps(json_from_schema(schema.get("schema")))
+            return json.dumps(jdg.json_from_schema(schema.get("schema")))
 
         return ""
 
