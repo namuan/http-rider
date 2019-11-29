@@ -19,6 +19,11 @@ class EnvironmentConfigurationPresenter:
             self.parent_view.lst_environment_data, self
         )
 
+        # domain events
+        app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(
+            self.refresh
+        )
+
         # ui events
         self.parent_view.finished.connect(self.on_close)
         self.parent_view.lst_environments.currentItemChanged.connect(
@@ -40,12 +45,16 @@ class EnvironmentConfigurationPresenter:
 
     def refresh(self):
         self.parent_view.lst_environments.clear()
+        self.environment_data_presenter.clear()
         environments = app_settings.app_data_cache.get_environments()
         logging.info(
             f"Refreshing env config :: Total environments: {len(environments)}"
         )
         for environment in environments:
             self.__add_environment_widget_item(environment)
+
+        if environments:
+            self.parent_view.lst_environments.setCurrentRow(0)
 
     def on_duplicate_environment(self):
         selected_item = self.parent_view.lst_environments.currentItem()
