@@ -7,8 +7,8 @@ from ..core import get_variable_tokens, replace_variables, combine_request_heade
 from ..core import styles_from_file
 from ..core.core_settings import app_settings
 from ..core.http_statuses import *
-from ..core.json_schema import schema_from_json
 from ..core.json_data_generator import jdg
+from ..core.json_schema import schema_from_json
 from ..core.safe_rest_api_interactor import rest_api_interactor, ApiWorkerData
 from ..exporters import dict_formatter, highlight_format_json
 from ..model.app_data import (
@@ -65,6 +65,7 @@ class FuzzTestPresenter:
         self.results_4xx = 0
         self.results_5xx = 0
         self.view.txt_fuzz_output.clear()
+        self.__display_results()
 
     def __output_generator(self, exchange: HttpExchange):
         request_headers = dict_formatter(
@@ -118,6 +119,9 @@ class FuzzTestPresenter:
         elif is_5xx(exchange_response.http_status_code):
             self.results_5xx += 1
 
+        self.__display_results()
+
+    def __display_results(self):
         output = "2XX: {}, 3XX: {}, 4XX: {}, 5XX: {}".format(
             self.results_2xx, self.results_3xx, self.results_4xx, self.results_5xx
         )

@@ -59,11 +59,12 @@ def extract_uri(url, servers):
 
 
 def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True):
-    http_method = api_call.http_method
-    http_url = api_call.http_url
-    req_headers = api_call.enabled_headers()
-    req_qp = api_call.enabled_query_params()
-    req_body = api_call.request_body_without_comments()
+    if api_call:
+        http_method = api_call.http_method
+        http_url = api_call.http_url
+        req_headers = api_call.enabled_headers()
+        req_qp = api_call.enabled_query_params()
+        req_body = api_call.request_body_without_comments()
 
     if exchange.response.http_status_code != 0:
         http_method = exchange.request.http_method
@@ -71,6 +72,12 @@ def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=
         req_qp = exchange.request.query_params
         req_headers = exchange.request.headers
         req_body = exchange.request.request_body
+    elif not api_call:
+        raise ValueError(
+            "Unable to make curl request as api_call is null and exchange response is {}".format(
+                exchange.response
+            )
+        )
 
     if req_qp:
         http_url = http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])

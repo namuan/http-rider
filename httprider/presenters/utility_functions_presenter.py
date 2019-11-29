@@ -24,7 +24,10 @@ class UtilityFunctionsPresenter:
         self.transform_selected_text()
 
     def apply_transformation(self, selected_text, func_name):
-        return utility_func_map.get(func_name)(selected_text)
+        try:
+            return utility_func_map.get(func_name)(selected_text)
+        except Exception as e:
+            return "Error: {}".format(e)
 
     def transform_selected_text(self):
         selected_text = self.view.lbl_selected_text.text()
