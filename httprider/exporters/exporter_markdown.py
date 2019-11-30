@@ -5,7 +5,7 @@ from pygments.lexers.markup import MarkdownLexer
 from pygments.formatters.other import NullFormatter
 
 from ..core.core_settings import app_settings
-from ..exporters import *
+from ..exporters.common import *
 from ..model.app_data import ApiCall
 
 

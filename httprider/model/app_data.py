@@ -5,8 +5,8 @@ import attr
 import cattr
 from requests.structures import CaseInsensitiveDict
 
-from ..core import DynamicStringData, strip_comments, compact_json
-from ..core.constants import *
+from httprider.core import DynamicStringData, strip_comments, compact_json
+from httprider.core.constants import *
 
 
 @attr.s(auto_attribs=True)

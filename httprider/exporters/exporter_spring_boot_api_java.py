@@ -11,7 +11,7 @@ from ..codegen.schema_to_java_generator import (
 from ..core.json_schema import schema_from_json
 from ..core.constants import AssertionMatchers
 from ..core.core_settings import app_settings
-from ..exporters import *
+from ..exporters.common import *
 from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, ProjectInfo, Assertion
 
 

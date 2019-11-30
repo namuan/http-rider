@@ -1,30 +1,28 @@
 import logging
 import operator
 from itertools import groupby
+from typing import List
 
 import attr
 from apispec import APISpec
-from typing import List
 
-from ..core.json_schema import schema_from_json
-from ..core.core_settings import app_settings
-from ..exporters import *
-from ..model.app_data import (
+from httprider.core.core_settings import app_settings, CoreSettings
+from httprider.core.json_schema import schema_from_json
+from httprider.exporters.common import *
+from httprider.model.app_data import (
     ApiCall,
     ProjectInfo,
-    HttpExchange,
-    ExchangeRequest,
-    ExchangeResponse,
 )
 
 
-@attr.s
+@attr.s(auto_attribs=True)
 class OpenApiv3Exporter:
+    app_config: CoreSettings
     name: str = "OpenAPI(v3)"
     output_ext: str = "yml"
 
-    def export_data(self, api_calls: List[ApiCall]):
-        project_info = app_settings.app_data_reader.get_or_create_project_info()
+    def export_data(self, api_calls: List[ApiCall], return_raw=False):
+        project_info = self.app_config.app_data_reader.get_or_create_project_info()
         spec = self.init_spec(project_info)
 
         # Combine API calls with same url
@@ -44,7 +42,7 @@ class OpenApiv3Exporter:
             if tag.name in api_call_tags:
                 spec.tag(dict(name=tag.name, description=tag.description))
 
-        return highlight(spec.to_yaml(), data.YamlLexer(), HtmlFormatter())
+        return spec.to_yaml() if return_raw else highlight(spec.to_yaml(), data.YamlLexer(), HtmlFormatter())
 
     def init_spec(self, project_info: ProjectInfo):
         return APISpec(
@@ -77,14 +75,14 @@ class OpenApiv3Exporter:
             if api.tags:
                 operations[http_method]["tags"].extend(api.tags)
 
+            last_exchange = self.app_config.app_data_cache.get_last_exchange(api.id)
+
             parameters = []
-            self.add_params(parameters, api.http_headers, "header")
-            self.add_params(parameters, api.http_params, "query")
+            self.add_params(parameters, last_exchange.request.headers, "header")
+            self.add_params(parameters, last_exchange.request.query_params, "query")
 
             if parameters:
                 operations[http_method]["parameters"] = parameters
-
-            last_exchange = app_settings.app_data_cache.get_last_exchange(api.id)
 
             # Request object
             if last_exchange.request.request_body:
@@ -128,62 +126,9 @@ class OpenApiv3Exporter:
                 {
                     "name": param,
                     "in": params_type,
-                    "schema": {"type": "string", "example": param_value.value},
+                    "schema": {"type": "string", "example": param_value},
                 }
             )
 
 
-exporter = OpenApiv3Exporter()
-
-if __name__ == "__main__":
-    try:
-        spec = APISpec(
-            title="A Super simple API", version="1.0.0", openapi_version="3.0.2"
-        )
-        api_call = ApiCall(
-            id=2,
-            description="Httpbin call to get request data - df92df60-c1b1-46fe-b83d-220e22ba152a",
-            title="Get httpbin",
-            http_url="${API_URL}/get",
-            http_method="GET",
-            http_headers={},
-            http_params={},
-            form_params={},
-            http_request_body="",
-            sequence_number=1000,
-            type="api",
-            tags=["Registration"],
-            last_response_code=200,
-            enabled=True,
-        )
-        last_exchange = HttpExchange(
-            api_call_id=2,
-            id=5,
-            request=ExchangeRequest(
-                request_time="Thu Jun 20 09:04:55 2019",
-                http_method="GET",
-                http_url="http://127.0.0.1:8000/get",
-                headers={},
-                query_params={},
-                form_params={},
-                request_body="",
-            ),
-            type="http_exchange",
-            response=ExchangeResponse(
-                http_status_code=200,
-                response_headers={
-                    "server": "gunicorn/19.9.0",
-                    "date": "Thu, 20 Jun 2019 08:04:55 GMT",
-                    "connection": "close",
-                    "content-type": "application/json",
-                    "content-length": "273",
-                    "access-control-allow-origin": "*",
-                    "access-control-allow-credentials": "true",
-                },
-                response_body='{\n  "args": {}, \n  "headers": {\n    "Accept": "*/*", \n    "Accept-Encoding": "gzip, deflate", \n    "Connection": "keep-alive", \n    "Host": "127.0.0.1:8000", \n    "User-Agent": "python-requests/2.21.0"\n  }, \n  "origin": "127.0.0.1", \n  "url": "http://127.0.0.1:8000/get"\n}\n',
-                response_time=236.530_999_999_999_98,
-            ),
-            assertions=[],
-        )
-    except SyntaxError as e:
-        print("Gracefully handling syntax error")
+exporter = OpenApiv3Exporter(app_config=app_settings)

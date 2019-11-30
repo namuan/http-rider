@@ -3,15 +3,19 @@ import json
 from mistune import markdown
 from pygments.formatters.other import NullFormatter
 
-from ..core import get_variable_tokens, replace_variables, combine_request_headers
-from ..core import styles_from_file
-from ..core.core_settings import app_settings
-from ..core.http_statuses import *
-from ..core.json_data_generator import jdg
-from ..core.json_schema import schema_from_json
-from ..core.safe_rest_api_interactor import rest_api_interactor, ApiWorkerData
-from ..exporters import dict_formatter, highlight_format_json
-from ..model.app_data import (
+from httprider.core import (
+    get_variable_tokens,
+    replace_variables,
+    combine_request_headers,
+)
+from httprider.core import styles_from_file
+from httprider.core.core_settings import app_settings
+from httprider.core.http_statuses import *
+from httprider.core.json_data_generator import jdg
+from httprider.core.json_schema import schema_from_json
+from httprider.core.safe_rest_api_interactor import rest_api_interactor, ApiWorkerData
+from httprider.exporters.common import dict_formatter, highlight_format_json
+from httprider.model.app_data import (
     ApiCall,
     ExchangeRequest,
     HttpExchange,

@@ -4,20 +4,20 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QKeyEvent
 from PyQt5.QtWidgets import *
 
-from ..core.api_call_interactor import api_call_interactor
-from ..model.completer import get_completer_model
-from ..presenters.mocked_response_presenter import MockedResponsePresenter
-from ..core import styles_from_file, split_url_qs
-from ..core.core_settings import app_settings
-from ..core.safe_rest_api_interactor import rest_api_interactor
-from ..exporters import api_request_body_highlighted
-from ..model.app_data import ApiCall, COMMON_HEADERS, HTTP_CONTENT_TYPES
-from ..presenters import AssertionResultPresenter, KeyValueListPresenter
-from ..ui.assertion_builder_dialog import AssertionBuilderDialog
-from ..widgets.completion_line_edit import CompletionLineEdit
-from ..widgets.completion_plain_text import CompletionPlainTextEdit
-from ..widgets.new_tag_entry_input import NewTagEntryLineEdit
-from ..widgets.tag_label_widget import TagLabelWidget
+from httprider.core.api_call_interactor import api_call_interactor
+from httprider.model.completer import get_completer_model
+from httprider.presenters.mocked_response_presenter import MockedResponsePresenter
+from httprider.core import styles_from_file, split_url_qs
+from httprider.core.core_settings import app_settings
+from httprider.core.safe_rest_api_interactor import rest_api_interactor
+from httprider.exporters.common import api_request_body_highlighted
+from httprider.model.app_data import ApiCall, COMMON_HEADERS, HTTP_CONTENT_TYPES
+from httprider.presenters import AssertionResultPresenter, KeyValueListPresenter
+from httprider.ui.assertion_builder_dialog import AssertionBuilderDialog
+from httprider.widgets.completion_line_edit import CompletionLineEdit
+from httprider.widgets.completion_plain_text import CompletionPlainTextEdit
+from httprider.widgets.new_tag_entry_input import NewTagEntryLineEdit
+from httprider.widgets.tag_label_widget import TagLabelWidget
 
 
 class RequestPresenter:

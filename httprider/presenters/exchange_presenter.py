@@ -2,11 +2,11 @@ import logging
 
 from PyQt5.QtWidgets import QHeaderView
 
-from ..core import elapsed_time_formatter, response_code_formatter, styles_from_file
-from ..core.core_settings import app_settings
-from ..exporters import request_body_highlighted, response_body_highlighted
-from ..model.app_data import ApiCall, HttpExchange
-from . import populate_tree_with_kv_dict
+from httprider.core import elapsed_time_formatter, response_code_formatter, styles_from_file
+from httprider.core.core_settings import app_settings
+from httprider.exporters.common import request_body_highlighted, response_body_highlighted
+from httprider.model.app_data import ApiCall, HttpExchange
+from httprider.presenters import populate_tree_with_kv_dict
 
 
 class ExchangePresenter:

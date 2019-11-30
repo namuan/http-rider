@@ -4,6 +4,9 @@ from faker.providers.company.en_US import Provider as CP
 from faker.providers.internet.en_US import Provider as IP
 from faker.providers.misc.en_US import Provider as MP
 from faker.providers.person.en_US import Provider as PP
+from faker.providers.python.en_US import Provider as PythonProvider
+from faker.providers.lorem.en_US import Provider as LoremProvider
+from faker.providers.date_time.en_US import Provider as DTProvider
 
 g = Generator()
 g.add_provider(PP)
@@ -11,7 +14,9 @@ g.add_provider(MP)
 g.add_provider(IP)
 g.add_provider(AP)
 g.add_provider(CP)
-
+g.add_provider(PythonProvider)
+g.add_provider(LoremProvider)
+g.add_provider(DTProvider)
 
 class CustomFaker:
     last_name = g.last_name

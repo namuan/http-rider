@@ -3,7 +3,7 @@ from pygments.lexers.jvm import JavaLexer
 from typing import List
 
 from ..core.core_settings import app_settings
-from ..exporters import *
+from ..exporters.common import *
 from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSource
 from ..codegen.schema_to_java_generator import to_java_function_name
 

@@ -3,7 +3,7 @@ from pygments.lexers.shell import BashLexer
 from typing import List
 
 from ..core.core_settings import app_settings
-from ..exporters import *
+from ..exporters.common import *
 from ..model.app_data import ApiCall, HttpExchange
 
 

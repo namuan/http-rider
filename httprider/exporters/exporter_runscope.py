@@ -10,7 +10,7 @@ from ..core.generators import call_generator_func
 from ..core import gen_uuid
 from ..core.constants import AssertionMatchers, AssertionDataSource
 from ..core.core_settings import app_settings
-from ..exporters import *
+from ..exporters.common import *
 from ..model.app_data import ApiTestCase, HttpExchange, Environment, Assertion
 
 internal_func_map = defaultdict(str)
