@@ -11,7 +11,7 @@ from . import (
     HeadersAssertionPresenter,
     BodyAssertionPresenter,
     AssertionListPresenter,
-    string_to_variable_name,
+    assertion_variable_name,
 )
 
 
@@ -70,7 +70,7 @@ class AssertionBuilderPresenter:
         item = QTreeWidgetItem(
             [
                 AssertionDataSource.REQUEST_BODY.value,
-                string_to_variable_name(
+                assertion_variable_name(
                     self.current.title, AssertionDataSource.REQUEST_BODY.value, selector
                 ),
                 selector,
@@ -87,7 +87,7 @@ class AssertionBuilderPresenter:
         item = QTreeWidgetItem(
             [
                 AssertionDataSource.RESPONSE_BODY.value,
-                string_to_variable_name(
+                assertion_variable_name(
                     self.current.title,
                     AssertionDataSource.RESPONSE_BODY.value,
                     selector,
@@ -103,7 +103,7 @@ class AssertionBuilderPresenter:
         item = QTreeWidgetItem(
             [
                 AssertionDataSource.REQUEST_HEADER.value,
-                string_to_variable_name(
+                assertion_variable_name(
                     self.current.title,
                     AssertionDataSource.REQUEST_HEADER.value,
                     selected_item.text(0),
@@ -119,7 +119,7 @@ class AssertionBuilderPresenter:
         item = QTreeWidgetItem(
             [
                 AssertionDataSource.RESPONSE_HEADER.value,
-                string_to_variable_name(
+                assertion_variable_name(
                     self.current.title,
                     AssertionDataSource.RESPONSE_HEADER.value,
                     selected_item.text(0),

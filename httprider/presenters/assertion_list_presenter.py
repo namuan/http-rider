@@ -15,7 +15,7 @@ from ..core import elapsed_time_formatter, response_code_formatter
 from ..core.constants import ASSERTION_TYPE_ROLE, AssertionMatchers
 from ..core.core_settings import app_settings
 from ..model.app_data import Assertion, AssertionDataSource, HttpExchange
-from . import string_to_variable_name
+from . import assertion_variable_name
 
 
 class NoEditDelegate(QStyledItemDelegate):
@@ -64,7 +64,7 @@ class AssertionListPresenter:
         item = QTreeWidgetItem(
             [
                 AssertionDataSource.RESPONSE_CODE.value,
-                string_to_variable_name(
+                assertion_variable_name(
                     api_call.title, AssertionDataSource.RESPONSE_CODE.value, ""
                 ),
                 None,
@@ -85,7 +85,7 @@ class AssertionListPresenter:
         item = QTreeWidgetItem(
             [
                 AssertionDataSource.RESPONSE_TIME.value,
-                string_to_variable_name(
+                assertion_variable_name(
                     api_call.title, AssertionDataSource.RESPONSE_TIME.value, ""
                 ),
                 None,
