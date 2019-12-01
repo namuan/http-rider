@@ -1,7 +1,7 @@
 import logging
 
-from ..core.core_settings import app_settings
-from ..core.worker_pool import single_worker
+from httprider.core.core_settings import app_settings
+from httprider.core.worker_pool import single_worker
 
 
 class MainPresenter:

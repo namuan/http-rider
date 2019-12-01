@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from httprider.core.api_call_interactor import api_call_interactor
-from ..core.core_settings import app_settings
-from ..ui.import_text_dialog import ImportTextDialog
+from httprider.core.core_settings import app_settings
+from httprider.ui.import_text_dialog import ImportTextDialog
 
 
 class ImporterPresenter:

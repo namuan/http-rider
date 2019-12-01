@@ -3,8 +3,8 @@ import functools
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 
-from ..core.constants import REPLACEMENTS
-from ..model.app_data import ApiTestCase
+from httprider.core.constants import REPLACEMENTS
+from httprider.model.app_data import ApiTestCase
 
 
 def apply_replacements(replacements, input_str):

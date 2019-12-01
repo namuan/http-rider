@@ -4,11 +4,11 @@ from pathlib import Path
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItem
 
-from ..exporters import exporter_plugins
-from ..core import styles_from_file
-from ..core.constants import EXPORTER_COMBO_ROLE
-from ..core.core_settings import app_settings
-from ..model.app_data import ApiCall
+from httprider.exporters import exporter_plugins
+from httprider.core import styles_from_file
+from httprider.core.constants import EXPORTER_COMBO_ROLE
+from httprider.core.core_settings import app_settings
+from httprider.model.app_data import ApiCall
 
 
 class DisplayMode(Enum):

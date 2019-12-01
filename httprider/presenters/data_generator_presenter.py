@@ -1,4 +1,4 @@
-from ..core.generators import *
+from httprider.core.generators import *
 
 
 class DataGeneratorPresenter:

@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QShortcut
 
 
 def shortcut_items(self):
-    cancel_progress = QShortcut(QKeySequence("Ctrl+C"), self)
+    cancel_progress = QShortcut(QKeySequence("Ctrl+."), self)
     cancel_progress.activated.connect(self.progress_dialog.cancel_processing)
 
     http_url = QShortcut(QKeySequence("Ctrl+L"), self)

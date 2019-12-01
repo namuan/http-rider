@@ -3,10 +3,10 @@ import logging
 from PyQt5.QtWidgets import QListWidget
 
 from httprider.core.api_call_interactor import api_call_interactor
-from ..core import str_to_bool
-from ..core.constants import AssertionMatchers
-from ..core.core_settings import app_settings
-from ..model.app_data import Assertion, ApiTestCase, HttpExchange, ApiCall
+from httprider.core import str_to_bool
+from httprider.core.constants import AssertionMatchers
+from httprider.core.core_settings import app_settings
+from httprider.model.app_data import Assertion, ApiTestCase, HttpExchange, ApiCall
 
 
 class AssertionResultPresenter:

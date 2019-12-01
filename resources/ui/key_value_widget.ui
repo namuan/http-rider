@@ -41,13 +41,24 @@
    </item>
    <item>
     <widget class="QLineEdit" name="txt_name">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
       <string notr="true"/>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="CompletionLineEdit" name="txt_value"/>
+    <widget class="CompletionLineEdit" name="txt_value">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QToolButton" name="btn_remove_header">

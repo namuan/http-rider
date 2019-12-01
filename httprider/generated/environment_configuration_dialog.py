@@ -14,7 +14,10 @@ class Ui_EnvironmentsConfigurationDialog(object):
     def setupUi(self, EnvironmentsConfigurationDialog):
         EnvironmentsConfigurationDialog.setObjectName("EnvironmentsConfigurationDialog")
         EnvironmentsConfigurationDialog.setWindowModality(QtCore.Qt.WindowModal)
-        EnvironmentsConfigurationDialog.resize(1020, 820)
+        EnvironmentsConfigurationDialog.resize(1020, 723)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        EnvironmentsConfigurationDialog.setFont(font)
         EnvironmentsConfigurationDialog.setModal(True)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(EnvironmentsConfigurationDialog)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")

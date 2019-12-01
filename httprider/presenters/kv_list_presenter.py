@@ -2,11 +2,11 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import *
 
-from ..core import DynamicStringData
-from ..core.core_settings import app_settings
-from ..model.completer import get_completer_model
-from ..widgets.key_value_widget import KeyValueWidget
-from ..widgets.new_header_widget import NewItemButtonWidget
+from httprider.core import DynamicStringData
+from httprider.core.core_settings import app_settings
+from httprider.model.completer import get_completer_model
+from httprider.widgets.key_value_widget import KeyValueWidget
+from httprider.widgets.new_header_widget import NewItemButtonWidget
 
 
 class KeyValueListPresenter:

@@ -1,8 +1,8 @@
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 
-from ..core.core_settings import app_settings
-from ..model.app_data import HttpExchange, ApiCall
+from httprider.core.core_settings import app_settings
+from httprider.model.app_data import HttpExchange, ApiCall
 
 
 class ApiCallsHistoryPresenter:

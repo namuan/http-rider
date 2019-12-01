@@ -1,12 +1,15 @@
 import logging
 
+from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QHeaderView
+from mistune import markdown
 
 from httprider.core import elapsed_time_formatter, response_code_formatter, styles_from_file
 from httprider.core.core_settings import app_settings
 from httprider.exporters.common import request_body_highlighted, response_body_highlighted
 from httprider.model.app_data import ApiCall, HttpExchange
 from httprider.presenters import populate_tree_with_kv_dict
+from httprider.presenters.common import markdown_request, markdown_response
 
 
 class ExchangePresenter:
@@ -69,6 +72,13 @@ class ExchangePresenter:
         """Called when all API calls are removed from list"""
         self.view.frame_exchange.hide()
 
+    def render_raw_exchange(self, plain_text_widget, raw_content):
+        plain_text_widget.clear()
+        plain_text_widget.appendHtml(markdown(raw_content))
+        txt_cursor: QTextCursor = plain_text_widget.textCursor()
+        txt_cursor.movePosition(QTextCursor.Start)
+        plain_text_widget.setTextCursor(txt_cursor)
+
     def refresh(self, api_call_id, exchange: HttpExchange):
         api_call = app_settings.app_data_cache.get_api_call(api_call_id)
         logging.info(f"API Call {api_call_id} - Updating Exchange View: {api_call}")
@@ -79,6 +89,8 @@ class ExchangePresenter:
             f"{http_request.http_method} {http_request.http_url}"
         )
         self.view.lbl_request_time.setText(http_request.request_time)
+
+        self.render_raw_exchange(self.view.txt_raw_request, markdown_request(exchange))
 
         self.view.txt_exchange_request_body.setHtml(
             request_body_highlighted(http_request)
@@ -102,6 +114,9 @@ class ExchangePresenter:
         if http_response.is_mocked:
             elapsed_time = "Mocked Response"
         self.view.lbl_response_latency.setText(elapsed_time)
+
+        self.render_raw_exchange(self.view.txt_raw_response, markdown_response(exchange))
+
         self.view.txt_response_body.setHtml(response_body_highlighted(http_response))
 
         populate_tree_with_kv_dict(

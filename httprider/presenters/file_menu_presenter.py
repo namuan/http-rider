@@ -1,8 +1,8 @@
 import os
 import shutil
 
-from ..core.core_settings import app_settings
-from ..model.user_data import UserProject, SavedState
+from httprider.core.core_settings import app_settings
+from httprider.model.user_data import UserProject, SavedState
 
 
 class FileMenuPresenter:

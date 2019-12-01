@@ -1,7 +1,6 @@
 import json
 
 from mistune import markdown
-from pygments.formatters.other import NullFormatter
 
 from httprider.core import (
     get_variable_tokens,
@@ -14,7 +13,6 @@ from httprider.core.http_statuses import *
 from httprider.core.json_data_generator import jdg
 from httprider.core.json_schema import schema_from_json
 from httprider.core.safe_rest_api_interactor import rest_api_interactor, ApiWorkerData
-from httprider.exporters.common import dict_formatter, highlight_format_json
 from httprider.model.app_data import (
     ApiCall,
     ExchangeRequest,
@@ -22,6 +20,7 @@ from httprider.model.app_data import (
     ExchangeRequestType,
     ExchangeResponse,
 )
+from presenters.common import markdown_request, markdown_response
 
 
 class FuzzTestPresenter:
@@ -72,43 +71,13 @@ class FuzzTestPresenter:
         self.__display_results()
 
     def __output_generator(self, exchange: HttpExchange):
-        request_headers = dict_formatter(
-            exchange.request.headers.items(), "{k}: {v}", splitter="\n"
-        )
-        response_headers = dict_formatter(
-            exchange.response.headers.items(), "{k}: {v}", splitter="\n"
-        )
-        request_qp = {k: v for k, v in exchange.request.query_params.items()}
-        http_url = exchange.request.http_url
-        if request_qp:
-            http_url = (
-                http_url + "?" + dict_formatter(request_qp.items(), "{k}={v}", "&")
-            )
-
-        formatted_request_body = highlight_format_json(
-            exchange.request.request_body, formatter=NullFormatter()
-        )
-        formatted_response_body = highlight_format_json(
-            exchange.response.response_body, formatter=NullFormatter()
-        )
+        request_rendered = markdown_request(exchange)
+        response_rendered = markdown_response(exchange)
 
         content = f"""### Request
-**{exchange.request.http_method} {http_url}**
-```
-{request_headers}
-```
-```
-{formatted_request_body or " "}
-```
+{request_rendered}
 ### Response
-
-**HTTP {exchange.response.http_status_code} ({exchange.response.elapsed_time} ms)**
-```
-{response_headers}
-```
-```
-{formatted_response_body or " "}
-```
+{response_rendered}
 =======================================================================================
         """
         return content

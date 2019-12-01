@@ -14,6 +14,9 @@ class Ui_UtilityFunctionsDialog(object):
     def setupUi(self, UtilityFunctionsDialog):
         UtilityFunctionsDialog.setObjectName("UtilityFunctionsDialog")
         UtilityFunctionsDialog.resize(422, 345)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        UtilityFunctionsDialog.setFont(font)
         self.buttonBox = QtWidgets.QDialogButtonBox(UtilityFunctionsDialog)
         self.buttonBox.setGeometry(QtCore.QRect(70, 310, 341, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)

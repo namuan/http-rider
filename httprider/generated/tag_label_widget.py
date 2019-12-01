@@ -14,6 +14,9 @@ class Ui_TagLabelWidget(object):
     def setupUi(self, TagLabelWidget):
         TagLabelWidget.setObjectName("TagLabelWidget")
         TagLabelWidget.resize(194, 36)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        TagLabelWidget.setFont(font)
         self.frame = QtWidgets.QFrame(TagLabelWidget)
         self.frame.setGeometry(QtCore.QRect(1, 1, 190, 31))
         self.frame.setFrameShape(QtWidgets.QFrame.Box)

@@ -10,8 +10,13 @@
     <x>0</x>
     <y>0</y>
     <width>1020</width>
-    <height>820</height>
+    <height>723</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Environments</string>

@@ -4,10 +4,10 @@ from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 
 from httprider.core.environment_interactor import environment_interactor
-from ..core import random_environment
-from ..core.core_settings import app_settings
-from ..model.app_data import Environment
-from ..presenters import KeyValueListPresenter
+from httprider.core import random_environment
+from httprider.core.core_settings import app_settings
+from httprider.model.app_data import Environment
+from httprider.presenters import KeyValueListPresenter
 
 
 class EnvironmentConfigurationPresenter:

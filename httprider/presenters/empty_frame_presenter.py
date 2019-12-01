@@ -1,6 +1,6 @@
 from httprider.core.api_call_interactor import api_call_interactor
 from httprider.core.app_state_interactor import AppStateInteractor
-from ..model.app_data import ApiCall
+from httprider.model.app_data import ApiCall
 
 
 class EmptyFramePresenter:

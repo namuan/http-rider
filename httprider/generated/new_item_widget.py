@@ -14,6 +14,9 @@ class Ui_NewItemWidget(object):
     def setupUi(self, NewItemWidget):
         NewItemWidget.setObjectName("NewItemWidget")
         NewItemWidget.resize(417, 44)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        NewItemWidget.setFont(font)
         self.horizontalLayout = QtWidgets.QHBoxLayout(NewItemWidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.btn_new_header = QtWidgets.QPushButton(NewItemWidget)

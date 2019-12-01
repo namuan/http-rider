@@ -11,10 +11,10 @@ from PyQt5.QtWidgets import (
     QPushButton,
 )
 
-from ..core import elapsed_time_formatter, response_code_formatter
-from ..core.constants import ASSERTION_TYPE_ROLE, AssertionMatchers
-from ..core.core_settings import app_settings
-from ..model.app_data import Assertion, AssertionDataSource, HttpExchange
+from httprider.core import elapsed_time_formatter, response_code_formatter
+from httprider.core.constants import ASSERTION_TYPE_ROLE, AssertionMatchers
+from httprider.core.core_settings import app_settings
+from httprider.model.app_data import Assertion, AssertionDataSource, HttpExchange
 from . import assertion_variable_name
 
 

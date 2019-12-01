@@ -5,9 +5,9 @@ from pathlib import Path
 import cattr
 from typing import List
 
-from ..model.app_data import Environment
-from ..core.core_settings import app_settings
-from ..model.user_data import UserProject
+from httprider.model.app_data import Environment
+from httprider.core.core_settings import app_settings
+from httprider.model.user_data import UserProject
 
 
 class EnvironmentMenuPresenter:

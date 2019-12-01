@@ -1,7 +1,7 @@
 import logging
 
-from ..core.core_settings import app_settings
-from ..model.app_configuration import AppConfiguration
+from httprider.core.core_settings import app_settings
+from httprider.model.app_configuration import AppConfiguration
 
 
 class ConfigPresenter:

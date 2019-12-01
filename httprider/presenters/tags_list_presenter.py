@@ -1,6 +1,6 @@
 from httprider.core.app_state_interactor import AppStateInteractor
-from ..core.constants import *
-from ..core.core_settings import app_settings
+from httprider.core.constants import *
+from httprider.core.core_settings import app_settings
 
 
 class TagsListPresenter:

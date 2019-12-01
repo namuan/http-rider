@@ -15,9 +15,15 @@ class Ui_Configuration(object):
         Configuration.setObjectName("Configuration")
         Configuration.setWindowModality(QtCore.Qt.WindowModal)
         Configuration.resize(486, 255)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        Configuration.setFont(font)
         Configuration.setModal(True)
         self.tabWidget = QtWidgets.QTabWidget(Configuration)
         self.tabWidget.setGeometry(QtCore.QRect(10, 10, 451, 191))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.tabWidget.setFont(font)
         self.tabWidget.setObjectName("tabWidget")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
@@ -69,7 +75,7 @@ class Ui_Configuration(object):
         self.btn_cancel_configuration.setObjectName("btn_cancel_configuration")
 
         self.retranslateUi(Configuration)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(Configuration)
 
     def retranslateUi(self, Configuration):

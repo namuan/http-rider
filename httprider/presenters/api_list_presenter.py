@@ -7,15 +7,15 @@ from PyQt5.QtGui import *
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtWidgets import *
 
-from ..core.api_call_interactor import api_call_interactor
-from ..core.app_state_interactor import AppStateInteractor
-from ..core.constants import *
-from ..core.core_settings import app_settings
-from ..core.safe_rest_api_interactor import rest_api_interactor
-from ..external.rest_api_connector import http_exchange_signals
-from ..model.app_data import ApiCall
-from ..presenters import AssertionResultPresenter
-from ..widgets.api_calls_list_view import ApiCallItemDelegate
+from httprider.core.api_call_interactor import api_call_interactor
+from httprider.core.app_state_interactor import AppStateInteractor
+from httprider.core.constants import *
+from httprider.core.core_settings import app_settings
+from httprider.core.safe_rest_api_interactor import rest_api_interactor
+from httprider.external.rest_api_connector import http_exchange_signals
+from httprider.model.app_data import ApiCall
+from httprider.presenters import AssertionResultPresenter
+from httprider.widgets.api_calls_list_view import ApiCallItemDelegate
 
 PADDING = 5
 

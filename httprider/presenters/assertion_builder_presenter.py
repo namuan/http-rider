@@ -3,10 +3,10 @@ import re
 
 from PyQt5.QtWidgets import QTreeWidgetItem
 
-from ..core import data_type
-from ..core.constants import AssertionDataSource, ASSERTION_TYPE_ROLE
-from ..core.core_settings import app_settings
-from ..model.app_data import ApiCall, HttpExchange
+from httprider.core import data_type
+from httprider.core.constants import AssertionDataSource, ASSERTION_TYPE_ROLE
+from httprider.core.core_settings import app_settings
+from httprider.model.app_data import ApiCall, HttpExchange
 from . import (
     HeadersAssertionPresenter,
     BodyAssertionPresenter,

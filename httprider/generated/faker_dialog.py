@@ -14,6 +14,9 @@ class Ui_DataGeneratorDialog(object):
     def setupUi(self, DataGeneratorDialog):
         DataGeneratorDialog.setObjectName("DataGeneratorDialog")
         DataGeneratorDialog.resize(422, 345)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        DataGeneratorDialog.setFont(font)
         self.buttonBox = QtWidgets.QDialogButtonBox(DataGeneratorDialog)
         self.buttonBox.setGeometry(QtCore.QRect(70, 310, 341, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
