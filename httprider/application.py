@@ -1,5 +1,6 @@
 import sys
 
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import *
 
 from . import __version__, __appname__, __desktopid__
@@ -10,6 +11,9 @@ from .ui.main_window import MainWindow
 def configure_theme(application):
     application.setStyle(LightTheme())
     application.style().load_stylesheet()
+    current_font: QFont = application.font()
+    current_font.setPointSize(11)
+    application.setFont(current_font)
 
 
 def main():

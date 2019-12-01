@@ -151,11 +151,6 @@
             <verstretch>1</verstretch>
            </sizepolicy>
           </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -178,11 +173,6 @@
               </item>
               <item>
                <widget class="QPlainTextEdit" name="txt_api_description">
-                <property name="font">
-                 <font>
-                  <pointsize>10</pointsize>
-                 </font>
-                </property>
                 <property name="placeholderText">
                  <string>Request description ...</string>
                 </property>
@@ -237,13 +227,7 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <widget class="CompletionPlainTextEdit" name="txt_request_body">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-             </widget>
+             <widget class="CompletionPlainTextEdit" name="txt_request_body"/>
             </item>
            </layout>
           </widget>
@@ -287,21 +271,10 @@
              </layout>
             </item>
             <item>
-             <widget class="QListWidget" name="lst_mocked_response_headers">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-             </widget>
+             <widget class="QListWidget" name="lst_mocked_response_headers"/>
             </item>
             <item>
              <widget class="CompletionPlainTextEdit" name="txt_mocked_response_body">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
               <property name="placeholderText">
                <string/>
               </property>
@@ -333,11 +306,6 @@
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QLabel" name="label">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>Assertions</string>
             </property>
@@ -353,13 +321,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QListWidget" name="list_assertion_results">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-         </widget>
+         <widget class="QListWidget" name="list_assertion_results"/>
         </item>
        </layout>
       </widget>
@@ -402,11 +364,6 @@
           </property>
           <item>
            <widget class="QLabel" name="lbl_request_time">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>request time</string>
             </property>
@@ -415,31 +372,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
-          <item>
-           <widget class="QLabel" name="lbl_request_title">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Title</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
          <widget class="QTabWidget" name="tabWidget_3">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -447,18 +380,9 @@
            <attribute name="title">
             <string>Raw</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_17">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
-             <widget class="QPlainTextEdit" name="txt_raw_request">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
+             <widget class="QPlainTextEdit" name="txt_raw_request"/>
             </item>
            </layout>
           </widget>
@@ -469,11 +393,6 @@
            <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
              <widget class="QTreeWidget" name="tbl_exchange_request_headers">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
               <column>
                <property name="text">
                 <string>Name</string>
@@ -501,11 +420,6 @@
            <layout class="QHBoxLayout" name="horizontalLayout_13">
             <item>
              <widget class="QTreeWidget" name="tbl_exchange_request_params">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
               <column>
                <property name="text">
                 <string>Name</string>
@@ -533,11 +447,6 @@
            <layout class="QHBoxLayout" name="horizontalLayout_15">
             <item>
              <widget class="QTreeWidget" name="tbl_exchange_form_params">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
               <column>
                <property name="text">
                 <string>Name</string>
@@ -578,53 +487,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_8">
-          <item>
-           <widget class="QLabel" name="lbl_response_code">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>&lt;&lt; Response Code &gt;&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="lbl_response_latency">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Latency</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
          <widget class="QTabWidget" name="tabWidget_4">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -635,11 +498,6 @@
            <layout class="QHBoxLayout" name="horizontalLayout_18">
             <item>
              <widget class="QPlainTextEdit" name="txt_raw_response">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
               <property name="readOnly">
                <bool>true</bool>
               </property>
@@ -654,11 +512,6 @@
            <layout class="QHBoxLayout" name="horizontalLayout_10">
             <item>
              <widget class="QTreeWidget" name="tbl_response_headers">
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
               <column>
                <property name="text">
                 <string>Name</string>

@@ -4,9 +4,16 @@ from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QHeaderView
 from mistune import markdown
 
-from httprider.core import elapsed_time_formatter, response_code_formatter, styles_from_file
+from httprider.core import (
+    elapsed_time_formatter,
+    response_code_formatter,
+    styles_from_file,
+)
 from httprider.core.core_settings import app_settings
-from httprider.exporters.common import request_body_highlighted, response_body_highlighted
+from httprider.exporters.common import (
+    request_body_highlighted,
+    response_body_highlighted,
+)
 from httprider.model.app_data import ApiCall, HttpExchange
 from httprider.presenters import populate_tree_with_kv_dict
 from httprider.presenters.common import markdown_request, markdown_response
@@ -85,11 +92,7 @@ class ExchangePresenter:
         self.current = api_call
         http_request = exchange.request
         # Request rendering
-        self.view.lbl_request_title.setText(
-            f"{http_request.http_method} {http_request.http_url}"
-        )
         self.view.lbl_request_time.setText(http_request.request_time)
-
         self.render_raw_exchange(self.view.txt_raw_request, markdown_request(exchange))
 
         self.view.txt_exchange_request_body.setHtml(
@@ -108,14 +111,14 @@ class ExchangePresenter:
         http_response = exchange.response
 
         # Response rendering
-        response_code = response_code_formatter(http_response.http_status_code)
-        self.view.lbl_response_code.setText(f"HTTP {response_code}")
-        elapsed_time = elapsed_time_formatter(http_response.elapsed_time)
         if http_response.is_mocked:
-            elapsed_time = "Mocked Response"
-        self.view.lbl_response_latency.setText(elapsed_time)
+            self.view.txt_raw_response.setStyleSheet("background-color: #e0d7d7;")
+        else:
+            self.view.txt_raw_response.setStyleSheet("background-color: white;")
 
-        self.render_raw_exchange(self.view.txt_raw_response, markdown_response(exchange))
+        self.render_raw_exchange(
+            self.view.txt_raw_response, markdown_response(exchange)
+        )
 
         self.view.txt_response_body.setHtml(response_body_highlighted(http_response))
 

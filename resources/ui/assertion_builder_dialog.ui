@@ -41,7 +41,6 @@
          <widget class="QLabel" name="label">
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -56,11 +55,6 @@
         </item>
         <item>
          <widget class="QTreeWidget" name="tbl_request_headers">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
           <column>
            <property name="text">
             <string>Name</string>
@@ -87,11 +81,6 @@
             <verstretch>1</verstretch>
            </sizepolicy>
           </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
@@ -117,7 +106,6 @@
          <widget class="QLabel" name="label_2">
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -132,11 +120,6 @@
         </item>
         <item>
          <widget class="QTreeWidget" name="tbl_response_headers">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
           <column>
            <property name="text">
             <string>Name</string>
@@ -162,11 +145,6 @@
             <horstretch>0</horstretch>
             <verstretch>1</verstretch>
            </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
           </property>
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
@@ -194,11 +172,6 @@
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="label_3">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
            <property name="text">
             <string>Assertions</string>
            </property>
@@ -235,11 +208,6 @@
        </item>
        <item>
         <widget class="QTreeWidget" name="tbl_assertions">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
          <attribute name="headerStretchLastSection">
           <bool>false</bool>
          </attribute>

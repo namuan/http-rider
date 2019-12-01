@@ -1,5 +1,6 @@
 from pygments.formatters.other import NullFormatter
 
+from httprider.core import elapsed_time_formatter
 from httprider.exporters.common import dict_formatter, highlight_format_json
 from model.app_data import HttpExchange
 
@@ -30,6 +31,10 @@ def markdown_request(exchange: HttpExchange):
 
 
 def markdown_response(exchange: HttpExchange):
+    elapsed_time = elapsed_time_formatter(exchange.response.elapsed_time)
+    if exchange.response.is_mocked:
+        elapsed_time = "Mocked Response"
+
     response_headers = dict_formatter(
         exchange.response.headers.items(), "{k}: {v}", splitter="\n"
     )
@@ -38,11 +43,11 @@ def markdown_response(exchange: HttpExchange):
         exchange.response.response_body, formatter=NullFormatter()
     )
     return f"""
-**HTTP {exchange.response.http_status_code} ({exchange.response.elapsed_time} ms)**
+**HTTP {exchange.response.http_status_code} ({elapsed_time})**
 ```
 {response_headers}
 ```
-```
+```json
 {formatted_response_body or " "}
 ```
     """
