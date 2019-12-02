@@ -1,12 +1,13 @@
-import attr
-from pygments.lexers.testing import GherkinLexer
 from typing import List
 
-from ..core import evaluate_functions
-from ..core.constants import AssertionMatchers
-from ..core.core_settings import app_settings
-from ..exporters.common import *
-from ..model.app_data import (
+import attr
+from pygments.lexers.testing import GherkinLexer
+
+from httprider.core import evaluate_nested_functions
+from httprider.core.constants import AssertionMatchers
+from httprider.core.core_settings import app_settings
+from httprider.exporters.common import *
+from httprider.model.app_data import (
     ApiCall,
     HttpExchange,
     ApiTestCase,
@@ -36,7 +37,7 @@ def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
 
     statements.append(f"Scenario: {api_call.title}")
     for hk, hv in api_call.enabled_headers().items():
-        converted_hv = evaluate_functions(convert_internal_variable(hv))
+        converted_hv = evaluate_nested_functions(convert_internal_variable(hv))
         if first_statement:
             statements.append(f"    Given I set {hk} header to {converted_hv}")
             first_statement = False
@@ -45,7 +46,7 @@ def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
 
     request_body = api_call.request_body_without_comments()
     if request_body:
-        converted_request_body = evaluate_functions(
+        converted_request_body = evaluate_nested_functions(
             convert_internal_variable(request_body)
         )
         if first_statement:

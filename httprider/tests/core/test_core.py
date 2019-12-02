@@ -1,5 +1,6 @@
-from httprider.core import abbreviate, template_sub
+from httprider.core import abbreviate, template_sub, evaluate_nested_functions
 from uuid import UUID
+from httprider.core.util_functions import str_to_base64e
 
 
 def test_abbreviate():
@@ -26,3 +27,16 @@ def test_template_sub_random_string_generator():
     output = template_sub(inp, {})
     assert len(output) == 10
     assert isinstance(output, str)
+
+
+def test_template_sub_base_64_encoder():
+    inp_str = "Hello"
+    inp = '${utils("base64Encode", "' + inp_str + '")}'
+    output = template_sub(inp, {})
+    assert output == str_to_base64e(inp_str)
+
+
+def test_evaluate_nested_functions():
+    inp = '${utils("base64Encode", "${custom("**#-#**", True)}")}'
+    output = evaluate_nested_functions(inp)
+    assert "base64Encode" not in output

@@ -186,13 +186,20 @@ def replace_variables(vars_tokens, exchange_request):
 
 
 def template_sub(templated_string, tokens):
-    return evaluate_functions(
+    return evaluate_nested_functions(
         Template(templated_string).safe_substitute(tokens) if templated_string else ""
     )
 
 
-def evaluate_functions(templated_string):
-    return internal_func_rgx.sub(return_func_result, templated_string, count=0)
+def evaluate_nested_functions(templated_string):
+    match_found = internal_func_rgx.search(templated_string)
+    while match_found:
+        templated_string = internal_func_rgx.sub(
+            return_func_result, templated_string, count=0
+        )
+        match_found = internal_func_rgx.search(templated_string)
+
+    return templated_string
 
 
 def import_modules(package):

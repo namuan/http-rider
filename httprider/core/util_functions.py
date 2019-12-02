@@ -1,6 +1,6 @@
 import base64
 
-from ..core.constants import UTF_8_ENCODING
+from httprider.core.constants import UTF_8_ENCODING
 
 
 def str_to_base64e(arg, url_safe=False):
