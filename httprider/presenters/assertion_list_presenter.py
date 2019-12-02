@@ -97,24 +97,23 @@ class AssertionListPresenter:
 
     def add_item(self, item: QTreeWidgetItem, selected_matcher=None, current_data=None):
         existing_item = self.__assertion_exist(item)
-
-        if not existing_item:
-            item.setFlags(item.flags() ^ Qt.ItemIsEditable)
-            self.view.addTopLevelItem(item)
-            item_qombo = QComboBox(self.view)
-            item_qombo.addItems([e.value for e in AssertionMatchers])
-            if selected_matcher:
-                item_qombo.setCurrentText(selected_matcher)
-            else:
-                item_qombo.setCurrentText("---")
-
-            self.view.setItemWidget(item, 4, item_qombo)
-            delete_btn = QPushButton("X")
-            delete_btn.setFlat(True)
-            delete_btn.pressed.connect(partial(self.on_delete_assertion, item))
-            self.view.setItemWidget(item, 6, delete_btn)
-        else:
+        if existing_item:
             existing_item.setData(3, Qt.DisplayRole, current_data)
+
+        item.setFlags(item.flags() ^ Qt.ItemIsEditable)
+        self.view.addTopLevelItem(item)
+        item_qombo = QComboBox(self.view)
+        item_qombo.addItems([e.value for e in AssertionMatchers])
+        if selected_matcher:
+            item_qombo.setCurrentText(selected_matcher)
+        else:
+            item_qombo.setCurrentText("---")
+
+        self.view.setItemWidget(item, 4, item_qombo)
+        delete_btn = QPushButton("X")
+        delete_btn.setFlat(True)
+        delete_btn.pressed.connect(partial(self.on_delete_assertion, item))
+        self.view.setItemWidget(item, 6, delete_btn)
 
     def on_delete_assertion(self, item: QTreeWidgetItem):
         index: QModelIndex = self.view.indexFromItem(item)
