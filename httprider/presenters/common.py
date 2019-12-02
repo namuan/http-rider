@@ -2,7 +2,7 @@ from pygments.formatters.other import NullFormatter
 
 from httprider.core import elapsed_time_formatter
 from httprider.exporters.common import dict_formatter, highlight_format_json
-from model.app_data import HttpExchange
+from httprider.model.app_data import HttpExchange
 
 
 def markdown_request(exchange: HttpExchange):

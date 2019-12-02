@@ -20,7 +20,7 @@ from httprider.model.app_data import (
     ExchangeRequestType,
     ExchangeResponse,
 )
-from presenters.common import markdown_request, markdown_response
+from httprider.presenters.common import markdown_request, markdown_response
 
 
 class FuzzTestPresenter:

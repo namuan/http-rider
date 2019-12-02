@@ -2,8 +2,8 @@ import random
 import re
 import string
 
-from .faker_config import fake
-from ..core.util_functions import *
+from httprider.core.faker_config import fake
+from httprider.core.util_functions import *
 
 # Internal function arguments must be one or more of
 # \d (digit) \w (word) \" (") \* (*) \# (#) \- (-) \, (,) \s (space) \= (base64)
