@@ -13,7 +13,6 @@ from string import Template
 from urllib import parse
 
 import attr
-import genson
 from PyQt5.QtCore import QFile, QFileInfo, QTextStream
 from PyQt5.QtWidgets import qApp
 from jsonpath_ng.ext import parse as jsonpath_parse
