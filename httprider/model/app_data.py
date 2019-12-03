@@ -145,14 +145,14 @@ class ExchangeRequest(object):
         )
 
     @classmethod
-    def from_api_call(cls, api_call: ApiCall):
+    def from_api_call(cls, api_call: ApiCall, hide_secrets=True):
         return cls(
             request_time=datetime.now().strftime("%c"),
             http_method=api_call.http_method,
             http_url=api_call.http_url,
-            headers=api_call.enabled_headers(),
-            query_params=api_call.enabled_query_params(),
-            form_params=api_call.enabled_form_params(),
+            headers=api_call.enabled_headers(hide_secrets),
+            query_params=api_call.enabled_query_params(hide_secrets),
+            form_params=api_call.enabled_form_params(hide_secrets),
             request_body=api_call.request_body_without_comments(),
         )
 

@@ -4,11 +4,11 @@ from queue import Queue, Empty
 import attr
 from typing import Any
 
-from .core_settings import app_settings
-from ..core import random_environment, combine_request_headers
-from ..core.api_call_interactor import api_call_interactor
-from ..external.rest_api_connector import RestApiConnector, http_exchange_signals
-from ..model.app_data import ApiCall, ExchangeRequest, HttpExchange, ExchangeResponse
+from httprider.core.core_settings import app_settings
+from httprider.core import random_environment, combine_request_headers
+from httprider.core.api_call_interactor import api_call_interactor
+from httprider.external.rest_api_connector import RestApiConnector, http_exchange_signals
+from httprider.model.app_data import ApiCall, ExchangeRequest, HttpExchange, ExchangeResponse
 
 
 @attr.s(auto_attribs=True)
@@ -36,7 +36,7 @@ class SafeRestApiInteractor:
         http_exchange_signals.interrupt.connect(self.__on_halt_processing)
 
     def make_http_call(self, api_call: ApiCall):
-        exchange_request = ExchangeRequest.from_api_call(api_call)
+        exchange_request = ExchangeRequest.from_api_call(api_call, hide_secrets=False)
         exchange_request.headers = combine_request_headers(
             app_settings, exchange_request
         )
