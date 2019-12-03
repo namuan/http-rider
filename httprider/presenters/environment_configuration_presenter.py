@@ -23,6 +23,7 @@ class EnvironmentConfigurationPresenter:
         app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(
             self.refresh
         )
+        app_settings.app_data_writer.signals.environments_imported.connect(self.refresh)
 
         # ui events
         self.parent_view.finished.connect(self.on_close)

@@ -8,6 +8,7 @@ from typing import List
 from httprider.model.app_data import Environment
 from httprider.core.core_settings import app_settings
 from httprider.model.user_data import UserProject
+from httprider.core.environment_interactor import environment_interactor
 
 
 class EnvironmentMenuPresenter:
@@ -42,6 +43,6 @@ class EnvironmentMenuPresenter:
             envs_json = json.loads(envs_raw_json)
             envs: List[Environment] = cattr.structure(envs_json, List[Environment])
             for env in envs:
-                app_settings.app_data_writer.update_environment_in_db(env)
+                environment_interactor.add_environment(env)
 
-            app_settings.app_data_writer.signals.environment_added.emit("")
+            app_settings.app_data_writer.signals.environments_imported.emit()

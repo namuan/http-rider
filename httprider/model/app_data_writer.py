@@ -34,6 +34,7 @@ class AppDataSignals(QObject):
     selected_exchange_changed = pyqtSignal(HttpExchange)
     project_info_updated = pyqtSignal(ProjectInfo)
     app_state_updated = pyqtSignal()
+    environments_imported = pyqtSignal()
 
 
 class AppDataWriter(AppData):

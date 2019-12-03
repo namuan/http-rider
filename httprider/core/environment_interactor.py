@@ -7,7 +7,7 @@ from httprider.model.app_data import Environment
 
 class EnvironmentInteractor:
     def add_environment(self, environment: Environment):
-        environment.id = gen_uuid()
+        environment.id = environment.id or gen_uuid()
         app_settings.app_data_writer.update_environment_in_db(environment)
         logging.info(f"Environment Added :: {environment.id} -> {environment}")
         app_settings.app_data_writer.signals.environment_added.emit(environment.id)
