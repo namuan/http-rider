@@ -75,6 +75,8 @@ def gen_array(var_name, json_schema):
 
 
 def code_from_schema(root_clazz, json_schema):
+    if not json_schema:
+        return ""
     schema_type = json_schema.get("type", "object")
     if schema_type == "array":
         return gen_array("Root", json_schema)

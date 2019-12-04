@@ -6,10 +6,7 @@ from httprider.model.app_data import HttpExchange
 
 
 def markdown_request(exchange: HttpExchange):
-    request_qp = {k: v for k, v in exchange.request.query_params.items()}
-    http_url = exchange.request.http_url
-    if request_qp:
-        http_url = http_url + "?" + dict_formatter(request_qp.items(), "{k}={v}", "&")
+    http_url = exchange.request.full_encoded_url
 
     request_headers = dict_formatter(
         exchange.request.headers.items(), "{k}: {v}", splitter="\n"

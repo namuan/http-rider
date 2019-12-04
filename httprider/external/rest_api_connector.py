@@ -2,6 +2,7 @@ import logging
 import time
 
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
+from requests import PreparedRequest
 from requests.exceptions import ConnectionError
 from urllib3.exceptions import NewConnectionError
 
@@ -61,6 +62,14 @@ class RestApiConnector(QThread):
     def on_halt_processing(self):
         self.halt_processing = True
         logging.info(f"Received interrupt signal on {self.exchange}")
+
+    def update_request(self, current_exchange_request: ExchangeRequest, prepared_request: PreparedRequest):
+        """Update exchange request with prepared request"""
+        current_exchange_request.full_encoded_url = prepared_request.url
+        current_exchange_request.headers = {k: v for k, v in prepared_request.headers.items()}
+        current_exchange_request.request_body = prepared_request.body
+        current_exchange_request.http_method = prepared_request.method
+        return current_exchange_request
 
     def convert_response(self, raw_response):
         res = ExchangeResponse(
@@ -125,6 +134,7 @@ class RestApiConnector(QThread):
                 response = self.requester.make_request(
                     req.http_method, req.http_url, kwargs
                 )
+                self.exchange.request = self.update_request(self.exchange.request, response.request)
                 self.exchange.response = self.convert_response(response)
 
                 for fk, fv in kwargs.get("files", {}).items():

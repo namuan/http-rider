@@ -128,6 +128,7 @@ class ExchangeRequest(object):
     request_time: str = ""
     http_method: str = "GET"
     http_url: str = "Request not available"
+    full_encoded_url: str = 'Request not available'
     headers: Dict = {}
     query_params: Dict = {}
     form_params: Dict = {}
