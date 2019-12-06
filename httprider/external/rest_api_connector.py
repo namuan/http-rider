@@ -127,6 +127,7 @@ class RestApiConnector(QThread):
                 logging.info(
                     f"<== Returning mocked Response ({self.exchange.api_call_id})"
                 )
+                self.exchange.request.full_encoded_url = self.exchange.request.url_with_qp()
                 self.exchange.response = replace_response_variables(
                     var_tokens, self.exchange.response
                 )

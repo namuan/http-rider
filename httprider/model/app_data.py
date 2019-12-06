@@ -128,7 +128,7 @@ class ExchangeRequest(object):
     request_time: str = ""
     http_method: str = "GET"
     http_url: str = "Request not available"
-    full_encoded_url: str = 'Request not available'
+    full_encoded_url: str = "Request not available"
     headers: Dict = {}
     query_params: Dict = {}
     form_params: Dict = {}
@@ -144,6 +144,16 @@ class ExchangeRequest(object):
             self.request_type
             and self.request_type.value == ExchangeRequestType.FUZZED.value
         )
+
+    def url_with_qp(self):
+        if self.query_params:
+            return (
+                self.http_url
+                + "?"
+                + "&".join([f"{k}={v}" for k, v in self.query_params.items()])
+            )
+        else:
+            return self.http_url
 
     @classmethod
     def from_api_call(cls, api_call: ApiCall, hide_secrets=True):

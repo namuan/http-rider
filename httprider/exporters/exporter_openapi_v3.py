@@ -109,7 +109,8 @@ class OpenApiv3Exporter:
 
                 if last_exchange.response.response_body:
                     generated_response_schema = schema_from_json(
-                        last_exchange.response.response_body
+                        last_exchange.response.response_body,
+                        remove_required=True
                     )
                     response_content_type = last_exchange.response.content_type()
 
