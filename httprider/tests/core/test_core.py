@@ -30,10 +30,11 @@ def test_template_sub_random_string_generator():
 
 
 def test_template_sub_base_64_encoder():
-    inp_str = "Hello"
-    inp = '${utils("base64Encode", "' + inp_str + '")}'
-    output = template_sub(inp, {})
-    assert output == str_to_base64e(inp_str)
+    inp_str = ["Hello", "some:asdsad"]
+    for s in inp_str:
+        inp = '${utils("base64Encode", "' + s + '")}'
+        output = template_sub(inp, {})
+        assert output == str_to_base64e(s)
 
 
 def test_evaluate_nested_functions():

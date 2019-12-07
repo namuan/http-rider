@@ -6,9 +6,9 @@ from httprider.core.faker_config import fake
 from httprider.core.util_functions import *
 
 # Internal function arguments must be one or more of
-# \d (digit) \w (word) \" (") \* (*) \# (#) \- (-) \, (,) \s (space) \= (base64)
+# \d (digit) \w (word) \" (") \* (*) \# (#) \- (-) \, (,) \s (space) \= \: (base64)
 internal_func_rgx = re.compile(
-    r"\$\{(\w+)\(([\d\w\"\*\#\-\,\.\/\=\s]*)\)\}", re.MULTILINE | re.IGNORECASE
+    r"\$\{(\w+)\(([\d\w\"\*\#\-\,\.\/\=\s\:]*)\)\}", re.MULTILINE | re.IGNORECASE
 )
 
 address_attributes_map = {
