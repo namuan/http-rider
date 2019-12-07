@@ -67,7 +67,7 @@ class RestApiConnector(QThread):
         """Update exchange request with prepared request"""
         current_exchange_request.full_encoded_url = prepared_request.url
         current_exchange_request.headers = {k: v for k, v in prepared_request.headers.items()}
-        current_exchange_request.request_body = prepared_request.body
+        current_exchange_request.request_body = prepared_request.body or ""
         current_exchange_request.http_method = prepared_request.method
         return current_exchange_request
 
