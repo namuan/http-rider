@@ -75,12 +75,12 @@ class ExchangePresenter:
         )
         if api_call_exchanges:
             last_exchange = api_call_exchanges[-1]
-            self.refresh(api_call.id, last_exchange)
+            self.refresh(last_exchange)
         else:
-            self.refresh(api_call.id, HttpExchange(api_call.id))
+            self.refresh(HttpExchange(api_call.id))
 
     def on_exchange_changed(self, exchange: HttpExchange):
-        self.refresh(exchange.api_call_id, exchange)
+        self.refresh(exchange)
 
     def cleanup(self):
         """Called when all API calls are removed from list"""
@@ -93,7 +93,8 @@ class ExchangePresenter:
         txt_cursor.movePosition(QTextCursor.Start)
         plain_text_widget.setTextCursor(txt_cursor)
 
-    def refresh(self, api_call_id, exchange: HttpExchange):
+    def refresh(self, exchange: HttpExchange):
+        api_call_id = exchange.api_call_id
         api_call = app_settings.app_data_cache.get_api_call(api_call_id)
         logging.info(f"API Call {api_call_id} - Updating Exchange View: {api_call}")
         self.current = api_call

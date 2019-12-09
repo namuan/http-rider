@@ -83,7 +83,8 @@ class RequestPresenter:
 
         self.assertion_result_presenter = AssertionResultPresenter(self.view)
 
-    def on_exchange_added(self, api_call_id, exchange):
+    def on_exchange_added(self, exchange):
+        api_call_id = exchange.api_call_id
         api_test_case = app_settings.app_data_cache.get_api_test_case(api_call_id)
         self.assertion_result_presenter.evaluate(api_test_case, exchange)
 

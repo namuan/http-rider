@@ -38,7 +38,7 @@ class ApiCallsHistoryPresenter:
         self.current_exchange = last_exchange
         self.refresh()
 
-    def refresh_on_new_exchange(self, _, exchange: HttpExchange):
+    def refresh_on_new_exchange(self, exchange: HttpExchange):
         self.current_exchange = exchange
         self.refresh()
 

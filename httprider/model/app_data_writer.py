@@ -16,7 +16,7 @@ from ..model.app_data import (
 
 
 class AppDataSignals(QObject):
-    exchange_added = pyqtSignal(str, HttpExchange)
+    exchange_added = pyqtSignal(HttpExchange)
     exchange_changed = pyqtSignal(str, HttpExchange)
     api_call_added = pyqtSignal(str, ApiCall)
     api_call_removed = pyqtSignal(list)
@@ -84,7 +84,7 @@ class AppDataWriter(AppData):
         exchange.id = gen_uuid()
         self.update_http_exchange_in_db(exchange)
         logging.info(f"API {exchange.api_call_id} - Added http exchange {exchange.id}")
-        self.signals.exchange_added.emit(exchange.api_call_id, exchange)
+        self.signals.exchange_added.emit(exchange)
 
     def update_http_exchange(self, exchange: HttpExchange):
         logging.info(

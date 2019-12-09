@@ -118,10 +118,10 @@ class AppDataCache:
     def get_selected_environment(self, environment_name):
         return self.environments.get(environment_name, Environment.from_json())
 
-    def on_api_http_exchange_added(self, api_call_id, exchange):
-        http_exchanges = self.api_http_exchanges.get(api_call_id, [])
+    def on_api_http_exchange_added(self, exchange):
+        http_exchanges = self.api_http_exchanges.get(exchange.api_call_id, [])
         http_exchanges.append(exchange)
-        self.api_http_exchanges[api_call_id] = http_exchanges
+        self.api_http_exchanges[exchange.api_call_id] = http_exchanges
 
     def on_api_http_exchange_updated(self, exchange_id, exchange):
         api_call_id = exchange.api_call_id
