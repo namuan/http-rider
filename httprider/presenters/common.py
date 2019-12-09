@@ -48,3 +48,16 @@ def markdown_response(exchange: HttpExchange):
 {formatted_response_body or " "}
 ```
     """
+
+
+def md_request_response_generator(exchange: HttpExchange):
+    request_rendered = markdown_request(exchange)
+    response_rendered = markdown_response(exchange)
+
+    content = f"""### Request
+{request_rendered}
+### Response
+{response_rendered}
+=======================================================================================
+        """
+    return content

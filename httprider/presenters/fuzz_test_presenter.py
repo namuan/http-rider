@@ -20,7 +20,7 @@ from httprider.model.app_data import (
     ExchangeRequestType,
     ExchangeResponse,
 )
-from httprider.presenters.common import markdown_request, markdown_response
+from httprider.presenters.common import md_request_response_generator
 
 
 class FuzzTestPresenter:
@@ -70,18 +70,6 @@ class FuzzTestPresenter:
         self.view.txt_fuzz_output.clear()
         self.__display_results()
 
-    def __output_generator(self, exchange: HttpExchange):
-        request_rendered = markdown_request(exchange)
-        response_rendered = markdown_response(exchange)
-
-        content = f"""### Request
-{request_rendered}
-### Response
-{response_rendered}
-=======================================================================================
-        """
-        return content
-
     def __update_results(self, exchange_response: ExchangeResponse):
         if is_2xx(exchange_response.http_status_code):
             self.results_2xx += 1
@@ -101,7 +89,7 @@ class FuzzTestPresenter:
         self.view.lbl_fuzz_results.setText(output)
 
     def __on_result(self, exchange: HttpExchange):
-        md = self.__output_generator(exchange)
+        md = md_request_response_generator(exchange)
         self.view.txt_fuzz_output.appendHtml(markdown(md))
         self.__update_results(exchange.response)
 

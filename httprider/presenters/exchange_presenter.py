@@ -22,6 +22,7 @@ from httprider.presenters.common import markdown_request, markdown_response
 class ExchangePresenter:
     def __init__(self, parent_view):
         self.current: ApiCall = None
+        self.current_exchange: HttpExchange = None
         self.view = parent_view
         self.pyg_styles = styles_from_file(":/themes/pyg.css")
         self.view.txt_exchange_request_body.document().setDefaultStyleSheet(
@@ -67,7 +68,7 @@ class ExchangePresenter:
         )
 
     def open_share_preview(self):
-        self.view.share_preview_dialog.show_exchange_preview()
+        self.view.share_preview_dialog.show_exchange_preview(self.current_exchange)
 
     def display_last_exchange(self, api_call: ApiCall):
         api_call_exchanges = app_settings.app_data_cache.get_api_call_exchanges(
@@ -94,6 +95,7 @@ class ExchangePresenter:
         plain_text_widget.setTextCursor(txt_cursor)
 
     def refresh(self, exchange: HttpExchange):
+        self.current_exchange = exchange
         api_call_id = exchange.api_call_id
         api_call = app_settings.app_data_cache.get_api_call(api_call_id)
         logging.info(f"API Call {api_call_id} - Updating Exchange View: {api_call}")
