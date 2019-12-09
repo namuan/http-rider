@@ -4,18 +4,21 @@ import traceback
 
 from PyQt5.QtGui import QDesktopServices, QCloseEvent, QIcon
 
-from ..presenters import *
-from ..generated.base_window import Ui_MainWindow
-from ..ui.code_generator_dialog import CodeGeneratorDialog
-from ..ui.fuzz_test_dialog import FuzzTestDialog
-from ..ui.configuration_dialog import ConfigurationDialog
-from ..ui.environment_configuration_dialog import EnvironmentConfigurationDialog
-from ..ui.menus import menu_items
-from ..ui.shortcuts import shortcut_items
-from ..ui.progress_dialog import ProgressDialog
-from ..ui.project_info_dialog import ProjectInfoDialog
-from ..ui.toolbar import tool_bar_items
-from ..ui.updater_dialog import Updater
+from httprider.presenters import *
+from httprider.generated.base_window import Ui_MainWindow
+from httprider.ui.code_generator_dialog import CodeGeneratorDialog
+from httprider.ui.fuzz_test_dialog import FuzzTestDialog
+from httprider.ui.configuration_dialog import ConfigurationDialog
+from httprider.ui.environment_configuration_dialog import EnvironmentConfigurationDialog
+from httprider.ui.share_preview_dialog import SharePreviewDialog
+
+# Import menu items after dialogs
+from httprider.ui.menus import menu_items
+from httprider.ui.shortcuts import shortcut_items
+from httprider.ui.progress_dialog import ProgressDialog
+from httprider.ui.project_info_dialog import ProjectInfoDialog
+from httprider.ui.toolbar import tool_bar_items
+from httprider.ui.updater_dialog import Updater
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -52,6 +55,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.project_info_dialog = ProjectInfoDialog(self)
         self.code_generator_dialog = CodeGeneratorDialog(self)
         self.fuzz_test_dialog = FuzzTestDialog(self)
+        self.share_preview_dialog = SharePreviewDialog(self)
 
         # Initialise Components
         menu_items(self)

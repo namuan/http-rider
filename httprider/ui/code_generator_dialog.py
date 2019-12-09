@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QDialog
 
-from ..generated.code_generator_dialog import Ui_CodeGeneratorDialog
-from ..presenters import CodeGeneratorPresenter
-from ..presenters.code_generator_presenter import DisplayMode
+from httprider.generated.code_generator_dialog import Ui_CodeGeneratorDialog
+from httprider.presenters import CodeGeneratorPresenter
+from httprider.presenters.code_generator_presenter import DisplayMode
 
 
 class CodeGeneratorDialog(QDialog, Ui_CodeGeneratorDialog):

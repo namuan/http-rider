@@ -54,6 +54,10 @@ class ExchangePresenter:
             1, QHeaderView.Stretch
         )
 
+        # ui events
+        self.view.btn_share_preview.clicked.connect(self.open_share_preview)
+
+        # domain events
         app_settings.app_data_writer.signals.exchange_added.connect(self.refresh)
         app_settings.app_data_reader.signals.api_call_change_selection.connect(
             self.display_last_exchange
@@ -61,6 +65,9 @@ class ExchangePresenter:
         app_settings.app_data_writer.signals.selected_exchange_changed.connect(
             self.on_exchange_changed
         )
+
+    def open_share_preview(self):
+        self.view.share_preview_dialog.show_exchange_preview()
 
     def display_last_exchange(self, api_call: ApiCall):
         api_call_exchanges = app_settings.app_data_cache.get_api_call_exchanges(
