@@ -18,10 +18,10 @@ def markdown_request(exchange: HttpExchange):
 
     return f"""
 **{exchange.request.http_method} {http_url}**
-```
+```sh
 {request_headers}
 ```
-```
+```json
 {formatted_request_body or " "}
 ```    
     """
@@ -41,7 +41,7 @@ def markdown_response(exchange: HttpExchange):
     )
     return f"""
 **HTTP {exchange.response.http_status_code} ({elapsed_time})**
-```
+```sh
 {response_headers}
 ```
 ```json
@@ -50,7 +50,7 @@ def markdown_response(exchange: HttpExchange):
     """
 
 
-def md_request_response_generator(exchange: HttpExchange):
+def md_request_response_generator(exchange: HttpExchange, include_sep=True):
     request_rendered = markdown_request(exchange)
     response_rendered = markdown_response(exchange)
 
@@ -58,6 +58,6 @@ def md_request_response_generator(exchange: HttpExchange):
 {request_rendered}
 ### Response
 {response_rendered}
-=======================================================================================
-        """
+{"=======================================================================================" if include_sep else ""}    
+    """
     return content

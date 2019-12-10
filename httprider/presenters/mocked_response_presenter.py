@@ -1,8 +1,9 @@
 from PyQt5.QtGui import QStandardItemModel
 
-from httprider.core import styles_from_file, str_to_int
+from httprider.core import str_to_int
 from httprider.core.constants import COMMON_HEADERS, HTTP_CONTENT_TYPES
 from httprider.core.core_settings import app_settings
+from httprider.core.pygment_styles import pyg_styles
 from httprider.exporters.common import highlight_format_json
 from httprider.model.app_data import MockedResponse
 from httprider.model.completer import get_completer_model
@@ -21,10 +22,7 @@ class MockedResponsePresenter:
             value_completions=HTTP_CONTENT_TYPES,
         )
 
-        self.pyg_styles = styles_from_file(":/themes/pyg.css")
-        self.parent_view.txt_mocked_response_body.document().setDefaultStyleSheet(
-            self.pyg_styles
-        )
+        self.parent_view.txt_mocked_response_body.document().setDefaultStyleSheet(pyg_styles())
 
         app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(
             self.refresh_completer

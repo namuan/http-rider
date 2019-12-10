@@ -13,7 +13,6 @@ from string import Template
 from urllib import parse
 
 import attr
-from PyQt5.QtCore import QFile, QFileInfo, QTextStream
 from PyQt5.QtWidgets import qApp
 from jsonpath_ng.ext import parse as jsonpath_parse
 
@@ -208,16 +207,6 @@ def import_modules(package):
             package.__path__, package.__name__ + "."
         )
     }
-
-
-def styles_from_file(filename):
-    if QFileInfo(filename).exists():
-        qss_file = QFile(filename)
-        qss_file.open(QFile.ReadOnly | QFile.Text)
-        content = QTextStream(qss_file).readAll()
-        return content
-    else:
-        return None
 
 
 def split_url_qs(url: str):

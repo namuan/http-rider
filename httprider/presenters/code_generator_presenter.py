@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItem
 
 from httprider.exporters import exporter_plugins
-from httprider.core import styles_from_file
+from httprider.core.pygment_styles import pyg_styles
 from httprider.core.constants import EXPORTER_COMBO_ROLE
 from httprider.core.core_settings import app_settings
 from httprider.model.app_data import ApiCall
@@ -22,8 +22,7 @@ class CodeGeneratorPresenter:
         self.main_window = parent
         self.mode = DisplayMode.SINGLE_API
         self.selected_api: ApiCall = None
-        self.pyg_styles = styles_from_file(":/themes/pyg.css")
-        self.view.txt_generated_code.document().setDefaultStyleSheet(self.pyg_styles)
+        self.view.txt_generated_code.document().setDefaultStyleSheet(pyg_styles())
 
         self.view.cmb_exporters.currentIndexChanged[int].connect(
             self.on_exporter_change

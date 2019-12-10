@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor, QPalette
 from PyQt5.QtWidgets import QProxyStyle, qApp
 
-from ..core import styles_from_file
+from httprider.core.pygment_styles import styles_from_file
 
 
 class LightTheme(QProxyStyle):

@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>753</width>
+    <width>984</width>
     <height>468</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Review the following request/response</string>
+        <string>Review the following request/response but note that any changes made in the preview will be discarded when the dialog is closed.</string>
        </property>
       </widget>
      </item>

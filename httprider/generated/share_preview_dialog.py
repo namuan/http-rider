@@ -14,7 +14,7 @@ class Ui_SharePreviewDialog(object):
     def setupUi(self, SharePreviewDialog):
         SharePreviewDialog.setObjectName("SharePreviewDialog")
         SharePreviewDialog.setWindowModality(QtCore.Qt.WindowModal)
-        SharePreviewDialog.resize(753, 468)
+        SharePreviewDialog.resize(984, 468)
         SharePreviewDialog.setModal(True)
         self.verticalLayout = QtWidgets.QVBoxLayout(SharePreviewDialog)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -48,6 +48,6 @@ class Ui_SharePreviewDialog(object):
     def retranslateUi(self, SharePreviewDialog):
         _translate = QtCore.QCoreApplication.translate
         SharePreviewDialog.setWindowTitle(_translate("SharePreviewDialog", "Dialog"))
-        self.label.setText(_translate("SharePreviewDialog", "Review the following request/response"))
+        self.label.setText(_translate("SharePreviewDialog", "Review the following request/response but note that any changes made in the preview will be discarded when the dialog is closed."))
         self.btn_show_preview.setText(_translate("SharePreviewDialog", "Preview"))
         self.btn_export_code.setText(_translate("SharePreviewDialog", "Share"))

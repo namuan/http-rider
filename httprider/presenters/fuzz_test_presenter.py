@@ -7,11 +7,11 @@ from httprider.core import (
     replace_variables,
     combine_request_headers,
 )
-from httprider.core import styles_from_file
 from httprider.core.core_settings import app_settings
 from httprider.core.http_statuses import *
 from httprider.core.json_data_generator import jdg
 from httprider.core.json_schema import schema_from_json
+from httprider.core.pygment_styles import pyg_styles
 from httprider.core.safe_rest_api_interactor import rest_api_interactor, ApiWorkerData
 from httprider.model.app_data import (
     ApiCall,
@@ -28,8 +28,7 @@ class FuzzTestPresenter:
         self.view = view
         self.main_window = parent
         self.selected_api: ApiCall = None
-        self.pyg_styles = styles_from_file(":/themes/pyg.css")
-        self.view.txt_fuzz_output.document().setDefaultStyleSheet(self.pyg_styles)
+        self.view.txt_fuzz_output.document().setDefaultStyleSheet(pyg_styles())
         self.__clear_results()
 
         # ui events

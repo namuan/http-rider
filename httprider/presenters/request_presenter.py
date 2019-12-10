@@ -4,15 +4,16 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QKeyEvent
 from PyQt5.QtWidgets import *
 
+from httprider.core import split_url_qs
 from httprider.core.api_call_interactor import api_call_interactor
-from httprider.model.completer import get_completer_model
-from httprider.presenters.mocked_response_presenter import MockedResponsePresenter
-from httprider.core import styles_from_file, split_url_qs
 from httprider.core.core_settings import app_settings
+from httprider.core.pygment_styles import pyg_styles
 from httprider.core.safe_rest_api_interactor import rest_api_interactor
 from httprider.exporters.common import api_request_body_highlighted
 from httprider.model.app_data import ApiCall, COMMON_HEADERS, HTTP_CONTENT_TYPES
+from httprider.model.completer import get_completer_model
 from httprider.presenters import AssertionResultPresenter, KeyValueListPresenter
+from httprider.presenters.mocked_response_presenter import MockedResponsePresenter
 from httprider.ui.assertion_builder_dialog import AssertionBuilderDialog
 from httprider.widgets.completion_line_edit import CompletionLineEdit
 from httprider.widgets.completion_plain_text import CompletionPlainTextEdit
@@ -42,8 +43,7 @@ class RequestPresenter:
 
         self.mocked_response_presenter = MockedResponsePresenter(self, self.view)
 
-        self.pyg_styles = styles_from_file(":/themes/pyg.css")
-        self.view.txt_request_body.document().setDefaultStyleSheet(self.pyg_styles)
+        self.view.txt_request_body.document().setDefaultStyleSheet(pyg_styles())
 
         self.assertion_builder_dialog = AssertionBuilderDialog(self.view)
         self.txt_new_tag_input = NewTagEntryLineEdit(self.view)

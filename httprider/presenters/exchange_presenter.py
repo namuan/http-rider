@@ -4,12 +4,8 @@ from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QHeaderView
 from mistune import markdown
 
-from httprider.core import (
-    elapsed_time_formatter,
-    response_code_formatter,
-    styles_from_file,
-)
 from httprider.core.core_settings import app_settings
+from httprider.core.pygment_styles import pyg_styles
 from httprider.exporters.common import (
     request_body_highlighted,
     response_body_highlighted,
@@ -24,11 +20,8 @@ class ExchangePresenter:
         self.current: ApiCall = None
         self.current_exchange: HttpExchange = None
         self.view = parent_view
-        self.pyg_styles = styles_from_file(":/themes/pyg.css")
-        self.view.txt_exchange_request_body.document().setDefaultStyleSheet(
-            self.pyg_styles
-        )
-        self.view.txt_response_body.document().setDefaultStyleSheet(self.pyg_styles)
+        self.view.txt_exchange_request_body.document().setDefaultStyleSheet(pyg_styles())
+        self.view.txt_response_body.document().setDefaultStyleSheet(pyg_styles())
 
         self.view.tbl_exchange_request_headers.header().setSectionResizeMode(
             0, QHeaderView.Stretch
