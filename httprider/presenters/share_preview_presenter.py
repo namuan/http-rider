@@ -60,7 +60,9 @@ class SharePreviewPresenter:
         html_md = markdown(self.md_content)
         self.view.txt_preview_share.setHtml(html_md)
         self.view.btn_show_preview.setText("Edit")
+        self.view.txt_preview_share.setReadOnly(True)
 
     def render_raw_markdown(self):
         self.view.txt_preview_share.setPlainText(self.md_content)
         self.view.btn_show_preview.setText("Preview")
+        self.view.txt_preview_share.setReadOnly(False)
