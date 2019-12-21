@@ -3,6 +3,7 @@ import mistune
 from httprider.core.core_settings import app_settings
 from httprider.core.markdown_renderer import HighlightRenderer
 from httprider.core.pygment_styles import pyg_styles
+from httprider.interactors.share_service_interactor import ShareServiceInteractor
 from httprider.model.app_data import HttpExchange, ApiCall
 from httprider.presenters.common import md_request_response_generator
 
@@ -17,21 +18,50 @@ class SharePreviewPresenter:
         self.selected_exchange = None
         self.edit_view = True
         self.md_content = ""
+        self.share_service_interactor = ShareServiceInteractor(self.view)
 
         self.view.txt_preview_share.document().setDefaultStyleSheet(pyg_styles())
 
         # ui events
         self.view.btn_show_preview.clicked.connect(self.render_preview)
+        self.view.btn_share_exchange.clicked.connect(self.share_exchange)
+
+        # domain events
+        app_settings.app_data_writer.signals.exchange_share_created.connect(self.on_share_created)
+        app_settings.app_data_writer.signals.exchange_share_failed.connect(self.on_share_failed)
+
+    def on_share_failed(self, error_message):
+        self.view.lbl_share_location.setText(error_message)
+        self.on_share_exchange_saved()
+
+    def on_share_created(self, share_location_url):
+        share_location_href = "Shared document: <a href=\"{0}\">{0}</a>".format(share_location_url)
+        self.view.lbl_share_location.setText(share_location_href)
+        self.on_share_exchange_saved()
+
+    def share_exchange(self):
+        self.view.btn_share_exchange.setEnabled(False)
+        self.view.lbl_share_location.setText("Creating document ...")
+        if self.edit_view:
+            self.update_cached_markdown()
+
+        markdown_html = markdown(self.md_content)
+        self.share_service_interactor.create_document(markdown_html)
+
+    def on_share_exchange_saved(self):
+        self.view.btn_share_exchange.setEnabled(True)
+
+    def update_cached_markdown(self):
+        self.md_content = self.view.txt_preview_share.toPlainText()
 
     def render_preview(self):
-        if self.edit_view:
-            raw_md = self.view.txt_preview_share.toPlainText()
-            self.md_content = raw_md
+        self.edit_view = not self.edit_view
+
+        if not self.edit_view:
+            self.update_cached_markdown()
             self.render_html_markdown()
         else:
             self.render_raw_markdown()
-
-        self.edit_view = not self.edit_view
 
     def prepend_api_call(self, api_call: ApiCall, raw_md):
         return f"""## {api_call.title}
@@ -41,6 +71,7 @@ class SharePreviewPresenter:
         """
 
     def refresh(self):
+        self.view.lbl_share_location.setText("")
         api_call = app_settings.app_data_cache.get_api_call(
             self.selected_exchange.api_call_id
         )

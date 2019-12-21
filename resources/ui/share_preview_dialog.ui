@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>984</width>
+    <width>1010</width>
     <height>468</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Review the following request/response but note that any changes made in the preview will be discarded when the dialog is closed.</string>
+        <string>Review/Edit the following request/response but note that any changes made in the preview will be discarded when the dialog is closed.</string>
        </property>
       </widget>
      </item>
@@ -55,7 +55,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btn_export_code">
+      <widget class="QPushButton" name="btn_share_exchange">
        <property name="font">
         <font>
          <pointsize>10</pointsize>
@@ -67,6 +67,19 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lbl_share_location">
+     <property name="text">
+      <string>Share location will appear here</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QTextEdit" name="txt_preview_share"/>

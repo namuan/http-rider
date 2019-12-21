@@ -1,3 +1,4 @@
+import base64
 import ast
 import codecs
 import functools
@@ -271,3 +272,15 @@ def strip_comments(request_body):
 
 def mask_secret(str_val):
     return "*" * len(str_val)
+
+
+def str_to_bytes(input_str: str):
+    return bytes(input_str, encoding="utf-8")
+
+
+def bytes_to_str(input_bytes: bytes):
+    return input_bytes.decode(encoding="utf-8")
+
+
+def str_to_base64_encoded_bytes(input_str) -> bytes:
+    return base64.standard_b64encode(str_to_bytes(input_str))

@@ -7,12 +7,12 @@ from PyQt5.QtWidgets import qApp
 from typing import Any, Union
 
 from httprider.model.app_configuration import AppConfiguration
-from ..core import str_to_bool, random_project_name
-from ..model.app_data_cache import AppDataCache
-from ..model.app_data_reader import AppDataReader
-from ..model.app_data_writer import AppDataWriter
-from ..model.storage import Storage
-from ..model.user_data import UserProject, SavedState
+from httprider.core import str_to_bool, random_project_name
+from httprider.model.app_data_cache import AppDataCache
+from httprider.model.app_data_reader import AppDataReader
+from httprider.model.app_data_writer import AppDataWriter
+from httprider.model.storage import Storage
+from httprider.model.user_data import UserProject, SavedState
 
 CURRENT_PROJECT_STATE_KEY = "currentProjectState"
 CURRENT_PROJECT_LOCATION_KEY = "currentProjectLocation"
@@ -23,6 +23,7 @@ STARTUP_CHECK_KEY = "startupCheck"
 WINDOW_STATE_KEY = "windowState"
 GEOMETRY_KEY = "geometry"
 REQUEST_TIMEOUT_SECS = "requestTimeoutSecs"
+PRINT_SHARE_SERVER = "printShareServer"
 
 
 class CoreSettings:
@@ -90,6 +91,7 @@ class CoreSettings:
         self.settings.setValue(HTTP_PROXY_KEY, app_config.http_proxy)
         self.settings.setValue(HTTPS_PROXY_KEY, app_config.https_proxy)
         self.settings.setValue(REQUEST_TIMEOUT_SECS, app_config.timeout_in_secs)
+        self.settings.setValue(PRINT_SHARE_SERVER, app_config.print_server)
         self.settings.sync()
 
     def load_configuration(self):
@@ -110,6 +112,9 @@ class CoreSettings:
         )
         app_config.timeout_in_secs = self.settings.value(
             REQUEST_TIMEOUT_SECS, AppConfiguration.timeout_in_secs
+        )
+        app_config.print_server = self.settings.value(
+            PRINT_SHARE_SERVER, AppConfiguration.print_server
         )
         return app_config
 

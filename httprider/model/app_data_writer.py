@@ -35,6 +35,8 @@ class AppDataSignals(QObject):
     project_info_updated = pyqtSignal(ProjectInfo)
     app_state_updated = pyqtSignal()
     environments_imported = pyqtSignal()
+    exchange_share_created = pyqtSignal(str)
+    exchange_share_failed = pyqtSignal(str)
 
 
 class AppDataWriter(AppData):

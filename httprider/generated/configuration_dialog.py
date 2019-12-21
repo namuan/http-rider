@@ -67,6 +67,15 @@ class Ui_Configuration(object):
         self.chk_updates_startup.setChecked(True)
         self.chk_updates_startup.setObjectName("chk_updates_startup")
         self.tabWidget.addTab(self.update, "")
+        self.tab_3 = QtWidgets.QWidget()
+        self.tab_3.setObjectName("tab_3")
+        self.label_4 = QtWidgets.QLabel(self.tab_3)
+        self.label_4.setGeometry(QtCore.QRect(15, 21, 101, 20))
+        self.label_4.setObjectName("label_4")
+        self.txt_print_server = QtWidgets.QLineEdit(self.tab_3)
+        self.txt_print_server.setGeometry(QtCore.QRect(120, 20, 311, 21))
+        self.txt_print_server.setObjectName("txt_print_server")
+        self.tabWidget.addTab(self.tab_3, "")
         self.btn_save_configuration = QtWidgets.QPushButton(Configuration)
         self.btn_save_configuration.setGeometry(QtCore.QRect(360, 210, 113, 32))
         self.btn_save_configuration.setObjectName("btn_save_configuration")
@@ -75,7 +84,7 @@ class Ui_Configuration(object):
         self.btn_cancel_configuration.setObjectName("btn_cancel_configuration")
 
         self.retranslateUi(Configuration)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Configuration)
 
     def retranslateUi(self, Configuration):
@@ -90,5 +99,8 @@ class Ui_Configuration(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Configuration", "HTTP Proxy"))
         self.chk_updates_startup.setText(_translate("Configuration", "Check for updates on start up"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.update), _translate("Configuration", "Updates"))
+        self.label_4.setText(_translate("Configuration", "Server"))
+        self.txt_print_server.setText(_translate("Configuration", "http://localhost:8080"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("Configuration", "Print/Share"))
         self.btn_save_configuration.setText(_translate("Configuration", "OK"))
         self.btn_cancel_configuration.setText(_translate("Configuration", "Cancel"))

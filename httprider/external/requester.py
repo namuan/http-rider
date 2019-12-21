@@ -1,7 +1,7 @@
 import requests
 from requests.adapters import HTTPAdapter
 
-from ..core.core_settings import app_settings
+from httprider.core.core_settings import app_settings
 
 MAX_RETRIES = 0
 
