@@ -30,10 +30,10 @@ class ShareServiceInteractor:
 
     def create_document(self, raw_html):
         app_config = app_settings.load_configuration()
+        url: QUrl = QUrl(app_config.print_server + "/prints")
         base64_encoded = str_to_base64_encoded_bytes(raw_html)
         jdoc = {"document": bytes_to_str(base64_encoded)}
         jdoc_str = json.dumps(jdoc)
-        url: QUrl = QUrl(app_config.print_server + "/prints")
         self.buffer.setData(str_to_bytes(jdoc_str))
         network_request = QNetworkRequest(url)
         network_request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")

@@ -4,4 +4,4 @@ class AppConfiguration:
     https_proxy: str = ""
     tls_verification: bool = True
     timeout_in_secs: str = "10"
-    print_server: str = "http://localhost:8080"
+    print_server: str = "https://printrider.bettercallbots.com"

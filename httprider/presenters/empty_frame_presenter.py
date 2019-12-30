@@ -11,7 +11,7 @@ class EmptyFramePresenter:
 
     def on_btn_add_request(self):
         api_call = ApiCall()
-        api_call.http_url = "http://127.0.0.1:8000/get"
+        api_call.http_url = "https://httpbin.org/get"
         api_call.http_method = "GET"
         api_call.title = "Get httpbin"
         api_call.description = "Httpbin call to get request data"
