@@ -1,6 +1,8 @@
 
 # HTTP Rider  
   
+[![Gitter](https://badges.gitter.im/http-rider/community.svg)](https://gitter.im/http-rider/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 Simple and Powerful cross-platform Rest API client  
   
 See https://twitter.com/deskriders_twt for development updates.  
