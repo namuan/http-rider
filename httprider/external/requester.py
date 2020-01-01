@@ -1,3 +1,4 @@
+import logging
 import requests
 from requests.adapters import HTTPAdapter
 
@@ -23,6 +24,9 @@ class Requester:
 
         try:
             self.session.mount(resource, HTTPAdapter(max_retries=MAX_RETRIES))
-            return requests.request(http_method, resource, **kwargs)
+            return requests.request(http_method, resource, **kwargs), None
         except requests.exceptions.HTTPError as e:
-            raise ConnectionError(e)
+            return requests.Response(), ConnectionError(e)
+        except Exception as e:
+            logging.error(e)
+            return requests.Response(), e

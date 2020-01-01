@@ -228,7 +228,17 @@ class HttpExchange(object):
     request: ExchangeRequest = ExchangeRequest()
     type: str = HTTP_EXCHANGE_RECORD_TYPE
     response: ExchangeResponse = ExchangeResponse()
+    response_status: ExchangeResponseStatus = ExchangeResponseStatus.NONE
     assertions: List[Assertion] = []
+
+    def is_passed(self):
+        return self.response_status == ExchangeResponseStatus.PASSED.value
+
+    def passed(self):
+        self.response_status = ExchangeResponseStatus.PASSED
+
+    def failed(self):
+        self.response_status = ExchangeResponseStatus.FAILED
 
     @classmethod
     def from_json(cls, json_obj, api_call_id=None):

@@ -1,5 +1,4 @@
 import logging
-import time
 
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
 from requests import PreparedRequest
@@ -12,12 +11,12 @@ from ..core import (
     replace_response_variables,
     get_variable_tokens,
 )
-from ..core.constants import ContentType
-from ..core.core_settings import app_settings
-from ..core.generators import is_file_function
-from ..external import open_form_file
-from ..external.requester import Requester
-from ..model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
+from httprider.core.constants import ContentType, ExchangeResponseStatus
+from httprider.core.core_settings import app_settings
+from httprider.core.generators import is_file_function
+from httprider.external import open_form_file
+from httprider.external.requester import Requester
+from httprider.model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
 
 
 class HttpExchangeSignals(QObject):
@@ -64,11 +63,14 @@ class RestApiConnector(QThread):
         logging.info(f"Received interrupt signal on {self.exchange}")
 
     def update_request(self, current_exchange_request: ExchangeRequest, prepared_request: PreparedRequest):
-        """Update exchange request with prepared request"""
-        current_exchange_request.full_encoded_url = prepared_request.url
-        current_exchange_request.headers = {k: v for k, v in prepared_request.headers.items()}
-        current_exchange_request.request_body = prepared_request.body or ""
-        current_exchange_request.http_method = prepared_request.method
+        """Update exchange request with prepared request if available"""
+        if prepared_request:
+            current_exchange_request.full_encoded_url = prepared_request.url or current_exchange_request
+            current_exchange_request.headers = {k: v for k, v in prepared_request.headers.items()}
+            current_exchange_request.request_body = prepared_request.body
+            current_exchange_request.http_method = prepared_request.method
+        else:
+            current_exchange_request.full_encoded_url = current_exchange_request.http_url
         return current_exchange_request
 
     def convert_response(self, raw_response):
@@ -83,13 +85,28 @@ class RestApiConnector(QThread):
         res.headers = raw_response.headers
         return res
 
+    def mock_exchange(self, var_tokens):
+        logging.info(
+            f"<== Returning mocked Response ({self.exchange.api_call_id})"
+        )
+        self.exchange.request.full_encoded_url = self.exchange.request.url_with_qp()
+        self.exchange.response = replace_response_variables(
+            var_tokens, self.exchange.response
+        )
+        self.exchange.response_status = ExchangeResponseStatus.PASSED
+
     def make_http_call(self):
+        # preparing request with variable substitutions
         var_tokens = get_variable_tokens(app_settings)
         self.exchange.request = replace_variables(var_tokens, self.exchange.request)
+
+        # deriving request content type
         req: ExchangeRequest = self.exchange.request
         logging.info(
             f"==>[{self.tname}] make_http_call({self.exchange.api_call_id}): Http {req.http_method} to {req.http_url}"
         )
+
+        # converting request to k/v structure
         kwargs = dict(headers=req.headers, params=req.query_params)
 
         content_type = req.headers.get("Content-Type", ContentType.NONE.value)
@@ -112,60 +129,58 @@ class RestApiConnector(QThread):
         elif req.request_body:
             kwargs["data"] = req.request_body
 
-        try:
-            progress_message = f"{req.http_method} call to {req.http_url}"
-            if req.is_fuzzed():
-                http_exchange_signals.fuzzed_request_started.emit(
-                    progress_message, self.exchange.api_call_id
-                )
-            else:
-                http_exchange_signals.request_started.emit(
-                    progress_message, self.exchange.api_call_id
-                )
-
-            if self.exchange.response.is_mocked:
-                logging.info(
-                    f"<== Returning mocked Response ({self.exchange.api_call_id})"
-                )
-                self.exchange.request.full_encoded_url = self.exchange.request.url_with_qp()
-                self.exchange.response = replace_response_variables(
-                    var_tokens, self.exchange.response
-                )
-            else:
-                response = self.requester.make_request(
-                    req.http_method, req.http_url, kwargs
-                )
-                self.exchange.request = self.update_request(self.exchange.request, response.request)
-                self.exchange.response = self.convert_response(response)
-
-                for fk, fv in kwargs.get("files", {}).items():
-                    fv.close()
-
-                logging.info(
-                    f"<== make_http_call({self.exchange.api_call_id}): "
-                    f"Received response in {self.exchange.response.elapsed_time}"
-                )
-
-                # This is to make sure that we cleanly quit this thread
-                if self.halt_processing:
-                    self.halt_processing = False
-                    http_exchange_signals.request_finished.emit()
-                    http_exchange_signals.fuzzed_request_finished.emit()
-                    return
-
-            self.signals.result.emit(self.exchange)
-        except ConnectionError as e:
-            nce: NewConnectionError = e.args[0].reason
-            error_response = ExchangeResponse(
-                http_status_code=-1, response_body=nce.args[0]
+        # Signal API call started
+        progress_message = f"{req.http_method} call to {req.http_url}"
+        if req.is_fuzzed():
+            http_exchange_signals.fuzzed_request_started.emit(
+                progress_message, self.exchange.api_call_id
             )
-            self.exchange.response = error_response
+        else:
+            http_exchange_signals.request_started.emit(
+                progress_message, self.exchange.api_call_id
+            )
 
-            self.signals.error.emit(self.exchange)
-        except Exception as e:
-            logging.error(e)
-            error_response = ExchangeResponse(http_status_code=-1, response_body=str(e))
-            self.exchange.response = error_response
+        if self.exchange.response.is_mocked:
+            self.mock_exchange(var_tokens)
+        else:
+            response, err = self.requester.make_request(
+                req.http_method, req.http_url, kwargs
+            )
+            self.exchange.request = self.update_request(self.exchange.request, response.request)
+
+            # Building exchange response
+            if err and isinstance(err, ConnectionError):
+                nce: NewConnectionError = err.args[0].reason
+                error_response = ExchangeResponse(http_status_code=-1, response_body=str(nce.args[0]))
+                self.exchange.response = error_response
+                self.exchange.failed()
+            elif err:
+                error_response = ExchangeResponse(http_status_code=-1, response_body=str(err))
+                self.exchange.response = error_response
+                self.exchange.failed()
+            else:
+                self.exchange.response = self.convert_response(response)
+                self.exchange.passed()
+
+            logging.info(
+                f"<== make_http_call({self.exchange.api_call_id}): "
+                f"Received response in {self.exchange.response.elapsed_time}"
+            )
+
+            # Cleanup (for both success/failure)
+            for fk, fv in kwargs.get("files", {}).items():
+                fv.close()
+
+            # This is to make sure that we cleanly quit this thread
+            if self.halt_processing:
+                self.halt_processing = False
+                http_exchange_signals.request_finished.emit()
+                http_exchange_signals.fuzzed_request_finished.emit()
+                return
+
+        if self.exchange.is_passed():
+            self.signals.result.emit(self.exchange)
+        else:
             self.signals.error.emit(self.exchange)
 
         if req.is_fuzzed():
@@ -179,5 +194,6 @@ class RestApiConnector(QThread):
         try:
             self.make_http_call()
         except Exception as e:
+            http_exchange_signals.request_finished.emit(self.exchange.api_call_id)
             logging.error(f"Unhandled exception: {e}")
             raise e

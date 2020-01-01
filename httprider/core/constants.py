@@ -71,4 +71,10 @@ class ExchangeRequestType(Enum):
     FUZZED = auto()
 
 
+class ExchangeResponseStatus(Enum):
+    NONE = auto()
+    PASSED = auto()
+    FAILED = auto()
+
+
 REPLACEMENTS = [("-", "_"), (" ", "_"), ("[", ""), ("]", ""), ("$", ""), (".", "_"), (">", "")]
