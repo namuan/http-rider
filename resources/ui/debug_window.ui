@@ -14,40 +14,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>80</y>
-      <width>302</width>
-      <height>255</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QTabWidget::pane {
-    border: 1px solid black;
-    background: white;
-}</string>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Tab 1</string>
-     </attribute>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QPlainTextEdit" name="plainTextEdit"/>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Tab 2</string>
-     </attribute>
-    </widget>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="ExampleOverlayedText" name="plainTextEdit"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -61,6 +32,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ExampleOverlayedText</class>
+   <extends>QPlainTextEdit</extends>
+   <header>example_overlayed_text.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
