@@ -1,4 +1,4 @@
-__version__ = "0.3b0"
+__version__ = "0.4b0"
 __appname__ = "httprider"
 __description__ = "Simple and Powerful cross-platform Rest API client"
 __desktopid__ = "dev.deskriders.HttpRider"
