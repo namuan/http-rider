@@ -70,10 +70,12 @@ setup(
         'httprider.model',
         'httprider.images',
         'httprider.exporters',
-        'httprider.importers'
+        'httprider.importers',
+        'httprider.codegen',
+        'httprider.interactors'
     ],
     package_data={
-        'httprider.images': ['*.png'],
+        'httprider.images': ['*.png' '*.svg'],
         'httprider.themes': ['*.qss', '*.css']
     },
     entry_points={

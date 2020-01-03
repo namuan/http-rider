@@ -315,7 +315,7 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "Mocked Response"))
         self.btn_add_tag.setText(_translate("MainWindow", "+"))
         self.label.setText(_translate("MainWindow", "Assertions"))
-        self.btn_open_assertions_dialog.setText(_translate("MainWindow", "..."))
+        self.btn_open_assertions_dialog.setText(_translate("MainWindow", "Setup"))
         self.lbl_request_time.setText(_translate("MainWindow", "request time"))
         self.btn_share_preview.setText(_translate("MainWindow", "..."))
         self.tabWidget_3.setTabText(self.tabWidget_3.indexOf(self.tab_8), _translate("MainWindow", "Raw"))

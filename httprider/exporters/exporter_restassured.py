@@ -2,10 +2,10 @@ import attr
 from pygments.lexers.jvm import JavaLexer
 from typing import List
 
-from ..core.core_settings import app_settings
-from ..exporters.common import *
-from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSource
-from ..codegen.schema_to_java_generator import to_java_function_name
+from httprider.core.core_settings import app_settings
+from httprider.exporters.common import *
+from httprider.model.app_data import ApiCall, HttpExchange, ApiTestCase, AssertionDataSource
+from httprider.codegen.schema_to_java_generator import to_java_function_name
 
 
 def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
@@ -37,7 +37,7 @@ def gen_when(api_call: ApiCall, last_exchange: HttpExchange):
 
 
 def gen_then(
-    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
+        api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
 ):
     statements = ["\tthen()."]
     for a in api_test_case.assertions:
@@ -122,11 +122,11 @@ class AirHttpTests {
         """
         output = [self.__export_api_call(api_call) for api_call in api_calls]
         return (
-            highlight(test_file_header, JavaLexer(), HtmlFormatter())
-            + "<br/>"
-            + "<br/>".join(output)
-            + "<br/>"
-            + highlight(test_file_footer, JavaLexer(), HtmlFormatter())
+                highlight(test_file_header, JavaLexer(), HtmlFormatter())
+                + "<br/>"
+                + "<br/>".join(output)
+                + "<br/>"
+                + highlight(test_file_footer, JavaLexer(), HtmlFormatter())
         )
 
     def __export_api_call(self, api_call):
