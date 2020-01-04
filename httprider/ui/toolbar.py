@@ -14,12 +14,6 @@ def tool_bar_items(self):
     self.addToolBar(Qt.TopToolBarArea, self.tool_bar)
     self.tool_bar.setMovable(False)
 
-    tool_bar_configure_action = QAction(
-        QIcon(":/images/configure-48.png"), "Settings", self
-    )
-    tool_bar_configure_action.triggered.connect(self.configuration_dialog.show_dialog)
-    self.tool_bar.addAction(tool_bar_configure_action)
-
     tool_bar_project_info_action = QAction(
         QIcon(":/images/info-48.png"), "Project Info", self
     )
@@ -131,6 +125,12 @@ def tool_bar_items(self):
     tool_bar_tags_list_action.setText("Tags")
     tool_bar_tags_list_action.setDefaultWidget(tool_bar_tags_list)
     self.tool_bar.addAction(tool_bar_tags_list_action)
+
+    tool_bar_configure_action = QAction(
+        QIcon(":/images/configure-48.png"), "Settings", self
+    )
+    tool_bar_configure_action.triggered.connect(self.configuration_dialog.show_dialog)
+    self.tool_bar.addAction(tool_bar_configure_action)
 
     tool_bar_update_available = QAction(
         QIcon(":/images/download-disabled-48.png"), "Update Available", self
