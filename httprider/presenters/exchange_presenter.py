@@ -113,11 +113,12 @@ class ExchangePresenter:
 
         http_response = exchange.response
 
+        # @todo: How to highlight mocked response
         # Response rendering
-        if http_response.is_mocked:
-            self.view.txt_raw_response.setStyleSheet("background-color: #e0d7d7;")
-        else:
-            self.view.txt_raw_response.setStyleSheet("background-color: white;")
+        # if http_response.is_mocked:
+        #     self.view.txt_raw_response.setStyleSheet("background-color: #e0d7d7;")
+        # else:
+        #     self.view.txt_raw_response.setStyleSheet("background-color: white;")
 
         self.render_raw_exchange(
             self.view.txt_raw_response, markdown_response(exchange)

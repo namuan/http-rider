@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_DebugWindow(object):
@@ -18,7 +18,7 @@ class Ui_DebugWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.plainTextEdit = OverlayedPlainTextEdit(self.centralwidget)
+        self.plainTextEdit = ExampleOverlayedText(self.centralwidget)
         self.plainTextEdit.setObjectName("plainTextEdit")
         self.verticalLayout.addWidget(self.plainTextEdit)
         DebugWindow.setCentralWidget(self.centralwidget)
@@ -36,6 +36,4 @@ class Ui_DebugWindow(object):
     def retranslateUi(self, DebugWindow):
         _translate = QtCore.QCoreApplication.translate
         DebugWindow.setWindowTitle(_translate("DebugWindow", "MainWindow"))
-
-
-from httprider.widgets.overlayed_widgets import OverlayedPlainTextEdit
+from example_overlayed_text import ExampleOverlayedText

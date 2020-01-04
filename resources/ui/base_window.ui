@@ -394,7 +394,11 @@
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
-             <widget class="QPlainTextEdit" name="txt_raw_request"/>
+             <widget class="QPlainTextEdit" name="txt_raw_request">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>

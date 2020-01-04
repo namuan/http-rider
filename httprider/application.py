@@ -1,19 +1,10 @@
 import sys
 
-from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import *
 
+from httprider.themes import theme_provider
+from httprider.ui.main_window import MainWindow
 from . import __version__, __appname__, __desktopid__
-from .themes.light_theme import LightTheme
-from .ui.main_window import MainWindow
-
-
-def configure_theme(application):
-    application.setStyle(LightTheme())
-    application.style().load_stylesheet()
-    current_font: QFont = application.font()
-    current_font.setPointSize(11)
-    application.setFont(current_font)
 
 
 def main():
@@ -23,7 +14,7 @@ def main():
     application.setDesktopFileName(__desktopid__)
 
     window = MainWindow()
-    configure_theme(application)
+    theme_provider.configure_theme(application)
 
     window.show()
     sys.exit(application.exec_())

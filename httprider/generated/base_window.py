@@ -206,6 +206,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.tab_8)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.txt_raw_request = QtWidgets.QPlainTextEdit(self.tab_8)
+        self.txt_raw_request.setReadOnly(True)
         self.txt_raw_request.setObjectName("txt_raw_request")
         self.horizontalLayout_7.addWidget(self.txt_raw_request)
         self.tabWidget_3.addTab(self.tab_8, "")

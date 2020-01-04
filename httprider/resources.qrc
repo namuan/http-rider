@@ -22,6 +22,7 @@
         <file>images/branch-open.svg</file>
         <file>images/branch-vline.svg</file>
         <file>themes/light.qss</file>
+        <file>themes/dark.qss</file>
         <file>themes/pyg.css</file>
     </qresource>
 </RCC>
