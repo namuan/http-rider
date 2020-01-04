@@ -2,8 +2,13 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-from ..core.constants import API_CALL_ROLE
-from ..model.app_data import ApiCall
+from httprider.core.constants import API_CALL_ROLE
+from httprider.model.app_data import ApiCall
+from httprider.themes.theme_provider import api_call_list_disabled_color, api_call_separator_rect, \
+    api_call_list_selected_rect, \
+    api_call_list_selected_pen, http_ex_success, http_ex_client_err, http_ex_server_err, http_ex_no_response, \
+    api_call_list_title_color, api_call_list_sub_title_color, api_call_list_disabled_title_color, \
+    api_call_list_disabled_sub_title_color, api_call_list_status_code_color
 
 PADDING = 5
 
@@ -13,9 +18,10 @@ class ApiCallItemDelegate(QStyledItemDelegate):
     TITLE_FONT_BOLD = True
     URL_FONT_SIZE = 10
     URL_FONT_BOLD = False
-    GREEN_COLOR = QColor("#01721d")
-    AMBER_COLOR = QColor("#d8a413")
-    RED_COLOR = QColor("#a51e00")
+    NO_RESPONSE_COLOR = http_ex_no_response()
+    GREEN_COLOR = http_ex_success()
+    AMBER_COLOR = http_ex_client_err()
+    RED_COLOR = http_ex_server_err()
 
     def sizeHint(self, option: QStyleOptionViewItem, model_index: QModelIndex):
         if not model_index.isValid():
@@ -55,7 +61,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         return size
 
     def paint(
-        self, painter: QPainter, option: QStyleOptionViewItem, model_index: QModelIndex
+            self, painter: QPainter, option: QStyleOptionViewItem, model_index: QModelIndex
     ):
         if not model_index.isValid():
             return
@@ -64,13 +70,13 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         painter.save()
 
         if option.state & QStyle.State_Selected:
-            painter.fillRect(bounding_rect, QColor("#CBD8E1"))
-            painter.setPen(QColor("#000000"))
+            painter.fillRect(bounding_rect, api_call_list_selected_rect())
+            painter.setPen(api_call_list_selected_pen())
 
         api_call: ApiCall = model_index.data(API_CALL_ROLE)
 
         if api_call.is_separator:
-            painter.fillRect(bounding_rect, QColor("#404040"))
+            painter.fillRect(bounding_rect, api_call_separator_rect())
             painter.restore()
             return
 
@@ -80,13 +86,13 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             str(api_call.last_response_code) if api_call.last_response_code else None
         )
 
-        title_pen_color = Qt.black
-        sub_title_pen_color = Qt.black
+        title_pen_color = api_call_list_title_color()
+        sub_title_pen_color = api_call_list_sub_title_color()
 
         if not api_call.enabled:
-            painter.fillRect(bounding_rect, QColor("#cfd2d6"))
-            title_pen_color = Qt.gray
-            sub_title_pen_color = Qt.gray
+            painter.fillRect(bounding_rect, api_call_list_disabled_color())
+            title_pen_color = api_call_list_disabled_title_color()
+            sub_title_pen_color = api_call_list_disabled_sub_title_color()
 
         font: QFont = QApplication.font()
         font.setPointSize(self.TITLE_FONT_SIZE)
@@ -139,7 +145,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def draw_status_code(
-        self, title_rect, bounding_rect, painter, api_status_code, api_call
+            self, title_rect, bounding_rect, painter, api_status_code, api_call
     ):
         code_rect_width = api_status_code * 2 if api_status_code else ""
 
@@ -170,7 +176,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             gradient.setColorAt(1, color_assertions)
             painter.fillPath(path, gradient)
             painter.setFont(font)
-            painter.setPen(Qt.white)
+            painter.setPen(api_call_list_status_code_color())
             if api_call.last_response_code > 0:
                 painter.drawText(
                     code_rect, Qt.AlignCenter | Qt.AlignVCenter, api_status_code
@@ -187,7 +193,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
 
     def color_from_response(self, response_code):
         if response_code <= 0:
-            return QColor("#a51e00")
+            return self.NO_RESPONSE_COLOR
 
         if 100 <= response_code < 400:
             return self.GREEN_COLOR

@@ -6,8 +6,10 @@ from httprider.core.pygment_styles import styles_from_file
 
 
 class Theme(QProxyStyle):
-    def __init__(self, palette):
+    def __init__(self):
         super(Theme, self).__init__()
+
+    def load_palette(self, palette):
         qApp.setPalette(palette)
 
     def load_stylesheet(self, theme_mode):

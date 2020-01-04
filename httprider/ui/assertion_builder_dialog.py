@@ -8,7 +8,6 @@ class AssertionBuilderDialog(QDialog, Ui_AssertionBuilderDialog):
     def __init__(self, parent=None):
         super(AssertionBuilderDialog, self).__init__(parent)
         self.setupUi(self)
-        # self.setFixedSize(self.size())
         self.presenter = AssertionBuilderPresenter(self)
 
     def show_dialog(self, api_call):

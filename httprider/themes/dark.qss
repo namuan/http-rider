@@ -1,17 +1,85 @@
+/* QToolBar */
+
 QToolBar {
     border-bottom: 1px solid #4D545B;
 }
 
-QListWidget::item:selected {
-   background: #CBD8E1;
-   color: black;
+/* QPushButton */
+
+QPushButton[accessibleName="greenbox"] {
+   background-color: #01721d;
+   border-style: none;
 }
 
-QTreeView
-{
-    border: 0.1ex solid #BAB9B8;
-    background-color: #FCFCFC;
+QPushButton[accessibleName="greenbox"]:pressed {
+   background-color: #00380d;
+   border-style: inset;
 }
+
+QPushButton[accessibleName="greenbox"]:hover {
+   background-color: #00380d;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="selectedgreenbox"] {
+   background-color: #01721d;
+   border-width: 1px;
+   border-color: #FFFFFF;
+   border-style: ridge;
+}
+
+QPushButton[accessibleName="redbox"] {
+   background-color: #a51e00;
+   border-style: none;
+}
+
+QPushButton[accessibleName="redbox"]:pressed {
+   background-color: #6b1300;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="redbox"]:hover {
+   background-color: #6b1300;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="selectedredbox"] {
+   background-color: #a51e00;
+   border-width: 1px;
+   border-color: #FFFFFF;
+   border-style: ridge;
+}
+
+QPushButton[accessibleName="amberbox"] {
+   background-color: #d8a413;
+   border-style: none;
+}
+
+QPushButton[accessibleName="amberbox"]:pressed {
+   background-color: #936f0a;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="amberbox"]:hover {
+   background-color: #936f0a;
+   border-style: inset;
+}
+
+QPushButton[accessibleName="selectedamberbox"] {
+   background-color: #d8a413;
+   border-width: 1px;
+   border-color: #FFFFFF;
+   border-style: ridge;
+}
+
+/* QTabWidget */
+
+QTabWidget::pane {
+    padding: 20px -10px -20px -10px;
+    border: none;
+}
+
+/* QTreeView */
 
 QTreeView::branch:has-siblings:!adjoins-item
 {
@@ -49,86 +117,8 @@ QTreeView::item
 
 QTreeView::item:!selected:hover
 {
-    background-color: rgba(61, 173, 232, 0.1);
+    background-color: #505153;
     outline: 0;
-    color: #31363B;
+    color: white;
     padding: 0.1ex;
-}
-
-QPushButton[accessibleName="greenbox"] {
-   background-color: #01721d;
-   border-width: 1px;
-   border-color: rgb(55, 94, 55);
-   border-style: none;
-}
-
-QPushButton[accessibleName="greenbox"]:pressed {
-   background-color: #00380d;
-   border-style: inset;
-}
-
-QPushButton[accessibleName="greenbox"]:hover {
-   background-color: #00380d;
-   border-style: inset;
-}
-
-QPushButton[accessibleName="redbox"] {
-   background-color: #a51e00;
-   border-width: 1px;
-   border-color: #6b1300;
-   border-style: none;
-}
-
-QPushButton[accessibleName="redbox"]:pressed {
-   background-color: #6b1300;
-   border-style: inset;
-}
-
-QPushButton[accessibleName="redbox"]:hover {
-   background-color: #6b1300;
-   border-style: inset;
-}
-
-QPushButton[accessibleName="amberbox"] {
-   background-color: #d8a413;
-   border-width: 1px;
-   border-color: #936f0a;
-   border-style: none;
-}
-
-QPushButton[accessibleName="amberbox"]:pressed {
-   background-color: #936f0a;
-   border-style: inset;
-}
-
-QPushButton[accessibleName="amberbox"]:hover {
-   background-color: #936f0a;
-   border-style: inset;
-}
-
-QPushButton[accessibleName="selectedgreenbox"] {
-   background-color: #01721d;
-   border-width: 2px;
-   border-color: #000000;
-   border-style: ridge;
-}
-
-QPushButton[accessibleName="selectedredbox"] {
-   background-color: #a51e00;
-   border-width: 2px;
-   border-color: #000000;
-   border-style: ridge;
-}
-
-QPushButton[accessibleName="selectedamberbox"] {
-   background-color: #d8a413;
-   border-width: 2px;
-   border-color: #000000;
-   border-style: ridge;
-}
-
-QTabWidget::pane {
-    padding: 0px -10px -20px -10px;
-    background-color: #eff0f1;
-    border: none;
 }

@@ -1,60 +1,68 @@
-import darkdetect
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QPalette
+from PyQt5.QtGui import QColor
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import qApp
 
-
-def is_dark():
-    return darkdetect.isDark()
-
-
-def light_palette():
-    palette = qApp.palette()
-    palette.setColor(QPalette.Window, QColor(239, 240, 241))
-    palette.setColor(QPalette.WindowText, QColor(49, 54, 59))
-    palette.setColor(QPalette.Base, QColor(252, 252, 252))
-    palette.setColor(QPalette.AlternateBase, QColor(239, 240, 241))
-    palette.setColor(QPalette.ToolTipBase, QColor(239, 240, 241))
-    palette.setColor(QPalette.ToolTipText, QColor(49, 54, 59))
-    palette.setColor(QPalette.Text, QColor(49, 54, 59))
-    palette.setColor(QPalette.Button, QColor(239, 240, 241))
-    palette.setColor(QPalette.ButtonText, QColor(49, 54, 59))
-    palette.setColor(QPalette.BrightText, QColor(255, 255, 255))
-    palette.setColor(QPalette.Link, QColor(41, 128, 185))
-    palette.setColor(QPalette.Highlight, QColor(126, 71, 130))
-    palette.setColor(QPalette.HighlightedText, Qt.white)
-    palette.setColor(QPalette.Disabled, QPalette.Light, Qt.white)
-    palette.setColor(QPalette.Disabled, QPalette.Shadow, QColor(234, 234, 234))
-    return palette
-
-
-def dark_palette():
-    palette = qApp.palette()
-    palette.setColor(QPalette.Window, QColor(239, 240, 241))
-    palette.setColor(QPalette.WindowText, QColor(49, 54, 59))
-    palette.setColor(QPalette.Base, QColor(252, 252, 252))
-    palette.setColor(QPalette.AlternateBase, QColor(239, 240, 241))
-    palette.setColor(QPalette.ToolTipBase, QColor(239, 240, 241))
-    palette.setColor(QPalette.ToolTipText, QColor(49, 54, 59))
-    palette.setColor(QPalette.Text, QColor(49, 54, 59))
-    palette.setColor(QPalette.Button, QColor(239, 240, 241))
-    palette.setColor(QPalette.ButtonText, QColor(49, 54, 59))
-    palette.setColor(QPalette.BrightText, QColor(255, 255, 255))
-    palette.setColor(QPalette.Link, QColor(41, 128, 185))
-    palette.setColor(QPalette.Highlight, QColor(126, 71, 130))
-    palette.setColor(QPalette.HighlightedText, Qt.white)
-    palette.setColor(QPalette.Disabled, QPalette.Light, Qt.white)
-    palette.setColor(QPalette.Disabled, QPalette.Shadow, QColor(234, 234, 234))
-    return palette
+from httprider.core.theme_mode import is_dark
+from httprider.themes.theme import Theme
 
 
 def configure_theme(application):
-    # palette = dark_palette() if is_dark() else light_palette()
-    # theme_mode = "dark" if is_dark() else "light"
-    # application.setStyle(Theme(palette))
-    # application.style().load_stylesheet(theme_mode)
+    application.setStyle(Theme())
+    theme_mode = "dark" if is_dark() else "light"
+    application.style().load_stylesheet(theme_mode)
 
     current_font: QFont = application.font()
     current_font.setPointSize(12)
     application.setFont(current_font)
+
+
+def api_call_separator_rect():
+    return QColor("#404040") if is_dark() else QColor("#404040")
+
+
+def api_call_list_selected_rect():
+    return QColor("#505153") if is_dark() else QColor("#CBD8E1")
+
+
+def api_call_list_selected_pen():
+    return Qt.white if is_dark() else Qt.black
+
+
+def api_call_list_title_color():
+    return Qt.white if is_dark() else Qt.black
+
+
+def api_call_list_sub_title_color():
+    return Qt.white if is_dark() else Qt.black
+
+
+def api_call_list_disabled_color():
+    return QColor("#343434") if is_dark() else QColor("#cfd2d6")
+
+
+def api_call_list_disabled_title_color():
+    return Qt.darkGray if is_dark() else Qt.gray
+
+
+def api_call_list_disabled_sub_title_color():
+    return Qt.darkGray if is_dark() else Qt.gray
+
+
+def api_call_list_status_code_color():
+    return Qt.white if is_dark() else Qt.white
+
+
+def http_ex_success():
+    return QColor("#01721d") if is_dark() else QColor("#01721d")
+
+
+def http_ex_client_err():
+    return QColor("#d8a413") if is_dark() else QColor("#d8a413")
+
+
+def http_ex_server_err():
+    return QColor("#a51e00") if is_dark() else QColor("#a51e00")
+
+
+def http_ex_no_response():
+    return QColor("#a51e00") if is_dark() else QColor("#a51e00")
