@@ -17,8 +17,18 @@ release: ## Step to prepare a new release
 	echo "Update the build version in http-rider-osx/.travis.yml"
 	echo "Commit with Release notes"
 
-venv:
+venv: ## Load virtualenv
 	source venv/bin/activate
+
+clean: ## Clean package
+	rm -rf build dist
+
+package: clean ## Rebuilds venv and packages app
+	rm -rf venv
+	python3 -m venv venv
+	./venv/bin/python3 -m pip install -r requirements.txt
+	./venv/bin/python3 -m pip install py2app
+	./venv/bin/python3 setup.py py2app
 
 uic: res ## Converts ui files to python
 	for i in `ls resources/ui/*.ui`; do FNAME=`basename $${i} ".ui"`; ./venv/bin/pyuic5 $${i} > "httprider/generated/$${FNAME}.py"; done
