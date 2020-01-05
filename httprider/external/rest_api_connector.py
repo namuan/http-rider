@@ -41,8 +41,9 @@ class FuzzedRestApiResponseSignals(QObject):
 
 
 class RestApiConnector(QThread):
-    def __init__(self, name):
-        super(RestApiConnector, self).__init__()
+    def __init__(self, name, app_config=app_settings):
+        super().__init__()
+        self.app_config = app_config
         self.tname = name
         self.halt_processing = False
         self.signals = RestApiResponseSignals()
@@ -97,7 +98,7 @@ class RestApiConnector(QThread):
 
     def make_http_call(self):
         # preparing request with variable substitutions
-        var_tokens = get_variable_tokens(app_settings)
+        var_tokens = get_variable_tokens(self.app_config)
         self.exchange.request = replace_variables(var_tokens, self.exchange.request)
 
         # deriving request content type
@@ -116,6 +117,7 @@ class RestApiConnector(QThread):
             content_type = req.headers.get("Content-Type", req.request_body_type.value)
 
         if req.form_params and "application/x-www-form-urlencoded" in content_type:
+            req.request_body_type = ContentType.FORM
             kwargs["data"] = req.form_params
         elif req.form_params:
             if content_type:

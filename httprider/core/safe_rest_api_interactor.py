@@ -29,7 +29,9 @@ class SafeRestApiInteractor:
     api_workers = []
     any_worker_running: bool = False
 
-    def __init__(self):
+    def __init__(self, app_config=app_settings):
+        self.app_config = app_config
+
         # domain events
         http_exchange_signals.request_finished.connect(self.__request_finished)
         http_exchange_signals.fuzzed_request_finished.connect(self.__request_finished)
@@ -38,7 +40,7 @@ class SafeRestApiInteractor:
     def make_http_call(self, api_call: ApiCall):
         exchange_request = ExchangeRequest.from_api_call(api_call, hide_secrets=False)
         exchange_request.headers = combine_request_headers(
-            app_settings, exchange_request
+            self.app_config, exchange_request
         )
         exchange = HttpExchange(api_call_id=api_call.id, request=exchange_request)
 
@@ -91,21 +93,21 @@ class SafeRestApiInteractor:
 
     def __on_success(self, exchange: HttpExchange):
         logging.info(f"API Call: {exchange.api_call_id} - __on_success")
-        api_call = app_settings.app_data_cache.get_api_call(exchange.api_call_id)
+        api_call = self.app_config.app_data_cache.get_api_call(exchange.api_call_id)
         api_call.last_response_code = exchange.response.http_status_code
 
         api_call_interactor.update_api_call(api_call.id, api_call)
 
-        app_settings.app_data_writer.add_http_exchange(exchange)
+        self.app_config.app_data_writer.add_http_exchange(exchange)
 
     def __on_failure(self, exchange: HttpExchange):
         logging.error(f"API Call: {exchange.api_call_id} - __on_failure -> {exchange}")
-        api_call = app_settings.app_data_cache.get_api_call(exchange.api_call_id)
+        api_call = self.app_config.app_data_cache.get_api_call(exchange.api_call_id)
         api_call.last_response_code = exchange.response.http_status_code
         api_call.last_assertion_result = None
         api_call_interactor.update_api_call(api_call.id, api_call)
 
-        app_settings.app_data_writer.add_http_exchange(exchange)
+        self.app_config.app_data_writer.add_http_exchange(exchange)
 
     def __on_halt_processing(self):
         logging.info(f"Clearing queue - items waiting: {self.worker_queue.qsize()}")
