@@ -19,6 +19,7 @@ CURRENT_PROJECT_LOCATION_KEY = "currentProjectLocation"
 HTTPS_PROXY_KEY = "httpsProxy"
 HTTP_PROXY_KEY = "httpProxy"
 TLS_VERIFICATION_KEY = "tlsVerification"
+ALLOW_REDIRECTS_KEY = "allowRedirects"
 STARTUP_CHECK_KEY = "startupCheck"
 WINDOW_STATE_KEY = "windowState"
 GEOMETRY_KEY = "geometry"
@@ -88,6 +89,7 @@ class CoreSettings:
     def save_configuration(self, app_config: AppConfiguration):
         self.settings.setValue(STARTUP_CHECK_KEY, app_config.update_check_on_startup)
         self.settings.setValue(TLS_VERIFICATION_KEY, app_config.tls_verification)
+        self.settings.setValue(ALLOW_REDIRECTS_KEY, app_config.allow_redirects)
         self.settings.setValue(HTTP_PROXY_KEY, app_config.http_proxy)
         self.settings.setValue(HTTPS_PROXY_KEY, app_config.https_proxy)
         self.settings.setValue(REQUEST_TIMEOUT_SECS, app_config.timeout_in_secs)
@@ -103,6 +105,9 @@ class CoreSettings:
         )
         app_config.tls_verification = str_to_bool(
             self.settings.value(TLS_VERIFICATION_KEY, AppConfiguration.tls_verification)
+        )
+        app_config.allow_redirects = str_to_bool(
+            self.settings.value(ALLOW_REDIRECTS_KEY, AppConfiguration.allow_redirects)
         )
         app_config.http_proxy = self.settings.value(
             HTTP_PROXY_KEY, AppConfiguration.http_proxy

@@ -31,6 +31,7 @@ class ConfigPresenter:
         config = AppConfiguration()
         config.update_check_on_startup = self.view.chk_updates_startup.isChecked()
         config.tls_verification = self.view.chk_tls_verficiation.isChecked()
+        config.allow_redirects = self.view.chk_allow_redirects.isChecked()
         config.http_proxy = self.view.txt_http_proxy.text()
         config.https_proxy = self.view.txt_https_proxy.text()
         config.timeout_in_secs = self.view.timeout_in_secs.text()
@@ -40,6 +41,7 @@ class ConfigPresenter:
     def object_to_form(self, app_config: AppConfiguration):
         self.view.chk_updates_startup.setChecked(app_config.update_check_on_startup)
         self.view.chk_tls_verficiation.setChecked(app_config.tls_verification)
+        self.view.chk_allow_redirects.setChecked(app_config.allow_redirects)
         self.view.txt_http_proxy.setText(app_config.http_proxy)
         self.view.txt_https_proxy.setText(app_config.https_proxy)
         self.view.timeout_in_secs.setText(app_config.timeout_in_secs)

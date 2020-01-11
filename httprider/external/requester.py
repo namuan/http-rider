@@ -15,6 +15,7 @@ class Requester:
         app_config = app_settings.load_configuration()
         kwargs["timeout"] = int(app_config.timeout_in_secs)
         kwargs["verify"] = app_config.tls_verification
+        kwargs["allow_redirects"] = app_config.allow_redirects
 
         if app_config.http_proxy and app_config.https_proxy:
             kwargs["proxies"] = {

@@ -3,5 +3,6 @@ class AppConfiguration:
     http_proxy: str = ""
     https_proxy: str = ""
     tls_verification: bool = True
+    allow_redirects: bool = False
     timeout_in_secs: str = "10"
     print_server: str = "https://printrider.bettercallbots.com"

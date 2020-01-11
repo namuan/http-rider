@@ -11,7 +11,6 @@ class ConfigurationDialog(QDialog, Ui_Configuration):
 
     def initialize(self):
         self.setupUi(self)
-        # self.setFixedSize(self.size())
         # @todo: Add validator
         # https://snorfalorpagus.net/blog/2014/08/09/validating-user-input-in-pyqt4-using-qvalidator/
 
