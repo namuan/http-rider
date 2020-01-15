@@ -46,7 +46,6 @@ class ProjectInfoPresenter:
         self.parent_view.txt_license_url.setText(project.license_url)
         self.parent_view.txt_license_name.setText(project.license_name)
 
-        self.parent_view.txt_project_teardown.setPlainText(project.teardown_code)
         self.parent_view.lst_project_tags.clear()
         for t in sorted(project.tags, key=lambda ti: ti.name):
             self.add_tag_info_widget(t)
@@ -128,7 +127,6 @@ class ProjectInfoPresenter:
         project.license_url = self.parent_view.txt_license_url.text()
         project.license_name = self.parent_view.txt_license_name.text()
 
-        project.teardown_code = self.parent_view.txt_project_teardown.toPlainText()
         project.tags = self.get_tags()
         project.servers = self.get_servers()
         project.common_headers = self.get_common_headers()
