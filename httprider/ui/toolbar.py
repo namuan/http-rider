@@ -101,11 +101,19 @@ def tool_bar_items(self):
     spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
     self.tool_bar.addWidget(spacer)
 
-    tool_bar_miltirun_call_action = QAction(
+    tool_bar_multi_share_call_action = QAction(
+        QIcon(":/images/share-all-48.png"), "Share All", self
+    )
+    tool_bar_multi_share_call_action.triggered.connect(
+        self.share_preview_dialog.show_multiple_exchanges_preview
+    )
+    self.tool_bar.addAction(tool_bar_multi_share_call_action)
+
+    tool_bar_multi_run_call_action = QAction(
         QIcon(":/images/multirun-48.png"), "Run All", self
     )
-    tool_bar_miltirun_call_action.triggered.connect(self.on_run_all_api_calls)
-    self.tool_bar.addAction(tool_bar_miltirun_call_action)
+    tool_bar_multi_run_call_action.triggered.connect(self.on_run_all_api_calls)
+    self.tool_bar.addAction(tool_bar_multi_run_call_action)
 
     tool_bar_search_field = SearchLineEdit(self)
     tool_bar_search_field.textChanged.connect(self.api_list_presenter.on_search_query)

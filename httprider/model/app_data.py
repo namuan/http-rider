@@ -141,16 +141,16 @@ class ExchangeRequest(object):
 
     def is_fuzzed(self):
         return (
-            self.request_type
-            and self.request_type.value == ExchangeRequestType.FUZZED.value
+                self.request_type
+                and self.request_type.value == ExchangeRequestType.FUZZED.value
         )
 
     def url_with_qp(self):
         if self.query_params:
             return (
-                self.http_url
-                + "?"
-                + "&".join([f"{k}={v}" for k, v in self.query_params.items()])
+                    self.http_url
+                    + "?"
+                    + "&".join([f"{k}={v}" for k, v in self.query_params.items()])
             )
         else:
             return self.http_url
@@ -232,7 +232,10 @@ class HttpExchange(object):
     assertions: List[Assertion] = []
 
     def is_passed(self):
-        return self.response_status == ExchangeResponseStatus.PASSED.value
+        return self.response_status == ExchangeResponseStatus.PASSED
+
+    def is_failed(self):
+        return not self.is_passed()
 
     def passed(self):
         self.response_status = ExchangeResponseStatus.PASSED

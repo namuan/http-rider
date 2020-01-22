@@ -68,7 +68,7 @@ class RestApiConnector(QThread):
         if prepared_request:
             current_exchange_request.full_encoded_url = prepared_request.url or current_exchange_request
             current_exchange_request.headers = {k: v for k, v in prepared_request.headers.items()}
-            current_exchange_request.request_body = prepared_request.body
+            current_exchange_request.request_body = prepared_request.body or ''
             current_exchange_request.http_method = prepared_request.method
         else:
             current_exchange_request.full_encoded_url = current_exchange_request.http_url

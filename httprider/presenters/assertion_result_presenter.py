@@ -2,8 +2,8 @@ import logging
 
 from PyQt5.QtWidgets import QListWidget
 
-from httprider.core.api_call_interactor import api_call_interactor
 from httprider.core import str_to_bool
+from httprider.core.api_call_interactor import api_call_interactor
 from httprider.core.constants import AssertionMatchers
 from httprider.core.core_settings import app_settings
 from httprider.model.app_data import Assertion, ApiTestCase, HttpExchange, ApiCall
@@ -89,15 +89,19 @@ class AssertionResultPresenter:
         if matcher == AssertionMatchers.NOT_NULL.value:
             return current_val is not None
 
-        if val_type == "int":
-            current_val = int(current_val) if current_val else None
-            expected_val = int(expected_val)
-        elif val_type == "float":
-            current_val = float(current_val) if current_val else None
-            expected_val = float(expected_val)
-        elif val_type == "bool":
-            current_val = str_to_bool(current_val) if current_val else None
-            expected_val = str_to_bool(expected_val)
+        try:
+            if val_type == "int":
+                current_val = int(current_val) if current_val else None
+                expected_val = int(expected_val)
+            elif val_type == "float":
+                current_val = float(current_val) if current_val else None
+                expected_val = float(expected_val)
+            elif val_type == "bool":
+                current_val = str_to_bool(current_val) if current_val else None
+                expected_val = str_to_bool(expected_val)
+        except ValueError as e:
+            logging.error("Unable to convert current value {} or expected value {}".format(current_val, expected_val))
+            return False
 
         if matcher == AssertionMatchers.EQ.value:
             return current_val == expected_val

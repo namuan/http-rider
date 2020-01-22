@@ -62,16 +62,7 @@ class CodeGeneratorPresenter:
         if self.mode == DisplayMode.SINGLE_API and self.selected_api:
             generated_code = selected_exporter.exporter.export_data([self.selected_api])
         else:
-            app_state = app_settings.app_data_cache.get_app_state()
-            api_calls = [
-                api_call
-                for api_call in app_settings.app_data_cache.filter_api_calls(
-                    search_query=app_state.selected_search,
-                    search_tag=app_state.selected_tag,
-                )
-                if api_call.enabled
-            ]
-
+            api_calls = app_settings.app_data_cache.get_all_active_api_calls()
             generated_code = selected_exporter.exporter.export_data(api_calls)
 
         self.view.txt_generated_code.appendHtml(generated_code)

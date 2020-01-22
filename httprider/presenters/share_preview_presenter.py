@@ -15,7 +15,7 @@ class SharePreviewPresenter:
     def __init__(self, view, parent=None):
         self.view = view
         self.main_window = parent
-        self.selected_exchange = None
+        self.selected_exchanges = None
         self.edit_view = True
         self.md_content = ""
         self.share_service_interactor = ShareServiceInteractor(self.view)
@@ -67,23 +67,35 @@ class SharePreviewPresenter:
         return f"""## {api_call.title}
 {api_call.description}
         
-{raw_md}
-        """
+{raw_md}"""
 
     def refresh(self):
         self.view.lbl_share_location.setText("")
-        api_call = app_settings.app_data_cache.get_api_call(
-            self.selected_exchange.api_call_id
-        )
-        raw_md = md_request_response_generator(
-            self.selected_exchange, include_sep=False
-        )
-        combined_md = self.prepend_api_call(api_call, raw_md)
-        self.md_content = combined_md
+        md_content_for_exchanges = [
+            self.md_for_exchange(exchange)
+            for exchange in self.selected_exchanges
+        ]
+        self.md_content = "\r\n".join(md_content_for_exchanges)
+
         self.render_raw_markdown()
 
+    def md_for_exchange(self, http_exchange: HttpExchange):
+        api_call = app_settings.app_data_cache.get_api_call(
+            http_exchange.api_call_id
+        )
+        raw_md = md_request_response_generator(
+            http_exchange, include_sep=False
+        )
+        return self.prepend_api_call(api_call, raw_md)
+
     def show_dialog(self, selected_exchange: HttpExchange):
-        self.selected_exchange = selected_exchange
+        self.selected_exchanges = [selected_exchange]
+        self.refresh()
+        self.view.show()
+
+    def show_dialog_multiple_apis(self):
+        api_calls = app_settings.app_data_cache.get_all_active_api_calls()
+        self.selected_exchanges = app_settings.app_data_cache.get_multiple_api_latest_exchanges(api_calls)
         self.refresh()
         self.view.show()
 

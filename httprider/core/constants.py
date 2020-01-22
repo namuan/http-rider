@@ -28,11 +28,6 @@ class AssertionDataSource(Enum):
     RESPONSE_TIME = "response_time"
 
 
-class AssertionOutput(Enum):
-    PASSED = "passed"
-    FAILED = "failed"
-
-
 class AssertionMatchers(Enum):
     SKIP = "---"
     EQ = "equalTo"
