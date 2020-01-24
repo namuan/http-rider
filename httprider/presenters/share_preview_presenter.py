@@ -4,7 +4,7 @@ from httprider.core.core_settings import app_settings
 from httprider.core.markdown_renderer import HighlightRenderer
 from httprider.core.pygment_styles import pyg_styles
 from httprider.interactors.share_service_interactor import ShareServiceInteractor
-from httprider.model.app_data import HttpExchange, ApiCall
+from httprider.model.app_data import HttpExchange, ApiCall, ProjectInfo
 from httprider.presenters.common import md_request_response_generator
 
 renderer = HighlightRenderer()
@@ -64,20 +64,31 @@ class SharePreviewPresenter:
             self.render_raw_markdown()
 
     def prepend_api_call(self, api_call: ApiCall, raw_md):
-        return f"""## {api_call.title}
+        return f"""### {api_call.title}
 {api_call.description}
         
 {raw_md}"""
 
     def refresh(self):
         self.view.lbl_share_location.setText("")
+        project: ProjectInfo = app_settings.app_data_reader.get_or_create_project_info()
+        md_project_info = self.md_for_project_info(project)
+
         md_content_for_exchanges = [
             self.md_for_exchange(exchange)
             for exchange in self.selected_exchanges
         ]
-        self.md_content = "\r\n".join(md_content_for_exchanges)
+
+        self.md_content = md_project_info + "\r\n" + "\r\n".join(md_content_for_exchanges)
 
         self.render_raw_markdown()
+
+    def md_for_project_info(self, project: ProjectInfo):
+        return f"""
+## {project.title}
+
+{project.info}
+        """
 
     def md_for_exchange(self, http_exchange: HttpExchange):
         api_call = app_settings.app_data_cache.get_api_call(

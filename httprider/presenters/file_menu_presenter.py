@@ -55,6 +55,9 @@ class FileMenuPresenter:
         app_settings.save_current_project(user_project)
         self.on_file_save(retain_current_project_file=True)
 
+    def on_file_save_env_and_apis(self):
+        pass
+
     def reload_app(self):
         """Switches the underlying data table to point to new file
         And refreshes all the views"""

@@ -18,12 +18,16 @@ def menu_items(self):
     save_as_action = QAction("Save &As...", self)
     save_as_action.triggered.connect(self.file_menu_presenter.on_file_save_as)
 
+    save_env_and_apis_action = QAction("Save &Environments And APIs...", self)
+    save_env_and_apis_action.triggered.connect(self.file_menu_presenter.on_file_save_env_and_apis)
+
     f: QMenu = self.menu_bar.addMenu("&File")
     f.addAction(new_action)
     f.addAction(open_action)
     f.addSeparator()
     f.addAction(save_action)
     f.addAction(save_as_action)
+    f.addAction(save_env_and_apis_action)
 
     single_request = QAction("&Send", self)
     single_request.setShortcut("Ctrl+Return")
@@ -41,8 +45,8 @@ def menu_items(self):
     multiple_export.setShortcut("Ctrl+Shift+E")
     multiple_export.triggered.connect(self.code_generator_dialog.export_all_dialog)
 
-    generate_data = QAction("&Generate Data", self)
-    generate_data.setShortcut("Ctrl+G")
+    generate_data = QAction("&Insert Variables", self)
+    generate_data.setShortcut("Ctrl+I")
     generate_data.triggered.connect(
         self.request_presenter.on_show_data_generator_dialog
     )
