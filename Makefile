@@ -10,12 +10,16 @@ setup: ## Setup virtual environment and install dependencies
 	echo "Once everything is installed, 'make run' to run the application"
 
 release: ## Step to prepare a new release
-	echo "Update version in httprider/__init__.py"
-	echo "Update version in .travis.yml"
-	echo "Commit and push latest version"
-	echo "Once the build is completed, git pull http-rider-osx"
-	echo "Update the build version in http-rider-osx/.travis.yml"
-	echo "Commit with Release notes"
+	echo "Instructions to prepare release"
+	echo "Repo: http-rider: Increment version in httprider/__init__.py"
+	echo "Repo: http-rider: Increment version in .travis.yml"
+	echo "Commit - Preparing Release x.x.x"
+	echo "Repo: http-rider-osx: Increment version in .travis.yml"
+	echo "Commit - Release x.x.x - MacOS"
+	echo "Repo: http-rider-win: Increment version in .appveyor.yml"
+	echo "Commit - Release x.x.x - Windows"
+	echo "Repo: http-rider: Update Download Links in README.md"
+	echo "Repo: http-rider-docs: Update content/en/docs/getting-started/installation.md"
 
 venv: ## Load virtualenv
 	source venv/bin/activate

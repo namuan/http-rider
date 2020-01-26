@@ -9,6 +9,12 @@ See https://twitter.com/deskriders_twt for development updates.
  
 [![HttpRider Intro](https://img.youtube.com/vi/fw8jMjQpfy8/0.jpg)](https://www.youtube.com/watch?v=fw8jMjQpfy8)
  
+### Downloads
+
+Downloads are currently available for MacOS and Windows however it is simple to run from source if you prefer that.
+
+See https://www.httprider.com/docs/getting-started/installation/ for instructions for different operating systems.
+ 
 ### Features  
   
 🚀 Feature complete | 🙈 Experimental | 📝 In development | ☁️️ Planned  
@@ -59,9 +65,9 @@ See https://twitter.com/deskriders_twt for development updates.
   
 🚀 Export [Runscope](https://www.runscope.com) monitoring tests [Demo](https://deskriders.dev/generating-runscope-monitoring-tests/)
 
-🙈 Export [OpenApi V3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) document
+🚀 Export [OpenApi V3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) document
 
-🙈 Export [RestAssured](http://rest-assured.io) functional tests
+🚀 Export [RestAssured](http://rest-assured.io) functional tests
   
 **Importers**
   
@@ -69,7 +75,7 @@ See https://twitter.com/deskriders_twt for development updates.
   
 🚀 Import Postman collections
   
-### Installation  
+### Development  
   
 Run `make` to display list of commands to install required dependencies in a virtual environment.  
   
