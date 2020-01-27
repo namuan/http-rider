@@ -21,6 +21,9 @@ release: ## Step to prepare a new release
 	echo "Repo: http-rider: Update Download Links in README.md"
 	echo "Repo: http-rider-docs: Update content/en/docs/getting-started/installation.md"
 
+deps: ## Reinstalls dependencies
+	./venv/bin/python3 -m pip install -r requirements/dev.txt
+
 clean: ## Clean package
 	rm -rf build dist
 
@@ -28,8 +31,7 @@ package: clean ## Rebuilds venv and packages app
 	rm -rf venv
 	python3 -m venv venv
 	./venv/bin/python3 -m pip install -r requirements/build.txt
-	./venv/bin/python3 -m pip install py2app
-	./venv/bin/python3 setup.py py2app
+	export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/python3 setup.py bdist_app
 
 uic: ## Converts ui files to python
 	for i in `ls resources/ui/*.ui`; do FNAME=`basename $${i} ".ui"`; ./venv/bin/pyuic5 $${i} > "httprider/generated/$${FNAME}.py"; done
@@ -39,6 +41,9 @@ res: ## Generates and compresses resource file
 
 run: ## Runs the application
 	export PYTHONPATH=`pwd`:$PYTHONPATH && python httprider/application.py
+
+runapp: ## Runs the packaged application
+	./dist/HttpRider.app/Contents/MacOS/app
 
 icns: ## Generates icon files from svg
 	echo "Run ./mk-icns.sh resources/icons/httprider.svg httprider"
