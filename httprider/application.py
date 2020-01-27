@@ -1,10 +1,9 @@
 import sys
-
 from PyQt5.QtWidgets import *
 
 from httprider.themes import theme_provider
 from httprider.ui.main_window import MainWindow
-from . import __version__, __appname__, __desktopid__
+from httprider import __version__, __appname__, __desktopid__
 
 
 def main():
@@ -18,3 +17,7 @@ def main():
 
     window.show()
     sys.exit(application.exec_())
+
+
+if __name__ == "__main__":
+    main()

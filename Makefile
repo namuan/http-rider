@@ -38,8 +38,7 @@ res: ## Generates and compresses resource file
 	./venv/bin/pyrcc5 -compress 9 -o httprider/generated/resources_rc.py resources/resources.qrc
 
 run: ## Runs the application
-	export PYTHONPATH=`pwd`:$PYTHONPATH && \
-	python3 httprider/main.py
+	export PYTHONPATH=`pwd`:$PYTHONPATH && python httprider/application.py
 
 icns: ## Generates icon files from svg
 	echo "Run ./mk-icns.sh resources/icons/httprider.svg httprider"
