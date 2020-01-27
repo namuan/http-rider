@@ -591,8 +591,6 @@
    <header location="global">..widgets.completion_plain_text</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../httprider/resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

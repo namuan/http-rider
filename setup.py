@@ -17,7 +17,7 @@ if "py2exe" in sys.argv:
 elif "py2app" in sys.argv:
     py2app_build = True
 
-with open('requirements.txt') as f:
+with open('requirements/base.txt') as f:
     requirements = f.read().splitlines()
 
 test_requirements = [

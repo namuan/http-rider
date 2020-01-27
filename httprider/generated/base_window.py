@@ -338,4 +338,3 @@ class Ui_MainWindow(object):
 from ..widgets.api_calls_list_view import ApiCallsListView
 from ..widgets.completion_line_edit import CompletionLineEdit
 from ..widgets.completion_plain_text import CompletionPlainTextEdit
-import resources_rc

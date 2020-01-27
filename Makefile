@@ -6,7 +6,7 @@ setup: ## Setup virtual environment and install dependencies
 	echo "Run the following commands to install required dependencies"
 	echo "python3 -m venv venv"
 	echo "source venv/bin/activate"
-	echo "pip install -r requirements.txt"
+	echo "pip install -r requirements/dev.txt"
 	echo "Once everything is installed, 'make run' to run the application"
 
 release: ## Step to prepare a new release
@@ -21,31 +21,28 @@ release: ## Step to prepare a new release
 	echo "Repo: http-rider: Update Download Links in README.md"
 	echo "Repo: http-rider-docs: Update content/en/docs/getting-started/installation.md"
 
-venv: ## Load virtualenv
-	source venv/bin/activate
-
 clean: ## Clean package
 	rm -rf build dist
 
 package: clean ## Rebuilds venv and packages app
 	rm -rf venv
 	python3 -m venv venv
-	./venv/bin/python3 -m pip install -r requirements.txt
+	./venv/bin/python3 -m pip install -r requirements/build.txt
 	./venv/bin/python3 -m pip install py2app
 	./venv/bin/python3 setup.py py2app
 
-uic: res ## Converts ui files to python
+uic: ## Converts ui files to python
 	for i in `ls resources/ui/*.ui`; do FNAME=`basename $${i} ".ui"`; ./venv/bin/pyuic5 $${i} > "httprider/generated/$${FNAME}.py"; done
 
-res: venv ## Generates and compresses resource file
-	./venv/bin/pyrcc5 -compress 9 -o httprider/resources_rc.py httprider/resources.qrc
+res: ## Generates and compresses resource file
+	./venv/bin/pyrcc5 -compress 9 -o httprider/generated/resources_rc.py resources/resources.qrc
 
 run: ## Runs the application
 	export PYTHONPATH=`pwd`:$PYTHONPATH && \
 	python3 httprider/main.py
 
 icns: ## Generates icon files from svg
-	echo "Run ./mk-icns.sh httprider/images/httprider.svg httprider"
+	echo "Run ./mk-icns.sh resources/icons/httprider.svg httprider"
 
 .PHONY: help
 .DEFAULT_GOAL := setup

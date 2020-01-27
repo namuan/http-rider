@@ -1,0 +1,3 @@
+-r base.txt
+pyqt-distutils
+PyInstaller>=3.6
