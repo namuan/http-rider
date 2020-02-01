@@ -116,15 +116,15 @@ class AssertionResultPresenter:
             return current_val is not None and current_val.strip() != ""
 
         if matcher == AssertionMatchers.CONTAINS.value:
-            return current_val.find(expected_val) >= 0
+            return current_val is not None and current_val.find(expected_val) >= 0
 
         if matcher == AssertionMatchers.NOT_CONTAINS.value:
-            return current_val.find(expected_val) < 0
+            return current_val is not None and current_val.find(expected_val) < 0
 
         if val_type in ["int", "float"]:
             if matcher == AssertionMatchers.LT.value:
-                return current_val < expected_val
+                return current_val is not None and current_val < expected_val
             if matcher == AssertionMatchers.GT.value:
-                return current_val > expected_val
+                return current_val is not None and current_val > expected_val
 
         return False
