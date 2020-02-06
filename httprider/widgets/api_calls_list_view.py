@@ -4,11 +4,21 @@ from PyQt5.QtWidgets import *
 
 from httprider.core.constants import API_CALL_ROLE
 from httprider.model.app_data import ApiCall
-from httprider.themes.theme_provider import api_call_list_disabled_color, api_call_separator_rect, \
-    api_call_list_selected_rect, \
-    api_call_list_selected_pen, http_ex_success, http_ex_client_err, http_ex_server_err, http_ex_no_response, \
-    api_call_list_title_color, api_call_list_sub_title_color, api_call_list_disabled_title_color, \
-    api_call_list_disabled_sub_title_color, api_call_list_status_code_color
+from httprider.themes.theme_provider import (
+    api_call_list_disabled_color,
+    api_call_separator_rect,
+    api_call_list_selected_rect,
+    api_call_list_selected_pen,
+    http_ex_success,
+    http_ex_client_err,
+    http_ex_server_err,
+    http_ex_no_response,
+    api_call_list_title_color,
+    api_call_list_sub_title_color,
+    api_call_list_disabled_title_color,
+    api_call_list_disabled_sub_title_color,
+    api_call_list_status_code_color,
+)
 
 PADDING = 5
 
@@ -61,7 +71,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         return size
 
     def paint(
-            self, painter: QPainter, option: QStyleOptionViewItem, model_index: QModelIndex
+        self, painter: QPainter, option: QStyleOptionViewItem, model_index: QModelIndex
     ):
         if not model_index.isValid():
             return
@@ -145,7 +155,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         painter.restore()
 
     def draw_status_code(
-            self, title_rect, bounding_rect, painter, api_status_code, api_call
+        self, title_rect, bounding_rect, painter, api_status_code, api_call
     ):
         code_rect_width = api_status_code * 2 if api_status_code else ""
 

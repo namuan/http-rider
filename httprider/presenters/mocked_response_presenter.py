@@ -22,7 +22,9 @@ class MockedResponsePresenter:
             value_completions=HTTP_CONTENT_TYPES,
         )
 
-        self.parent_view.txt_mocked_response_body.document().setDefaultStyleSheet(pyg_styles())
+        self.parent_view.txt_mocked_response_body.document().setDefaultStyleSheet(
+            pyg_styles()
+        )
 
         app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(
             self.refresh_completer

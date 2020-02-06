@@ -100,7 +100,11 @@ class AssertionResultPresenter:
                 current_val = str_to_bool(current_val) if current_val else None
                 expected_val = str_to_bool(expected_val)
         except ValueError as e:
-            logging.error("Unable to convert current value {} or expected value {}".format(current_val, expected_val))
+            logging.error(
+                "Unable to convert current value {} or expected value {}".format(
+                    current_val, expected_val
+                )
+            )
             return False
 
         if matcher == AssertionMatchers.EQ.value:

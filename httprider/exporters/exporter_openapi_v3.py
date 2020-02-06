@@ -42,7 +42,11 @@ class OpenApiv3Exporter:
             if tag.name in api_call_tags:
                 spec.tag(dict(name=tag.name, description=tag.description))
 
-        return spec.to_yaml() if return_raw else highlight(spec.to_yaml(), data.YamlLexer(), HtmlFormatter())
+        return (
+            spec.to_yaml()
+            if return_raw
+            else highlight(spec.to_yaml(), data.YamlLexer(), HtmlFormatter())
+        )
 
     def init_spec(self, project_info: ProjectInfo):
         return APISpec(
@@ -109,8 +113,7 @@ class OpenApiv3Exporter:
 
                 if last_exchange.response.response_body:
                     generated_response_schema = schema_from_json(
-                        last_exchange.response.response_body,
-                        remove_required=True
+                        last_exchange.response.response_body, remove_required=True
                     )
                     response_content_type = last_exchange.response.content_type()
 

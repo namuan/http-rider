@@ -100,7 +100,7 @@ class ApiCall(object):
 
     def enabled_headers(self, hide_secrets=True):
         return {
-            k: v.display_value() if hide_secrets else v.value
+            k.lower(): v.display_value() if hide_secrets else v.value
             for k, v in self.http_headers.items()
             if v.is_enabled
         }
@@ -141,16 +141,16 @@ class ExchangeRequest(object):
 
     def is_fuzzed(self):
         return (
-                self.request_type
-                and self.request_type.value == ExchangeRequestType.FUZZED.value
+            self.request_type
+            and self.request_type.value == ExchangeRequestType.FUZZED.value
         )
 
     def url_with_qp(self):
         if self.query_params:
             return (
-                    self.http_url
-                    + "?"
-                    + "&".join([f"{k}={v}" for k, v in self.query_params.items()])
+                self.http_url
+                + "?"
+                + "&".join([f"{k}={v}" for k, v in self.query_params.items()])
             )
         else:
             return self.http_url

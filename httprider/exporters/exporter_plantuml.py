@@ -41,7 +41,7 @@ def gen_function(api_call, last_exchange, api_test_case, project_info):
     response_code = last_exchange.response.http_status_code
 
     statements = [
-        f"'" + ('-' * 100),
+        f"'" + ("-" * 100),
         f'"{source.strip()}"->"{target.strip()}": **{last_exchange.request.http_method}** "{api_uri}"',
         f"rnote right {source.strip()}",
         f"{api_call.title}",

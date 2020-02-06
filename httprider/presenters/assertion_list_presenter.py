@@ -136,7 +136,13 @@ class AssertionListPresenter:
             new_assertion = Assertion(
                 data_from=data_from,
                 var_name=var_name,
-                selector=selector.lower() if data_from in [AssertionDataSource.REQUEST_HEADER.value, AssertionDataSource.RESPONSE_HEADER.value] else selector,
+                selector=selector.lower()
+                if data_from
+                in [
+                    AssertionDataSource.REQUEST_HEADER.value,
+                    AssertionDataSource.RESPONSE_HEADER.value,
+                ]
+                else selector,
                 matcher=selected_matcher,
                 expected_value=expected_value,
                 var_type=assertion_value_type,

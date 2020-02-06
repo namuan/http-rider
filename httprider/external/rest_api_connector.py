@@ -63,15 +63,25 @@ class RestApiConnector(QThread):
         self.halt_processing = True
         logging.info(f"Received interrupt signal on {self.exchange}")
 
-    def update_request(self, current_exchange_request: ExchangeRequest, prepared_request: PreparedRequest):
+    def update_request(
+        self,
+        current_exchange_request: ExchangeRequest,
+        prepared_request: PreparedRequest,
+    ):
         """Update exchange request with prepared request if available"""
         if prepared_request:
-            current_exchange_request.full_encoded_url = prepared_request.url or current_exchange_request
-            current_exchange_request.headers = {k: v for k, v in prepared_request.headers.items()}
-            current_exchange_request.request_body = prepared_request.body or ''
+            current_exchange_request.full_encoded_url = (
+                prepared_request.url or current_exchange_request
+            )
+            current_exchange_request.headers = {
+                k: v for k, v in prepared_request.headers.items()
+            }
+            current_exchange_request.request_body = prepared_request.body or ""
             current_exchange_request.http_method = prepared_request.method
         else:
-            current_exchange_request.full_encoded_url = current_exchange_request.http_url
+            current_exchange_request.full_encoded_url = (
+                current_exchange_request.http_url
+            )
         return current_exchange_request
 
     def convert_response(self, raw_response):
@@ -87,9 +97,7 @@ class RestApiConnector(QThread):
         return res
 
     def mock_exchange(self, var_tokens):
-        logging.info(
-            f"<== Returning mocked Response ({self.exchange.api_call_id})"
-        )
+        logging.info(f"<== Returning mocked Response ({self.exchange.api_call_id})")
         self.exchange.request.full_encoded_url = self.exchange.request.url_with_qp()
         self.exchange.response = replace_response_variables(
             var_tokens, self.exchange.response
@@ -148,16 +156,22 @@ class RestApiConnector(QThread):
             response, err = self.requester.make_request(
                 req.http_method, req.http_url, kwargs
             )
-            self.exchange.request = self.update_request(self.exchange.request, response.request)
+            self.exchange.request = self.update_request(
+                self.exchange.request, response.request
+            )
 
             # Building exchange response
             if err and isinstance(err, ConnectionError):
                 nce: NewConnectionError = err.args[0].reason
-                error_response = ExchangeResponse(http_status_code=-1, response_body=str(nce.args[0]))
+                error_response = ExchangeResponse(
+                    http_status_code=-1, response_body=str(nce.args[0])
+                )
                 self.exchange.response = error_response
                 self.exchange.failed()
             elif err:
-                error_response = ExchangeResponse(http_status_code=-1, response_body=str(err))
+                error_response = ExchangeResponse(
+                    http_status_code=-1, response_body=str(err)
+                )
                 self.exchange.response = error_response
                 self.exchange.failed()
             else:
@@ -186,7 +200,9 @@ class RestApiConnector(QThread):
             self.signals.error.emit(self.exchange)
 
         if req.is_fuzzed():
-            http_exchange_signals.fuzzed_request_finished.emit(self.exchange.api_call_id)
+            http_exchange_signals.fuzzed_request_finished.emit(
+                self.exchange.api_call_id
+            )
         else:
             http_exchange_signals.request_finished.emit(self.exchange.api_call_id)
 

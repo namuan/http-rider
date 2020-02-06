@@ -19,7 +19,9 @@ class DebugWindow(QtWidgets.QMainWindow, Ui_DebugWindow):
 
     def on_test(self):
         self.edit_mode = not self.edit_mode
-        self.plainTextEdit.appendPlainText("Button Clicked - Mode: {}".format("Edit" if self.edit_mode else "Preview"))
+        self.plainTextEdit.appendPlainText(
+            "Button Clicked - Mode: {}".format("Edit" if self.edit_mode else "Preview")
+        )
         self.update_floating_button_text()
 
     def update_floating_button_text(self):

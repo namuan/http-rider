@@ -3,7 +3,12 @@ from PyQt5.QtWidgets import QListWidgetItem
 
 from httprider.presenters import KeyValueListPresenter
 from httprider.core.core_settings import app_settings
-from httprider.model.app_data import ProjectInfo, TagInfo, COMMON_HEADERS, HTTP_CONTENT_TYPES
+from httprider.model.app_data import (
+    ProjectInfo,
+    TagInfo,
+    COMMON_HEADERS,
+    HTTP_CONTENT_TYPES,
+)
 from httprider.widgets.tag_info_widget import TagInfoWidget
 
 

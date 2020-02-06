@@ -9,9 +9,7 @@ def test_abbreviate():
 
 def test_template_sub_variable():
     templated_str = "Hello ${name}"
-    tokens = dict(
-        name='John Doe'
-    )
+    tokens = dict(name="John Doe")
     output = template_sub(templated_str, tokens)
     assert output == "Hello John Doe"
 

@@ -7,8 +7,16 @@ from typing import Any
 from httprider.core.core_settings import app_settings
 from httprider.core import random_environment, combine_request_headers
 from httprider.core.api_call_interactor import api_call_interactor
-from httprider.external.rest_api_connector import RestApiConnector, http_exchange_signals
-from httprider.model.app_data import ApiCall, ExchangeRequest, HttpExchange, ExchangeResponse
+from httprider.external.rest_api_connector import (
+    RestApiConnector,
+    http_exchange_signals,
+)
+from httprider.model.app_data import (
+    ApiCall,
+    ExchangeRequest,
+    HttpExchange,
+    ExchangeResponse,
+)
 
 
 @attr.s(auto_attribs=True)
@@ -25,6 +33,7 @@ class SafeRestApiInteractor:
     [x] Should queues requests and sequentially call RestApiConnector
     [x] Should provide callback hooks on success and failure for caller
     """
+
     worker_queue: Queue = Queue()
     api_workers = []
     any_worker_running: bool = False
@@ -52,12 +61,14 @@ class SafeRestApiInteractor:
         api_worker_data = ApiWorkerData(
             exchange=exchange,
             on_success=self.__on_success,
-            on_failure=self.__on_failure
+            on_failure=self.__on_failure,
         )
         self.queue_worker_task(api_worker_data)
 
     def queue_worker_task(self, api_worker_data: ApiWorkerData):
-        logging.warning(f"Queuing request for API: {api_worker_data.exchange.api_call_id}")
+        logging.warning(
+            f"Queuing request for API: {api_worker_data.exchange.api_call_id}"
+        )
         self.worker_queue.put(api_worker_data)
         self.__process_queue()
         logging.info(f"Queue Size: {self.worker_queue.qsize()}")
@@ -72,7 +83,9 @@ class SafeRestApiInteractor:
             logging.info("Worker running. Will check again once it finished processing")
         elif not self.worker_queue.empty():
             wrapped_queued_exchange: ApiWorkerData = self.worker_queue.get()
-            logging.info(f"Processing queued exchange: {wrapped_queued_exchange.exchange.api_call_id}")
+            logging.info(
+                f"Processing queued exchange: {wrapped_queued_exchange.exchange.api_call_id}"
+            )
             self.__process_exchange(wrapped_queued_exchange)
         else:
             logging.debug("Nothing in the queue")

@@ -27,15 +27,21 @@ class SharePreviewPresenter:
         self.view.btn_share_exchange.clicked.connect(self.share_exchange)
 
         # domain events
-        app_settings.app_data_writer.signals.exchange_share_created.connect(self.on_share_created)
-        app_settings.app_data_writer.signals.exchange_share_failed.connect(self.on_share_failed)
+        app_settings.app_data_writer.signals.exchange_share_created.connect(
+            self.on_share_created
+        )
+        app_settings.app_data_writer.signals.exchange_share_failed.connect(
+            self.on_share_failed
+        )
 
     def on_share_failed(self, error_message):
         self.view.lbl_share_location.setText(error_message)
         self.on_share_exchange_saved()
 
     def on_share_created(self, share_location_url):
-        share_location_href = "Shared document: <a href=\"{0}\">{0}</a>".format(share_location_url)
+        share_location_href = 'Shared document: <a href="{0}">{0}</a>'.format(
+            share_location_url
+        )
         self.view.lbl_share_location.setText(share_location_href)
         self.on_share_exchange_saved()
 
@@ -75,11 +81,12 @@ class SharePreviewPresenter:
         md_project_info = self.md_for_project_info(project)
 
         md_content_for_exchanges = [
-            self.md_for_exchange(exchange)
-            for exchange in self.selected_exchanges
+            self.md_for_exchange(exchange) for exchange in self.selected_exchanges
         ]
 
-        self.md_content = md_project_info + "\r\n" + "\r\n".join(md_content_for_exchanges)
+        self.md_content = (
+            md_project_info + "\r\n" + "\r\n".join(md_content_for_exchanges)
+        )
 
         self.render_raw_markdown()
 
@@ -91,12 +98,8 @@ class SharePreviewPresenter:
         """
 
     def md_for_exchange(self, http_exchange: HttpExchange):
-        api_call = app_settings.app_data_cache.get_api_call(
-            http_exchange.api_call_id
-        )
-        raw_md = md_request_response_generator(
-            http_exchange, include_sep=False
-        )
+        api_call = app_settings.app_data_cache.get_api_call(http_exchange.api_call_id)
+        raw_md = md_request_response_generator(http_exchange, include_sep=False)
         return self.prepend_api_call(api_call, raw_md)
 
     def show_dialog(self, selected_exchange: HttpExchange):
@@ -106,7 +109,9 @@ class SharePreviewPresenter:
 
     def show_dialog_multiple_apis(self):
         api_calls = app_settings.app_data_cache.get_all_active_api_calls()
-        self.selected_exchanges = app_settings.app_data_cache.get_multiple_api_latest_exchanges(api_calls)
+        self.selected_exchanges = app_settings.app_data_cache.get_multiple_api_latest_exchanges(
+            api_calls
+        )
         self.refresh()
         self.view.show()
 

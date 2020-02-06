@@ -23,7 +23,9 @@ class ExchangePresenter:
         self.view.txt_raw_request.document().setDefaultStyleSheet(pyg_styles())
         self.view.txt_raw_response.document().setDefaultStyleSheet(pyg_styles())
 
-        self.view.txt_exchange_request_body.document().setDefaultStyleSheet(pyg_styles())
+        self.view.txt_exchange_request_body.document().setDefaultStyleSheet(
+            pyg_styles()
+        )
         self.view.txt_response_body.document().setDefaultStyleSheet(pyg_styles())
 
         self.view.tbl_exchange_request_headers.header().setSectionResizeMode(

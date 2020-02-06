@@ -19,7 +19,9 @@ def menu_items(self):
     save_as_action.triggered.connect(self.file_menu_presenter.on_file_save_as)
 
     save_env_and_apis_action = QAction("Save &Environments And APIs...", self)
-    save_env_and_apis_action.triggered.connect(self.file_menu_presenter.on_file_save_env_and_apis)
+    save_env_and_apis_action.triggered.connect(
+        self.file_menu_presenter.on_file_save_env_and_apis
+    )
 
     f: QMenu = self.menu_bar.addMenu("&File")
     f.addAction(new_action)

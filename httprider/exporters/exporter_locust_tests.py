@@ -106,7 +106,11 @@ class ApiUser(HttpLocust):
         unformatted_code = file_header + "\n".join(output) + file_footer
         formatted_code, _ = format_python_code(unformatted_code)
 
-        return formatted_code if return_raw else highlight(formatted_code, Python3Lexer(), HtmlFormatter())
+        return (
+            formatted_code
+            if return_raw
+            else highlight(formatted_code, Python3Lexer(), HtmlFormatter())
+        )
 
     def __export_api_call(self, idx, api_call):
         last_exchange = self.app_config.app_data_cache.get_last_exchange(api_call.id)

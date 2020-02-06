@@ -18,6 +18,7 @@ g.add_provider(PythonProvider)
 g.add_provider(LoremProvider)
 g.add_provider(DTProvider)
 
+
 class CustomFaker:
     last_name = g.last_name
     first_name = g.first_name

@@ -20,7 +20,7 @@ def _build_filter_query(query=None, tag=None):
     if selected_tag and query:
         return (
             lambda api_call: query.lower() in api_call.title.lower()
-                             and selected_tag in api_call.tags
+            and selected_tag in api_call.tags
         )
 
     if selected_tag:
@@ -203,12 +203,12 @@ class AppDataCache:
 
     @staticmethod
     def get_latest_assertion_value_from_exchange(
-            assertion: Assertion, exchange: HttpExchange
+        assertion: Assertion, exchange: HttpExchange
     ):
         if assertion.data_from == AssertionDataSource.REQUEST_HEADER.value:
-            return exchange.request.headers.get(assertion.selector, None)
+            return exchange.request.headers.get(assertion.selector.lower(), None)
         elif assertion.data_from == AssertionDataSource.RESPONSE_HEADER.value:
-            return exchange.response.headers.get(assertion.selector, None)
+            return exchange.response.headers.get(assertion.selector.lower(), None)
         elif assertion.data_from == AssertionDataSource.REQUEST_BODY.value:
             return json_path(exchange.request.request_body, assertion.selector)
         elif assertion.data_from == AssertionDataSource.RESPONSE_BODY.value:
@@ -248,10 +248,7 @@ class AppDataCache:
 
     def get_multiple_api_latest_exchanges(self, api_calls: List[ApiCall]):
         """Returns latest Http Exchanges for multiple API Calls"""
-        return [
-            self.get_last_exchange(api_call.id)
-            for api_call in api_calls
-        ]
+        return [self.get_last_exchange(api_call.id) for api_call in api_calls]
 
     def get_all_api_test_assertions(self):
         api_calls = self.get_all_api_calls()

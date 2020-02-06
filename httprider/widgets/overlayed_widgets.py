@@ -2,14 +2,13 @@ from PyQt5 import QtWidgets, QtCore
 
 
 class FloatingButtonWidget(QtWidgets.QPushButton):
-
     def __init__(self, parent):
         super().__init__(parent)
         self.paddingLeft = 5
         self.paddingTop = 5
 
     def update_position(self):
-        if hasattr(self.parent(), 'viewport'):
+        if hasattr(self.parent(), "viewport"):
             parent_rect = self.parent().viewport().rect()
         else:
             parent_rect = self.parent().rect()
@@ -42,4 +41,3 @@ class OverlayedPlainTextEdit(QtWidgets.QPlainTextEdit):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.floating_button.update_position()
-
