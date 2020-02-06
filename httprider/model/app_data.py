@@ -194,7 +194,7 @@ class ExchangeResponse(object):
         self.response_headers = {k: v for k, v in new_headers.lower_items()}
 
     def content_type(self):
-        return self.headers.get("Content-Type", self.response_body_type.value)
+        return self.headers.get("content-type", self.response_body_type.value)
 
     @classmethod
     def from_mocked_response(cls, mocked_response: MockedResponse):
