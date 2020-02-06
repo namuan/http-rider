@@ -21,6 +21,9 @@ release: ## Step to prepare a new release
 	echo "Repo: http-rider: Update Download Links in README.md"
 	echo "Repo: http-rider-docs: Update content/en/docs/getting-started/installation.md"
 
+black: ## Runs black for code formatting
+	black httprider --exclude generated
+
 deps: ## Reinstalls dependencies
 	./venv/bin/python3 -m pip install -r requirements/dev.txt
 
