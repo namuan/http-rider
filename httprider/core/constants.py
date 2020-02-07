@@ -39,6 +39,7 @@ class AssertionMatchers(Enum):
     NOT_CONTAINS = "notContainsString"
     LT = "lessThan"
     GT = "greaterThan"
+    MATCHES = "matches"
 
 
 HTTP_CONTENT_TYPES = [

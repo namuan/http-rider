@@ -1,4 +1,5 @@
 import logging
+import re
 
 from PyQt5.QtWidgets import QListWidget
 
@@ -124,6 +125,12 @@ class AssertionResultPresenter:
 
         if matcher == AssertionMatchers.NOT_CONTAINS.value:
             return current_val is not None and current_val.find(expected_val) < 0
+
+        if matcher == AssertionMatchers.MATCHES.value:
+            return (
+                current_val is not None
+                and re.match(expected_val, current_val) is not None
+            )
 
         if val_type in ["int", "float"]:
             if matcher == AssertionMatchers.LT.value:
