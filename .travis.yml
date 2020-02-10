@@ -19,3 +19,10 @@ script:
   - git push origin ${BUILD_VERSION}
 notifications:
   email: false
+
+deploy:
+  provider: releases
+  api-key: "${GITHUB_TOKEN}"
+  skip_cleanup: true
+  on:
+    repo: namuan/one-page-releases
