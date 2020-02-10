@@ -1,12 +1,10 @@
-
-# HTTP Rider  
+<p align="center">
+  <img src="https://github.com/namuan/http-rider/raw/master/resources/images/httprider-readme.png" width="128px"/>
+</p>
+<h1 align="center">HttpRider :: Simple and Powerful Cross-Platform API Client</h1>  
   
-[![Gitter](https://badges.gitter.im/http-rider/community.svg)](https://gitter.im/http-rider/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
-Simple and Powerful cross-platform Rest API client  
-  
-See https://twitter.com/deskriders_twt for development updates.  
- 
+[![MacOS Release](https://img.shields.io/github/v/release/namuan/http-rider-osx?label=macos)](https://github.com/namuan/http-rider-osx/releases) [![Windows Release](https://img.shields.io/github/v/release/namuan/http-rider-win?label=windows)](https://github.com/namuan/http-rider-win/releases) [![Linux Release](https://img.shields.io/github/v/release/namuan/http-rider?label=Linux)](https://github.com/namuan/http-rider/releases) [![GitHub license](https://img.shields.io/github/license/namuan/http-rider.svg)](https://github.com/namuan/namuan/blob/master/LICENSE) [![Build Status](https://travis-ci.com/namuan/http-rider.svg?branch=master)](https://travis-ci.org/namuan/http-rider) [![GitHub last commit](https://img.shields.io/github/last-commit/namuan/http-rider)](https://github.com/namuan/http-rider/commits/master) [![GitHub commit activity the past week, 4 weeks, year](https://img.shields.io/github/commit-activity/y/namuan/http-rider)](https://github.com/namuan/http-rider/commits/master) [![Twitter Follow](https://img.shields.io/twitter/follow/deskriders_twt.svg?style=social&label=Follow)](https://twitter.com/deskriders_twt) [![Gitter](https://badges.gitter.im/http-rider/community.svg)](https://gitter.im/http-rider/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+   
 [![HttpRider Intro](https://img.youtube.com/vi/fw8jMjQpfy8/0.jpg)](https://www.youtube.com/watch?v=fw8jMjQpfy8)
  
 ### Downloads
