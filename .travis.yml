@@ -25,4 +25,4 @@ deploy:
   api-key: "${GITHUB_TOKEN}"
   skip_cleanup: true
   on:
-    repo: namuan/one-page-releases
+    repo: namuan/http-rider
