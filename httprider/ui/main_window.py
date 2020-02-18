@@ -47,6 +47,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.api_calls_history_presenter = ApiCallsHistoryPresenter(self)
         self.file_menu_presenter = FileMenuPresenter(self)
         self.env_menu_presenter = EnvironmentMenuPresenter(self)
+        self.generator_menu_presenter = GeneratorsMenuPresenter(self)
 
         # Custom Dialogs
         self.configuration_dialog = ConfigurationDialog(self)

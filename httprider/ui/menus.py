@@ -72,3 +72,10 @@ def menu_items(self):
     r: QMenu = self.menu_bar.addMenu("&Environments")
     r.addAction(export_env_action)
     r.addAction(import_env_action)
+
+    # Generators Menu
+    openapi_sdk_gen_action = QAction("&OpenAPI SDK", self)
+    openapi_sdk_gen_action.triggered.connect(self.generator_menu_presenter.on_openapi_sdk_generator)
+
+    r: QMenu = self.menu_bar.addMenu("&Generators")
+    r.addAction(openapi_sdk_gen_action)

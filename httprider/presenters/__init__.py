@@ -62,3 +62,4 @@ from .data_generator_presenter import DataGeneratorPresenter
 from .environments_menu_presenter import EnvironmentMenuPresenter
 from .fuzz_test_presenter import FuzzTestPresenter
 from .share_preview_presenter import SharePreviewPresenter
+from .generators_menu_presenter import GeneratorsMenuPresenter
