@@ -18,9 +18,6 @@ class Ui_DebugWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.plainTextEdit = ExampleOverlayedText(self.centralwidget)
-        self.plainTextEdit.setObjectName("plainTextEdit")
-        self.verticalLayout.addWidget(self.plainTextEdit)
         DebugWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(DebugWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 622, 22))
@@ -36,4 +33,3 @@ class Ui_DebugWindow(object):
     def retranslateUi(self, DebugWindow):
         _translate = QtCore.QCoreApplication.translate
         DebugWindow.setWindowTitle(_translate("DebugWindow", "MainWindow"))
-from example_overlayed_text import ExampleOverlayedText
