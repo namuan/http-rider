@@ -82,7 +82,7 @@ $ make
 Run the following commands to install required dependencies  
 python3 -m venv venv  
 source venv/bin/activate  
-pip install -r requirements.txt  
+pip install -r requirements/dev.txt  
 Once everything is installed, 'make run' to run the application  
 ```  
   
