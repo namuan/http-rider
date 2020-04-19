@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QIcon, QFont
+from PyQt5.QtGui import QColor, QIcon, QFont, QFontDatabase
 
 from httprider.core.theme_mode import is_dark
 from httprider.themes.theme import Theme
@@ -12,7 +12,10 @@ def configure_theme(application):
     theme_mode = "dark" if is_dark() else "light"
     application.style().load_stylesheet(theme_mode)
 
-    current_font: QFont = application.font()
+    font_db = QFontDatabase()
+    font_db.addApplicationFont(":/fonts/JetBrainsMono-Regular.ttf")
+
+    current_font: QFont = QFont("JetBrains Mono")
     current_font.setPointSize(12)
     application.setFont(current_font)
 

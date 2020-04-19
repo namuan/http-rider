@@ -29,5 +29,6 @@
         <file>icons/httprider.icns</file>
         <file>icons/httprider.ico</file>
         <file>icons/httprider.svg</file>
+        <file>fonts/JetBrainsMono-Regular.ttf</file>
     </qresource>
 </RCC>
