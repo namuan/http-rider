@@ -118,7 +118,7 @@ class RestApiConnector(QThread):
         # converting request to k/v structure
         kwargs = dict(headers=req.headers, params=req.query_params)
 
-        content_type = req.headers.get("Content-Type", ContentType.NONE.value)
+        content_type = req.headers.get("content-type", ContentType.NONE.value)
 
         if req.request_body:
             req.request_body_type = guess_content_type(req.request_body)
