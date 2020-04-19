@@ -26,5 +26,8 @@
         <file>themes/dark.qss</file>
         <file>themes/pyg-light.css</file>
         <file>themes/pyg-dark.css</file>
+        <file>icons/httprider.icns</file>
+        <file>icons/httprider.ico</file>
+        <file>icons/httprider.svg</file>
     </qresource>
 </RCC>
