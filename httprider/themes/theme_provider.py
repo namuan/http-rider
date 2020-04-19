@@ -1,12 +1,13 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QColor, QIcon, QFont
 
 from httprider.core.theme_mode import is_dark
 from httprider.themes.theme import Theme
 
 
 def configure_theme(application):
+    application.setWindowIcon(QIcon(":/icons/httprider.ico"))
+
     application.setStyle(Theme())
     theme_mode = "dark" if is_dark() else "light"
     application.style().load_stylesheet(theme_mode)
