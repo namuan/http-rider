@@ -58,10 +58,9 @@ class OpenApiv3Exporter:
         )
 
     def export_api_calls(self, api_spec, api_path, api_calls, servers):
-        # api_call = api_calls[0]
-        # last_exchange = app_settings.app_data_reader.get_last_exchange(api_call.id)
-        # http_relative_uri = self.extract_uri(last_exchange.request.http_url, servers)
-        http_relative_uri = extract_uri(api_path, servers)
+
+        http_relative_uri = self.url_from_last_exchange(api_calls, servers)
+        # http_relative_uri = extract_uri(api_path, servers)
 
         operations = {}
 
@@ -123,6 +122,12 @@ class OpenApiv3Exporter:
 
         # Build spec
         api_spec.path(http_relative_uri, operations=operations)
+
+    def url_from_last_exchange(self, api_calls, servers):
+        api_call = api_calls[0]
+        last_exchange = self.app_config.app_data_cache.get_last_exchange(api_call.id)
+        http_relative_uri = extract_uri(last_exchange.request.http_url, servers)
+        return http_relative_uri
 
     def add_params(self, parameters, source_params, params_type):
         for param, param_value in source_params.items():
