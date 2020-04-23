@@ -45,6 +45,9 @@ res: ## Generates and compresses resource file
 run: ## Runs the application
 	export PYTHONPATH=`pwd`:$PYTHONPATH && python httprider/application.py
 
+test: ## Run all unit tests
+	export PYTHONPATH=`pwd`:$PYTHONPATH && pytest httprider/tests
+
 runapp: ## Runs the packaged application
 	./dist/HttpRider.app/Contents/MacOS/app
 
