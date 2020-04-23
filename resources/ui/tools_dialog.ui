@@ -21,9 +21,9 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>250</x>
      <y>310</y>
-     <width>341</width>
+     <width>171</width>
      <height>32</height>
     </rect>
    </property>
@@ -57,29 +57,33 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>70</y>
-     <width>391</width>
+     <y>80</y>
+     <width>401</width>
      <height>26</height>
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="lbl_transformed_text">
+  <widget class="QToolButton" name="btn_copy_transformed">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>190</y>
-     <width>331</width>
-     <height>16</height>
+     <x>370</x>
+     <y>110</y>
+     <width>41</width>
+     <height>22</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <pointsize>11</pointsize>
-     <italic>true</italic>
-    </font>
-   </property>
    <property name="text">
-    <string>&lt;transformed value&gt;</string>
+    <string>Copy</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="txt_transformed_text">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>350</width>
+     <height>181</height>
+    </rect>
    </property>
   </widget>
  </widget>

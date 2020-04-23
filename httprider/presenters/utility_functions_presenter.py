@@ -10,10 +10,11 @@ class UtilityFunctionsPresenter:
         for f in utility_func_map.keys():
             self.view.function_selector.addItem(f)
 
-            # Event handlers to refresh generated values
+        # Event handlers to refresh generated values
         self.view.function_selector.currentIndexChanged[str].connect(
             self.transform_selected_text
         )
+        self.view.btn_copy_transformed.clicked.connect(self.on_copy_clipboard)
 
     def init(self):
         whole_text = self.parent.text()
@@ -29,10 +30,14 @@ class UtilityFunctionsPresenter:
         except Exception as e:
             return "Error: {}".format(e)
 
+    def on_copy_clipboard(self):
+        self.view.txt_transformed_text.selectAll()
+        self.view.txt_transformed_text.copy()
+
     def transform_selected_text(self):
         selected_text = self.view.lbl_selected_text.text()
         func_name = self.view.function_selector.currentText()
-        self.view.lbl_transformed_text.setText(
+        self.view.txt_transformed_text.setPlainText(
             self.apply_transformation(selected_text, func_name)
         )
 
