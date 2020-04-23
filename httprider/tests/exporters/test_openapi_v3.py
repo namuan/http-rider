@@ -21,7 +21,7 @@ def test_export_single_open_api_v3_document():
     assert openapi.get("info").get("title") is not ""
     assert openapi.get("info").get("version") == "1.0.0"
 
-    openapi_path = openapi.get("paths").get("${API_URL}/get", None)
+    openapi_path = openapi.get("paths").get("http://127.0.0.1:8000/get", None)
     assert openapi_path is not None
     assert openapi_path.get("get").get("summary") == "Get httpbin"
     assert "Registration" in openapi_path.get("get").get("tags")
