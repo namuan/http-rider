@@ -5,19 +5,18 @@ from requests import PreparedRequest
 from requests.exceptions import ConnectionError
 from urllib3.exceptions import NewConnectionError
 
+from httprider.core.constants import ContentType, ExchangeResponseStatus, CONTENT_TYPE_HEADER_IN_EXCHANGE
+from httprider.core.core_settings import app_settings
+from httprider.core.generators import is_file_function
+from httprider.external import open_form_file
+from httprider.external.requester import Requester
+from httprider.model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
 from ..core import (
     guess_content_type,
     replace_variables,
     replace_response_variables,
     get_variable_tokens,
 )
-from httprider.core.constants import ContentType, ExchangeResponseStatus
-from httprider.core.core_settings import app_settings
-from httprider.core.generators import is_file_function
-from httprider.external import open_form_file
-from httprider.external.requester import Requester
-from httprider.model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
-
 
 class HttpExchangeSignals(QObject):
     request_started = pyqtSignal(str, str)
@@ -64,14 +63,14 @@ class RestApiConnector(QThread):
         logging.info(f"Received interrupt signal on {self.exchange}")
 
     def update_request(
-        self,
-        current_exchange_request: ExchangeRequest,
-        prepared_request: PreparedRequest,
+            self,
+            current_exchange_request: ExchangeRequest,
+            prepared_request: PreparedRequest,
     ):
         """Update exchange request with prepared request if available"""
         if prepared_request:
             current_exchange_request.full_encoded_url = (
-                prepared_request.url or current_exchange_request
+                    prepared_request.url or current_exchange_request
             )
             current_exchange_request.headers = {
                 k: v for k, v in prepared_request.headers.items()
@@ -118,18 +117,18 @@ class RestApiConnector(QThread):
         # converting request to k/v structure
         kwargs = dict(headers=req.headers, params=req.query_params)
 
-        content_type = req.headers.get("content-type", ContentType.NONE.value)
+        content_type = req.headers.get("%s" % CONTENT_TYPE_HEADER_IN_EXCHANGE, ContentType.NONE.value)
 
         if req.request_body:
             req.request_body_type = guess_content_type(req.request_body)
-            content_type = req.headers.get("Content-Type", req.request_body_type.value)
+            content_type = req.headers.get(CONTENT_TYPE_HEADER_IN_EXCHANGE, req.request_body_type.value)
 
         if req.form_params and "application/x-www-form-urlencoded" in content_type:
             req.request_body_type = ContentType.FORM
             kwargs["data"] = req.form_params
         elif req.form_params:
             if content_type:
-                del kwargs["headers"]["Content-Type"]
+                del kwargs["headers"][CONTENT_TYPE_HEADER_IN_EXCHANGE]
 
             kwargs["files"] = {
                 k: open_form_file(is_file_function(v).group(2))

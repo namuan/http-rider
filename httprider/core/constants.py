@@ -54,6 +54,8 @@ HTTP_CONTENT_TYPES = [
 
 COMMON_HEADERS = ["Content-Type", "Accept", "Authorization"]
 
+CONTENT_TYPE_HEADER_IN_EXCHANGE = "content-type"
+
 
 class ContentType(Enum):
     NONE = ""
