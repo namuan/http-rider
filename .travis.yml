@@ -10,7 +10,7 @@ branches:
     - master
 env:
   global:
-    - BUILD_VERSION="0.6.2"
+    - BUILD_VERSION="0.6.3"
 script:
   - git config --local user.name "namuan"
   - git remote set-url origin https://namuan:${GITHUB_TOKEN}@github.com/namuan/http-rider.git
