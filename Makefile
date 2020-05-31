@@ -7,6 +7,7 @@ release: ## Step to prepare a new release
 	echo "Repo: http-rider: Increment version in httprider/__init__.py"
 	echo "Repo: http-rider: Increment version in .travis.yml"
 	echo "Commit - Preparing Release x.x.x"
+	echo "Check Differences between Releases using Fork"
 	echo "Repo: http-rider-osx: Increment version in .travis.yml"
 	echo "Commit - Release x.x.x - MacOS"
 	echo "Repo: http-rider-win: Increment version in .appveyor.yml"
