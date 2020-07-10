@@ -44,7 +44,7 @@ def to_python_requests(idx, api_call: ApiCall, last_exchange: HttpExchange):
     """
 
     py_func = f"""
-    @seq_task({idx + 1})
+    @task
     # @task(10) # To run this test 10 times
     def {func_name}(self):
         # Group requests if it contains variable params
@@ -68,13 +68,13 @@ class LocustTestsExporter:
 
     def export_data(self, api_calls: List[ApiCall], return_raw=False):
         file_header = """
-# python3 -m pip install locustio - See https://docs.locust.io/en/stable/installation.html
+# python3 -m pip install locust - See https://docs.locust.io/en/stable/installation.html
 # Running the tests with web ui
 # locust -f this_file.py
 # Or to run it without web ui for 20(secs) with 10 users and 2 users to spawn every second
-# locust -f locust_test.py --no-web -c 10 -r 2 --run-time 20s
+# locust -f locust_test.py --headless --users 10 --hatch-rate 2 --run-time 20s
 
-from locust import HttpLocust, TaskSet, TaskSequence, seq_task
+from locust import HttpUser, SequentialTaskSet, constant, constant_pacing, between, task
 import json
 import random
 import string
@@ -91,12 +91,16 @@ def random_str(length=10, with_punctuation=False):
 def random_int(min=0, max=100):
     return random.randint(min, max)
     
-class ApiTestSteps(TaskSequence):
+class ApiTestSteps(SequentialTaskSet):
         """
+
         file_footer = """
-class ApiUser(HttpLocust):
-    task_set = ApiTestSteps
+class ApiUser(HttpUser):
+    tasks = [ApiTestSteps]
     host = "localhost"
+    
+    # See https://docs.locust.io/en/stable/api.html#locust.wait_time
+    wait_time = constant(1) # wait between requests. Other options between(5, 15) or constant_pacing(1)
         
         """
         output = [
