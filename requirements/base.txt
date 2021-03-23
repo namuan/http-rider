@@ -1,5 +1,5 @@
-sip==4.19.8
-PyQt5==5.13.2
+sip
+PyQt5
 requests
 attrs
 cattrs
