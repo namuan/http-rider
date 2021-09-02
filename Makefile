@@ -18,7 +18,7 @@ release: ## Step to prepare a new release
 black: ## Runs black for code formatting
 	black httprider --exclude generated
 
-deps: ## Reinstalls dependencies
+deps: ## Reinstalls dependencies
 	./venv/bin/python3 -m pip install -r requirements/dev.txt
 
 clean: ## Clean package
@@ -29,7 +29,7 @@ setup: ## Re-initiates virtualenv
 	python3 -m venv venv
 	./venv/bin/python3 -m pip install -r requirements/dev.txt
 
-package: clean ## Rebuilds venv and packages app
+package: clean ## Rebuilds venv and packages app
 	./venv/bin/python3 -m pip install -r requirements/build.txt
 	export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/python3 setup.py bdist_app
 
@@ -47,6 +47,9 @@ test: ## Run all unit tests
 
 runapp: ## Runs the packaged application
 	./dist/HttpRider.app/Contents/MacOS/app
+
+install-macosx: package ## Installs application in users Application folder
+	./scripts/install-macosx.sh httprider.app
 
 icns: ## Generates icon files from svg
 	echo "Run ./mk-icns.sh resources/icons/httprider.svg httprider"
