@@ -16,7 +16,10 @@ release: ## Step to prepare a new release
 	echo "Repo: http-rider-docs: Update content/en/docs/getting-started/installation.md"
 
 black: ## Runs black for code formatting
-	black httprider --exclude generated
+	./venv/bin/black httprider --exclude generated
+
+lint: black ## Runs Flake8 for linting
+	./venv/bin/flake8 app
 
 deps: ## Reinstalls dependencies
 	./venv/bin/python3 -m pip install -r requirements/dev.txt
@@ -28,6 +31,7 @@ setup: ## Re-initiates virtualenv
 	rm -rf venv
 	python3 -m venv venv
 	./venv/bin/python3 -m pip install -r requirements/dev.txt
+	echo "Once everything is installed, 'make run' to run the application"
 
 package: clean ## Rebuilds venv and packages app
 	./venv/bin/python3 -m pip install -r requirements/build.txt
@@ -44,6 +48,10 @@ run: ## Runs the application
 
 test: ## Run all unit tests
 	export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/pytest httprider/tests
+
+uitest: ## Run all unit tests
+	rm -vf $$HOME/Library/Preferences/Python/httprider.db
+	export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/pytest uitests
 
 runapp: ## Runs the packaged application
 	./dist/HttpRider.app/Contents/MacOS/app
