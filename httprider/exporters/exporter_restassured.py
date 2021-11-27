@@ -98,12 +98,12 @@ class RestAssuredExporter:
         <scope>test</scope>
     </dependency>
 
-    Hamcresh Matchers
+    Hamcrest Matchers
     
     <dependency>
-        <groupId>org.hamcrest</groupId>
-        <artifactId>hamcrest-all</artifactId>
-        <version>1.3</version>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-all</artifactId>
+        <version>1.3</version>
     </dependency>
 
     JSON Schema Validation
