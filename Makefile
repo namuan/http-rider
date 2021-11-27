@@ -16,10 +16,10 @@ release: ## Step to prepare a new release
 	echo "Repo: http-rider-docs: Update content/en/docs/getting-started/installation.md"
 
 black: ## Runs black for code formatting
-	./venv/bin/black httprider --exclude generated
+	./venv/bin/black httprider
 
 lint: black ## Runs Flake8 for linting
-	./venv/bin/flake8 app
+	./venv/bin/flake8 httprider
 
 deps: ## Reinstalls dependencies
 	./venv/bin/python3 -m pip install -r requirements/dev.txt
