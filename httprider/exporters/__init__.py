@@ -10,6 +10,7 @@ from . import exporter_plantuml
 from . import exporter_slow_cooker
 from . import exporter_confluence
 from . import exporter_locust_tests
+from . import exporter_spring_contract_tests
 
 exporter_plugins = {
     "locust": exporter_locust_tests,
@@ -24,4 +25,5 @@ exporter_plugins = {
     "mermaid": exporter_mermaid,
     "openapi_v3": exporter_openapi_v3,
     "restassured": exporter_restassured,
+    "spring_contract_tests": exporter_spring_contract_tests,
 }
