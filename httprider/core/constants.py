@@ -49,7 +49,7 @@ HTTP_CONTENT_TYPES = [
     "application/octet-stream",
     "application/pdf",
     "application/xml",
-    "text/xml"
+    "text/xml",
 ]
 
 COMMON_HEADERS = ["Content-Type", "Accept", "Authorization"]

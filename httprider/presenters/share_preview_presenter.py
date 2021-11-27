@@ -109,8 +109,8 @@ class SharePreviewPresenter:
 
     def show_dialog_multiple_apis(self):
         api_calls = app_settings.app_data_cache.get_all_active_api_calls()
-        self.selected_exchanges = app_settings.app_data_cache.get_multiple_api_latest_exchanges(
-            api_calls
+        self.selected_exchanges = (
+            app_settings.app_data_cache.get_multiple_api_latest_exchanges(api_calls)
         )
         self.refresh()
         self.view.show()

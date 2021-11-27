@@ -66,8 +66,10 @@ class AssertionResultPresenter:
                 self.view.addItem(f"{assertion.output}")
 
     def __evaluate_assertion(self, assertion: Assertion, exchange: HttpExchange):
-        current_val = app_settings.app_data_cache.get_latest_assertion_value_from_exchange(
-            assertion, exchange
+        current_val = (
+            app_settings.app_data_cache.get_latest_assertion_value_from_exchange(
+                assertion, exchange
+            )
         )
         if assertion.expected_value == "None":
             assertion.output = None

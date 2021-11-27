@@ -44,12 +44,18 @@ class Ui_AssertionBuilderDialog(object):
         self.tbl_request_headers.headerItem().setTextAlignment(1, QtCore.Qt.AlignCenter)
         self.verticalLayout.addWidget(self.tbl_request_headers)
         self.tbl_request_body = QtWidgets.QTreeView(self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
-        sizePolicy.setHeightForWidth(self.tbl_request_body.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.tbl_request_body.sizePolicy().hasHeightForWidth()
+        )
         self.tbl_request_body.setSizePolicy(sizePolicy)
-        self.tbl_request_body.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tbl_request_body.setEditTriggers(
+            QtWidgets.QAbstractItemView.NoEditTriggers
+        )
         self.tbl_request_body.setObjectName("tbl_request_body")
         self.tbl_request_body.header().setVisible(False)
         self.tbl_request_body.header().setStretchLastSection(False)
@@ -70,16 +76,26 @@ class Ui_AssertionBuilderDialog(object):
         self.verticalLayout_2.addWidget(self.label_2)
         self.tbl_response_headers = QtWidgets.QTreeWidget(self.frame_2)
         self.tbl_response_headers.setObjectName("tbl_response_headers")
-        self.tbl_response_headers.headerItem().setTextAlignment(0, QtCore.Qt.AlignCenter)
-        self.tbl_response_headers.headerItem().setTextAlignment(1, QtCore.Qt.AlignCenter)
+        self.tbl_response_headers.headerItem().setTextAlignment(
+            0, QtCore.Qt.AlignCenter
+        )
+        self.tbl_response_headers.headerItem().setTextAlignment(
+            1, QtCore.Qt.AlignCenter
+        )
         self.verticalLayout_2.addWidget(self.tbl_response_headers)
         self.tbl_response_body = QtWidgets.QTreeView(self.frame_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
-        sizePolicy.setHeightForWidth(self.tbl_response_body.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.tbl_response_body.sizePolicy().hasHeightForWidth()
+        )
         self.tbl_response_body.setSizePolicy(sizePolicy)
-        self.tbl_response_body.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tbl_response_body.setEditTriggers(
+            QtWidgets.QAbstractItemView.NoEditTriggers
+        )
         self.tbl_response_body.setObjectName("tbl_response_body")
         self.tbl_response_body.header().setVisible(False)
         self.tbl_response_body.header().setStretchLastSection(False)
@@ -95,7 +111,9 @@ class Ui_AssertionBuilderDialog(object):
         self.label_3 = QtWidgets.QLabel(self.frame_3)
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_2.addWidget(self.label_3)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_2.addItem(spacerItem)
         self.btn_response_code_assertion = QtWidgets.QToolButton(self.frame_3)
         self.btn_response_code_assertion.setObjectName("btn_response_code_assertion")
@@ -122,20 +140,48 @@ class Ui_AssertionBuilderDialog(object):
 
     def retranslateUi(self, AssertionBuilderDialog):
         _translate = QtCore.QCoreApplication.translate
-        AssertionBuilderDialog.setWindowTitle(_translate("AssertionBuilderDialog", "Assertions Builder"))
+        AssertionBuilderDialog.setWindowTitle(
+            _translate("AssertionBuilderDialog", "Assertions Builder")
+        )
         self.label.setText(_translate("AssertionBuilderDialog", "Request"))
-        self.tbl_request_headers.headerItem().setText(0, _translate("AssertionBuilderDialog", "Name"))
-        self.tbl_request_headers.headerItem().setText(1, _translate("AssertionBuilderDialog", "Value"))
+        self.tbl_request_headers.headerItem().setText(
+            0, _translate("AssertionBuilderDialog", "Name")
+        )
+        self.tbl_request_headers.headerItem().setText(
+            1, _translate("AssertionBuilderDialog", "Value")
+        )
         self.label_2.setText(_translate("AssertionBuilderDialog", "Response"))
-        self.tbl_response_headers.headerItem().setText(0, _translate("AssertionBuilderDialog", "Name"))
-        self.tbl_response_headers.headerItem().setText(1, _translate("AssertionBuilderDialog", "Value"))
+        self.tbl_response_headers.headerItem().setText(
+            0, _translate("AssertionBuilderDialog", "Name")
+        )
+        self.tbl_response_headers.headerItem().setText(
+            1, _translate("AssertionBuilderDialog", "Value")
+        )
         self.label_3.setText(_translate("AssertionBuilderDialog", "Assertions"))
-        self.btn_response_code_assertion.setText(_translate("AssertionBuilderDialog", "HTTP 200"))
-        self.btn_response_time_assertion.setText(_translate("AssertionBuilderDialog", "317 ms"))
-        self.tbl_assertions.headerItem().setText(0, _translate("AssertionBuilderDialog", "From"))
-        self.tbl_assertions.headerItem().setText(1, _translate("AssertionBuilderDialog", "Name"))
-        self.tbl_assertions.headerItem().setText(2, _translate("AssertionBuilderDialog", "Selector"))
-        self.tbl_assertions.headerItem().setText(3, _translate("AssertionBuilderDialog", "Current Value"))
-        self.tbl_assertions.headerItem().setText(4, _translate("AssertionBuilderDialog", "Matcher"))
-        self.tbl_assertions.headerItem().setText(5, _translate("AssertionBuilderDialog", "Expected Value"))
-        self.tbl_assertions.headerItem().setText(6, _translate("AssertionBuilderDialog", "X"))
+        self.btn_response_code_assertion.setText(
+            _translate("AssertionBuilderDialog", "HTTP 200")
+        )
+        self.btn_response_time_assertion.setText(
+            _translate("AssertionBuilderDialog", "317 ms")
+        )
+        self.tbl_assertions.headerItem().setText(
+            0, _translate("AssertionBuilderDialog", "From")
+        )
+        self.tbl_assertions.headerItem().setText(
+            1, _translate("AssertionBuilderDialog", "Name")
+        )
+        self.tbl_assertions.headerItem().setText(
+            2, _translate("AssertionBuilderDialog", "Selector")
+        )
+        self.tbl_assertions.headerItem().setText(
+            3, _translate("AssertionBuilderDialog", "Current Value")
+        )
+        self.tbl_assertions.headerItem().setText(
+            4, _translate("AssertionBuilderDialog", "Matcher")
+        )
+        self.tbl_assertions.headerItem().setText(
+            5, _translate("AssertionBuilderDialog", "Expected Value")
+        )
+        self.tbl_assertions.headerItem().setText(
+            6, _translate("AssertionBuilderDialog", "X")
+        )

@@ -14,7 +14,9 @@ class Ui_TagInfoWidget(object):
     def setupUi(self, TagInfoWidget):
         TagInfoWidget.setObjectName("TagInfoWidget")
         TagInfoWidget.resize(516, 165)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(TagInfoWidget.sizePolicy().hasHeightForWidth())
@@ -31,7 +33,9 @@ class Ui_TagInfoWidget(object):
         self.gridLayout.setContentsMargins(5, 1, 5, 1)
         self.gridLayout.setObjectName("gridLayout")
         self.lbl_tag = QtWidgets.QLabel(TagInfoWidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lbl_tag.sizePolicy().hasHeightForWidth())
@@ -47,7 +51,9 @@ class Ui_TagInfoWidget(object):
         self.lbl_tag.setObjectName("lbl_tag")
         self.gridLayout.addWidget(self.lbl_tag, 0, 0, 1, 1)
         self.txt_tag_info = QtWidgets.QPlainTextEdit(TagInfoWidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.txt_tag_info.sizePolicy().hasHeightForWidth())

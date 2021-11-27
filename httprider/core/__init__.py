@@ -147,7 +147,7 @@ def replace_response_variables(vars_tokens, exchange_response):
 
 
 def combine_request_headers(app_settings, exchange_request):
-    """"
+    """
     Inject common headers respecting existing headers on the request
     """
     project_info = app_settings.app_data_reader.get_or_create_project_info()

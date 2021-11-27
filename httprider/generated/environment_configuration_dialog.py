@@ -22,7 +22,9 @@ class Ui_EnvironmentsConfigurationDialog(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(EnvironmentsConfigurationDialog)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.splitter = QtWidgets.QSplitter(EnvironmentsConfigurationDialog)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.splitter.sizePolicy().hasHeightForWidth())
@@ -38,7 +40,9 @@ class Ui_EnvironmentsConfigurationDialog(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem)
         self.btn_duplicate_environment = QtWidgets.QToolButton(self.frame)
         self.btn_duplicate_environment.setObjectName("btn_duplicate_environment")
@@ -55,10 +59,14 @@ class Ui_EnvironmentsConfigurationDialog(object):
         self.lst_environments.setObjectName("lst_environments")
         self.verticalLayout.addWidget(self.lst_environments)
         self.lst_environment_data = QtWidgets.QListWidget(self.splitter)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lst_environment_data.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.lst_environment_data.sizePolicy().hasHeightForWidth()
+        )
         self.lst_environment_data.setSizePolicy(sizePolicy)
         self.lst_environment_data.setObjectName("lst_environment_data")
         self.horizontalLayout_2.addWidget(self.splitter)
@@ -68,7 +76,15 @@ class Ui_EnvironmentsConfigurationDialog(object):
 
     def retranslateUi(self, EnvironmentsConfigurationDialog):
         _translate = QtCore.QCoreApplication.translate
-        EnvironmentsConfigurationDialog.setWindowTitle(_translate("EnvironmentsConfigurationDialog", "Environments"))
-        self.btn_duplicate_environment.setText(_translate("EnvironmentsConfigurationDialog", "++"))
-        self.btn_remove_environment.setText(_translate("EnvironmentsConfigurationDialog", "-"))
-        self.btn_add_environment.setText(_translate("EnvironmentsConfigurationDialog", "+"))
+        EnvironmentsConfigurationDialog.setWindowTitle(
+            _translate("EnvironmentsConfigurationDialog", "Environments")
+        )
+        self.btn_duplicate_environment.setText(
+            _translate("EnvironmentsConfigurationDialog", "++")
+        )
+        self.btn_remove_environment.setText(
+            _translate("EnvironmentsConfigurationDialog", "-")
+        )
+        self.btn_add_environment.setText(
+            _translate("EnvironmentsConfigurationDialog", "+")
+        )

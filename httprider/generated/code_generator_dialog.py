@@ -26,7 +26,9 @@ class Ui_CodeGeneratorDialog(object):
         self.cmb_exporters.setFont(font)
         self.cmb_exporters.setObjectName("cmb_exporters")
         self.horizontalLayout.addWidget(self.cmb_exporters)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem)
         self.btn_copy_code = QtWidgets.QPushButton(CodeGeneratorDialog)
         font = QtGui.QFont()

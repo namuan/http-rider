@@ -41,4 +41,6 @@ class Ui_KeyValueWidget(object):
         _translate = QtCore.QCoreApplication.translate
         KeyValueWidget.setWindowTitle(_translate("KeyValueWidget", "Form"))
         self.btn_remove_header.setText(_translate("KeyValueWidget", "-"))
+
+
 from ..widgets.completion_line_edit import CompletionLineEdit

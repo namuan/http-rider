@@ -20,7 +20,9 @@ class Ui_UtilityFunctionsDialog(object):
         self.buttonBox = QtWidgets.QDialogButtonBox(UtilityFunctionsDialog)
         self.buttonBox.setGeometry(QtCore.QRect(250, 310, 171, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(
+            QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok
+        )
         self.buttonBox.setObjectName("buttonBox")
         self.lbl_selected_text = QtWidgets.QLabel(UtilityFunctionsDialog)
         self.lbl_selected_text.setGeometry(QtCore.QRect(20, 10, 391, 16))
@@ -46,6 +48,10 @@ class Ui_UtilityFunctionsDialog(object):
 
     def retranslateUi(self, UtilityFunctionsDialog):
         _translate = QtCore.QCoreApplication.translate
-        UtilityFunctionsDialog.setWindowTitle(_translate("UtilityFunctionsDialog", "Dialog"))
-        self.lbl_selected_text.setText(_translate("UtilityFunctionsDialog", "<selected text>"))
+        UtilityFunctionsDialog.setWindowTitle(
+            _translate("UtilityFunctionsDialog", "Dialog")
+        )
+        self.lbl_selected_text.setText(
+            _translate("UtilityFunctionsDialog", "<selected text>")
+        )
         self.btn_copy_transformed.setText(_translate("UtilityFunctionsDialog", "Copy"))

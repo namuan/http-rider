@@ -20,7 +20,9 @@ class Ui_DataGeneratorDialog(object):
         self.buttonBox = QtWidgets.QDialogButtonBox(DataGeneratorDialog)
         self.buttonBox.setGeometry(QtCore.QRect(70, 310, 341, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(
+            QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok
+        )
         self.buttonBox.setObjectName("buttonBox")
         self.tabWidget = QtWidgets.QTabWidget(DataGeneratorDialog)
         self.tabWidget.setGeometry(QtCore.QRect(20, 10, 391, 291))
@@ -285,37 +287,64 @@ class Ui_DataGeneratorDialog(object):
     def retranslateUi(self, DataGeneratorDialog):
         _translate = QtCore.QCoreApplication.translate
         DataGeneratorDialog.setWindowTitle(_translate("DataGeneratorDialog", "Dialog"))
-        self.cmb_random_string.setText(_translate("DataGeneratorDialog", "Random string"))
+        self.cmb_random_string.setText(
+            _translate("DataGeneratorDialog", "Random string")
+        )
         self.label.setText(_translate("DataGeneratorDialog", "Chars"))
-        self.chk_random_string_letters.setText(_translate("DataGeneratorDialog", "Letters"))
-        self.chk_random_string_digits.setText(_translate("DataGeneratorDialog", "Digits"))
+        self.chk_random_string_letters.setText(
+            _translate("DataGeneratorDialog", "Letters")
+        )
+        self.chk_random_string_digits.setText(
+            _translate("DataGeneratorDialog", "Digits")
+        )
         self.cmb_uuid.setText(_translate("DataGeneratorDialog", "UUID"))
         self.lbl_eg_random_string.setText(_translate("DataGeneratorDialog", "eg."))
         self.lbl_eg_uuid.setText(_translate("DataGeneratorDialog", "eg."))
         self.cmb_custom_string.setText(_translate("DataGeneratorDialog", "Custom"))
-        self.txt_custom_string_template.setText(_translate("DataGeneratorDialog", "**#-#**"))
-        self.lbl_eg_uuid_2.setText(_translate("DataGeneratorDialog", "(# for numeric, * for alphabet)"))
+        self.txt_custom_string_template.setText(
+            _translate("DataGeneratorDialog", "**#-#**")
+        )
+        self.lbl_eg_uuid_2.setText(
+            _translate("DataGeneratorDialog", "(# for numeric, * for alphabet)")
+        )
         self.lbl_eg_custom_string.setText(_translate("DataGeneratorDialog", "eg."))
-        self.chk_custom_string_uppercase.setText(_translate("DataGeneratorDialog", "Uppercase"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.misc), _translate("DataGeneratorDialog", "Misc"))
-        self.cmb_person_first_name.setText(_translate("DataGeneratorDialog", "First name"))
-        self.cmb_person_last_name.setText(_translate("DataGeneratorDialog", "Last name"))
+        self.chk_custom_string_uppercase.setText(
+            _translate("DataGeneratorDialog", "Uppercase")
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.misc), _translate("DataGeneratorDialog", "Misc")
+        )
+        self.cmb_person_first_name.setText(
+            _translate("DataGeneratorDialog", "First name")
+        )
+        self.cmb_person_last_name.setText(
+            _translate("DataGeneratorDialog", "Last name")
+        )
         self.gender_selector.setItemText(0, _translate("DataGeneratorDialog", "Male"))
         self.gender_selector.setItemText(1, _translate("DataGeneratorDialog", "Female"))
         self.cmb_person_suffix.setText(_translate("DataGeneratorDialog", "Suffix"))
-        self.cmb_person_full_name.setText(_translate("DataGeneratorDialog", "Full name"))
+        self.cmb_person_full_name.setText(
+            _translate("DataGeneratorDialog", "Full name")
+        )
         self.lbl_eg_person_first_name.setText(_translate("DataGeneratorDialog", "eg."))
         self.lbl_eg_person_last_name.setText(_translate("DataGeneratorDialog", "eg."))
         self.lbl_eg_person_suffix.setText(_translate("DataGeneratorDialog", "eg."))
         self.lbl_eg_person_full_name.setText(_translate("DataGeneratorDialog", "eg."))
         self.lbl_eg_person_prefix.setText(_translate("DataGeneratorDialog", "eg."))
         self.cmb_person_prefix.setText(_translate("DataGeneratorDialog", "Prefix"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.person), _translate("DataGeneratorDialog", "Person"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.person),
+            _translate("DataGeneratorDialog", "Person"),
+        )
         self.lbl_eg_address_full.setText(_translate("DataGeneratorDialog", "eg."))
         self.cmb_address_full.setText(_translate("DataGeneratorDialog", "Full Address"))
-        self.cmb_address_secondary.setText(_translate("DataGeneratorDialog", "Secondary Address"))
+        self.cmb_address_secondary.setText(
+            _translate("DataGeneratorDialog", "Secondary Address")
+        )
         self.lbl_eg_address_secondary.setText(_translate("DataGeneratorDialog", "eg."))
-        self.cmb_address_street.setText(_translate("DataGeneratorDialog", "Street Address"))
+        self.cmb_address_street.setText(
+            _translate("DataGeneratorDialog", "Street Address")
+        )
         self.lbl_eg_address_street.setText(_translate("DataGeneratorDialog", "eg."))
         self.lbl_eg_address_city.setText(_translate("DataGeneratorDialog", "eg."))
         self.cmb_address_city.setText(_translate("DataGeneratorDialog", "City"))
@@ -325,4 +354,7 @@ class Ui_DataGeneratorDialog(object):
         self.cmb_address_state.setText(_translate("DataGeneratorDialog", "State"))
         self.cmb_address_country.setText(_translate("DataGeneratorDialog", "Country"))
         self.lbl_eg_address_country.setText(_translate("DataGeneratorDialog", "eg."))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.address), _translate("DataGeneratorDialog", "Address"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.address),
+            _translate("DataGeneratorDialog", "Address"),
+        )

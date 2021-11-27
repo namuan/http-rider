@@ -132,8 +132,8 @@ class EnvironmentConfigurationPresenter:
     def on_item_changed(self, changed_item):
         old_environment_name = self.selected_environment
         changed_environment_name = changed_item.text()
-        old_environment: Environment = app_settings.app_data_cache.get_selected_environment(
-            old_environment_name
+        old_environment: Environment = (
+            app_settings.app_data_cache.get_selected_environment(old_environment_name)
         )
         old_environment.name = changed_environment_name
 

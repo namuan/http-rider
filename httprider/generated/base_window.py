@@ -23,15 +23,21 @@ class Ui_MainWindow(object):
         self.splitter.setOrientation(QtCore.Qt.Horizontal)
         self.splitter.setObjectName("splitter")
         self.lst_http_requests = ApiCallsListView(self.splitter)
-        self.lst_http_requests.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.lst_http_requests.setEditTriggers(
+            QtWidgets.QAbstractItemView.NoEditTriggers
+        )
         self.lst_http_requests.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
         self.lst_http_requests.setDefaultDropAction(QtCore.Qt.MoveAction)
         self.lst_http_requests.setObjectName("lst_http_requests")
         self.frame_request_response = QtWidgets.QFrame(self.splitter)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame_request_response.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.frame_request_response.sizePolicy().hasHeightForWidth()
+        )
         self.frame_request_response.setSizePolicy(sizePolicy)
         self.frame_request_response.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_request_response.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -59,7 +65,9 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.txt_http_url.setFont(font)
-        self.txt_http_url.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.txt_http_url.setAlignment(
+            QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
+        )
         self.txt_http_url.setObjectName("txt_http_url")
         self.horizontalLayout.addWidget(self.txt_http_url)
         self.btn_send_request = QtWidgets.QPushButton(self.frame_request_response)
@@ -72,7 +80,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.btn_send_request)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.tabWidget = QtWidgets.QTabWidget(self.frame_request_response)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
@@ -135,7 +145,9 @@ class Ui_MainWindow(object):
         self.chk_mock_response_enabled = QtWidgets.QCheckBox(self.tab_7)
         self.chk_mock_response_enabled.setObjectName("chk_mock_response_enabled")
         self.horizontalLayout_16.addWidget(self.chk_mock_response_enabled)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_16.addItem(spacerItem)
         self.txt_mocked_response_code = QtWidgets.QLineEdit(self.tab_7)
         self.txt_mocked_response_code.setText("")
@@ -167,7 +179,9 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.frame_request_response)
         self.label.setObjectName("label")
         self.horizontalLayout_4.addWidget(self.label)
-        self.btn_open_assertions_dialog = QtWidgets.QToolButton(self.frame_request_response)
+        self.btn_open_assertions_dialog = QtWidgets.QToolButton(
+            self.frame_request_response
+        )
         self.btn_open_assertions_dialog.setObjectName("btn_open_assertions_dialog")
         self.horizontalLayout_4.addWidget(self.btn_open_assertions_dialog)
         self.verticalLayout.addLayout(self.horizontalLayout_4)
@@ -175,10 +189,14 @@ class Ui_MainWindow(object):
         self.list_assertion_results.setObjectName("list_assertion_results")
         self.verticalLayout.addWidget(self.list_assertion_results)
         self.frame_exchange = QtWidgets.QFrame(self.splitter)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame_exchange.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.frame_exchange.sizePolicy().hasHeightForWidth()
+        )
         self.frame_exchange.setSizePolicy(sizePolicy)
         self.frame_exchange.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_exchange.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -194,7 +212,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addWidget(self.lbl_request_time)
         self.btn_share_preview = QtWidgets.QToolButton(self.frame_exchange)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/images/share-48.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon.addPixmap(
+            QtGui.QPixmap(":/images/share-48.png"), QtGui.QIcon.Normal, QtGui.QIcon.On
+        )
         self.btn_share_preview.setIcon(icon)
         self.btn_share_preview.setObjectName("btn_share_preview")
         self.horizontalLayout_6.addWidget(self.btn_share_preview)
@@ -216,8 +236,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
         self.tbl_exchange_request_headers = QtWidgets.QTreeWidget(self.tab)
         self.tbl_exchange_request_headers.setObjectName("tbl_exchange_request_headers")
-        self.tbl_exchange_request_headers.headerItem().setTextAlignment(0, QtCore.Qt.AlignCenter)
-        self.tbl_exchange_request_headers.headerItem().setTextAlignment(1, QtCore.Qt.AlignCenter)
+        self.tbl_exchange_request_headers.headerItem().setTextAlignment(
+            0, QtCore.Qt.AlignCenter
+        )
+        self.tbl_exchange_request_headers.headerItem().setTextAlignment(
+            1, QtCore.Qt.AlignCenter
+        )
         self.horizontalLayout_12.addWidget(self.tbl_exchange_request_headers)
         self.tabWidget_3.addTab(self.tab, "")
         self.tab_2 = QtWidgets.QWidget()
@@ -226,8 +250,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
         self.tbl_exchange_request_params = QtWidgets.QTreeWidget(self.tab_2)
         self.tbl_exchange_request_params.setObjectName("tbl_exchange_request_params")
-        self.tbl_exchange_request_params.headerItem().setTextAlignment(0, QtCore.Qt.AlignCenter)
-        self.tbl_exchange_request_params.headerItem().setTextAlignment(1, QtCore.Qt.AlignCenter)
+        self.tbl_exchange_request_params.headerItem().setTextAlignment(
+            0, QtCore.Qt.AlignCenter
+        )
+        self.tbl_exchange_request_params.headerItem().setTextAlignment(
+            1, QtCore.Qt.AlignCenter
+        )
         self.horizontalLayout_13.addWidget(self.tbl_exchange_request_params)
         self.tabWidget_3.addTab(self.tab_2, "")
         self.tab_6 = QtWidgets.QWidget()
@@ -236,8 +264,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_15.setObjectName("horizontalLayout_15")
         self.tbl_exchange_form_params = QtWidgets.QTreeWidget(self.tab_6)
         self.tbl_exchange_form_params.setObjectName("tbl_exchange_form_params")
-        self.tbl_exchange_form_params.headerItem().setTextAlignment(0, QtCore.Qt.AlignCenter)
-        self.tbl_exchange_form_params.headerItem().setTextAlignment(1, QtCore.Qt.AlignCenter)
+        self.tbl_exchange_form_params.headerItem().setTextAlignment(
+            0, QtCore.Qt.AlignCenter
+        )
+        self.tbl_exchange_form_params.headerItem().setTextAlignment(
+            1, QtCore.Qt.AlignCenter
+        )
         self.horizontalLayout_15.addWidget(self.tbl_exchange_form_params)
         self.tabWidget_3.addTab(self.tab_6, "")
         self.tab_3 = QtWidgets.QWidget()
@@ -268,8 +300,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
         self.tbl_response_headers = QtWidgets.QTreeWidget(self.tab_4)
         self.tbl_response_headers.setObjectName("tbl_response_headers")
-        self.tbl_response_headers.headerItem().setTextAlignment(0, QtCore.Qt.AlignCenter)
-        self.tbl_response_headers.headerItem().setTextAlignment(1, QtCore.Qt.AlignCenter)
+        self.tbl_response_headers.headerItem().setTextAlignment(
+            0, QtCore.Qt.AlignCenter
+        )
+        self.tbl_response_headers.headerItem().setTextAlignment(
+            1, QtCore.Qt.AlignCenter
+        )
         self.horizontalLayout_10.addWidget(self.tbl_response_headers)
         self.tabWidget_4.addTab(self.tab_4, "")
         self.tab_5 = QtWidgets.QWidget()
@@ -304,37 +340,95 @@ class Ui_MainWindow(object):
         self.cmb_http_method.setItemText(6, _translate("MainWindow", "HEAD"))
         self.txt_http_url.setText(_translate("MainWindow", "https://httpbin.org/get"))
         self.btn_send_request.setText(_translate("MainWindow", "Send"))
-        self.txt_api_title.setPlaceholderText(_translate("MainWindow", "Untitled request"))
-        self.txt_api_description.setPlaceholderText(_translate("MainWindow", "Request description ..."))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_description), _translate("MainWindow", "Description"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_headers), _translate("MainWindow", "Headers"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_queryparams), _translate("MainWindow", "Query Params"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_formparams), _translate("MainWindow", "Form Params"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_request_body), _translate("MainWindow", "Request Body"))
+        self.txt_api_title.setPlaceholderText(
+            _translate("MainWindow", "Untitled request")
+        )
+        self.txt_api_description.setPlaceholderText(
+            _translate("MainWindow", "Request description ...")
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_description),
+            _translate("MainWindow", "Description"),
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_headers),
+            _translate("MainWindow", "Headers"),
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_queryparams),
+            _translate("MainWindow", "Query Params"),
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_formparams),
+            _translate("MainWindow", "Form Params"),
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_request_body),
+            _translate("MainWindow", "Request Body"),
+        )
         self.chk_mock_response_enabled.setText(_translate("MainWindow", "Enabled"))
-        self.txt_mocked_response_code.setPlaceholderText(_translate("MainWindow", "200"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "Mocked Response"))
+        self.txt_mocked_response_code.setPlaceholderText(
+            _translate("MainWindow", "200")
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_7),
+            _translate("MainWindow", "Mocked Response"),
+        )
         self.btn_add_tag.setText(_translate("MainWindow", "+"))
         self.label.setText(_translate("MainWindow", "Assertions"))
         self.btn_open_assertions_dialog.setText(_translate("MainWindow", "Setup"))
         self.lbl_request_time.setText(_translate("MainWindow", "request time"))
         self.btn_share_preview.setText(_translate("MainWindow", "..."))
-        self.tabWidget_3.setTabText(self.tabWidget_3.indexOf(self.tab_8), _translate("MainWindow", "Raw"))
-        self.tbl_exchange_request_headers.headerItem().setText(0, _translate("MainWindow", "Name"))
-        self.tbl_exchange_request_headers.headerItem().setText(1, _translate("MainWindow", "Value"))
-        self.tabWidget_3.setTabText(self.tabWidget_3.indexOf(self.tab), _translate("MainWindow", "Headers"))
-        self.tbl_exchange_request_params.headerItem().setText(0, _translate("MainWindow", "Name"))
-        self.tbl_exchange_request_params.headerItem().setText(1, _translate("MainWindow", "Value"))
-        self.tabWidget_3.setTabText(self.tabWidget_3.indexOf(self.tab_2), _translate("MainWindow", "Params"))
-        self.tbl_exchange_form_params.headerItem().setText(0, _translate("MainWindow", "Name"))
-        self.tbl_exchange_form_params.headerItem().setText(1, _translate("MainWindow", "Value"))
-        self.tabWidget_3.setTabText(self.tabWidget_3.indexOf(self.tab_6), _translate("MainWindow", "Form"))
-        self.tabWidget_3.setTabText(self.tabWidget_3.indexOf(self.tab_3), _translate("MainWindow", "Body"))
-        self.tabWidget_4.setTabText(self.tabWidget_4.indexOf(self.tab_9), _translate("MainWindow", "Raw"))
-        self.tbl_response_headers.headerItem().setText(0, _translate("MainWindow", "Name"))
-        self.tbl_response_headers.headerItem().setText(1, _translate("MainWindow", "Value"))
-        self.tabWidget_4.setTabText(self.tabWidget_4.indexOf(self.tab_4), _translate("MainWindow", "Headers"))
-        self.tabWidget_4.setTabText(self.tabWidget_4.indexOf(self.tab_5), _translate("MainWindow", "Body"))
+        self.tabWidget_3.setTabText(
+            self.tabWidget_3.indexOf(self.tab_8), _translate("MainWindow", "Raw")
+        )
+        self.tbl_exchange_request_headers.headerItem().setText(
+            0, _translate("MainWindow", "Name")
+        )
+        self.tbl_exchange_request_headers.headerItem().setText(
+            1, _translate("MainWindow", "Value")
+        )
+        self.tabWidget_3.setTabText(
+            self.tabWidget_3.indexOf(self.tab), _translate("MainWindow", "Headers")
+        )
+        self.tbl_exchange_request_params.headerItem().setText(
+            0, _translate("MainWindow", "Name")
+        )
+        self.tbl_exchange_request_params.headerItem().setText(
+            1, _translate("MainWindow", "Value")
+        )
+        self.tabWidget_3.setTabText(
+            self.tabWidget_3.indexOf(self.tab_2), _translate("MainWindow", "Params")
+        )
+        self.tbl_exchange_form_params.headerItem().setText(
+            0, _translate("MainWindow", "Name")
+        )
+        self.tbl_exchange_form_params.headerItem().setText(
+            1, _translate("MainWindow", "Value")
+        )
+        self.tabWidget_3.setTabText(
+            self.tabWidget_3.indexOf(self.tab_6), _translate("MainWindow", "Form")
+        )
+        self.tabWidget_3.setTabText(
+            self.tabWidget_3.indexOf(self.tab_3), _translate("MainWindow", "Body")
+        )
+        self.tabWidget_4.setTabText(
+            self.tabWidget_4.indexOf(self.tab_9), _translate("MainWindow", "Raw")
+        )
+        self.tbl_response_headers.headerItem().setText(
+            0, _translate("MainWindow", "Name")
+        )
+        self.tbl_response_headers.headerItem().setText(
+            1, _translate("MainWindow", "Value")
+        )
+        self.tabWidget_4.setTabText(
+            self.tabWidget_4.indexOf(self.tab_4), _translate("MainWindow", "Headers")
+        )
+        self.tabWidget_4.setTabText(
+            self.tabWidget_4.indexOf(self.tab_5), _translate("MainWindow", "Body")
+        )
+
+
 from ..widgets.api_calls_list_view import ApiCallsListView
 from ..widgets.completion_line_edit import CompletionLineEdit
 from ..widgets.completion_plain_text import CompletionPlainTextEdit

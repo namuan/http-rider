@@ -33,10 +33,14 @@ class Ui_ProjectInfoDialog(object):
         self.label_8.setObjectName("label_8")
         self.gridLayout.addWidget(self.label_8, 8, 1, 1, 1)
         self.txt_project_info = QtWidgets.QTextEdit(self.tab_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.txt_project_info.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.txt_project_info.sizePolicy().hasHeightForWidth()
+        )
         self.txt_project_info.setSizePolicy(sizePolicy)
         self.txt_project_info.setObjectName("txt_project_info")
         self.gridLayout.addWidget(self.txt_project_info, 3, 0, 1, 2)
@@ -48,7 +52,9 @@ class Ui_ProjectInfoDialog(object):
         self.label_9 = QtWidgets.QLabel(self.tab_2)
         self.label_9.setObjectName("label_9")
         self.horizontalLayout_7.addWidget(self.label_9)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_7.addItem(spacerItem)
         self.btn_add_server = QtWidgets.QToolButton(self.tab_2)
         self.btn_add_server.setObjectName("btn_add_server")
@@ -85,7 +91,9 @@ class Ui_ProjectInfoDialog(object):
         self.label_6.setObjectName("label_6")
         self.gridLayout.addWidget(self.label_6, 6, 1, 1, 1)
         self.lst_servers = QtWidgets.QListWidget(self.tab_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lst_servers.sizePolicy().hasHeightForWidth())
@@ -146,7 +154,19 @@ class Ui_ProjectInfoDialog(object):
         self.label_6.setText(_translate("ProjectInfoDialog", "Contact Email"))
         self.label_2.setText(_translate("ProjectInfoDialog", "Version"))
         self.label_4.setText(_translate("ProjectInfoDialog", "Terms of Service URL"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("ProjectInfoDialog", "General"))
-        self.label_10.setText(_translate("ProjectInfoDialog", "Common Headers (Will be added to all API requests)"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("ProjectInfoDialog", "Setup"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("ProjectInfoDialog", "Tags"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_2),
+            _translate("ProjectInfoDialog", "General"),
+        )
+        self.label_10.setText(
+            _translate(
+                "ProjectInfoDialog",
+                "Common Headers (Will be added to all API requests)",
+            )
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_3), _translate("ProjectInfoDialog", "Setup")
+        )
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_5), _translate("ProjectInfoDialog", "Tags")
+        )

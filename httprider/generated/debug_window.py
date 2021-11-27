@@ -36,4 +36,6 @@ class Ui_DebugWindow(object):
     def retranslateUi(self, DebugWindow):
         _translate = QtCore.QCoreApplication.translate
         DebugWindow.setWindowTitle(_translate("DebugWindow", "MainWindow"))
+
+
 from example_overlayed_text import ExampleOverlayedText

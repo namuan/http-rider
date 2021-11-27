@@ -176,8 +176,7 @@ def to_runscope_request_body(request_body):
 
 
 def to_runscope_url(api_call):
-    """Build URL from ApiCall combing with query parameters
-    """
+    """Build URL from ApiCall combing with query parameters"""
     req_qp = api_call.enabled_query_params()
     http_url = api_call.http_url
     if req_qp:

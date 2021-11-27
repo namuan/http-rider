@@ -42,7 +42,9 @@ class Ui_OpenApiSdkDialog(object):
         self.verticalLayout.addWidget(self.listWidget)
         self.gridLayout_2.addWidget(self.frame, 0, 0, 2, 1)
         self.frame_2 = QtWidgets.QFrame(OpenApiSdkDialog)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
@@ -61,7 +63,9 @@ class Ui_OpenApiSdkDialog(object):
         self.formLayout = QtWidgets.QFormLayout(self.scrollAreaWidgetContents)
         self.formLayout.setObjectName("formLayout")
         self.lineEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lineEdit_2.sizePolicy().hasHeightForWidth())
@@ -89,7 +93,9 @@ class Ui_OpenApiSdkDialog(object):
         self.pushButton.setObjectName("pushButton")
         self.progressBar = QtWidgets.QProgressBar(self.frame_3)
         self.progressBar.setGeometry(QtCore.QRect(406, 14, 361, 20))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.progressBar.sizePolicy().hasHeightForWidth())
@@ -98,7 +104,9 @@ class Ui_OpenApiSdkDialog(object):
         self.progressBar.setObjectName("progressBar")
         self.label_3 = QtWidgets.QLabel(self.frame_3)
         self.label_3.setGeometry(QtCore.QRect(13, 47, 93, 16))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
@@ -116,7 +124,9 @@ class Ui_OpenApiSdkDialog(object):
         _translate = QtCore.QCoreApplication.translate
         OpenApiSdkDialog.setWindowTitle(_translate("OpenApiSdkDialog", "Dialog"))
         self.toolButton.setText(_translate("OpenApiSdkDialog", "..."))
-        self.lineEdit_2.setText(_translate("OpenApiSdkDialog", "org.openapitools.client.api"))
+        self.lineEdit_2.setText(
+            _translate("OpenApiSdkDialog", "org.openapitools.client.api")
+        )
         self.label_2.setText(_translate("OpenApiSdkDialog", "Description"))
         self.label.setText(_translate("OpenApiSdkDialog", "API Package"))
         self.pushButton.setText(_translate("OpenApiSdkDialog", "Download"))
