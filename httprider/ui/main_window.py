@@ -11,7 +11,6 @@ from httprider.ui.fuzz_test_dialog import FuzzTestDialog
 from httprider.ui.configuration_dialog import ConfigurationDialog
 from httprider.ui.environment_configuration_dialog import EnvironmentConfigurationDialog
 from httprider.ui.share_preview_dialog import SharePreviewDialog
-from httprider.ui.openapi_sdk_generator_dialog import OpenApiGeneratorDialog
 
 # Import menu items after dialogs
 from httprider.ui.menus import menu_items
@@ -58,7 +57,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.code_generator_dialog = CodeGeneratorDialog(self)
         self.fuzz_test_dialog = FuzzTestDialog(self)
         self.share_preview_dialog = SharePreviewDialog(self)
-        self.openapi_sdk_generator_dialog = OpenApiGeneratorDialog(self)
 
         # Initialise Components
         menu_items(self)
