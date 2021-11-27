@@ -300,6 +300,10 @@ import org.springframework.cloud.contract.spec.Contract
     def __export_api_call(self, project_info, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         api_test_case = app_settings.app_data_cache.get_api_test_case(api_call.id)
+        api_uri = last_exchange.request.http_url
+        response_code = last_exchange.response.http_status_code
+        formatted_request_body = format_json(last_exchange.request.request_body)
+        formatted_response_body = format_json(last_exchange.response.response_body)
         doc = f"""
 Contract.make {{
     description(\"\"\"
@@ -314,15 +318,12 @@ Contract.make {{
     ```
     \"\"\")
     }}
-    label("valid_greeting_post_request")
+    label("{api_call.title}")
     request {{
-            method 'POST'
-            url '/greetings'
-            body \"\"\"
-            {{
-                "message" : "message",
-                "authorName": "authorName"
-            }}
+        method '{last_exchange.request.http_method}'
+        url '{api_uri}'
+        body \"\"\"
+        {formatted_request_body}
         \"\"\"
         headers {{
             contentType(applicationJson())
@@ -330,16 +331,9 @@ Contract.make {{
     }}
     
     response {{
-        status 201
+        status {response_code}
         body \"\"\"
-        {{
-            "id" : "7c468d6c-8318-445b-9f3e-da450de24b5b",
-            "message" : "message",
-            "author": {{
-                "name" : "authorName"
-            }},
-            "created" : "-999999999-01-01T00:00:00+18:00"
-        }}
+        {formatted_response_body}
         \"\"\"
         headers {{
             contentType(applicationJson())
