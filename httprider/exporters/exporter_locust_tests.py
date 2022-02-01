@@ -69,6 +69,7 @@ class LocustTestsExporter:
     def export_data(self, api_calls: List[ApiCall], return_raw=False):
         file_header = """
 # python3 -m pip install locust - See https://docs.locust.io/en/stable/installation.html
+# python3 -m pip install Faker - See https://faker.readthedocs.io/en/master/
 # Running the tests with web ui
 # locust -f this_file.py
 # Or to run it without web ui for 20(secs) with 10 users and 2 users to spawn every second
@@ -79,7 +80,13 @@ import json
 import random
 import string
 import uuid
+from faker import Faker
 
+fake = Faker()
+
+def fake_person():
+    return fake.name()
+    
 def random_uuid():
     return str(uuid.uuid4())
     
