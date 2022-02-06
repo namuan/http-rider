@@ -137,11 +137,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # @todo: Remove usages and use one under ui module
     def open_file(self, dialog_title, dialog_location, file_filter=None):
         return QFileDialog.getOpenFileName(
-            self, dialog_title, dialog_location, filter=file_filter
+            self,
+            dialog_title,
+            dialog_location,
+            filter=file_filter,
+            options=QFileDialog.DontUseNativeDialog,
         )
 
     # @todo: Remove usages and use one under ui module
     def save_file(self, dialog_title, dialog_location, file_filter=None):
         return QFileDialog.getSaveFileName(
-            self, dialog_title, dialog_location, filter=file_filter
+            self,
+            dialog_title,
+            dialog_location,
+            filter=file_filter,
+            options=QFileDialog.DontUseNativeDialog,
         )

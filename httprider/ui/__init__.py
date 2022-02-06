@@ -10,7 +10,11 @@ def open_file(
     file_filter=None,
 ):
     return QFileDialog.getOpenFileName(
-        parent, caption=dialog_title, directory=dialog_location, filter=file_filter
+        parent,
+        caption=dialog_title,
+        directory=dialog_location,
+        filter=file_filter,
+        options=QFileDialog.DontUseNativeDialog,
     )
 
 
@@ -21,5 +25,9 @@ def save_file(
     file_filter=None,
 ):
     return QFileDialog.getSaveFileName(
-        parent, caption=dialog_title, directory=dialog_location, filter=file_filter
+        parent,
+        caption=dialog_title,
+        directory=dialog_location,
+        filter=file_filter,
+        options=QFileDialog.DontUseNativeDialog,
     )
