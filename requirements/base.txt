@@ -1,4 +1,4 @@
-PyQt5==5.12.3
+PyQt5
 requests
 attrs
 cattrs
@@ -17,4 +17,4 @@ dataset
 yapf
 stringcase
 mistune
-darkdetect
+darkdetects
