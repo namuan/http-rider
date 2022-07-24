@@ -18,6 +18,7 @@ CURRENT_PROJECT_STATE_KEY = "currentProjectState"
 CURRENT_PROJECT_LOCATION_KEY = "currentProjectLocation"
 HTTPS_PROXY_KEY = "httpsProxy"
 HTTP_PROXY_KEY = "httpProxy"
+NO_PROXY_KEY = "noProxy"
 TLS_VERIFICATION_KEY = "tlsVerification"
 ALLOW_REDIRECTS_KEY = "allowRedirects"
 STARTUP_CHECK_KEY = "startupCheck"
@@ -92,6 +93,7 @@ class CoreSettings:
         self.settings.setValue(ALLOW_REDIRECTS_KEY, app_config.allow_redirects)
         self.settings.setValue(HTTP_PROXY_KEY, app_config.http_proxy)
         self.settings.setValue(HTTPS_PROXY_KEY, app_config.https_proxy)
+        self.settings.setValue(NO_PROXY_KEY, app_config.no_proxy)
         self.settings.setValue(REQUEST_TIMEOUT_SECS, app_config.timeout_in_secs)
         self.settings.setValue(PRINT_SHARE_SERVER, app_config.print_server)
         self.settings.sync()
@@ -114,6 +116,9 @@ class CoreSettings:
         )
         app_config.https_proxy = self.settings.value(
             HTTPS_PROXY_KEY, AppConfiguration.https_proxy
+        )
+        app_config.no_proxy = self.settings.value(
+            NO_PROXY_KEY, AppConfiguration.no_proxy
         )
         app_config.timeout_in_secs = self.settings.value(
             REQUEST_TIMEOUT_SECS, AppConfiguration.timeout_in_secs

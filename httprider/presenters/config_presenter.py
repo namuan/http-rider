@@ -34,6 +34,7 @@ class ConfigPresenter:
         config.allow_redirects = self.view.chk_allow_redirects.isChecked()
         config.http_proxy = self.view.txt_http_proxy.text()
         config.https_proxy = self.view.txt_https_proxy.text()
+        config.no_proxy = self.view.txt_no_proxy.text()
         config.timeout_in_secs = self.view.timeout_in_secs.text()
         config.print_server = self.view.txt_print_server.text()
         return config
@@ -44,5 +45,6 @@ class ConfigPresenter:
         self.view.chk_allow_redirects.setChecked(app_config.allow_redirects)
         self.view.txt_http_proxy.setText(app_config.http_proxy)
         self.view.txt_https_proxy.setText(app_config.https_proxy)
+        self.view.txt_no_proxy.setText(app_config.no_proxy)
         self.view.timeout_in_secs.setText(app_config.timeout_in_secs)
         self.view.txt_print_server.setText(app_config.print_server)

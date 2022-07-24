@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'resources/ui/configuration_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.2
+# Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -72,8 +72,14 @@ class Ui_Configuration(object):
         self.chk_tls_verficiation.setChecked(True)
         self.chk_tls_verficiation.setObjectName("chk_tls_verficiation")
         self.formLayout.setWidget(
-            2, QtWidgets.QFormLayout.FieldRole, self.chk_tls_verficiation
+            4, QtWidgets.QFormLayout.FieldRole, self.chk_tls_verficiation
         )
+        self.txt_no_proxy = QtWidgets.QLineEdit(self.tab)
+        self.txt_no_proxy.setObjectName("txt_no_proxy")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.txt_no_proxy)
+        self.lblNoProxy = QtWidgets.QLabel(self.tab)
+        self.lblNoProxy.setObjectName("lblNoProxy")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.lblNoProxy)
         self.horizontalLayout.addLayout(self.formLayout)
         self.tabWidget.addTab(self.tab, "")
         self.update = QtWidgets.QWidget()
@@ -106,8 +112,20 @@ class Ui_Configuration(object):
         self.btn_cancel_configuration.setObjectName("btn_cancel_configuration")
 
         self.retranslateUi(Configuration)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Configuration)
+        Configuration.setTabOrder(self.tabWidget, self.btn_save_configuration)
+        Configuration.setTabOrder(
+            self.btn_save_configuration, self.btn_cancel_configuration
+        )
+        Configuration.setTabOrder(self.btn_cancel_configuration, self.timeout_in_secs)
+        Configuration.setTabOrder(self.timeout_in_secs, self.chk_allow_redirects)
+        Configuration.setTabOrder(self.chk_allow_redirects, self.txt_http_proxy)
+        Configuration.setTabOrder(self.txt_http_proxy, self.txt_https_proxy)
+        Configuration.setTabOrder(self.txt_https_proxy, self.txt_no_proxy)
+        Configuration.setTabOrder(self.txt_no_proxy, self.chk_tls_verficiation)
+        Configuration.setTabOrder(self.chk_tls_verficiation, self.chk_updates_startup)
+        Configuration.setTabOrder(self.chk_updates_startup, self.txt_print_server)
 
     def retranslateUi(self, Configuration):
         _translate = QtCore.QCoreApplication.translate
@@ -123,6 +141,7 @@ class Ui_Configuration(object):
         self.chk_tls_verficiation.setText(
             _translate("Configuration", "SSL/TLS verification")
         )
+        self.lblNoProxy.setText(_translate("Configuration", "no proxy"))
         self.tabWidget.setTabText(
             self.tabWidget.indexOf(self.tab), _translate("Configuration", "HTTP Proxy")
         )

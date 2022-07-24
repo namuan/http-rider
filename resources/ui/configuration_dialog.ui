@@ -39,7 +39,7 @@
     </font>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -134,13 +134,23 @@
        <item row="1" column="1">
         <widget class="QLineEdit" name="txt_https_proxy"/>
        </item>
-       <item row="2" column="1">
+       <item row="4" column="1">
         <widget class="QCheckBox" name="chk_tls_verficiation">
          <property name="text">
           <string>SSL/TLS verification</string>
          </property>
          <property name="checked">
           <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="txt_no_proxy"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lblNoProxy">
+         <property name="text">
+          <string>no proxy</string>
          </property>
         </widget>
        </item>
@@ -246,6 +256,19 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>btn_save_configuration</tabstop>
+  <tabstop>btn_cancel_configuration</tabstop>
+  <tabstop>timeout_in_secs</tabstop>
+  <tabstop>chk_allow_redirects</tabstop>
+  <tabstop>txt_http_proxy</tabstop>
+  <tabstop>txt_https_proxy</tabstop>
+  <tabstop>txt_no_proxy</tabstop>
+  <tabstop>chk_tls_verficiation</tabstop>
+  <tabstop>chk_updates_startup</tabstop>
+  <tabstop>txt_print_server</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
