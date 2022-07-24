@@ -55,7 +55,7 @@ def to_python_requests(idx, api_call: ApiCall, last_exchange: HttpExchange):
                 {headers_code if has_headers else ""}
                 {request_body if request_body else ""}
         )
-        print(f'Response HTTP Status Code: {{response.status_code}}')
+        print_details("{func_name}", response)
     """
     return py_func
 
@@ -81,6 +81,7 @@ import random
 import string
 import uuid
 from faker import Faker
+from datetime import datetime
 
 fake = Faker()
 
@@ -98,6 +99,16 @@ def random_str(length=10, with_punctuation=False):
 def random_int(min=0, max=100):
     return random.randint(min, max)
     
+def bold(message):
+    return f"\\033[1m{message}\\033[0m"
+
+def print_details(tag, response):
+    request_dt = datetime.now().strftime("%Y-%m-%d %H:%M")
+    print(f"{bold(tag)} request date time:{request_dt}")
+    print(
+        f" {bold('Status Code:')} {response.status_code}  {bold('Response:')} {response.json()}"
+    )
+
 class ApiTestSteps(SequentialTaskSet):
         """
 
