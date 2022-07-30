@@ -11,6 +11,8 @@ from . import exporter_slow_cooker
 from . import exporter_confluence
 from . import exporter_locust_tests
 from . import exporter_spring_contract_tests
+from . import exporter_java_feign_client
+from . import exporter_spring_boot_api_java
 
 exporter_plugins = {
     "locust": exporter_locust_tests,
@@ -26,4 +28,6 @@ exporter_plugins = {
     "openapi_v3": exporter_openapi_v3,
     "restassured": exporter_restassured,
     "spring_contract_tests": exporter_spring_contract_tests,
+    "spring_boot_api_java": exporter_spring_boot_api_java,
+    "java_feign_client": exporter_java_feign_client,
 }
