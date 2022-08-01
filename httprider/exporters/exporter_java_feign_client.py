@@ -16,8 +16,9 @@ from ..model.app_data import ApiCall, HttpExchange, ApiTestCase
 
 
 def to_spring_http_method(http_method: str):
-    if http_method.lower() not in ["options", "head"]:
-        return f"@{to_java_class_name(http_method)}Mapping"
+    norm_http_method = http_method.lower()
+    if norm_http_method not in ["options", "head"]:
+        return f"@{norm_http_method.lower().capitalize()}Mapping"
     else:
         return f"@GetMapping"
 
@@ -60,7 +61,7 @@ def gen_feign_client_response_class(
 def gen_feign_client_class(
     api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
 ):
-    api_uri = ""
+    api_uri = api_call.http_url
     has_request = ""  # true/false
     request_media_type = ""
     has_response = ""  # true/false
