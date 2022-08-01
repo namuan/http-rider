@@ -110,7 +110,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "httpriderClient", url = "${target.url}", configuration = {HttpRiderClient.CustomConfig.class})
-public interface HttpRiderClient {{
+public interface HttpRiderFeignClient {{
 
     class CustomConfig {
         @Bean
