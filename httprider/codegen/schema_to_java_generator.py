@@ -19,7 +19,7 @@ def to_java_function_name(name):
 
 
 def to_java_class_name(name):
-    return __norm(name).capitalize()
+    return stringcase.capitalcase(name)
 
 
 def to_java_variable(var_name):
