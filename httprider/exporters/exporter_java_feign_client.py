@@ -115,7 +115,7 @@ public interface HttpRiderFeignClient {{
     class CustomConfig {
         @Bean
         public RequestInterceptor headerInterceptor() {
-            return template -> template.header("Food", "Bar");
+            return template -> template.header("Foo", "Bar");
         }
     }
 """
