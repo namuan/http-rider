@@ -7,6 +7,7 @@ __type_mapping = {
     "number": "int",
     "boolean": "boolean",
     "string": "String",
+    "null": "Object",
 }
 
 
