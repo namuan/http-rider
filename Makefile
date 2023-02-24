@@ -22,14 +22,15 @@ lint: black ## Runs Flake8 for linting
 	./venv/bin/flake8 httprider
 
 deps: ## Reinstalls dependencies
-	./venv/bin/python3 -m pip install -r requirements/dev.txt
+	./venv/bin/python3 -m pip install --upgrade pip
+	./venv/bin/python3 -m pip install -U -r requirements/dev.txt
 
 clean: ## Clean package
 	rm -rf build dist
 
 setup: ## Re-initiates virtualenv
 	rm -rf venv
-	python3 -m venv venv
+	python3.9 -m venv venv
 	./venv/bin/python3 -m pip install -r requirements/dev.txt
 	echo "Once everything is installed, 'make run' to run the application"
 
@@ -63,7 +64,7 @@ icns: ## Generates icon files from svg
 	echo "Run ./mk-icns.sh resources/icons/httprider.svg httprider"
 
 .PHONY: help
-.DEFAULT_GOAL := setup
+.DEFAULT_GOAL := help
 
 help: Makefile
 	echo
