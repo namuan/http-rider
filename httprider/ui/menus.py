@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QAction, QMenu
-
+from PyQt6.QtWidgets import QMenu
+from PyQt6.QtGui import QAction
 
 def menu_items(self):
     # File Menu

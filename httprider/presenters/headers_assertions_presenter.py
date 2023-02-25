@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, QModelIndex
-from PyQt6.QtWidgets import QHeaderView, QMenu, QAction, QApplication
-
+from PyQt6.QtWidgets import QHeaderView, QMenu, QApplication
+from PyQt6.QtGui import QAction
 from . import populate_tree_with_kv_dict
 
 
@@ -10,8 +10,8 @@ class HeadersAssertionPresenter:
         self.parent_view = parent_view
         self.parent_header_selection = on_header_selection
 
-        self.view.header().setSectionResizeMode(0, QHeaderView.Stretch)
-        self.view.header().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.view.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.view.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
 
         self.view.doubleClicked.connect(self.on_double_click_item)
 

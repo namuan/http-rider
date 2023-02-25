@@ -69,14 +69,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setup_empty_frame(self):
         self.frame_request_response.hide()
         self.empty_frame = QFrame(self.splitter)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setHeightForWidth(self.empty_frame.sizePolicy().hasHeightForWidth())
         self.empty_frame.setSizePolicy(sizePolicy)
         self.empty_frame.setObjectName("empty_frame")
         self.btn_add_request = QPushButton(self.empty_frame)
         self.gridLayout = QGridLayout(self.empty_frame)
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -141,7 +141,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             dialog_title,
             dialog_location,
             filter=file_filter,
-            options=QFileDialog.DontUseNativeDialog,
+            options=QFileDialog.Option.DontUseNativeDialog,
         )
 
     # @todo: Remove usages and use one under ui module
@@ -151,5 +151,5 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             dialog_title,
             dialog_location,
             filter=file_filter,
-            options=QFileDialog.DontUseNativeDialog,
+            options=QFileDialog.Option.DontUseNativeDialog,
         )

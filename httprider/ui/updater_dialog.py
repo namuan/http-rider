@@ -1,6 +1,7 @@
 import json
 import sys
 
+from PyQt6 import QtCore
 from PyQt6.QtCore import Qt, QUrl
 from PyQt6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 from PyQt6.QtWidgets import QApplication, QDialog
@@ -14,14 +15,14 @@ class Updater(QDialog):
         "https://github.com/namuan/http-rider-osx/releases/latest"
     )
 
-    def __init__(self, parent=None, flags=Qt.Dialog | Qt.WindowCloseButtonHint):
+    def __init__(self, parent=None, flags=QtCore.Qt.WindowType.Dialog | QtCore.Qt.WindowType.WindowCloseButtonHint):
         super(Updater, self).__init__(parent, flags)
         self.parent = parent
         self.manager = QNetworkAccessManager(self)
         self.manager.finished.connect(self.done)
 
     def done(self, reply: QNetworkReply):
-        if reply.error() != QNetworkReply.NoError:
+        if reply.error() != QNetworkReply.NetworkError.NoError:
             sys.stderr.write(reply.errorString())
             return
         try:

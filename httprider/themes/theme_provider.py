@@ -12,8 +12,7 @@ def configure_theme(application):
     theme_mode = "dark" if is_dark() else "light"
     application.style().load_stylesheet(theme_mode)
 
-    font_db = QFontDatabase()
-    font_db.addApplicationFont(":/fonts/JetBrainsMono-Regular.ttf")
+    QFontDatabase.addApplicationFont((":/fonts/JetBrainsMono-Regular.ttf"))
 
     current_font: QFont = QFont("JetBrains Mono")
     current_font.setPointSize(12)

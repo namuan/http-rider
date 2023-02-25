@@ -1,3 +1,5 @@
+from PyQt6 import QtCore
+
 from httprider.core.api_call_interactor import api_call_interactor
 from httprider.core.app_state_interactor import AppStateInteractor
 from httprider.model.app_data import ApiCall
@@ -55,7 +57,8 @@ class EmptyFramePresenter:
         self.__select_text(self.view.txt_api_title)
 
     def __select_text(self, txt_field):
-        txt_field.setFocus(True)
+        # TODO: This may not work
+        txt_field.setFocus(QtCore.Qt.FocusReason)
         txt_field.selectAll()
 
     def display(self):

@@ -179,17 +179,18 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             color_assertions = self.color_from_assertions(
                 api_call.last_assertion_result, color
             )
-            gradient: QLinearGradient = QLinearGradient(
-                code_rect.topLeft(), code_rect.bottomRight()
-            )
-            gradient.setColorAt(0, color)
-            gradient.setColorAt(1, color_assertions)
-            painter.fillPath(path, gradient)
+            # TODO: Uncomment and FIX
+            # gradient: QLinearGradient = QLinearGradient(
+            #     code_rect.topLeft(), code_rect.bottomRight()
+            # )
+            # gradient.setColorAt(0, color)
+            # gradient.setColorAt(1, color_assertions)
+            # painter.fillPath(path, gradient)
             painter.setFont(font)
             painter.setPen(api_call_list_status_code_color())
             if api_call.last_response_code > 0:
                 painter.drawText(
-                    code_rect, Qt.AlignCenter | Qt.AlignVCenter, api_status_code
+                    code_rect, Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignVCenter, api_status_code
                 )
 
     def color_from_assertions(self, assertion_result, response_color):

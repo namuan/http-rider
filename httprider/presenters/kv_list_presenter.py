@@ -31,16 +31,16 @@ class KeyValueListPresenter:
         self.header_name_completer = None
         if key_completions:
             self.header_name_completer = QCompleter(key_completions)
-            self.header_name_completer.setCaseSensitivity(Qt.CaseInsensitive)
-            self.header_name_completer.setFilterMode(Qt.MatchContains)
-            self.header_name_completer.setCompletionMode(QCompleter.PopupCompletion)
+            self.header_name_completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+            self.header_name_completer.setFilterMode(Qt.MatchFlag.MatchContains)
+            self.header_name_completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
 
         self.header_value_completer = None
         if value_completions:
             self.header_value_completer = QCompleter(value_completions)
-            self.header_value_completer.setCaseSensitivity(Qt.CaseInsensitive)
-            self.header_value_completer.setFilterMode(Qt.MatchContains)
-            self.header_value_completer.setCompletionMode(QCompleter.PopupCompletion)
+            self.header_value_completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+            self.header_value_completer.setFilterMode(Qt.MatchFlag.MatchContains)
+            self.header_value_completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
 
         self.completer_model = None
 

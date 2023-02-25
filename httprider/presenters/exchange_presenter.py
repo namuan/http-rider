@@ -29,28 +29,28 @@ class ExchangePresenter:
         self.view.txt_response_body.document().setDefaultStyleSheet(pyg_styles())
 
         self.view.tbl_exchange_request_headers.header().setSectionResizeMode(
-            0, QHeaderView.Stretch
+            0, QHeaderView.ResizeMode.Stretch
         )
         self.view.tbl_exchange_request_headers.header().setSectionResizeMode(
-            1, QHeaderView.Stretch
+            1, QHeaderView.ResizeMode.Stretch
         )
         self.view.tbl_exchange_request_params.header().setSectionResizeMode(
-            0, QHeaderView.Stretch
+            0, QHeaderView.ResizeMode.Stretch
         )
         self.view.tbl_exchange_request_params.header().setSectionResizeMode(
-            1, QHeaderView.Stretch
+            1, QHeaderView.ResizeMode.Stretch
         )
         self.view.tbl_exchange_form_params.header().setSectionResizeMode(
-            0, QHeaderView.Stretch
+            0, QHeaderView.ResizeMode.Stretch
         )
         self.view.tbl_exchange_form_params.header().setSectionResizeMode(
-            1, QHeaderView.Stretch
+            1, QHeaderView.ResizeMode.Stretch
         )
         self.view.tbl_response_headers.header().setSectionResizeMode(
-            0, QHeaderView.Stretch
+            0, QHeaderView.ResizeMode.Stretch
         )
         self.view.tbl_response_headers.header().setSectionResizeMode(
-            1, QHeaderView.Stretch
+            1, QHeaderView.ResizeMode.Stretch
         )
 
         # ui events
@@ -89,7 +89,7 @@ class ExchangePresenter:
         plain_text_widget.clear()
         plain_text_widget.appendHtml(markdown(raw_content))
         txt_cursor: QTextCursor = plain_text_widget.textCursor()
-        txt_cursor.movePosition(QTextCursor.Start)
+        txt_cursor.movePosition(QTextCursor.MoveOperation.Start)
         plain_text_widget.setTextCursor(txt_cursor)
 
     def refresh(self, exchange: HttpExchange):

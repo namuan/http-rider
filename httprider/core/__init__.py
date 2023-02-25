@@ -254,7 +254,7 @@ def guess_content_type(body):
 
 def load_json_show_error(json_str):
     try:
-        j = json.loads(json_str, encoding="utf-8")
+        j = json.loads(json_str)
         return j
     except JSONDecodeError:
         logging.error(f"Error in loading JSON: {json_str}")

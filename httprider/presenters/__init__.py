@@ -27,9 +27,9 @@ def populate_tree_with_json(json_data, json_model, tree_view):
     json_model.setup_model(json_data)
     tree_view.setModel(json_model)
     tree_view.expandAll()
-    tree_view.header().setDefaultAlignment(Qt.AlignHCenter)
-    tree_view.header().setSectionResizeMode(0, QHeaderView.Stretch)
-    tree_view.header().setSectionResizeMode(1, QHeaderView.Stretch)
+    tree_view.header().setDefaultAlignment(Qt.AlignmentFlag.AlignHCenter)
+    tree_view.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+    tree_view.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
 
 
 def populate_tree_with_kv_dict(kv_dict, tree_widget):

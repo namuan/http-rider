@@ -39,7 +39,7 @@ class CodeGeneratorPresenter:
 
         for ek, ev in exporter_plugins.items():
             item: QStandardItem = QStandardItem()
-            item.setData(ev.exporter.name, Qt.DisplayRole)
+            item.setData(ev.exporter.name, Qt.ItemDataRole.DisplayRole)
             item.setData(ek, EXPORTER_COMBO_ROLE)
             self.view.cmb_exporters.addItem(ev.exporter.name, item)
 

@@ -11,7 +11,7 @@ class NewTagEntryLineEdit(QtWidgets.QLineEdit):
     def __init__(self, parent=None):
         super(NewTagEntryLineEdit, self).__init__(parent)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -25,7 +25,7 @@ class NewTagEntryLineEdit(QtWidgets.QLineEdit):
         if event.key() == QtCore.Qt.Key.Key_Escape:
             self.discard_tag_signal.emit()
 
-        if event.key() in [QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return]:
+        if event.key() in [QtCore.Qt.Key.Key_Enter, QtCore.Qt.Key.Key_Return]:
             self.save_tag_signal.emit(self.text())
 
     def focusOutEvent(self, event: QFocusEvent):

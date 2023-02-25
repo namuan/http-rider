@@ -1,6 +1,6 @@
 from PyQt6.QtCore import QModelIndex, Qt
-from PyQt6.QtWidgets import QTreeView, QAction, QMenu, QApplication
-
+from PyQt6.QtWidgets import QTreeView, QMenu, QApplication
+from PyQt6.QtGui import QAction
 from . import populate_tree_with_json
 from httprider.widgets.json_tree_widget import ItemRole, JsonModel
 

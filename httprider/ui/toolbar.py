@@ -1,7 +1,7 @@
 from functools import partial
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtWidgets import *
 
 from ..importers import importer_plugins

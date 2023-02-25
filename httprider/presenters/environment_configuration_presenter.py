@@ -174,7 +174,7 @@ class EnvironmentConfigurationPresenter:
 
     def __add_environment_widget_item(self, env: Environment):
         item = QtWidgets.QListWidgetItem()
-        item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+        item.setFlags(item.flags() | QtCore.Qt.ItemFlag.ItemIsEditable)
         item.setText(env.name)
         self.parent_view.lst_environments.addItem(item)
 
