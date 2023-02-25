@@ -34,5 +34,5 @@ class ProgressDialog(QDialog, Ui_ProgressDialog):
         self.lbl_progress_status.setText(message)
 
     def keyPressEvent(self, e: QKeyEvent):
-        if e.key() != Qt.Key_Escape:
+        if e.key() != Qt.Key.Key_Escape:
             super(QDialog, self).keyPressEvent(e)

@@ -11,7 +11,7 @@ from ..widgets.search_line_edit_widget import SearchLineEdit
 def tool_bar_items(self):
     """Create a tool bar for the main window."""
     self.tool_bar.setObjectName("maintoolbar")
-    self.addToolBar(Qt.TopToolBarArea, self.tool_bar)
+    self.addToolBar(Qt.ToolBarArea.TopToolBarArea, self.tool_bar)
     self.tool_bar.setMovable(False)
 
     tool_bar_project_info_action = QAction(
@@ -86,7 +86,7 @@ def tool_bar_items(self):
 
     tool_bar_envs_list = QComboBox(self)
     tool_bar_envs_list.setSizePolicy(
-        QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding
+        QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding
     )
     tool_bar_envs_list.setDuplicatesEnabled(False)
     tool_bar_envs_list.currentTextChanged.connect(
@@ -98,7 +98,7 @@ def tool_bar_items(self):
     self.tool_bar.addAction(tool_bar_envs_list_action)
 
     spacer = QWidget(self)
-    spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+    spacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
     self.tool_bar.addWidget(spacer)
 
     tool_bar_multi_share_call_action = QAction(
@@ -123,7 +123,7 @@ def tool_bar_items(self):
 
     tool_bar_tags_list = QComboBox(self)
     tool_bar_tags_list.setSizePolicy(
-        QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding
+        QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding
     )
     tool_bar_tags_list.setDuplicatesEnabled(False)
     tool_bar_tags_list.currentTextChanged.connect(

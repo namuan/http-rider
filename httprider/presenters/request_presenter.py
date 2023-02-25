@@ -49,7 +49,7 @@ class RequestPresenter:
         self.txt_new_tag_input = NewTagEntryLineEdit(self.view)
         self.view.tags_layout.addWidget(self.txt_new_tag_input)
         self.spacer_item = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Minimum
         )
         self.view.tags_layout.addItem(self.spacer_item)
         self.view.btn_send_request.pressed.connect(self.on_btn_send_request)

@@ -22,7 +22,7 @@ class NewTagEntryLineEdit(QtWidgets.QLineEdit):
 
     def keyPressEvent(self, event: QKeyEvent):
         super().keyPressEvent(event)
-        if event.key() == QtCore.Qt.Key_Escape:
+        if event.key() == QtCore.Qt.Key.Key_Escape:
             self.discard_tag_signal.emit()
 
         if event.key() in [QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return]:

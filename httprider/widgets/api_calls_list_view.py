@@ -79,7 +79,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         bounding_rect = option.rect
         painter.save()
 
-        if option.state & QStyle.State_Selected:
+        if option.state & QStyle.StateFlag.State_Selected:
             painter.fillRect(bounding_rect, api_call_list_selected_rect())
             painter.setPen(api_call_list_selected_pen())
 
@@ -109,7 +109,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         font.setBold(self.TITLE_FONT_BOLD)
         font_metrics: QFontMetrics = QFontMetrics(font)
         elided_title = font_metrics.elidedText(
-            api_title, Qt.ElideRight, bounding_rect.width() - 10 * PADDING
+            api_title, Qt.TextElideMode.ElideRight, bounding_rect.width() - 10 * PADDING
         )
         # title
         title_rect = font_metrics.boundingRect(
@@ -123,7 +123,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         painter.setFont(font)
         painter.setPen(title_pen_color)
         painter.drawText(
-            title_rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextWordWrap, elided_title
+            title_rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWordWrap, elided_title
         )
 
         self.draw_status_code(
@@ -135,7 +135,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         font.setBold(self.URL_FONT_BOLD)
         font_metrics: QFontMetrics = QFontMetrics(font)
         elided_http_url = font_metrics.elidedText(
-            api_http_url, Qt.ElideMiddle, bounding_rect.width() - 5 * PADDING
+            api_http_url, Qt.TextElideMode.ElideMiddle, bounding_rect.width() - 5 * PADDING
         )
 
         url_rect = font_metrics.boundingRect(
@@ -149,7 +149,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         painter.setFont(font)
         painter.setPen(sub_title_pen_color)
         painter.drawText(
-            url_rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextWordWrap, elided_http_url
+            url_rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWordWrap, elided_http_url
         )
 
         painter.restore()
@@ -170,7 +170,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
             code_rect_width,
         )
-        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         path = QPainterPath()
         path.addRoundedRect(QRectF(code_rect), 5, 5)
 

@@ -7,7 +7,7 @@ __pyg_styles = None
 def styles_from_file(filename):
     if QFileInfo(filename).exists():
         qss_file = QFile(filename)
-        qss_file.open(QFile.ReadOnly | QFile.Text)
+        qss_file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
         content = QTextStream(qss_file).readAll()
         return content
     else:

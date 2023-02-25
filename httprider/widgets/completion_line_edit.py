@@ -45,7 +45,7 @@ class ChildLineEdit(QLineEdit):
             self.entry_completed.emit("", "", True)
 
     def keyPressEvent(self, e: QKeyEvent):
-        if e.key() == Qt.Key_Escape:
+        if e.key() == Qt.Key.Key_Escape:
             self.entry_completed.emit("", "", True)
             e.ignore()
 
