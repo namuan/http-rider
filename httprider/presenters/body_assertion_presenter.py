@@ -41,7 +41,7 @@ class BodyAssertionPresenter:
         index: QModelIndex = self.view.indexAt(position)
         if not index.isValid():
             return
-        self.context_menu.exec_(self.view.mapToGlobal(position))
+        self.context_menu.exec(self.view.mapToGlobal(position))
 
     def on_body_item_selected(self, index: QModelIndex):
         item = self.view.model().data(index, ItemRole)

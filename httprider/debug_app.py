@@ -35,4 +35,4 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     window = DebugWindow()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

@@ -103,9 +103,9 @@ class ApiListPresenter:
         selected_api_call: ApiCall = index.data(API_CALL_ROLE)
         global_position = self.view.viewport().mapToGlobal(position)
         if selected_api_call.is_separator:
-            self.separator_menu.exec_(global_position)
+            self.separator_menu.exec(global_position)
         else:
-            self.menu.exec_(global_position)
+            self.menu.exec(global_position)
 
     def selectPreviousApiCall(self):
         selected_index = self.index_at_selected_row()

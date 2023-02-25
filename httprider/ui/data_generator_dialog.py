@@ -16,7 +16,7 @@ class DataGeneratorDialog(QDialog, Ui_DataGeneratorDialog):
 
     def exec_dialog(self):
         self.presenter.fake_to_form()
-        return self.exec_()
+        return self.exec()
 
     def get_function(self):
         return self.presenter.get_function()

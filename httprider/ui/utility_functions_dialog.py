@@ -16,7 +16,7 @@ class UtilityFunctionsDialog(QDialog, Ui_UtilityFunctionsDialog):
 
     def exec_dialog(self):
         self.presenter.init()
-        return self.exec_()
+        return self.exec()
 
     def get_function(self):
         return self.presenter.get_function()

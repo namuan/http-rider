@@ -16,7 +16,7 @@ def main():
     theme_provider.configure_theme(application)
 
     window.show()
-    sys.exit(application.exec_())
+    sys.exit(application.exec())
 
 
 if __name__ == "__main__":

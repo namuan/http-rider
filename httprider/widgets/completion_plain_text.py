@@ -54,7 +54,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
     def on_context_menu(self, position):
         menu = self.createStandardContextMenu()
         self.menu_item_handler.setup_actions(menu)
-        menu.exec_(self.mapToGlobal(position))
+        menu.exec(self.mapToGlobal(position))
 
     def setup_selections(self):
         tc: QTextCursor = self.textCursor()
@@ -66,7 +66,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         cur_pos: QRect = self.cursorRect()
         global_position = self.mapToGlobal(cur_pos.bottomLeft())
         self.data_generator_dialog.move(global_position)
-        if self.data_generator_dialog.exec_dialog() == QDialog.Accepted:
+        if self.data_generator_dialog.execdialog() == QDialog.Accepted:
             f = self.data_generator_dialog.get_function()
             self.process_completion(f, f, rollback)
         else:
@@ -76,7 +76,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         cur_pos: QRect = self.cursorRect()
         global_position = self.mapToGlobal(cur_pos.bottomLeft())
         self.utility_functions_dialog.move(global_position)
-        if self.utility_functions_dialog.exec_dialog() == QDialog.Accepted:
+        if self.utility_functions_dialog.execdialog() == QDialog.Accepted:
             f = self.utility_functions_dialog.get_function()
             self.process_completion(f, f, rollback)
         else:

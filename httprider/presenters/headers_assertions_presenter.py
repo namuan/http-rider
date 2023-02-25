@@ -47,7 +47,7 @@ class HeadersAssertionPresenter:
         if not index.isValid():
             return
 
-        self.header_menu.exec_(self.view.mapToGlobal(position))
+        self.header_menu.exec(self.view.mapToGlobal(position))
 
     def refresh(self, header_items):
         populate_tree_with_kv_dict(header_items, self.view)
