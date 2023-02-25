@@ -1,7 +1,7 @@
 import logging
 
-from PyQt5.QtGui import QTextCursor
-from PyQt5.QtWidgets import QHeaderView
+from PyQt6.QtGui import QTextCursor
+from PyQt6.QtWidgets import QHeaderView
 from mistune import markdown
 
 from httprider.core.core_settings import app_settings

@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QDialog
 
 from ..generated.faker_dialog import Ui_DataGeneratorDialog
 from ..presenters.data_generator_presenter import DataGeneratorPresenter

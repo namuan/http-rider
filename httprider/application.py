@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import *
+from PyQt6.QtWidgets import *
 
 from httprider.themes import theme_provider
 from httprider.ui.main_window import MainWindow

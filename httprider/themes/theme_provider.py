@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QIcon, QFont, QFontDatabase
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor, QIcon, QFont, QFontDatabase
 
 from httprider.core.theme_mode import is_dark
 from httprider.themes.theme import Theme

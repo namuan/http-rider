@@ -1,5 +1,5 @@
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import *
+from PyQt6.QtWidgets import *
 
 from httprider.core.core_settings import app_settings
 from httprider.model.app_data import HttpExchange, ApiCall

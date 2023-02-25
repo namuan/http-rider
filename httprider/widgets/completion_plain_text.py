@@ -1,6 +1,6 @@
-from PyQt5.QtCore import QRect, Qt
-from PyQt5.QtGui import QTextCursor, QKeyEvent, QTextCharFormat
-from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QAction
+from PyQt6.QtCore import QRect, Qt
+from PyQt6.QtGui import QTextCursor, QKeyEvent, QTextCharFormat
+from PyQt6.QtWidgets import QPlainTextEdit, QDialog, QAction
 
 from ..ui.data_generator_dialog import DataGeneratorDialog
 from ..ui.utility_functions_dialog import UtilityFunctionsDialog

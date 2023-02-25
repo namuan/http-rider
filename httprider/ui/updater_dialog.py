@@ -1,9 +1,9 @@
 import json
 import sys
 
-from PyQt5.QtCore import Qt, QUrl
-from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
-from PyQt5.QtWidgets import qApp, QDialog
+from PyQt6.QtCore import Qt, QUrl
+from PyQt6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
+from PyQt6.QtWidgets import qApp, QDialog
 
 
 class Updater(QDialog):

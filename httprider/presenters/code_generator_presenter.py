@@ -1,8 +1,8 @@
 from enum import Enum, auto
 from pathlib import Path
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QStandardItem
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QStandardItem
 
 from httprider.exporters import exporter_plugins
 from httprider.core.pygment_styles import pyg_styles

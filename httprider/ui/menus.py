@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QAction, QMenu
+from PyQt6.QtWidgets import QAction, QMenu
 
 
 def menu_items(self):

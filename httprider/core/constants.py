@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-from PyQt5.QtCore import Qt
+from PyQt6.QtCore import Qt
 
 ENVIRONMENT_RECORD_TYPE = "environment"
 PROJECT_INFO_RECORD_TYPE = "project_info"

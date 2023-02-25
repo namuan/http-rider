@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
 
 from httprider.generated.debug_window import Ui_DebugWindow
 

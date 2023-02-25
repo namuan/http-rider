@@ -14,7 +14,7 @@ from string import Template
 from urllib import parse
 
 import attr
-from PyQt5.QtWidgets import qApp
+from PyQt6.QtWidgets import qApp
 from jsonpath_ng.ext import parse as jsonpath_parse
 
 from .constants import ContentType, UTF_8_ENCODING

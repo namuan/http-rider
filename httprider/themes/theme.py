@@ -1,6 +1,6 @@
 import logging
 
-from PyQt5.QtWidgets import QProxyStyle, qApp
+from PyQt6.QtWidgets import QProxyStyle, qApp
 
 from httprider.core.pygment_styles import styles_from_file
 

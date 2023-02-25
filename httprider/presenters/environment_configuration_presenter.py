@@ -1,7 +1,7 @@
 import logging
 
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
+from PyQt6 import QtCore
+from PyQt6 import QtWidgets
 
 from httprider.core.environment_interactor import environment_interactor
 from httprider.core import random_environment

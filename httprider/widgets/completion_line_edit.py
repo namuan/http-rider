@@ -1,6 +1,6 @@
-from PyQt5.QtCore import *
-from PyQt5.QtGui import QKeyEvent, QFocusEvent, QStandardItemModel
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import *
+from PyQt6.QtGui import QKeyEvent, QFocusEvent, QStandardItemModel
+from PyQt6.QtWidgets import *
 
 from ..core import DynamicStringData, DynamicStringType
 from ..core.constants import DYNAMIC_STRING_ROLE

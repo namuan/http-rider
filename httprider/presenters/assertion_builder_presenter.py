@@ -1,7 +1,7 @@
 import functools
 import re
 
-from PyQt5.QtWidgets import QTreeWidgetItem
+from PyQt6.QtWidgets import QTreeWidgetItem
 
 from httprider.core import data_type
 from httprider.core.constants import AssertionDataSource, ASSERTION_TYPE_ROLE

@@ -1,6 +1,6 @@
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
-from PyQt5.QtGui import QKeyEvent, QFocusEvent
+from PyQt6 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6.QtGui import QKeyEvent, QFocusEvent
 
 
 # noinspection PyPep8Naming

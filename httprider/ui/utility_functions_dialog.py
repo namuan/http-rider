@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QDialog
 
 from ..presenters.utility_functions_presenter import UtilityFunctionsPresenter
 from ..generated.tools_dialog import Ui_UtilityFunctionsDialog

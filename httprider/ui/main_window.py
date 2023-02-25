@@ -2,7 +2,7 @@ import logging
 import sys
 import traceback
 
-from PyQt5.QtGui import QDesktopServices, QCloseEvent, QIcon
+from PyQt6.QtGui import QDesktopServices, QCloseEvent, QIcon
 
 from httprider.presenters import *
 from httprider.generated.base_window import Ui_MainWindow

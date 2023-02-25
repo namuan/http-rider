@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QStandardItemModel
+from PyQt6.QtGui import QStandardItemModel
 
 from httprider.core import str_to_int
 from httprider.core.constants import COMMON_HEADERS, HTTP_CONTENT_TYPES

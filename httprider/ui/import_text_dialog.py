@@ -1,5 +1,5 @@
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QDialog
 
 from ..generated.import_text_dialog import Ui_ImportTextDialog
 

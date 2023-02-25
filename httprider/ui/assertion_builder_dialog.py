@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog
 
 from ..generated.assertion_builder_dialog import Ui_AssertionBuilderDialog
 from ..presenters import AssertionBuilderPresenter

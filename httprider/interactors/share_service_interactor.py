@@ -1,8 +1,8 @@
 import json
 import logging
 
-from PyQt5.QtCore import QUrl, QByteArray, QBuffer
-from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
+from PyQt6.QtCore import QUrl, QByteArray, QBuffer
+from PyQt6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 
 from httprider.core import str_to_base64_encoded_bytes, bytes_to_str, str_to_bytes
 from httprider.core.core_settings import app_settings

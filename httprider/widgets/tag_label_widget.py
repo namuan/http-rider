@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 from httprider.core.api_call_interactor import api_call_interactor
 from ..core.core_settings import app_settings

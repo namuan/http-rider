@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog
 
 from httprider.generated.share_preview_dialog import Ui_SharePreviewDialog
 from httprider.model.app_data import HttpExchange

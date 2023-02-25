@@ -2,8 +2,8 @@ import logging
 import logging.handlers
 from pathlib import Path
 
-from PyQt5.QtCore import QSettings, QStandardPaths
-from PyQt5.QtWidgets import qApp
+from PyQt6.QtCore import QSettings, QStandardPaths
+from PyQt6.QtWidgets import qApp
 from typing import Any, Union
 
 from httprider.model.app_configuration import AppConfiguration

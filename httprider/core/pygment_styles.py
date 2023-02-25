@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QFile, QFileInfo, QTextStream
+from PyQt6.QtCore import QFile, QFileInfo, QTextStream
 from httprider.core.theme_mode import is_dark
 
 __pyg_styles = None

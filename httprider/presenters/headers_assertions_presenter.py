@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt, QModelIndex
-from PyQt5.QtWidgets import QHeaderView, QMenu, QAction, qApp
+from PyQt6.QtCore import Qt, QModelIndex
+from PyQt6.QtWidgets import QHeaderView, QMenu, QAction, qApp
 
 from . import populate_tree_with_kv_dict
 

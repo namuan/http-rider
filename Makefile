@@ -39,7 +39,7 @@ package: clean ## Rebuilds venv and packages app
 	export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/python3 setup.py bdist_app
 
 uic: ## Converts ui files to python
-	for i in `ls resources/ui/*.ui`; do FNAME=`basename $${i} ".ui"`; ./venv/bin/pyuic5 $${i} > "httprider/generated/$${FNAME}.py"; done
+	for i in `ls resources/ui/*.ui`; do FNAME=`basename $${i} ".ui"`; ./venv/bin/pyuic6 $${i} > "httprider/generated/$${FNAME}.py"; done
 
 res: ## Generates and compresses resource file
 	./venv/bin/pyrcc5 -compress 9 -o httprider/generated/resources_rc.py resources/resources.qrc
