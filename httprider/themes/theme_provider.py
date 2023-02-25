@@ -29,15 +29,15 @@ def api_call_list_selected_rect():
 
 
 def api_call_list_selected_pen():
-    return Qt.GlobalColor.white if is_dark() else Qt.black
+    return Qt.GlobalColor.white if is_dark() else Qt.GlobalColor.black
 
 
 def api_call_list_title_color():
-    return Qt.GlobalColor.white if is_dark() else Qt.black
+    return Qt.GlobalColor.white if is_dark() else Qt.GlobalColor.black
 
 
 def api_call_list_sub_title_color():
-    return Qt.GlobalColor.white if is_dark() else Qt.black
+    return Qt.GlobalColor.white if is_dark() else Qt.GlobalColor.black
 
 
 def api_call_list_disabled_color():
