@@ -103,7 +103,7 @@ class CompletionLineEdit(QLineEdit):
         self.selection_start = 0
         self.selection_length = 0
 
-        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.on_context_menu)
 
         self.menu_item_handler = CompletionContextMenuHandler(self)

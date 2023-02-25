@@ -27,7 +27,7 @@ class BodyAssertionPresenter:
         self.context_menu.addAction(select_action)
         self.context_menu.addAction(copy_action)
 
-        self.view.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.view.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.view.customContextMenuRequested.connect(self.show_context_menu)
 
     def refresh(self, request_body):

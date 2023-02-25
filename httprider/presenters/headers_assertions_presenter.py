@@ -26,7 +26,7 @@ class HeadersAssertionPresenter:
         self.header_menu.addAction(select_action)
         self.header_menu.addAction(copy_action)
 
-        self.view.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.view.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.view.customContextMenuRequested.connect(self.show_menu_headers)
 
     def on_double_click_item(self, index: QModelIndex):

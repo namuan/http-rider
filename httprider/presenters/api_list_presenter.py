@@ -38,7 +38,7 @@ class ApiListPresenter:
         self.view.setItemDelegate(ApiCallItemDelegate())
 
         self.view.selectionModel().currentChanged.connect(self.on_list_item_selected)
-        self.view.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.view.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.view.customContextMenuRequested.connect(self.show_context_menu)
         self.view.drop_event_signal.connect(self.on_drop_event)
         self.view.model().rowsRemoved.connect(self.onRowsRemoved)
