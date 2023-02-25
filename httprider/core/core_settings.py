@@ -37,7 +37,7 @@ class CoreSettings:
         self.app_data_writer: AppDataWriter = None
         self.app_data_cache: AppDataCache = None
         self.docs_location: Path = Path(
-            QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
+            QStandardPaths.writableLocation(QStandardPaths.StandardLocation.DocumentsLocation)
         )
 
     def init(self):
