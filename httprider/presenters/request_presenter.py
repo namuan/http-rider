@@ -96,7 +96,7 @@ class RequestPresenter:
     def on_show_data_generator_dialog(self):
         focused_widget: QWidget = QApplication.instance().focusWidget()
         if type(focused_widget) in [CompletionPlainTextEdit, CompletionLineEdit]:
-            key_event = QKeyEvent(QKeyEvent.KeyPress, Qt.Key_Dollar, Qt.NoModifier, "$")
+            key_event = QKeyEvent(QKeyEvent.Type.KeyPress, Qt.Key.Key_Dollar, Qt.KeyboardModifier.NoModifier, "$")
             QApplication.instance().sendEvent(focused_widget, key_event)
 
     def on_show_assertions_dialog(self):
