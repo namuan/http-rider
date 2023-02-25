@@ -3,7 +3,7 @@ import sys
 
 from PyQt6.QtCore import Qt, QUrl
 from PyQt6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
-from PyQt6.QtWidgets import qApp, QDialog
+from PyQt6.QtWidgets import QApplication, QDialog
 
 
 class Updater(QDialog):
@@ -28,7 +28,7 @@ class Updater(QDialog):
             json_data = json.loads(str(reply.readAll(), "utf-8"))
             reply.deleteLater()
             latest = json_data.get("tag_name")
-            current = qApp.applicationVersion()
+            current = QApplication.instance().applicationVersion()
             self.parent.update_available(latest, current)
         except json.JSONDecodeError:
             self.logger.exception("Error retrieving data", exc_info=True)

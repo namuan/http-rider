@@ -109,7 +109,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         event.accept()
         self.presenter.shutdown()
         try:
-            qApp.exit(0)
+            QApplication.instance().exit(0)
         except:
             pass
 

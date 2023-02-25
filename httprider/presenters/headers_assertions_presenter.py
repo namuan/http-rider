@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt, QModelIndex
-from PyQt6.QtWidgets import QHeaderView, QMenu, QAction, qApp
+from PyQt6.QtWidgets import QHeaderView, QMenu, QAction, QApplication
 
 from . import populate_tree_with_kv_dict
 
@@ -35,7 +35,7 @@ class HeadersAssertionPresenter:
 
     def on_clipboard_copy_header(self):
         selected_item = self.view.currentItem()
-        clipboard = qApp.clipboard()
+        clipboard = QApplication.instance().clipboard()
         clipboard.setText(selected_item.text(1))
 
     def on_select_header(self):

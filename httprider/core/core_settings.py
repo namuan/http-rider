@@ -3,7 +3,7 @@ import logging.handlers
 from pathlib import Path
 
 from PyQt6.QtCore import QSettings, QStandardPaths
-from PyQt6.QtWidgets import qApp
+from PyQt6.QtWidgets import QApplication
 from typing import Any, Union
 
 from httprider.model.app_configuration import AppConfiguration
@@ -41,7 +41,7 @@ class CoreSettings:
         )
 
     def init(self):
-        self.app_name = qApp.applicationName().lower()
+        self.app_name = QApplication.instance().applicationName().lower()
         self.app_dir = Path(
             QStandardPaths.writableLocation(QStandardPaths.AppConfigLocation)
         )
