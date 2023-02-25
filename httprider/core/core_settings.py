@@ -48,7 +48,7 @@ class CoreSettings:
         self.app_dir.mkdir(exist_ok=True)
         settings_file = f"{self.app_name}.ini"
         self.settings = QSettings(
-            self.app_dir.joinpath(settings_file).as_posix(), QSettings.IniFormat
+            self.app_dir.joinpath(settings_file).as_posix(), QSettings.Format.IniFormat
         )
         self.settings.sync()
 
