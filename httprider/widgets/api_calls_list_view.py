@@ -170,22 +170,22 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
             code_rect_width,
         )
+        code_rect_f: QRectF = QRectF(code_rect)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         path = QPainterPath()
-        path.addRoundedRect(QRectF(code_rect), 5, 5)
+        path.addRoundedRect(code_rect_f, 5, 5)
 
         if api_status_code:
             color = self.color_from_response(api_call.last_response_code)
             color_assertions = self.color_from_assertions(
                 api_call.last_assertion_result, color
             )
-            # TODO: Uncomment and FIX
-            # gradient: QLinearGradient = QLinearGradient(
-            #     code_rect.topLeft(), code_rect.bottomRight()
-            # )
-            # gradient.setColorAt(0, color)
-            # gradient.setColorAt(1, color_assertions)
-            # painter.fillPath(path, gradient)
+            gradient: QLinearGradient = QLinearGradient(
+                code_rect_f.topLeft(), code_rect_f.bottomRight()
+            )
+            gradient.setColorAt(0, color)
+            gradient.setColorAt(1, color_assertions)
+            painter.fillPath(path, gradient)
             painter.setFont(font)
             painter.setPen(api_call_list_status_code_color())
             if api_call.last_response_code > 0:
