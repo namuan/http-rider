@@ -156,7 +156,7 @@ class ApiListPresenter:
                 next_api_call = self.model.item(after).data(API_CALL_ROLE)
                 next_sequence_number = next_api_call.sequence_number
             new_sequence_number = (
-                prev_sequence_number + (next_sequence_number - prev_sequence_number) / 2
+                    prev_sequence_number + (next_sequence_number - prev_sequence_number) / 2
             )
             api_call.sequence_number = new_sequence_number
             logging.info(
@@ -208,7 +208,7 @@ class ApiListPresenter:
             self.view.setCurrentIndex(previous_item.index())
 
     def on_list_item_selected(self, current: QModelIndex):
-        if not current:
+        if not current or not current.isValid():
             return
 
         selected_api_call: ApiCall = current.data(API_CALL_ROLE)
