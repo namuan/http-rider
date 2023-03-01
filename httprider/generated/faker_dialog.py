@@ -18,6 +18,7 @@ class Ui_DataGeneratorDialog(object):
         DataGeneratorDialog.setFont(font)
         self.buttonBox = QtWidgets.QDialogButtonBox(parent=DataGeneratorDialog)
         self.buttonBox.setGeometry(QtCore.QRect(70, 310, 341, 32))
+        self.buttonBox.setStyleSheet("color: rgb(0, 0, 0);")
         self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
         self.buttonBox.setObjectName("buttonBox")
