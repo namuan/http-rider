@@ -66,7 +66,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         cur_pos: QRect = self.cursorRect()
         global_position = self.mapToGlobal(cur_pos.bottomLeft())
         self.data_generator_dialog.move(global_position)
-        if self.data_generator_dialog.execdialog() == QDialog.DialogCode.Accepted:
+        if self.data_generator_dialog.exec_dialog() == QDialog.DialogCode.Accepted:
             f = self.data_generator_dialog.get_function()
             self.process_completion(f, f, rollback)
         else:
@@ -76,7 +76,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         cur_pos: QRect = self.cursorRect()
         global_position = self.mapToGlobal(cur_pos.bottomLeft())
         self.utility_functions_dialog.move(global_position)
-        if self.utility_functions_dialog.execdialog() == QDialog.DialogCode.Accepted:
+        if self.utility_functions_dialog.exec_dialog() == QDialog.DialogCode.Accepted:
             f = self.utility_functions_dialog.get_function()
             self.process_completion(f, f, rollback)
         else:
@@ -104,7 +104,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
             if self.selected_text:
                 tc: QTextCursor = self.textCursor()
                 tc.setPosition(self.selection_start)
-                tc.setPosition(self.selection_end, QTextCursor.MoveOperation.KeepAnchor)
+                tc.setPosition(self.selection_end, QTextCursor.MoveMode.KeepAnchor)
                 self.setTextCursor(tc)
 
             existing_format = self.currentCharFormat()
