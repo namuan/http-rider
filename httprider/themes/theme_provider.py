@@ -6,13 +6,13 @@ from httprider.themes.theme import Theme
 
 
 def configure_theme(application):
-    application.setWindowIcon(QIcon(":/icons/httprider.ico"))
+    application.setWindowIcon(QIcon("icons:httprider.ico"))
 
-    application.setStyle(Theme())
+    application.setStyle(Theme(application))
     theme_mode = "dark" if is_dark() else "light"
     application.style().load_stylesheet(theme_mode)
 
-    QFontDatabase.addApplicationFont((":/fonts/JetBrainsMono-Regular.ttf"))
+    QFontDatabase.addApplicationFont(("fonts:JetBrainsMono-Regular.ttf"))
 
     current_font: QFont = QFont("JetBrains Mono")
     current_font.setPointSize(12)
@@ -44,11 +44,11 @@ def api_call_list_disabled_color():
 
 
 def api_call_list_disabled_title_color():
-    return Qt.darkGray if is_dark() else Qt.gray
+    return Qt.GlobalColor.darkGray if is_dark() else Qt.GlobalColor.gray
 
 
 def api_call_list_disabled_sub_title_color():
-    return Qt.darkGray if is_dark() else Qt.gray
+    return Qt.GlobalColor.darkGray if is_dark() else Qt.GlobalColor.gray
 
 
 def api_call_list_status_code_color():

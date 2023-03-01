@@ -128,7 +128,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 act for act in toolbar_actions if act.text() == "Update Available"
             )
             if updates_action:
-                updates_action.setIcon(QIcon(":/images/download-48.png"))
+                updates_action.setIcon(QIcon("images:download-48.png"))
                 updates_action.setEnabled(True)
 
     def open_releases_page(self) -> None:

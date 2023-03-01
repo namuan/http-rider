@@ -19,4 +19,4 @@ def pyg_styles():
         return __pyg_styles
     else:
         pyg_theme = "dark" if is_dark() else "light"
-        return styles_from_file(":/themes/pyg-{}.css".format(pyg_theme))
+        return styles_from_file("themes:pyg-{}.css".format(pyg_theme))

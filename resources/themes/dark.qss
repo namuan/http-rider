@@ -83,31 +83,31 @@ QTabWidget::pane {
 
 QTreeView::branch:has-siblings:!adjoins-item
 {
-    border-image: url(:/images/branch-vline.svg) 0;
+    border-image: url(images:branch-vline.svg) 0;
 }
 
 QTreeView::branch:has-siblings:adjoins-item
 {
-    border-image: url(:/images/branch-more.svg) 0;
+    border-image: url(images:branch-more.svg) 0;
 }
 
 QTreeView::branch:!has-children:!has-siblings:adjoins-item
 {
-    border-image: url(:/images/branch-end.svg) 0;
+    border-image: url(images:branch-end.svg) 0;
 }
 
 QTreeView::branch:has-children:!has-siblings:closed,
 QTreeView::branch:closed:has-children:has-siblings
 {
-    border-image: url(:/images/branch-end-closed.svg) 0;
-    image: url(:/images/branch-closed.svg);
+    border-image: url(images:branch-end-closed.svg) 0;
+    image: url(images:branch-closed.svg);
 }
 
 QTreeView::branch:open:has-children:!has-siblings,
 QTreeView::branch:open:has-children:has-siblings
 {
-    border-image: url(:/images/branch-end-open.svg) 0;
-    image: url(:/images/branch-open.svg);
+    border-image: url(images:branch-end-open.svg) 0;
+    image: url(images:branch-open.svg);
 }
 
 QTreeView::item
