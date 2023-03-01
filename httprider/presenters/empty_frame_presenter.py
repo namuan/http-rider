@@ -57,8 +57,7 @@ class EmptyFramePresenter:
         self.__select_text(self.view.txt_api_title)
 
     def __select_text(self, txt_field):
-        # TODO: This may not work
-        txt_field.setFocus(QtCore.Qt.FocusReason)
+        txt_field.setFocus()
         txt_field.selectAll()
 
     def display(self):
