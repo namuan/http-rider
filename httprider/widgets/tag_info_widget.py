@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget
 
 from ..generated.tag_info_widget import Ui_TagInfoWidget
 from ..model.app_data import TagInfo

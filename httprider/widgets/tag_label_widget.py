@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 from httprider.core.api_call_interactor import api_call_interactor
 from ..core.core_settings import app_settings
@@ -29,7 +29,7 @@ class TagLabelWidget(QtWidgets.QWidget, Ui_TagLabelWidget):
         super(TagLabelWidget, self).__init__(parent)
         self.setupUi(self)
         self.lbl_tag = TagLabel(self.horizontalLayoutWidget)
-        self.lbl_tag.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+        self.lbl_tag.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.IBeamCursor))
         self.lbl_tag.clicked.connect(self.editTag)
         self.horizontalLayout.insertWidget(0, self.lbl_tag)
         self.edit_tag = NewTagEntryLineEdit(self.horizontalLayoutWidget)

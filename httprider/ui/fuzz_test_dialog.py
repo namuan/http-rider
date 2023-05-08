@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog
 
 from ..generated.fuzz_test_dialog import Ui_FuzzTestDialog
 from ..presenters import FuzzTestPresenter

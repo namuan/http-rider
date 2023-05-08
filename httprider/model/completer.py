@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt6.QtGui import QStandardItemModel, QStandardItem
 
 from httprider.core.constants import DYNAMIC_STRING_ROLE
 from httprider.model.app_data import ApiTestCase

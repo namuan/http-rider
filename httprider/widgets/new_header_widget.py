@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
 
 from ..generated.new_item_widget import Ui_NewItemWidget
 

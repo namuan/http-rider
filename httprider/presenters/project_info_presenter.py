@@ -1,5 +1,5 @@
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QListWidgetItem
+from PyQt6 import QtWidgets, QtCore
+from PyQt6.QtWidgets import QListWidgetItem
 
 from httprider.presenters import KeyValueListPresenter
 from httprider.core.core_settings import app_settings

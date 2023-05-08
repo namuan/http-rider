@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog
 
 from ..generated.configuration_dialog import Ui_Configuration
 from ..presenters import ConfigPresenter

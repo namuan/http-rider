@@ -1,9 +1,9 @@
-from PyQt5.QtCore import *
+from PyQt6.QtCore import *
 
 from ..core import load_json_show_error
 
 NoneType = type(None)
-ItemRole = Qt.UserRole + 200
+ItemRole = Qt.ItemDataRole.UserRole + 200
 
 
 class JsonTreeItem(object):
@@ -83,7 +83,7 @@ class JsonModel(QAbstractItemModel):
         item = index.internalPointer()
         col = index.column()
 
-        if role == Qt.DisplayRole:
+        if role == Qt.ItemDataRole.DisplayRole:
             if col == 0:
                 return item.itemKey
             elif col == 1:

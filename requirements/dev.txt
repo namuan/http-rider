@@ -3,5 +3,4 @@ flake8
 black
 pytest
 pytest-qt
-PyQt5-stubs==5.15.2.0
 pre-commit

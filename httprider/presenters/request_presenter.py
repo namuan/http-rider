@@ -1,8 +1,8 @@
 import logging
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QStandardItemModel, QKeyEvent
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QStandardItemModel, QKeyEvent
+from PyQt6.QtWidgets import *
 
 from httprider.core import split_url_qs
 from httprider.core.api_call_interactor import api_call_interactor
@@ -49,7 +49,7 @@ class RequestPresenter:
         self.txt_new_tag_input = NewTagEntryLineEdit(self.view)
         self.view.tags_layout.addWidget(self.txt_new_tag_input)
         self.spacer_item = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
         )
         self.view.tags_layout.addItem(self.spacer_item)
         self.view.btn_send_request.pressed.connect(self.on_btn_send_request)
@@ -94,10 +94,10 @@ class RequestPresenter:
         self.view.txt_request_body.child_edit.setup_completer(completer_model)
 
     def on_show_data_generator_dialog(self):
-        focused_widget: QWidget = qApp.focusWidget()
+        focused_widget: QWidget = QApplication.instance().focusWidget()
         if type(focused_widget) in [CompletionPlainTextEdit, CompletionLineEdit]:
-            key_event = QKeyEvent(QKeyEvent.KeyPress, Qt.Key_Dollar, Qt.NoModifier, "$")
-            qApp.sendEvent(focused_widget, key_event)
+            key_event = QKeyEvent(QKeyEvent.Type.KeyPress, Qt.Key.Key_Dollar, Qt.KeyboardModifier.NoModifier, "$")
+            QApplication.instance().sendEvent(focused_widget, key_event)
 
     def on_show_assertions_dialog(self):
         self.assertion_builder_dialog.show_dialog(self.current)

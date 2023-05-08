@@ -1,7 +1,7 @@
 import logging
 
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
+from PyQt6 import QtCore
+from PyQt6 import QtWidgets
 
 from httprider.core.environment_interactor import environment_interactor
 from httprider.core import random_environment
@@ -174,7 +174,7 @@ class EnvironmentConfigurationPresenter:
 
     def __add_environment_widget_item(self, env: Environment):
         item = QtWidgets.QListWidgetItem()
-        item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+        item.setFlags(item.flags() | QtCore.Qt.ItemFlag.ItemIsEditable)
         item.setText(env.name)
         self.parent_view.lst_environments.addItem(item)
 

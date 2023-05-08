@@ -1,7 +1,7 @@
 import json
 import logging
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt6.QtCore import QObject, pyqtSignal
 
 from ..core import gen_uuid
 from ..core.constants import ENVIRONMENT_RECORD_TYPE, API_CALL_RECORD_TYPE

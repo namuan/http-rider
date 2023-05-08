@@ -1,19 +1,18 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QIcon, QFont, QFontDatabase
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor, QIcon, QFont, QFontDatabase
 
 from httprider.core.theme_mode import is_dark
 from httprider.themes.theme import Theme
 
 
 def configure_theme(application):
-    application.setWindowIcon(QIcon(":/icons/httprider.ico"))
+    application.setWindowIcon(QIcon("icons:httprider.ico"))
 
-    application.setStyle(Theme())
+    application.setStyle(Theme(application))
     theme_mode = "dark" if is_dark() else "light"
     application.style().load_stylesheet(theme_mode)
 
-    font_db = QFontDatabase()
-    font_db.addApplicationFont(":/fonts/JetBrainsMono-Regular.ttf")
+    QFontDatabase.addApplicationFont(("fonts:JetBrainsMono-Regular.ttf"))
 
     current_font: QFont = QFont("JetBrains Mono")
     current_font.setPointSize(12)
@@ -29,15 +28,15 @@ def api_call_list_selected_rect():
 
 
 def api_call_list_selected_pen():
-    return Qt.white if is_dark() else Qt.black
+    return Qt.GlobalColor.white if is_dark() else Qt.GlobalColor.black
 
 
 def api_call_list_title_color():
-    return Qt.white if is_dark() else Qt.black
+    return Qt.GlobalColor.white if is_dark() else Qt.GlobalColor.black
 
 
 def api_call_list_sub_title_color():
-    return Qt.white if is_dark() else Qt.black
+    return Qt.GlobalColor.white if is_dark() else Qt.GlobalColor.black
 
 
 def api_call_list_disabled_color():
@@ -45,15 +44,15 @@ def api_call_list_disabled_color():
 
 
 def api_call_list_disabled_title_color():
-    return Qt.darkGray if is_dark() else Qt.gray
+    return Qt.GlobalColor.darkGray if is_dark() else Qt.GlobalColor.gray
 
 
 def api_call_list_disabled_sub_title_color():
-    return Qt.darkGray if is_dark() else Qt.gray
+    return Qt.GlobalColor.darkGray if is_dark() else Qt.GlobalColor.gray
 
 
 def api_call_list_status_code_color():
-    return Qt.white if is_dark() else Qt.white
+    return Qt.GlobalColor.white if is_dark() else Qt.GlobalColor.white
 
 
 def http_ex_success():

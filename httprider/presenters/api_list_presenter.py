@@ -2,10 +2,10 @@ import copy
 import logging
 from typing import List
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtGui import QStandardItemModel
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
+from PyQt6.QtGui import QStandardItemModel
+from PyQt6.QtWidgets import *
 
 from httprider.core.api_call_interactor import api_call_interactor
 from httprider.core.app_state_interactor import AppStateInteractor
@@ -38,7 +38,7 @@ class ApiListPresenter:
         self.view.setItemDelegate(ApiCallItemDelegate())
 
         self.view.selectionModel().currentChanged.connect(self.on_list_item_selected)
-        self.view.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.view.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.view.customContextMenuRequested.connect(self.show_context_menu)
         self.view.drop_event_signal.connect(self.on_drop_event)
         self.view.model().rowsRemoved.connect(self.onRowsRemoved)
@@ -103,9 +103,9 @@ class ApiListPresenter:
         selected_api_call: ApiCall = index.data(API_CALL_ROLE)
         global_position = self.view.viewport().mapToGlobal(position)
         if selected_api_call.is_separator:
-            self.separator_menu.exec_(global_position)
+            self.separator_menu.exec(global_position)
         else:
-            self.menu.exec_(global_position)
+            self.menu.exec(global_position)
 
     def selectPreviousApiCall(self):
         selected_index = self.index_at_selected_row()
@@ -156,7 +156,7 @@ class ApiListPresenter:
                 next_api_call = self.model.item(after).data(API_CALL_ROLE)
                 next_sequence_number = next_api_call.sequence_number
             new_sequence_number = (
-                prev_sequence_number + (next_sequence_number - prev_sequence_number) / 2
+                    prev_sequence_number + (next_sequence_number - prev_sequence_number) / 2
             )
             api_call.sequence_number = new_sequence_number
             logging.info(
@@ -208,7 +208,7 @@ class ApiListPresenter:
             self.view.setCurrentIndex(previous_item.index())
 
     def on_list_item_selected(self, current: QModelIndex):
-        if not current:
+        if not current or not current.isValid():
             return
 
         selected_api_call: ApiCall = current.data(API_CALL_ROLE)

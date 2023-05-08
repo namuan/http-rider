@@ -2,7 +2,7 @@ import logging
 import sys
 import traceback
 
-from PyQt5.QtGui import QDesktopServices, QCloseEvent, QIcon
+from PyQt6.QtGui import QDesktopServices, QCloseEvent, QIcon
 
 from httprider.presenters import *
 from httprider.generated.base_window import Ui_MainWindow
@@ -69,14 +69,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setup_empty_frame(self):
         self.frame_request_response.hide()
         self.empty_frame = QFrame(self.splitter)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setHeightForWidth(self.empty_frame.sizePolicy().hasHeightForWidth())
         self.empty_frame.setSizePolicy(sizePolicy)
         self.empty_frame.setObjectName("empty_frame")
         self.btn_add_request = QPushButton(self.empty_frame)
         self.gridLayout = QGridLayout(self.empty_frame)
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
@@ -109,7 +109,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         event.accept()
         self.presenter.shutdown()
         try:
-            qApp.exit(0)
+            QApplication.instance().exit(0)
         except:
             pass
 
@@ -128,7 +128,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 act for act in toolbar_actions if act.text() == "Update Available"
             )
             if updates_action:
-                updates_action.setIcon(QIcon(":/images/download-48.png"))
+                updates_action.setIcon(QIcon("images:download-48.png"))
                 updates_action.setEnabled(True)
 
     def open_releases_page(self) -> None:
@@ -141,7 +141,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             dialog_title,
             dialog_location,
             filter=file_filter,
-            options=QFileDialog.DontUseNativeDialog,
+            options=QFileDialog.Option.DontUseNativeDialog,
         )
 
     # @todo: Remove usages and use one under ui module
@@ -151,5 +151,5 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             dialog_title,
             dialog_location,
             filter=file_filter,
-            options=QFileDialog.DontUseNativeDialog,
+            options=QFileDialog.Option.DontUseNativeDialog,
         )

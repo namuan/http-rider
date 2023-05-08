@@ -1,8 +1,8 @@
 import logging
 from functools import partial
 
-from PyQt5.QtCore import Qt, QModelIndex
-from PyQt5.QtWidgets import (
+from PyQt6.QtCore import Qt, QModelIndex
+from PyQt6.QtWidgets import (
     QTreeWidgetItem,
     QHeaderView,
     QStyledItemDelegate,
@@ -33,15 +33,15 @@ class AssertionListPresenter:
         self.parent_presenter = parent_presenter
         self.view = tbl_widget
         self.parent_view = parent_view
-        stretch_mode = QHeaderView.Stretch
+        stretch_mode = QHeaderView.ResizeMode.Stretch
         header: QHeaderView = self.view.header()
-        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(3, stretch_mode)
-        header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(5, stretch_mode)
-        header.setSectionResizeMode(6, QHeaderView.Fixed)
+        header.setSectionResizeMode(6, QHeaderView.ResizeMode.Fixed)
         header.resizeSection(6, 40)
         self.view.setItemDelegateForColumn(0, NoEditDelegate(self.view))
         self.view.setItemDelegateForColumn(3, NoEditDelegate(self.view))
@@ -98,9 +98,9 @@ class AssertionListPresenter:
     def add_item(self, item: QTreeWidgetItem, selected_matcher=None, current_data=None):
         existing_item = self.__assertion_exist(item)
         if existing_item:
-            existing_item.setData(3, Qt.DisplayRole, current_data)
+            existing_item.setData(3, Qt.ItemDataRole.DisplayRole, current_data)
 
-        item.setFlags(item.flags() ^ Qt.ItemIsEditable)
+        item.setFlags(item.flags() ^ Qt.ItemFlag.ItemIsEditable)
         self.view.addTopLevelItem(item)
         item_qombo = QComboBox(self.view)
         item_qombo.addItems([e.value for e in AssertionMatchers])
@@ -123,12 +123,12 @@ class AssertionListPresenter:
         tests = []
         for i in range(self.view.topLevelItemCount()):
             widget_item: QTreeWidgetItem = self.view.topLevelItem(i)
-            data_from = widget_item.data(0, Qt.DisplayRole)
-            var_name = widget_item.data(1, Qt.DisplayRole)
-            selector = widget_item.data(2, Qt.DisplayRole)
+            data_from = widget_item.data(0, Qt.ItemDataRole.DisplayRole)
+            var_name = widget_item.data(1, Qt.ItemDataRole.DisplayRole)
+            selector = widget_item.data(2, Qt.ItemDataRole.DisplayRole)
             assertion_value_type = widget_item.data(3, ASSERTION_TYPE_ROLE)
             selected_matcher = self.__selected_matcher(widget_item)
-            expected_value = widget_item.data(5, Qt.DisplayRole)
+            expected_value = widget_item.data(5, Qt.ItemDataRole.DisplayRole)
 
             if selected_matcher == AssertionMatchers.NOT_NULL.value:
                 expected_value = "Not Null"
@@ -153,14 +153,14 @@ class AssertionListPresenter:
         return tests
 
     def __assertion_exist(self, item: QTreeWidgetItem):
-        data_from = item.data(0, Qt.DisplayRole)
-        selector = item.data(2, Qt.DisplayRole)
+        data_from = item.data(0, Qt.ItemDataRole.DisplayRole)
+        selector = item.data(2, Qt.ItemDataRole.DisplayRole)
         assertion_found = None
         for i in range(self.view.topLevelItemCount()):
             widget_item: QTreeWidgetItem = self.view.topLevelItem(i)
             if (
-                widget_item.data(0, Qt.DisplayRole) == data_from
-                and widget_item.data(2, Qt.DisplayRole) == selector
+                widget_item.data(0, Qt.ItemDataRole.DisplayRole) == data_from
+                and widget_item.data(2, Qt.ItemDataRole.DisplayRole) == selector
             ):
                 assertion_found = widget_item
                 break
@@ -196,12 +196,12 @@ class AssertionListPresenter:
                 logging.error(last_exchange)
 
             # @todo: Create a function to convert row in assertions table <-> Assertion object
-            item.setData(0, Qt.DisplayRole, assertion.data_from)
-            item.setData(1, Qt.DisplayRole, assertion.var_name)
-            item.setData(2, Qt.DisplayRole, assertion.selector)
-            item.setData(3, Qt.DisplayRole, current_value_from_exchange)
+            item.setData(0, Qt.ItemDataRole.DisplayRole, assertion.data_from)
+            item.setData(1, Qt.ItemDataRole.DisplayRole, assertion.var_name)
+            item.setData(2, Qt.ItemDataRole.DisplayRole, assertion.selector)
+            item.setData(3, Qt.ItemDataRole.DisplayRole, current_value_from_exchange)
             item.setData(3, ASSERTION_TYPE_ROLE, assertion.var_type)
-            item.setData(5, Qt.DisplayRole, assertion.expected_value)
+            item.setData(5, Qt.ItemDataRole.DisplayRole, assertion.expected_value)
             self.add_item(
                 item,
                 selected_matcher=assertion.matcher,

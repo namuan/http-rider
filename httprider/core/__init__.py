@@ -14,7 +14,7 @@ from string import Template
 from urllib import parse
 
 import attr
-from PyQt5.QtWidgets import qApp
+from PyQt6.QtWidgets import QApplication
 from jsonpath_ng.ext import parse as jsonpath_parse
 
 from .constants import ContentType, UTF_8_ENCODING
@@ -85,7 +85,7 @@ def random_environment():
 
 
 def random_project_name():
-    return f"{qApp.applicationName()}-{fake.domain_word()}.tmp.db"
+    return f"{QApplication.instance().applicationName()}-{fake.domain_word()}.tmp.db"
 
 
 def elapsed_time_formatter(elapsed_time):
@@ -254,7 +254,7 @@ def guess_content_type(body):
 
 def load_json_show_error(json_str):
     try:
-        j = json.loads(json_str, encoding="utf-8")
+        j = json.loads(json_str)
         return j
     except JSONDecodeError:
         logging.error(f"Error in loading JSON: {json_str}")

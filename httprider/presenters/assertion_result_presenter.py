@@ -1,7 +1,7 @@
 import logging
 import re
 
-from PyQt5.QtWidgets import QListWidget
+from PyQt6.QtWidgets import QListWidget
 
 from httprider.core import str_to_bool
 from httprider.core.api_call_interactor import api_call_interactor

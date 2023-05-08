@@ -1,6 +1,6 @@
 import logging
 
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
 from requests import PreparedRequest
 from requests.exceptions import ConnectionError
 from urllib3.exceptions import NewConnectionError

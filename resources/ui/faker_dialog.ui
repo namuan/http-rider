@@ -27,6 +27,9 @@
      <height>32</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 0, 0);</string>
+   </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
@@ -58,12 +61,6 @@
        <width>131</width>
        <height>20</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Random string</string>
@@ -136,12 +133,6 @@
        <height>20</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>UUID</string>
      </property>
@@ -192,12 +183,6 @@
        <width>100</width>
        <height>20</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Custom</string>
@@ -283,12 +268,6 @@
        <height>20</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>First name</string>
      </property>
@@ -304,12 +283,6 @@
        <width>100</width>
        <height>20</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Last name</string>
@@ -344,12 +317,6 @@
        <height>20</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Suffix</string>
      </property>
@@ -362,12 +329,6 @@
        <width>100</width>
        <height>20</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Full name</string>
@@ -472,12 +433,6 @@
        <height>20</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Prefix</string>
      </property>
@@ -517,12 +472,6 @@
        <height>20</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Full Address</string>
      </property>
@@ -538,12 +487,6 @@
        <width>151</width>
        <height>20</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Secondary Address</string>
@@ -578,12 +521,6 @@
        <width>131</width>
        <height>20</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Street Address</string>
@@ -637,12 +574,6 @@
        <height>20</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>City</string>
      </property>
@@ -658,12 +589,6 @@
        <width>131</width>
        <height>20</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Zip code</string>
@@ -717,12 +642,6 @@
        <height>20</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>State</string>
      </property>
@@ -738,12 +657,6 @@
        <width>131</width>
        <height>20</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Country</string>

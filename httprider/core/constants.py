@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-from PyQt5.QtCore import Qt
+from PyQt6.QtCore import Qt
 
 ENVIRONMENT_RECORD_TYPE = "environment"
 PROJECT_INFO_RECORD_TYPE = "project_info"
@@ -10,11 +10,11 @@ API_TEST_CASE_RECORD_TYPE = "api_test"
 API_CALL_RECORD_TYPE = "api"
 DEFAULT_TAG = "Show All"
 
-API_CALL_ROLE = Qt.UserRole + 100
+API_CALL_ROLE = Qt.ItemDataRole.UserRole + 100
 API_ID_ROLE = API_CALL_ROLE + 100
-ASSERTION_TYPE_ROLE = Qt.UserRole + 300
-DYNAMIC_STRING_ROLE = Qt.UserRole + 400
-EXPORTER_COMBO_ROLE = Qt.UserRole + 500
+ASSERTION_TYPE_ROLE = Qt.ItemDataRole.UserRole + 300
+DYNAMIC_STRING_ROLE = Qt.ItemDataRole.UserRole + 400
+EXPORTER_COMBO_ROLE = Qt.ItemDataRole.UserRole + 500
 
 UTF_8_ENCODING = "utf-8"
 

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog
 
 from httprider.generated.code_generator_dialog import Ui_CodeGeneratorDialog
 from httprider.presenters import CodeGeneratorPresenter

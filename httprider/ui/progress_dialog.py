@@ -1,6 +1,6 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeyEvent
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QKeyEvent
+from PyQt6.QtWidgets import QDialog
 
 from ..external.rest_api_connector import http_exchange_signals
 from ..generated.progress_dialog import Ui_ProgressDialog
@@ -34,5 +34,5 @@ class ProgressDialog(QDialog, Ui_ProgressDialog):
         self.lbl_progress_status.setText(message)
 
     def keyPressEvent(self, e: QKeyEvent):
-        if e.key() != Qt.Key_Escape:
+        if e.key() != Qt.Key.Key_Escape:
             super(QDialog, self).keyPressEvent(e)

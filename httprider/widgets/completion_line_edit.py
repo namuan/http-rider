@@ -1,6 +1,6 @@
-from PyQt5.QtCore import *
-from PyQt5.QtGui import QKeyEvent, QFocusEvent, QStandardItemModel
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import *
+from PyQt6.QtGui import QKeyEvent, QFocusEvent, QStandardItemModel, QAction
+from PyQt6.QtWidgets import *
 
 from ..core import DynamicStringData, DynamicStringType
 from ..core.constants import DYNAMIC_STRING_ROLE
@@ -29,15 +29,15 @@ class ChildLineEdit(QLineEdit):
     def setup_completer(self, model: QStandardItemModel):
         completer = QCompleter()
         completer.setModel(model)
-        completer.setCaseSensitivity(Qt.CaseInsensitive)
-        completer.setFilterMode(Qt.MatchContains)
-        completer.setCompletionMode(QCompleter.PopupCompletion)
+        completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        completer.setFilterMode(Qt.MatchFlag.MatchContains)
+        completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
         super().setCompleter(completer)
         self.completer().activated[QModelIndex].connect(self.on_completion)
 
     def on_completion(self, index: QModelIndex):
         self.entry_completed.emit(
-            index.data(Qt.DisplayRole), index.data(DYNAMIC_STRING_ROLE), False
+            index.data(Qt.ItemDataRole.DisplayRole), index.data(DYNAMIC_STRING_ROLE), False
         )
 
     def focusOutEvent(self, e: QFocusEvent):
@@ -45,7 +45,7 @@ class ChildLineEdit(QLineEdit):
             self.entry_completed.emit("", "", True)
 
     def keyPressEvent(self, e: QKeyEvent):
-        if e.key() == Qt.Key_Escape:
+        if e.key() == Qt.Key.Key_Escape:
             self.entry_completed.emit("", "", True)
             e.ignore()
 
@@ -83,7 +83,7 @@ class CompletionContextMenuHandler:
         dynamic_value: DynamicStringData = self.view.getValue()
 
         # Switch from secret -> plain, plain -> secret
-        if self.view.echoMode() == QLineEdit.PasswordEchoOnEdit:
+        if self.view.echoMode() == QLineEdit.EchoMode.PasswordEchoOnEdit:
             dynamic_value.string_type = DynamicStringType.PLAIN.value
         else:
             dynamic_value.string_type = DynamicStringType.SECRET.value
@@ -103,7 +103,7 @@ class CompletionLineEdit(QLineEdit):
         self.selection_start = 0
         self.selection_length = 0
 
-        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.on_context_menu)
 
         self.menu_item_handler = CompletionContextMenuHandler(self)
@@ -111,13 +111,13 @@ class CompletionLineEdit(QLineEdit):
     def on_context_menu(self, position):
         menu = self.createStandardContextMenu()
         self.menu_item_handler.setup_actions(menu)
-        menu.exec_(self.mapToGlobal(position))
+        menu.exec(self.mapToGlobal(position))
 
     def show_data_dialog(self, rollback):
         cur_pos: QRect = self.cursorRect()
         global_position = self.mapToGlobal(cur_pos.bottomLeft())
         self.data_generator_dialog.move(global_position)
-        if self.data_generator_dialog.exec_dialog() == QDialog.Accepted:
+        if self.data_generator_dialog.exec_dialog() == QDialog.DialogCode.Accepted:
             f = self.data_generator_dialog.get_function()
             self.process_completion(f, f, rollback)
         else:
@@ -127,7 +127,7 @@ class CompletionLineEdit(QLineEdit):
         cur_pos: QRect = self.cursorRect()
         global_position = self.mapToGlobal(cur_pos.bottomLeft())
         self.utility_functions_dialog.move(global_position)
-        if self.utility_functions_dialog.exec_dialog() == QDialog.Accepted:
+        if self.utility_functions_dialog.exec_dialog() == QDialog.DialogCode.Accepted:
             f = self.utility_functions_dialog.get_function()
             self.process_completion(f, f, rollback, replace_text=True)
         else:
@@ -161,7 +161,7 @@ class CompletionLineEdit(QLineEdit):
         self.child_edit.hide()
         self.child_edit.setText("")
 
-        self.setFocus(Qt.OtherFocusReason)
+        self.setFocus(Qt.FocusReason.OtherFocusReason)
         if not rollback:
             if replace_text:
                 self.selectAll()
@@ -185,29 +185,29 @@ class CompletionLineEdit(QLineEdit):
 
         popup_visible = self.child_edit.completer().popup().isVisible()
 
-        if e.key() == Qt.Key_Dollar:
+        if e.key() == Qt.Key.Key_Dollar:
             if not popup_visible:
                 self.setup_selections()
                 self.child_edit.setGeometry(self.rect())
                 self.child_edit.setText("")
                 self.child_edit.show()
-                self.child_edit.setFocus(Qt.OtherFocusReason)
+                self.child_edit.setFocus(Qt.FocusReason.OtherFocusReason)
                 return
 
         super().keyPressEvent(e)
 
     def setValue(self, new_val: DynamicStringData):
         if new_val.string_type == DynamicStringType.SECRET.value:
-            self.setEchoMode(QLineEdit.PasswordEchoOnEdit)
+            self.setEchoMode(QLineEdit.EchoMode.PasswordEchoOnEdit)
         else:
-            self.setEchoMode(QLineEdit.Normal)
+            self.setEchoMode(QLineEdit.EchoMode.Normal)
 
         self.setText(new_val.value)
 
     def getValue(self):
         field_val = self.text().strip()
         string_type = DynamicStringType.PLAIN.value
-        if self.echoMode() == QLineEdit.PasswordEchoOnEdit:
+        if self.echoMode() == QLineEdit.EchoMode.PasswordEchoOnEdit:
             string_type = DynamicStringType.SECRET.value
 
         return DynamicStringData(value=field_val, string_type=string_type)

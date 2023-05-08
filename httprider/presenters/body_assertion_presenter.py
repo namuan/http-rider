@@ -1,6 +1,6 @@
-from PyQt5.QtCore import QModelIndex, Qt
-from PyQt5.QtWidgets import QTreeView, QAction, QMenu, qApp
-
+from PyQt6.QtCore import QModelIndex, Qt
+from PyQt6.QtWidgets import QTreeView, QMenu, QApplication
+from PyQt6.QtGui import QAction
 from . import populate_tree_with_json
 from httprider.widgets.json_tree_widget import ItemRole, JsonModel
 
@@ -27,7 +27,7 @@ class BodyAssertionPresenter:
         self.context_menu.addAction(select_action)
         self.context_menu.addAction(copy_action)
 
-        self.view.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.view.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.view.customContextMenuRequested.connect(self.show_context_menu)
 
     def refresh(self, request_body):
@@ -41,7 +41,7 @@ class BodyAssertionPresenter:
         index: QModelIndex = self.view.indexAt(position)
         if not index.isValid():
             return
-        self.context_menu.exec_(self.view.mapToGlobal(position))
+        self.context_menu.exec(self.view.mapToGlobal(position))
 
     def on_body_item_selected(self, index: QModelIndex):
         item = self.view.model().data(index, ItemRole)
@@ -62,5 +62,5 @@ class BodyAssertionPresenter:
             return
         current_value = item.itemValue
 
-        clipboard = qApp.clipboard()
+        clipboard = QApplication.instance().clipboard()
         clipboard.setText(current_value)

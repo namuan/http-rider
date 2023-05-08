@@ -1,6 +1,6 @@
-from PyQt5.QtCore import Qt, QModelIndex
-from PyQt5.QtWidgets import QHeaderView, QMenu, QAction, qApp
-
+from PyQt6.QtCore import Qt, QModelIndex
+from PyQt6.QtWidgets import QHeaderView, QMenu, QApplication
+from PyQt6.QtGui import QAction
 from . import populate_tree_with_kv_dict
 
 
@@ -10,8 +10,8 @@ class HeadersAssertionPresenter:
         self.parent_view = parent_view
         self.parent_header_selection = on_header_selection
 
-        self.view.header().setSectionResizeMode(0, QHeaderView.Stretch)
-        self.view.header().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.view.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.view.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
 
         self.view.doubleClicked.connect(self.on_double_click_item)
 
@@ -26,7 +26,7 @@ class HeadersAssertionPresenter:
         self.header_menu.addAction(select_action)
         self.header_menu.addAction(copy_action)
 
-        self.view.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.view.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.view.customContextMenuRequested.connect(self.show_menu_headers)
 
     def on_double_click_item(self, index: QModelIndex):
@@ -35,7 +35,7 @@ class HeadersAssertionPresenter:
 
     def on_clipboard_copy_header(self):
         selected_item = self.view.currentItem()
-        clipboard = qApp.clipboard()
+        clipboard = QApplication.instance().clipboard()
         clipboard.setText(selected_item.text(1))
 
     def on_select_header(self):
@@ -47,7 +47,7 @@ class HeadersAssertionPresenter:
         if not index.isValid():
             return
 
-        self.header_menu.exec_(self.view.mapToGlobal(position))
+        self.header_menu.exec(self.view.mapToGlobal(position))
 
     def refresh(self, header_items):
         populate_tree_with_kv_dict(header_items, self.view)

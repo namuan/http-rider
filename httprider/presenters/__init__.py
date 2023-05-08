@@ -1,7 +1,7 @@
 import functools
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import *
 
 from httprider.core.constants import REPLACEMENTS
 from httprider.model.app_data import ApiTestCase
@@ -27,9 +27,9 @@ def populate_tree_with_json(json_data, json_model, tree_view):
     json_model.setup_model(json_data)
     tree_view.setModel(json_model)
     tree_view.expandAll()
-    tree_view.header().setDefaultAlignment(Qt.AlignHCenter)
-    tree_view.header().setSectionResizeMode(0, QHeaderView.Stretch)
-    tree_view.header().setSectionResizeMode(1, QHeaderView.Stretch)
+    tree_view.header().setDefaultAlignment(Qt.AlignmentFlag.AlignHCenter)
+    tree_view.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+    tree_view.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
 
 
 def populate_tree_with_kv_dict(kv_dict, tree_widget):

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog
 
 from ..generated.project_info_dialog import Ui_ProjectInfoDialog
 from ..presenters.project_info_presenter import ProjectInfoPresenter

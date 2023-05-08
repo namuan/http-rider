@@ -1,5 +1,5 @@
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QShortcut
+from PyQt6.QtGui import *
+from PyQt6.QtGui import QShortcut
 
 
 def shortcut_items(self):

@@ -1,7 +1,7 @@
-from PyQt5.QtCore import QRect, Qt
-from PyQt5.QtGui import QTextCursor, QKeyEvent, QTextCharFormat
-from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QAction
-
+from PyQt6.QtCore import QRect, Qt
+from PyQt6.QtGui import QTextCursor, QKeyEvent, QTextCharFormat
+from PyQt6.QtWidgets import QPlainTextEdit, QDialog
+from PyQt6.QtGui import QAction
 from ..ui.data_generator_dialog import DataGeneratorDialog
 from ..ui.utility_functions_dialog import UtilityFunctionsDialog
 from ..widgets.completion_line_edit import ChildLineEdit
@@ -43,7 +43,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         self.selection_start = 0
         self.selection_end = 0
 
-        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.on_context_menu)
 
         self.menu_item_handler = PlainTextContextMenuHandler(self)
@@ -54,7 +54,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
     def on_context_menu(self, position):
         menu = self.createStandardContextMenu()
         self.menu_item_handler.setup_actions(menu)
-        menu.exec_(self.mapToGlobal(position))
+        menu.exec(self.mapToGlobal(position))
 
     def setup_selections(self):
         tc: QTextCursor = self.textCursor()
@@ -66,7 +66,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         cur_pos: QRect = self.cursorRect()
         global_position = self.mapToGlobal(cur_pos.bottomLeft())
         self.data_generator_dialog.move(global_position)
-        if self.data_generator_dialog.exec_dialog() == QDialog.Accepted:
+        if self.data_generator_dialog.exec_dialog() == QDialog.DialogCode.Accepted:
             f = self.data_generator_dialog.get_function()
             self.process_completion(f, f, rollback)
         else:
@@ -76,7 +76,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         cur_pos: QRect = self.cursorRect()
         global_position = self.mapToGlobal(cur_pos.bottomLeft())
         self.utility_functions_dialog.move(global_position)
-        if self.utility_functions_dialog.exec_dialog() == QDialog.Accepted:
+        if self.utility_functions_dialog.exec_dialog() == QDialog.DialogCode.Accepted:
             f = self.utility_functions_dialog.get_function()
             self.process_completion(f, f, rollback)
         else:
@@ -99,12 +99,12 @@ class CompletionPlainTextEdit(QPlainTextEdit):
         self.child_edit.hide()
         self.child_edit.setText("")
 
-        self.setFocus(Qt.OtherFocusReason)
+        self.setFocus(Qt.FocusReason.OtherFocusReason)
         if not rollback:
             if self.selected_text:
                 tc: QTextCursor = self.textCursor()
                 tc.setPosition(self.selection_start)
-                tc.setPosition(self.selection_end, QTextCursor.KeepAnchor)
+                tc.setPosition(self.selection_end, QTextCursor.MoveMode.KeepAnchor)
                 self.setTextCursor(tc)
 
             existing_format = self.currentCharFormat()
@@ -128,7 +128,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
             return
 
         popup_visible = self.child_edit.completer().popup().isVisible()
-        if e.key() == Qt.Key_Dollar:
+        if e.key() == Qt.Key.Key_Dollar:
             if not popup_visible:
                 tc: QTextCursor = self.textCursor()
                 self.selected_text = tc.selectedText()
@@ -140,7 +140,7 @@ class CompletionPlainTextEdit(QPlainTextEdit):
                 self.child_edit.setGeometry(popup_rect)
                 self.child_edit.setText("")
                 self.child_edit.show()
-                self.child_edit.setFocus(Qt.OtherFocusReason)
+                self.child_edit.setFocus(Qt.FocusReason.OtherFocusReason)
                 return
 
         super().keyPressEvent(e)

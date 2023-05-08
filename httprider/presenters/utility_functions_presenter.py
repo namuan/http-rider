@@ -11,9 +11,10 @@ class UtilityFunctionsPresenter:
             self.view.function_selector.addItem(f)
 
         # Event handlers to refresh generated values
-        self.view.function_selector.currentIndexChanged[str].connect(
-            self.transform_selected_text
-        )
+        # TODO: UnComment and FIX
+        # self.view.function_selector.currentIndexChanged[str].connect(
+        #     self.transform_selected_text
+        # )
         self.view.btn_copy_transformed.clicked.connect(self.on_copy_clipboard)
 
     def init(self):
