@@ -11,7 +11,7 @@
 
 Downloads are currently available for MacOS and Windows however it is simple to run from source if you prefer that.
 
-See https://www.httprider.com/docs/getting-started/installation/ for instructions for different operating systems.
+See [https://www.httprider.com/docs/getting-started/installation/](https://namuan.github.io/http-rider-docs/docs/getting-started/installation/) for instructions for different operating systems.
  
 ### Features  
   
