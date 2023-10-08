@@ -7,7 +7,12 @@ import httprider
 a = Analysis(['bin/app'],
              pathex=['.'],
              binaries=None,
-             datas=[],
+             datas=[
+                ('resources/images/*', 'resources/images'),
+                ('resources/icons/*', 'resources/icons'),
+                ('resources/fonts/*', 'resources/fonts'),
+                ('resources/themes/*', 'resources/themes'),
+             ],
              hiddenimports=[],
              hookspath=None,
              runtime_hooks=None,
