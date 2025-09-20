@@ -1,5 +1,53 @@
 repos:
-  - repo: https://github.com/ambv/black
-    rev: stable
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v4.4.0"
     hooks:
-      - id: black
+      - id: check-ast
+      - id: check-builtin-literals
+      - id: check-added-large-files
+        exclude: "^assets/"
+      - id: check-docstring-first
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
+      - id: debug-statements
+      - id: detect-private-key
+      - id: trailing-whitespace
+        exclude: "^docs/"
+      - id: mixed-line-ending
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.20.0
+    hooks:
+      - id: pyupgrade
+        args: [--py310-plus]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.6.3"
+    hooks:
+      - id: ruff
+        types_or: [python, pyi, jupyter, toml]
+        args: [--fix]
+      - id: ruff-format
+        types_or: [python, pyi, jupyter, toml]
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: "v3.0.3"
+    hooks:
+      - id: prettier
+
+  - repo: local
+    hooks:
+      - id: xenon
+        name: xenon
+        entry: uv run xenon --max-absolute B ./
+        language: system
+        types: [python]

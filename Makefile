@@ -1,71 +1,67 @@
 export PROJECTNAME=$(shell basename "$(PWD)")
 
-.SILENT: ;               # no need for @
+.PHONY: $(shell grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk -F: '{print $$1}')
 
-release: ## Step to prepare a new release
-	echo "Instructions to prepare release"
-	echo "Repo: http-rider: Increment version in httprider/__init__.py"
-	echo "Repo: http-rider: Increment version in .travis.yml"
-	echo "Commit - Preparing Release x.x.x"
-	echo "Check Differences between Releases using Fork"
-	echo "Repo: http-rider-osx: Increment version in .travis.yml"
-	echo "Commit - Release x.x.x - MacOS"
-	echo "Repo: http-rider-win: Increment version in .appveyor.yml"
-	echo "Commit - Release x.x.x - Windows"
-	echo "Repo: http-rider: Update Download Links in README.md"
-	echo "Repo: http-rider-docs: Update content/en/docs/getting-started/installation.md"
+install: ## Install the virtual environment and install the pre-commit hooks
+	@echo "🚀 Creating virtual environment using uv"
+	@uv sync
+	@uv run pre-commit install
 
-black: ## Runs black for code formatting
-	./venv/bin/black httprider
+start-work: ## Start working on a new feature
+	@echo "🚀 Starting work on a new feature"
+	@mob start -i -b "$(FEATURE)"
 
-lint: black ## Runs Flake8 for linting
-	./venv/bin/flake8 httprider
+check: clean ## Run code quality tools.
+	@echo "🚀 Checking lock file consistency with 'pyproject.toml'"
+	@uv lock --locked
+	@echo "🚀 Linting code: Running pre-commit"
+	@uv run pre-commit run -a
+	@mob next
 
-deps: ## Reinstalls dependencies
-	./venv/bin/python3 -m pip install --upgrade pip
-	./venv/bin/python3 -m pip install -U -r requirements/dev.txt
-
-clean: ## Clean package
-	rm -rf build dist
-
-setup: ## Re-initiates virtualenv
-	rm -rf venv
-	python3.9 -m venv venv
-	./venv/bin/python3 -m pip install -r requirements/dev.txt
-	echo "Once everything is installed, 'make run' to run the application"
-
-package: clean ## Rebuilds venv and packages app
-	./venv/bin/python3 -m pip install -r requirements/build.txt
-	export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/python3 setup.py bdist_app
-
-uic: ## Converts ui files to python
-	for i in `ls resources/ui/*.ui`; do FNAME=`basename $${i} ".ui"`; ./venv/bin/pyuic6 $${i} > "httprider/generated/$${FNAME}.py"; done
-
-run: ## Runs the application
-	export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/python3 httprider/application.py
+upgrade: ## Upgrade all dependencies to their latest versions
+	@echo "🚀 Upgrading all dependencies"
+	@uv lock --upgrade
 
 test: ## Run all unit tests
-	export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/pytest httprider/tests
+	@echo "🚀 Running unit tests"
+	@uv run pytest -v
 
-uitest: ## Run all unit tests
-	rm -vf $$HOME/Library/Preferences/Python/httprider.db
-	export PYTHONPATH=`pwd`:$PYTHONPATH && ./venv/bin/pytest uitests
+test-single: ## Run a single test file (usage: make test-single TEST=test_config.py)
+	@echo "🚀 Running single test: $(TEST)"
+	@uv run pytest -v tests/$(TEST)
 
-runapp: ## Runs the packaged application
-	./dist/HttpRider.app/Contents/MacOS/app
+run: ## Run the application
+	@echo "🚀 Testing code: Running $(PROJECTNAME)"
+	@uv run $(PROJECTNAME)
+
+clean: ## Clean build artifacts
+	@echo "🚀 Removing build artifacts"
+	@find . -type f -name "*.pyc" -delete
+	@find . -type d -name "__pycache__" -delete
+	@find . -type d -name "*.egg-info" -delete
+	@rm -rf build/ dist/
+
+context: clean-build ## Build context file from application sources
+	llm-context-builder.py --extensions .py --ignored_dirs build dist generated venv .venv .idea .aider.tags.cache.v3 --print_contents --temp_file
+
+package: clean ## Run installer
+	@uv run pyinstaller main.spec --clean
 
 install-macosx: package ## Installs application in users Application folder
 	./scripts/install-macosx.sh httprider.app
 
-icns: ## Generates icon files from svg
-	echo "Run ./mk-icns.sh resources/icons/httprider.svg httprider"
+setup: ## One command setup
+	@make install-macosx
+	@echo "Installation completed"
+
+ICON_PNG ?= assets/$(PROJECTNAME)-icon.png
+
+icons: ## Generate ICNS and ICO files from the PNG logo
+	@bash assets/generate-icons.sh $(ICON_PNG)
 
 .PHONY: help
-.DEFAULT_GOAL := help
+help:
+	@uv run python -c "import re; \
+	[[print(f'\033[36m{m[0]:<20}\033[0m {m[1]}') for m in re.findall(r'^([a-zA-Z_-]+):.*?## (.*)$$', open(makefile).read(), re.M)] for makefile in ('$(MAKEFILE_LIST)').strip().split()]"
 
-help: Makefile
-	echo
-	echo " Choose a command run in "$(PROJECTNAME)":"
-	echo
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-	echo
+.DEFAULT_GOAL := help

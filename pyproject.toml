@@ -1,0 +1,130 @@
+[project]
+name = "httprider"
+version = "0.6.4"
+description = "Simple and Powerful cross-platform Rest API client"
+authors = [{ name = "Namuan", email = "info@bettercallbots.com" }]
+readme = "README.md"
+license = {text = "MIT"}
+keywords = ['python', 'rest', 'api', 'client', 'desktop']
+requires-python = ">=3.11"
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Internet :: WWW/HTTP :: Browsers",
+]
+dependencies = [
+    "PyQt6",
+    "requests",
+    "attrs",
+    "cattrs",
+    "Faker",
+    "objectpath",
+    "jsonpath-ng",
+    "uncurl",
+    "Pygments",
+    "prance",
+    "openapi-spec-validator",
+    "apispec",
+    "apispec[yaml]",
+    "apispec[validation]",
+    "genson",
+    "dataset",
+    "yapf",
+    "stringcase",
+    "mistune",
+    "darkdetect",
+]
+
+[project.urls]
+Homepage = "https://deskriders.dev"
+Repository = "https://github.com/namuan/httprider"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest",
+    "pytest-qt",
+    "pre-commit",
+    "black",
+    "flake8",
+    "ruff",
+    "pyinstaller",
+    "radon",
+    "xenon",
+]
+
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["httprider*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+fix = true
+
+[tool.ruff.lint]
+select = [
+    # flake8-2020
+    "YTT",
+    # flake8-bandit
+    "S",
+    # flake8-bugbear
+    "B",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # mccabe
+    "C90",
+    # pycodestyle
+    "E", "W",
+    # pyflakes
+    "F",
+    # pygrep-hooks
+    "PGH",
+    # pyupgrade
+    "UP",
+    # ruff
+    "RUF",
+    # tryceratops
+    "TRY",
+]
+ignore = [
+    # LineTooLong
+    "E501",
+    # DoNotAssignLambda
+    "E731",
+    "TRY003",
+    "TRY300",
+    "TRY301",
+    "E741",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.ruff.format]
+preview = true
+
+[project.scripts]
+http-rider = "httprider.application:main"
