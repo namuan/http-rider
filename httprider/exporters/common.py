@@ -58,28 +58,31 @@ def extract_uri(url, servers):
     return url
 
 
-def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True):
+def _get_request_data(api_call: ApiCall, exchange: HttpExchange):
+    """Extract request data from api_call or exchange."""
     if api_call:
-        http_method = api_call.http_method
-        http_url = api_call.http_url
-        req_headers = api_call.enabled_headers()
-        req_qp = api_call.enabled_query_params()
-        req_body = api_call.request_body_without_comments()
-
-    if exchange.response.http_status_code != 0:
-        http_method = exchange.request.http_method
-        http_url = exchange.request.http_url
-        req_qp = exchange.request.query_params
-        req_headers = exchange.request.headers
-        req_body = exchange.request.request_body
-    elif not api_call:
-        raise ValueError(
-            f"Unable to make curl request as api_call is null and exchange response is {exchange.response}"
+        return (
+            api_call.http_method,
+            api_call.http_url,
+            api_call.enabled_headers(),
+            api_call.enabled_query_params(),
+            api_call.request_body_without_comments(),
         )
 
-    if req_qp:
-        http_url = http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
+    if exchange.response.http_status_code != 0:
+        return (
+            exchange.request.http_method,
+            exchange.request.http_url,
+            exchange.request.headers,
+            exchange.request.query_params,
+            exchange.request.request_body,
+        )
 
+    raise ValueError(f"Unable to make curl request as api_call is null and exchange response is {exchange.response}")
+
+
+def _build_curl_parts(http_method, http_url, req_headers, req_body, compressed, verify):
+    """Build curl command parts."""
     parts = [("curl", None), ("-X", http_method)]
 
     for k, v in sorted(req_headers.items()):
@@ -98,15 +101,28 @@ def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=
         parts += [("--insecure", None)]
 
     parts += [(None, http_url)]
+    return parts
 
+
+def _format_curl_command(parts):
+    """Format curl command parts into final string."""
     flat_parts = []
     for k, v in parts:
         if k:
             flat_parts.append(k)
         if v:
             flat_parts.append(f"'{v}'")
-
     return " ".join(flat_parts)
+
+
+def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True):
+    http_method, http_url, req_headers, req_qp, req_body = _get_request_data(api_call, exchange)
+
+    if req_qp:
+        http_url = http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
+
+    parts = _build_curl_parts(http_method, http_url, req_headers, req_body, compressed, verify)
+    return _format_curl_command(parts)
 
 
 def format_python_code(unformatted_code):

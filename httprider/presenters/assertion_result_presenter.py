@@ -70,11 +70,8 @@ class AssertionResultPresenter:
             assertion.output = f"{indicator} [{assertion.data_from}] {assertion.selector} - Actual:({current_val}) {assertion.matcher} Expected:({assertion.expected_value})"
         return assertion
 
-    def __get_result_for_matcher(self, matcher, current_val, expected_val, val_type):
-        logging.info(f"get_result_for_matcher({matcher}, {current_val}, {expected_val}, {val_type})")
-        if matcher == AssertionMatchers.NOT_NULL.value:
-            return current_val is not None
-
+    def _convert_values_by_type(self, current_val, expected_val, val_type):
+        """Convert values to appropriate types."""
         try:
             if val_type == "int":
                 current_val = int(current_val) if current_val else None
@@ -87,33 +84,69 @@ class AssertionResultPresenter:
                 expected_val = str_to_bool(expected_val)
         except ValueError:
             logging.exception(f"Unable to convert current value {current_val} or expected value {expected_val}")
-            return False
+            return None, None, False
+        return current_val, expected_val, True
 
+    def _handle_basic_matchers(self, matcher, current_val, expected_val):
+        """Handle basic equality and null matchers."""
+        if matcher == AssertionMatchers.NOT_NULL.value:
+            return current_val is not None
         if matcher == AssertionMatchers.EQ.value:
             return current_val == expected_val
-
         if matcher == AssertionMatchers.NOT_EQ.value:
             return current_val != expected_val
+        return None
 
+    def _handle_string_matchers(self, matcher, current_val, expected_val):
+        """Handle string-based matchers."""
         if matcher == AssertionMatchers.EMPTY.value:
             return current_val.strip() == ""
-
         if matcher == AssertionMatchers.NOT_EMPTY.value:
             return current_val is not None and current_val.strip() != ""
-
         if matcher == AssertionMatchers.CONTAINS.value:
             return current_val is not None and current_val.find(expected_val) >= 0
-
         if matcher == AssertionMatchers.NOT_CONTAINS.value:
             return current_val is not None and current_val.find(expected_val) < 0
-
         if matcher == AssertionMatchers.MATCHES.value:
             return current_val is not None and re.match(expected_val, current_val) is not None
+        return None
 
+    def _handle_numeric_matchers(self, matcher, current_val, expected_val, val_type):
+        """Handle numeric comparison matchers."""
         if val_type in ["int", "float"]:
             if matcher == AssertionMatchers.LT.value:
                 return current_val is not None and current_val < expected_val
             if matcher == AssertionMatchers.GT.value:
                 return current_val is not None and current_val > expected_val
+        return None
+
+    def __get_result_for_matcher(self, matcher, current_val, expected_val, val_type):
+        logging.info(f"get_result_for_matcher({matcher}, {current_val}, {expected_val}, {val_type})")
+
+        # Handle NOT_NULL first as it doesn't need type conversion
+        if matcher == AssertionMatchers.NOT_NULL.value:
+            return current_val is not None
+
+        # Convert values by type
+        current_val, expected_val, conversion_success = self._convert_values_by_type(
+            current_val, expected_val, val_type
+        )
+        if not conversion_success:
+            return False
+
+        # Try basic matchers
+        result = self._handle_basic_matchers(matcher, current_val, expected_val)
+        if result is not None:
+            return result
+
+        # Try string matchers
+        result = self._handle_string_matchers(matcher, current_val, expected_val)
+        if result is not None:
+            return result
+
+        # Try numeric matchers
+        result = self._handle_numeric_matchers(matcher, current_val, expected_val, val_type)
+        if result is not None:
+            return result
 
         return False

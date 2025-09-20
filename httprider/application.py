@@ -3,7 +3,7 @@ import sys
 from PyQt6.QtWidgets import *
 
 from httprider import __appname__, __desktopid__, __version__
-from httprider.themes import theme_provider
+from httprider.core.core_settings import app_settings
 from httprider.ui.main_window import MainWindow
 
 
@@ -13,12 +13,10 @@ def main():
     application.setApplicationName(__appname__)
     application.setDesktopFileName(__desktopid__)
 
-    window = MainWindow()
-    theme_provider.configure_theme(application)
+    # Initialize app settings
+    app_settings.init()
 
-    window.show()
+    main_window = MainWindow()
+    main_window.show()
+
     sys.exit(application.exec())
-
-
-if __name__ == "__main__":
-    main()
