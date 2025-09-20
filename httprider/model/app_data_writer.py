@@ -51,7 +51,7 @@ class AppDataWriter(AppData):
         logging.info(f"Updating Project info In DB {project_info}")
         table = self.ldb[project_info.record_type]
         table.upsert(
-            dict(name=project_info.record_type, object=json.dumps(project_info.to_json())),
+            {"name": project_info.record_type, "object": json.dumps(project_info.to_json())},
             ["name"],
         )
         self.signals.project_info_updated.emit(project_info)
@@ -63,7 +63,7 @@ class AppDataWriter(AppData):
         logging.info(f"Updating App State In DB {app_state}")
         table = self.ldb[app_state.record_type]
         table.upsert(
-            dict(name=app_state.record_type, object=json.dumps(app_state.to_json())),
+            {"name": app_state.record_type, "object": json.dumps(app_state.to_json())},
             ["name"],
         )
         self.signals.app_state_updated.emit()
@@ -71,12 +71,12 @@ class AppDataWriter(AppData):
     def update_http_exchange_in_db(self, exchange: HttpExchange):
         table = self.ldb[exchange.type]
         table.upsert(
-            dict(
-                name=exchange.type,
-                exchange_id=exchange.id,
-                api_call_id=exchange.api_call_id,
-                object=json.dumps(exchange.to_json()),
-            ),
+            {
+                "name": exchange.type,
+                "exchange_id": exchange.id,
+                "api_call_id": exchange.api_call_id,
+                "object": json.dumps(exchange.to_json()),
+            },
             ["exchange_id", "api_call_id"],
         )
 
@@ -99,11 +99,11 @@ class AppDataWriter(AppData):
         logging.debug(f"update_api_call_in_db - {api_call}")
         table = self.ldb[api_call.type]
         table.upsert(
-            dict(
-                name=api_call.type,
-                api_call_id=api_call.id,
-                object=json.dumps(api_call.to_json()),
-            ),
+            {
+                "name": api_call.type,
+                "api_call_id": api_call.id,
+                "object": json.dumps(api_call.to_json()),
+            },
             ["api_call_id"],
         )
         return api_call.id
@@ -116,11 +116,11 @@ class AppDataWriter(AppData):
     def update_environment_in_db(self, environment: Environment):
         table = self.ldb[environment.record_type]
         table.upsert(
-            dict(
-                name=environment.record_type,
-                environment_name=environment.name,
-                object=json.dumps(environment.to_json()),
-            ),
+            {
+                "name": environment.record_type,
+                "environment_name": environment.name,
+                "object": json.dumps(environment.to_json()),
+            },
             ["environment_name"],
         )
 
@@ -139,12 +139,12 @@ class AppDataWriter(AppData):
 
         table = self.ldb[test_case.record_type]
         table.upsert(
-            dict(
-                name=test_case.record_type,
-                test_case_id=test_case.id,
-                api_call_id=test_case.api_call_id,
-                object=json.dumps(test_case.to_json()),
-            ),
+            {
+                "name": test_case.record_type,
+                "test_case_id": test_case.id,
+                "api_call_id": test_case.api_call_id,
+                "object": json.dumps(test_case.to_json()),
+            },
             ["test_case_id"],
         )
 

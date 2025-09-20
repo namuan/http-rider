@@ -1,3 +1,4 @@
+import ast
 import random
 import re
 import string
@@ -48,18 +49,19 @@ def random_person(args):
     return person_attributes_map.get(gender.lower()).get(attribute)()
 
 
+# ruff: noqa: S311
 def custom_string_generator(args):
     pattern, upper_case = args
 
-    def subs(chr):
-        if chr == "*":
+    def subs(char_in_pattern):
+        if char_in_pattern == "*":
             if upper_case:
                 return random.choice(string.ascii_uppercase)
             else:
                 return random.choice(string.ascii_lowercase)
-        if chr == "#":
+        if char_in_pattern == "#":
             return random.choice(string.digits)
-        return chr
+        return char_in_pattern
 
     return "".join([subs(c) for c in pattern])
 
@@ -96,7 +98,7 @@ def noop(args):
 
 
 def call_generator_func(func_name, parsed_args):
-    args = None if not parsed_args else eval(parsed_args)
+    args = None if not parsed_args else ast.literal_eval(parsed_args)
     m = {
         "random": random_string_generator,
         "uuid": random_uuid,

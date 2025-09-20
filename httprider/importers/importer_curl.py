@@ -21,8 +21,8 @@ class CurlImporter:
             ctx: ParsedContext = uncurl.parse_context(curl_command)
             api_call = self.__extract_api_call(ctx)
             return None, [api_call]
-        except BaseException:
-            raise SyntaxError("Unable to parse curl command")
+        except BaseException as e:
+            raise SyntaxError("Unable to parse curl command") from e
 
     def __extract_api_call(self, ctx):
         url, qs = split_url_qs(ctx.url.strip())

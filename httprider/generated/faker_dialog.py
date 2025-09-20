@@ -220,8 +220,8 @@ class Ui_DataGeneratorDialog:
 
         self.retranslateUi(DataGeneratorDialog)
         self.tabWidget.setCurrentIndex(0)
-        self.buttonBox.accepted.connect(DataGeneratorDialog.accept)  # type: ignore
-        self.buttonBox.rejected.connect(DataGeneratorDialog.reject)  # type: ignore
+        self.buttonBox.accepted.connect(DataGeneratorDialog.accept)
+        self.buttonBox.rejected.connect(DataGeneratorDialog.reject)
         QtCore.QMetaObject.connectSlotsByName(DataGeneratorDialog)
 
     def retranslateUi(self, DataGeneratorDialog):

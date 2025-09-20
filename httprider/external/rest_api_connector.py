@@ -111,7 +111,7 @@ class RestApiConnector(QThread):
         )
 
         # converting request to k/v structure
-        kwargs = dict(headers=req.headers, params=req.query_params)
+        kwargs = {"headers": req.headers, "params": req.query_params}
 
         content_type = req.headers.get(f"{CONTENT_TYPE_HEADER_IN_EXCHANGE}", ContentType.NONE.value)
 
@@ -192,7 +192,7 @@ class RestApiConnector(QThread):
         logging.info(f"Running Rest API Connector for API: {self.exchange.api_call_id}")
         try:
             self.make_http_call()
-        except Exception as e:
+        except Exception:
             http_exchange_signals.request_finished.emit(self.exchange.api_call_id)
-            logging.exception(f"Unhandled exception: {e}")
+            logging.exception("Unhandled exception")
             raise

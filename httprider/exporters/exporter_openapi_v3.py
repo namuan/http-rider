@@ -39,7 +39,7 @@ class OpenApiv3Exporter:
 
         for tag in project_info.tags:
             if tag.name in api_call_tags:
-                spec.tag(dict(name=tag.name, description=tag.description))
+                spec.tag({"name": tag.name, "description": tag.description})
 
         return spec.to_yaml() if return_raw else highlight(spec.to_yaml(), data.YamlLexer(), HtmlFormatter())
 
@@ -48,7 +48,7 @@ class OpenApiv3Exporter:
             title=project_info.title,
             version=project_info.version,
             openapi_version="3.0.2",
-            info=dict(description=project_info.info),
+            info={"description": project_info.info},
             servers=[{"url": s} for s in project_info.servers],
         )
 

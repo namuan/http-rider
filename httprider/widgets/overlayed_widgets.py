@@ -8,10 +8,7 @@ class FloatingButtonWidget(QtWidgets.QPushButton):
         self.paddingTop = 5
 
     def update_position(self):
-        if hasattr(self.parent(), "viewport"):
-            parent_rect = self.parent().viewport().rect()
-        else:
-            parent_rect = self.parent().rect()
+        parent_rect = self.parent().viewport().rect() if hasattr(self.parent(), "viewport") else self.parent().rect()
 
         if not parent_rect:
             return

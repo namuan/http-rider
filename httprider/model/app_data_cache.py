@@ -1,4 +1,5 @@
 import logging
+from typing import ClassVar
 
 from ..core import json_path, response_code_formatter, response_code_round_up
 from ..core.constants import DEFAULT_TAG, AssertionDataSource
@@ -29,12 +30,12 @@ def _build_filter_query(query=None, tag=None):
 
 
 class AppDataCache:
-    api_call_list: dict[str, ApiCall] = {}
-    api_test_cases: dict[str, ApiTestCase] = {}
-    api_http_exchanges: dict[str, list[HttpExchange]] = {}
-    app_state: AppState = None
-    search_query = None
-    environments: dict[str, Environment] = {}
+    api_call_list: ClassVar[dict[str, ApiCall]] = {}
+    api_test_cases: ClassVar[dict[str, ApiTestCase]] = {}
+    api_http_exchanges: ClassVar[dict[str, list[HttpExchange]]] = {}
+    app_state: ClassVar[AppState] = None
+    search_query: ClassVar = None
+    environments: ClassVar[dict[str, Environment]] = {}
 
     def __init__(self, data_reader: AppDataReader, data_writer: AppDataWriter):
         self.app_data_reader = data_reader

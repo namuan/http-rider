@@ -23,8 +23,8 @@ from .share_preview_presenter import SharePreviewPresenter
 from .tags_list_presenter import TagsListPresenter
 
 __all__ = [
-    "ApiListPresenter",
     "ApiCallsHistoryPresenter",
+    "ApiListPresenter",
     "AssertionBuilderPresenter",
     "AssertionResultPresenter",
     "CodeGeneratorPresenter",

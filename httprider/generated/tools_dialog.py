@@ -42,8 +42,8 @@ class Ui_UtilityFunctionsDialog:
         self.txt_transformed_text.setObjectName("txt_transformed_text")
 
         self.retranslateUi(UtilityFunctionsDialog)
-        self.buttonBox.accepted.connect(UtilityFunctionsDialog.accept)  # type: ignore
-        self.buttonBox.rejected.connect(UtilityFunctionsDialog.reject)  # type: ignore
+        self.buttonBox.accepted.connect(UtilityFunctionsDialog.accept)
+        self.buttonBox.rejected.connect(UtilityFunctionsDialog.reject)
         QtCore.QMetaObject.connectSlotsByName(UtilityFunctionsDialog)
 
     def retranslateUi(self, UtilityFunctionsDialog):

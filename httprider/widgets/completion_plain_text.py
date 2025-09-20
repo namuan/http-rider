@@ -130,19 +130,18 @@ class CompletionPlainTextEdit(QPlainTextEdit):
             return
 
         popup_visible = self.child_edit.completer().popup().isVisible()
-        if e.key() == Qt.Key.Key_Dollar:
-            if not popup_visible:
-                tc: QTextCursor = self.textCursor()
-                self.selected_text = tc.selectedText()
-                self.selection_start = tc.selectionStart()
-                self.selection_end = tc.selectionEnd()
-                tc.setPosition(tc.selectionStart())
-                self.setTextCursor(tc)
-                popup_rect = self.boundingRect()
-                self.child_edit.setGeometry(popup_rect)
-                self.child_edit.setText("")
-                self.child_edit.show()
-                self.child_edit.setFocus(Qt.FocusReason.OtherFocusReason)
-                return
+        if e.key() == Qt.Key.Key_Dollar and not popup_visible:
+            tc: QTextCursor = self.textCursor()
+            self.selected_text = tc.selectedText()
+            self.selection_start = tc.selectionStart()
+            self.selection_end = tc.selectionEnd()
+            tc.setPosition(tc.selectionStart())
+            self.setTextCursor(tc)
+            popup_rect = self.boundingRect()
+            self.child_edit.setGeometry(popup_rect)
+            self.child_edit.setText("")
+            self.child_edit.show()
+            self.child_edit.setFocus(Qt.FocusReason.OtherFocusReason)
+            return
 
         super().keyPressEvent(e)

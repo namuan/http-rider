@@ -69,6 +69,7 @@ __all__ = [
 
 class DynamicStringType(Enum):
     PLAIN = "plain"
+    # ruff: noqa: S105
     SECRET = "secret"
 
 

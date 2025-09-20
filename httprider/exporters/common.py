@@ -11,10 +11,12 @@ from ..model.app_data import ApiCall, ExchangeRequest, ExchangeResponse, HttpExc
 internal_var_selector = re.compile(r"\$\{(\w+)\}")
 
 
-def highlight_format_json(plain_text, formatter=HtmlFormatter()):
+def highlight_format_json(plain_text, formatter=None):
     if not plain_text:
         return ""
 
+    if formatter is None:
+        formatter = HtmlFormatter()
     return highlight(format_json(plain_text), data.JsonLexer(), formatter)
 
 

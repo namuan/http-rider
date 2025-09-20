@@ -50,8 +50,8 @@ class JsonTreeItem:
 
         return topItem
 
-    def __flatten_string(self, input):
-        return input.strip().replace("\r", "").replace("\n", "")
+    def __flatten_string(self, item_input):
+        return item_input.strip().replace("\r", "").replace("\n", "")
 
 
 class JsonModel(QAbstractItemModel):
@@ -124,10 +124,7 @@ class JsonModel(QAbstractItemModel):
         if parent.column() > 0:
             return 0
 
-        if not parent.isValid():
-            parentItem = self.rootItem
-        else:
-            parentItem = parent.internalPointer()
+        parentItem = self.rootItem if not parent.isValid() else parent.internalPointer()
 
         return parentItem.childCount()
 
@@ -138,10 +135,7 @@ class JsonModel(QAbstractItemModel):
         if not self.hasIndex(row, column, parent):
             return QModelIndex()
 
-        if not parent.isValid():
-            parentItem = self.rootItem
-        else:
-            parentItem = parent.internalPointer()
+        parentItem = self.rootItem if not parent.isValid() else parent.internalPointer()
 
         childItem = parentItem.child(row)
         return self.createIndex(row, column, childItem)

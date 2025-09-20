@@ -28,6 +28,7 @@ class JsonDataGenerator:
         self.array_max_length = array_ml
 
     def rand_int(self, upper_limit, lower_limit):
+        # ruff: noqa: S311
         return randint(lower_limit, upper_limit)
 
     def fuzz_boolean(self, boolean_schema):
@@ -53,6 +54,7 @@ class JsonDataGenerator:
             return self.fuzz_date_time()
 
         string_length = self.rand_int(self.string_max_length, 0)
+        # ruff: noqa: S311
         return "".join(choices(string.ascii_uppercase + string.digits, k=string_length))
 
     def fuzz_int(self, int_schema):

@@ -1,6 +1,6 @@
 import logging
 from queue import Empty, Queue
-from typing import Any
+from typing import Any, ClassVar
 
 import attr
 
@@ -27,16 +27,15 @@ class ApiWorkerData:
 
 
 class SafeRestApiInteractor:
-    """
-    Singleton class
+    """Singleton class
     [x] Should manages requests and invoking new RestApiConnector
     [x] Should queues requests and sequentially call RestApiConnector
     [x] Should provide callback hooks on success and failure for caller
     """
 
-    worker_queue: Queue = Queue()
-    api_workers = []
-    any_worker_running: bool = False
+    worker_queue: ClassVar[Queue] = Queue()
+    api_workers: ClassVar[list] = []
+    any_worker_running: ClassVar[bool] = False
 
     def __init__(self, app_config=app_settings):
         self.app_config = app_config

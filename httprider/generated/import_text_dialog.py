@@ -35,8 +35,8 @@ class Ui_ImportTextDialog:
         self.verticalLayout.addWidget(self.btn_dialog_buttons)
 
         self.retranslateUi(ImportTextDialog)
-        self.btn_dialog_buttons.accepted.connect(ImportTextDialog.accept)  # type: ignore
-        self.btn_dialog_buttons.rejected.connect(ImportTextDialog.reject)  # type: ignore
+        self.btn_dialog_buttons.accepted.connect(ImportTextDialog.accept)
+        self.btn_dialog_buttons.rejected.connect(ImportTextDialog.reject)
         QtCore.QMetaObject.connectSlotsByName(ImportTextDialog)
 
     def retranslateUi(self, ImportTextDialog):

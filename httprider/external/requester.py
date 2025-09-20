@@ -29,11 +29,12 @@ class Requester:
 
         try:
             self.session.mount(resource, HTTPAdapter(max_retries=MAX_RETRIES))
+            # ruff: noqa: S113
             return requests.request(http_method, resource, **kwargs), None
         except requests.exceptions.HTTPError as e:
             return requests.Response(), ConnectionError(e)
         except Exception as e:
-            logging.exception(e)
+            logging.exception("Error while making request")
             return requests.Response(), e
 
 

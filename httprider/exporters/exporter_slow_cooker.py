@@ -61,27 +61,19 @@ class SlowCookerExporter:
         header = """
 ## Download and setup slow_cooker from https://github.com/buoyantio/slow_cooker
 <br/>## Brief description about common parameters
-<br/>## <strong>-qps</strong>: QPS to send to backends per request thread
-<br/>## <strong>-concurrency</strong>: Number of goroutines to run, each at the specified QPS level. Measure total QPS as qps * concurrency
+<br/>## <strong>-qps</strong>: QPS to send to backends per request thread
+<br/>## <strong>-concurrency</strong>: Number of goroutines to run, each at the specified QPS level. Measure total QPS as qps * concurrency
 <br/>## <strong>-iterations</strong>: Number of iterations for the experiment. Exits gracefully after iterations * interval (default 0, meaning infinite)
 <br/>## <strong>-interval</strong>: How often to report stats to stdout. (Default 10s)
-<br/>## <strong>-header</strong>: Adds additional headers to each request. Can be specified multiple times. Format is key: value
-<br/>## <strong>-interval</strong>: How often to report stats to stdout
+<br/>## <strong>-header</strong>: Adds additional headers to each request. Can be specified multiple times. Format is key: value
+<br/>## <strong>-interval</strong>: How often to report stats to stdout
 <br/>## <strong>-method</strong>: Determines which HTTP method to use when making the request
-<br/>## <strong>-totalRequests</strong>: Exit after sending this many requests.
+<br/>## <strong>-totalRequests</strong>: Exit after sending this many requests.
 <br/>## <strong>-timeout</strong>: Individual request timeout. (Default 10s)
 <br/>
 <br/>## Log/Output format
-<br/>## $timestamp $good/$bad/$failed $trafficGoal $percentGoal $interval $min [$p50 $p95 $p99 $p999] $max $bhash
-<br/>## <strong>bad</strong> means a status code in the 500 range. <strong>failed</strong> means a connection failure.
-<br/>## <strong>percentGoal</strong> is calculated as the total number of good and bad requests as a percentage of <strong>trafficGoal</strong>.
-<br/>## <strong>bhash</strong> is the number of failed hashes of body content. A value greater than 0 indicates a real problem.
-<br/>## p50: 50% of requests completed took this long
-<br/>## p95: 5% of requests completed took this long
-<br/>## p99: 1% of requests completed took this long
-<br/>## p999: 01% of requests completed took this long
-<br/>
-        """
+<br/>## $timestamp $good/$bad/$failed $trafficGoal $percentGoal $interval $min [$p50 $p95 $p99 $p999] $max $bhash
+"""
         output = [self.__export_api_call(api_call) for api_call in api_calls]
         return header + "<br/>".join(output)
 

@@ -5,15 +5,13 @@ from httprider.core.json_schema import schema_from_json
 
 def test_generate_schema_from_json():
     # given
-    raw_json = json.dumps(
-        dict(
-            name="john doe",
-            age=51,
-            height=5.10,
-            addresses=[],
-            balance=dict(amount=1000, currency="GBP"),
-        )
-    )
+    raw_json = json.dumps({
+        "name": "john doe",
+        "age": 51,
+        "height": 5.10,
+        "addresses": [],
+        "balance": {"amount": 1000, "currency": "GBP"},
+    })
     # when
     generated_schema = schema_from_json(raw_json).get("schema")
     # then
@@ -37,15 +35,13 @@ def test_generate_schema_from_json():
 
 def test_generate_schema_with_no_required_fields():
     # given
-    raw_json = json.dumps(
-        dict(
-            name="john doe",
-            age=51,
-            height=5.10,
-            addresses=[],
-            balance=dict(amount=1000, currency="GBP"),
-        )
-    )
+    raw_json = json.dumps({
+        "name": "john doe",
+        "age": 51,
+        "height": 5.10,
+        "addresses": [],
+        "balance": {"amount": 1000, "currency": "GBP"},
+    })
     # when
     generated_schema = schema_from_json(raw_json, remove_required=True).get("schema")
     # then

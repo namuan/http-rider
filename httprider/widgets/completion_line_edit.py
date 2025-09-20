@@ -183,14 +183,13 @@ class CompletionLineEdit(QLineEdit):
 
         popup_visible = self.child_edit.completer().popup().isVisible()
 
-        if e.key() == Qt.Key.Key_Dollar:
-            if not popup_visible:
-                self.setup_selections()
-                self.child_edit.setGeometry(self.rect())
-                self.child_edit.setText("")
-                self.child_edit.show()
-                self.child_edit.setFocus(Qt.FocusReason.OtherFocusReason)
-                return
+        if e.key() == Qt.Key.Key_Dollar and not popup_visible:
+            self.setup_selections()
+            self.child_edit.setGeometry(self.rect())
+            self.child_edit.setText("")
+            self.child_edit.show()
+            self.child_edit.setFocus(Qt.FocusReason.OtherFocusReason)
+            return
 
         super().keyPressEvent(e)
 

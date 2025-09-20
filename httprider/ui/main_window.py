@@ -119,7 +119,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.updater.check()
 
     def update_available(self, latest, current):
-        update_available = True if latest > current else False
+        update_available = latest > current
         logging.info(f"Update Available ({latest} > {current}) ? ({update_available}) Enable Toolbar Icon")
         if update_available:
             toolbar_actions = self.tool_bar.actions()
