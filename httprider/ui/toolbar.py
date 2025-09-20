@@ -1,10 +1,7 @@
-from functools import partial
-
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import *
 
-from ..importers import importer_plugins
 from ..widgets.search_line_edit_widget import SearchLineEdit
 
 
@@ -34,19 +31,6 @@ def tool_bar_items(self):
     self.tool_bar.addAction(tool_bar_remove_call_action)
 
     self.tool_bar.addSeparator()
-
-    # Menu for Importers
-    importers = QMenu()
-    for val in importer_plugins:
-        imported_module = val.importer
-        i_action = QAction(imported_module.name, self)
-        i_action.triggered.connect(partial(self.importer_presenter.import_collection, imported_module))
-        importers.addAction(i_action)
-
-    tool_bar_import_action = QAction(QIcon("images:import-48.png"), "Import", self)
-    tool_bar_import_action.setMenu(importers)
-
-    self.tool_bar.addAction(tool_bar_import_action)
 
     tool_bar_export_action = QAction(QIcon("images:export-48.png"), "Export", self)
     tool_bar_export_action.triggered.connect(self.code_generator_dialog.export_single_dialog)

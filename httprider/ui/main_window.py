@@ -3,7 +3,7 @@ import sys
 import traceback
 
 from PyQt6.QtGui import QCloseEvent, QDesktopServices, QIcon
-from PyQt6.QtWidgets import QFrame, QGridLayout, QMainWindow, QPushButton, QSizePolicy, QToolBar
+from PyQt6.QtWidgets import QFileDialog, QFrame, QGridLayout, QMainWindow, QPushButton, QSizePolicy, QToolBar
 
 from httprider.generated.base_window import Ui_MainWindow
 from httprider.presenters import *

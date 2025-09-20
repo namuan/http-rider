@@ -1,5 +1,10 @@
+import logging
+from functools import partial
+
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import QMenu
+
+from ..importers import importer_plugins
 
 
 def menu_items(self):
@@ -31,6 +36,15 @@ def menu_items(self):
     f.addAction(save_action)
     f.addAction(save_as_action)
     # f.addAction(save_env_and_apis_action)
+
+    # Separate Import menu with dynamic plugin discovery
+    import_menu: QMenu = self.menu_bar.addMenu("&Import")
+    for plugin in importer_plugins:
+        imported_module = plugin.importer
+        import_action = QAction(imported_module.name, self)
+        import_action.triggered.connect(partial(self.importer_presenter.import_collection, imported_module))
+        import_menu.addAction(import_action)
+        logging.debug(f"Added import plugin: {imported_module.name}")
 
     single_request = QAction("&Send", self)
     single_request.setShortcut("Ctrl+Return")
