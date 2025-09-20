@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_UtilityFunctionsDialog(object):
+class Ui_UtilityFunctionsDialog:
     def setupUi(self, UtilityFunctionsDialog):
         UtilityFunctionsDialog.setObjectName("UtilityFunctionsDialog")
         UtilityFunctionsDialog.resize(422, 345)
@@ -20,7 +20,9 @@ class Ui_UtilityFunctionsDialog(object):
         self.buttonBox.setGeometry(QtCore.QRect(250, 310, 171, 32))
         self.buttonBox.setStyleSheet("color: rgb(0, 0, 0);")
         self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
+        self.buttonBox.setStandardButtons(
+            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok
+        )
         self.buttonBox.setObjectName("buttonBox")
         self.lbl_selected_text = QtWidgets.QLabel(parent=UtilityFunctionsDialog)
         self.lbl_selected_text.setGeometry(QtCore.QRect(20, 10, 391, 16))
@@ -40,8 +42,8 @@ class Ui_UtilityFunctionsDialog(object):
         self.txt_transformed_text.setObjectName("txt_transformed_text")
 
         self.retranslateUi(UtilityFunctionsDialog)
-        self.buttonBox.accepted.connect(UtilityFunctionsDialog.accept) # type: ignore
-        self.buttonBox.rejected.connect(UtilityFunctionsDialog.reject) # type: ignore
+        self.buttonBox.accepted.connect(UtilityFunctionsDialog.accept)  # type: ignore
+        self.buttonBox.rejected.connect(UtilityFunctionsDialog.reject)  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(UtilityFunctionsDialog)
 
     def retranslateUi(self, UtilityFunctionsDialog):

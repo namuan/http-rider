@@ -1,8 +1,8 @@
 import json
+from contextlib import suppress
 from json import JSONDecodeError
 
 import genson
-from contextlib import suppress
 
 
 def __delete_nested_keys(nested_dict, keys):

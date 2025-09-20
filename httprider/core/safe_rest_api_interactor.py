@@ -1,12 +1,12 @@
 import logging
-from queue import Queue, Empty
-
-import attr
+from queue import Empty, Queue
 from typing import Any
 
-from httprider.core.core_settings import app_settings
-from httprider.core import random_environment, combine_request_headers
+import attr
+
+from httprider.core import combine_request_headers, random_environment
 from httprider.core.api_call_interactor import api_call_interactor
+from httprider.core.core_settings import app_settings
 from httprider.external.rest_api_connector import (
     RestApiConnector,
     http_exchange_signals,
@@ -14,13 +14,13 @@ from httprider.external.rest_api_connector import (
 from httprider.model.app_data import (
     ApiCall,
     ExchangeRequest,
-    HttpExchange,
     ExchangeResponse,
+    HttpExchange,
 )
 
 
 @attr.s(auto_attribs=True)
-class ApiWorkerData(object):
+class ApiWorkerData:
     exchange: HttpExchange
     on_success: Any
     on_failure: Any
@@ -48,15 +48,11 @@ class SafeRestApiInteractor:
 
     def make_http_call(self, api_call: ApiCall):
         exchange_request = ExchangeRequest.from_api_call(api_call, hide_secrets=False)
-        exchange_request.headers = combine_request_headers(
-            self.app_config, exchange_request
-        )
+        exchange_request.headers = combine_request_headers(self.app_config, exchange_request)
         exchange = HttpExchange(api_call_id=api_call.id, request=exchange_request)
 
         if api_call.mocked_response.is_enabled:
-            exchange.response = ExchangeResponse.from_mocked_response(
-                api_call.mocked_response
-            )
+            exchange.response = ExchangeResponse.from_mocked_response(api_call.mocked_response)
 
         api_worker_data = ApiWorkerData(
             exchange=exchange,
@@ -66,15 +62,13 @@ class SafeRestApiInteractor:
         self.queue_worker_task(api_worker_data)
 
     def queue_worker_task(self, api_worker_data: ApiWorkerData):
-        logging.warning(
-            f"Queuing request for API: {api_worker_data.exchange.api_call_id}"
-        )
+        logging.warning(f"Queuing request for API: {api_worker_data.exchange.api_call_id}")
         self.worker_queue.put(api_worker_data)
         self.__process_queue()
         logging.info(f"Queue Size: {self.worker_queue.qsize()}")
 
     def __request_finished(self, api_call_id):
-        logging.info("Api Call: {} - Worker completed".format(api_call_id))
+        logging.info(f"Api Call: {api_call_id} - Worker completed")
         self.any_worker_running = False
         self.__process_queue()
 
@@ -83,9 +77,7 @@ class SafeRestApiInteractor:
             logging.info("Worker running. Will check again once it finished processing")
         elif not self.worker_queue.empty():
             wrapped_queued_exchange: ApiWorkerData = self.worker_queue.get()
-            logging.info(
-                f"Processing queued exchange: {wrapped_queued_exchange.exchange.api_call_id}"
-            )
+            logging.info(f"Processing queued exchange: {wrapped_queued_exchange.exchange.api_call_id}")
             self.__process_exchange(wrapped_queued_exchange)
         else:
             logging.debug("Nothing in the queue")

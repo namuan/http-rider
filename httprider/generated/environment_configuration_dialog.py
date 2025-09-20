@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_EnvironmentsConfigurationDialog(object):
+class Ui_EnvironmentsConfigurationDialog:
     def setupUi(self, EnvironmentsConfigurationDialog):
         EnvironmentsConfigurationDialog.setObjectName("EnvironmentsConfigurationDialog")
         EnvironmentsConfigurationDialog.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
@@ -21,7 +21,9 @@ class Ui_EnvironmentsConfigurationDialog(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(EnvironmentsConfigurationDialog)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.splitter = QtWidgets.QSplitter(parent=EnvironmentsConfigurationDialog)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.splitter.sizePolicy().hasHeightForWidth())
@@ -37,7 +39,9 @@ class Ui_EnvironmentsConfigurationDialog(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem)
         self.btn_duplicate_environment = QtWidgets.QToolButton(parent=self.frame)
         self.btn_duplicate_environment.setObjectName("btn_duplicate_environment")
@@ -54,7 +58,9 @@ class Ui_EnvironmentsConfigurationDialog(object):
         self.lst_environments.setObjectName("lst_environments")
         self.verticalLayout.addWidget(self.lst_environments)
         self.lst_environment_data = QtWidgets.QListWidget(parent=self.splitter)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lst_environment_data.sizePolicy().hasHeightForWidth())

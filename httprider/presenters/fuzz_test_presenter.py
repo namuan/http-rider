@@ -3,22 +3,22 @@ import json
 from mistune import markdown
 
 from httprider.core import (
+    combine_request_headers,
     get_variable_tokens,
     replace_variables,
-    combine_request_headers,
 )
 from httprider.core.core_settings import app_settings
 from httprider.core.http_statuses import *
 from httprider.core.json_data_generator import jdg
 from httprider.core.json_schema import schema_from_json
 from httprider.core.pygment_styles import pyg_styles
-from httprider.core.safe_rest_api_interactor import rest_api_interactor, ApiWorkerData
+from httprider.core.safe_rest_api_interactor import ApiWorkerData, rest_api_interactor
 from httprider.model.app_data import (
     ApiCall,
     ExchangeRequest,
-    HttpExchange,
     ExchangeRequestType,
     ExchangeResponse,
+    HttpExchange,
 )
 from httprider.presenters.common import md_request_response_generator
 
@@ -35,12 +35,10 @@ class FuzzTestPresenter:
         self.view.btn_fuzz_test.clicked.connect(self.on_fuzz_test)
 
         # domain events
-        app_settings.app_data_reader.signals.api_call_change_selection.connect(
-            self.__on_updated_selected_api
-        )
+        app_settings.app_data_reader.signals.api_call_change_selection.connect(self.__on_updated_selected_api)
 
     def show_dialog(self):
-        lbl = "{} {}".format(self.selected_api.http_method, self.selected_api.http_url)
+        lbl = f"{self.selected_api.http_method} {self.selected_api.http_url}"
         self.view.lbl_api_call.setText(lbl)
         self.__clear_results()
         self.view.show()
@@ -82,9 +80,7 @@ class FuzzTestPresenter:
         self.__display_results()
 
     def __display_results(self):
-        output = "2XX: {}, 3XX: {}, 4XX: {}, 5XX: {}".format(
-            self.results_2xx, self.results_3xx, self.results_4xx, self.results_5xx
-        )
+        output = f"2XX: {self.results_2xx}, 3XX: {self.results_3xx}, 4XX: {self.results_4xx}, 5XX: {self.results_5xx}"
         self.view.lbl_fuzz_results.setText(output)
 
     def __on_result(self, exchange: HttpExchange):
@@ -95,16 +91,12 @@ class FuzzTestPresenter:
     def __prepare_fuzzed_exchange_from_api_call(self, api_call: ApiCall):
         exchange_request: ExchangeRequest = self.__get_prepared_request(api_call)
         exchange_request.request_type = ExchangeRequestType.FUZZED
-        exchange_request.request_body = self.__generate_fuzzed_payload(
-            exchange_request.request_body
-        )
+        exchange_request.request_body = self.__generate_fuzzed_payload(exchange_request.request_body)
         return HttpExchange(api_call_id=api_call.id, request=exchange_request)
 
     def __get_prepared_request(self, api_call: ApiCall):
         exchange_request = ExchangeRequest.from_api_call(api_call)
-        exchange_request.headers = combine_request_headers(
-            app_settings, exchange_request
-        )
+        exchange_request.headers = combine_request_headers(app_settings, exchange_request)
         var_tokens = get_variable_tokens(app_settings)
         exchange_request = replace_variables(var_tokens, exchange_request)
 

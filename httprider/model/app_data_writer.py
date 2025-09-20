@@ -4,14 +4,14 @@ import logging
 from PyQt6.QtCore import QObject, pyqtSignal
 
 from ..core import gen_uuid
-from ..core.constants import ENVIRONMENT_RECORD_TYPE, API_CALL_RECORD_TYPE
+from ..core.constants import API_CALL_RECORD_TYPE, ENVIRONMENT_RECORD_TYPE
 from ..model.app_data import (
-    HttpExchange,
     ApiCall,
-    ProjectInfo,
+    ApiTestCase,
     AppData,
     Environment,
-    ApiTestCase,
+    HttpExchange,
+    ProjectInfo,
 )
 
 
@@ -51,9 +51,7 @@ class AppDataWriter(AppData):
         logging.info(f"Updating Project info In DB {project_info}")
         table = self.ldb[project_info.record_type]
         table.upsert(
-            dict(
-                name=project_info.record_type, object=json.dumps(project_info.to_json())
-            ),
+            dict(name=project_info.record_type, object=json.dumps(project_info.to_json())),
             ["name"],
         )
         self.signals.project_info_updated.emit(project_info)
@@ -89,9 +87,7 @@ class AppDataWriter(AppData):
         self.signals.exchange_added.emit(exchange)
 
     def update_http_exchange(self, exchange: HttpExchange):
-        logging.info(
-            f"API {exchange.api_call_id} - Updating http exchange {exchange.id}"
-        )
+        logging.info(f"API {exchange.api_call_id} - Updating http exchange {exchange.id}")
         self.update_http_exchange_in_db(exchange)
         self.signals.exchange_changed.emit(exchange.id, exchange)
 
@@ -152,7 +148,5 @@ class AppDataWriter(AppData):
             ["test_case_id"],
         )
 
-        logging.info(
-            f"API: {test_case.api_call_id} - Test Id: {test_case.id} - Upserting API Test case {test_case}"
-        )
+        logging.info(f"API: {test_case.api_call_id} - Test Id: {test_case.id} - Upserting API Test case {test_case}")
         self.signals.api_test_case_changed.emit(test_case.api_call_id)

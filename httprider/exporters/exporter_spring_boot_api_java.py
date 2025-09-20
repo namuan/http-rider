@@ -1,6 +1,5 @@
 import attr
 from pygments.lexers.jvm import JavaLexer
-from typing import List
 
 from ..codegen.http_status_code_mapping import Languages, to_http_status
 from ..codegen.schema_to_java_generator import (
@@ -8,30 +7,26 @@ from ..codegen.schema_to_java_generator import (
     to_java_class_name,
     to_java_function_name,
 )
-from ..core.json_schema import schema_from_json
 from ..core.constants import AssertionMatchers
 from ..core.core_settings import app_settings
+from ..core.json_schema import schema_from_json
 from ..exporters.common import *
-from ..model.app_data import ApiCall, HttpExchange, ApiTestCase, ProjectInfo, Assertion
+from ..model.app_data import ApiCall, ApiTestCase, Assertion, HttpExchange, ProjectInfo
 
 
-def gen_tags(tags: List):
+def gen_tags(tags: list):
     return " ".join([f"@{t}" for t in tags])
 
 
 def convert_internal_variable(str_with_variable):
-    return (
-        internal_var_selector.sub(r"`\1`", str_with_variable, count=0)
-        if str_with_variable
-        else ""
-    )
+    return internal_var_selector.sub(r"`\1`", str_with_variable, count=0) if str_with_variable else ""
 
 
 def to_spring_http_method(http_method: str):
     if http_method.lower() not in ["options", "head"]:
         return f"@{to_java_class_name(http_method)}Mapping"
     else:
-        return f"@GetMapping"
+        return "@GetMapping"
 
 
 def to_mock_mvc_http_method(http_method: str):
@@ -43,9 +38,7 @@ def to_spring_response_status(http_status_code):
     return status, message, http_status_code
 
 
-def gen_api_request_class(
-    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
-):
+def gen_api_request_class(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
     if not last_exchange.request.request_body:
         return ""
 
@@ -58,9 +51,7 @@ import org.springframework.web.bind.annotation.*;
     return request_clazz_header + "\n" + clazz_definition
 
 
-def gen_api_response_class(
-    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
-):
+def gen_api_response_class(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
     if not last_exchange.response.response_body:
         return ""
 
@@ -69,29 +60,21 @@ def gen_api_response_class(
 // 3. API Response definition
 import org.springframework.web.bind.annotation.*;
     """
-    clazz_definition = code_from_schema(
-        "ApiResponse", response_json_schema.get("schema")
-    )
+    clazz_definition = code_from_schema("ApiResponse", response_json_schema.get("schema"))
     return response_clazz_header + "\n" + clazz_definition
 
 
 def _to_fox_implicit_param(params, param_type):
     return dict_formatter(
         params,
-        '@ApiImplicitParam(name="{k}", value="{v}", required=true, paramType="'
-        + param_type
-        + '")',
+        '@ApiImplicitParam(name="{k}", value="{v}", required=true, paramType="' + param_type + '")',
         splitter=",",
     )
 
 
-def gen_controller(
-    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
-):
+def gen_controller(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
     mapping = to_spring_http_method(api_call.http_method)
-    resp_status, resp_message, resp_code = to_spring_response_status(
-        last_exchange.response.http_status_code
-    )
+    resp_status, resp_message, resp_code = to_spring_response_status(last_exchange.response.http_status_code)
     function_name = to_java_function_name(api_call.title)
     controller = f"""
 // 4. Controller method
@@ -109,9 +92,9 @@ import org.springframework.web.bind.annotation.*;
 @ApiResponses({{
         @ApiResponse(code = {resp_code}, message = "{resp_message}", response = ApiResponse.class)
 }})
-public ApiResponse {function_name}() {{    
+public ApiResponse {function_name}() {{
     ApiResponse response = new ApiResponse();
-    return response;    
+    return response;
 }}
     """
 
@@ -120,56 +103,36 @@ public ApiResponse {function_name}() {{
 
 def to_json_result_matcher(a: Assertion):
     mapper = {
-        AssertionMatchers.EQ.value: 'jsonPath("{}").value({})'.format(
-            a.selector, a.expected_value
-        )
+        AssertionMatchers.EQ.value: f'jsonPath("{a.selector}").value({a.expected_value})'
         if a.var_type == "int"
-        else 'jsonPath("{}").value("{}")'.format(a.selector, a.expected_value),
-        AssertionMatchers.NOT_EQ.value: '!jsonPath("{}").value({})'.format(
-            a.selector, a.expected_value
-        )
+        else f'jsonPath("{a.selector}").value("{a.expected_value}")',
+        AssertionMatchers.NOT_EQ.value: f'!jsonPath("{a.selector}").value({a.expected_value})'
         if a.var_type == "int"
-        else 'jsonPath("{}").value("{}")'.format(a.selector, a.expected_value),
-        AssertionMatchers.NOT_NULL.value: 'jsonPath("{}").exists()'.format(a.selector),
-        AssertionMatchers.EMPTY.value: 'jsonPath("{}").isEmpty()'.format(a.selector),
-        AssertionMatchers.NOT_EMPTY.value: 'jsonPath("{}").isNotEmpty()'.format(
-            a.selector
-        ),
-        AssertionMatchers.CONTAINS.value: 'jsonPath("{}").value("//Hamcrest contains")'.format(
-            a.selector
-        ),
-        AssertionMatchers.NOT_CONTAINS.value: '!jsonPath("{}").value("//Hamcrest contains")'.format(
-            a.selector
-        ),
-        AssertionMatchers.LT.value: 'jsonPath("{}").value("//Hamcrest less than")'.format(
-            a.selector
-        ),
-        AssertionMatchers.GT.value: 'jsonPath("{}").value("//Hamcrest greater than")'.format(
-            a.selector
-        ),
+        else f'jsonPath("{a.selector}").value("{a.expected_value}")',
+        AssertionMatchers.NOT_NULL.value: f'jsonPath("{a.selector}").exists()',
+        AssertionMatchers.EMPTY.value: f'jsonPath("{a.selector}").isEmpty()',
+        AssertionMatchers.NOT_EMPTY.value: f'jsonPath("{a.selector}").isNotEmpty()',
+        AssertionMatchers.CONTAINS.value: f'jsonPath("{a.selector}").value("//Hamcrest contains")',
+        AssertionMatchers.NOT_CONTAINS.value: f'!jsonPath("{a.selector}").value("//Hamcrest contains")',
+        AssertionMatchers.LT.value: f'jsonPath("{a.selector}").value("//Hamcrest less than")',
+        AssertionMatchers.GT.value: f'jsonPath("{a.selector}").value("//Hamcrest greater than")',
     }
     return mapper.get(a.matcher, None)
 
 
 def gen_test_assertions(api_test_case: ApiTestCase):
     for assertion in api_test_case.comparable_assertions():
-        yield ".andExpect({})".format(to_json_result_matcher(assertion))
+        yield f".andExpect({to_json_result_matcher(assertion)})"
 
 
-def gen_test(
-    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
-):
+def gen_test(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
     mapping = to_mock_mvc_http_method(api_call.http_method)
     url = api_call.http_url
-    resp_status, resp_code, resp_message = to_spring_response_status(
-        last_exchange.response.http_status_code
-    )
+    _resp_status, resp_code, _resp_message = to_spring_response_status(last_exchange.response.http_status_code)
     function_name = to_java_function_name(api_call.title)
     encoded_json_string = encode_json_string(last_exchange.request.request_body)
 
-    json_path_assertions = "\n".join(
-        [statement for statement in gen_test_assertions(api_test_case)]
-    )
+    json_path_assertions = "\n".join([statement for statement in gen_test_assertions(api_test_case)])
 
     test_code = f"""
 // 5. MockMvc test generator
@@ -195,8 +158,7 @@ public void test{function_name}() throws Exception {{
 def converter(assertion):
     return (
         "should exist"
-        if assertion.matcher
-        in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value]
+        if assertion.matcher in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value]
         else f"should be {assertion.expected_value}"
     )
 
@@ -204,8 +166,7 @@ def converter(assertion):
 def converter_path_statement(assertion):
     return (
         "should not be empty"
-        if assertion.matcher
-        in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value]
+        if assertion.matcher in [AssertionMatchers.NOT_NULL.value, AssertionMatchers.NOT_EMPTY.value]
         else f"should be {assertion.expected_value}"
     )
 
@@ -281,7 +242,7 @@ class SpringBootApiJavaExporter:
     name: str = "Spring Boot API (Java)"
     output_ext: str = "java"
 
-    def export_data(self, api_calls: List[ApiCall]):
+    def export_data(self, api_calls: list[ApiCall]):
         test_file_header = """
 /**
 The generated code is divided into different sections
@@ -295,13 +256,9 @@ The generated code is divided into different sections
 """
         project_info = app_settings.app_data_reader.get_or_create_project_info()
         fox_config = gen_fox_config(project_info)
-        output = [
-            self.__export_api_call(project_info, api_call) for api_call in api_calls
-        ]
+        output = [self.__export_api_call(project_info, api_call) for api_call in api_calls]
 
-        return highlight(
-            test_file_header + fox_config, JavaLexer(), HtmlFormatter()
-        ) + "<br/>".join(output)
+        return highlight(test_file_header + fox_config, JavaLexer(), HtmlFormatter()) + "<br/>".join(output)
 
     def __export_api_call(self, project_info, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)

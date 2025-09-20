@@ -3,12 +3,11 @@ import os
 from pathlib import Path
 
 import cattr
-from typing import List
 
-from httprider.model.app_data import Environment
 from httprider.core.core_settings import app_settings
-from httprider.model.user_data import UserProject
 from httprider.core.environment_interactor import environment_interactor
+from httprider.model.app_data import Environment
+from httprider.model.user_data import UserProject
 
 
 class EnvironmentMenuPresenter:
@@ -24,9 +23,7 @@ class EnvironmentMenuPresenter:
             file_filter="Environment Files (*.envs.json)",
         )
         if file_location:
-            envs: List[
-                Environment
-            ] = app_settings.app_data_reader.get_environments_from_db()
+            envs: list[Environment] = app_settings.app_data_reader.get_environments_from_db()
             envs_json = cattr.unstructure(envs)
             Path(file_location).write_text(json.dumps(envs_json))
 
@@ -41,7 +38,7 @@ class EnvironmentMenuPresenter:
         if file_location:
             envs_raw_json = Path(file_location).read_text()
             envs_json = json.loads(envs_raw_json)
-            envs: List[Environment] = cattr.structure(envs_json, List[Environment])
+            envs: list[Environment] = cattr.structure(envs_json, list[Environment])
             for env in envs:
                 environment_interactor.add_environment(env)
 

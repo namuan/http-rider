@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_CodeGeneratorDialog(object):
+class Ui_CodeGeneratorDialog:
     def setupUi(self, CodeGeneratorDialog):
         CodeGeneratorDialog.setObjectName("CodeGeneratorDialog")
         CodeGeneratorDialog.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
@@ -25,7 +25,9 @@ class Ui_CodeGeneratorDialog(object):
         self.cmb_exporters.setFont(font)
         self.cmb_exporters.setObjectName("cmb_exporters")
         self.horizontalLayout.addWidget(self.cmb_exporters)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem)
         self.btn_copy_code = QtWidgets.QPushButton(parent=CodeGeneratorDialog)
         font = QtGui.QFont()

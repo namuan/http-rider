@@ -1,6 +1,5 @@
 import attr
 from pygments.lexers.shell import BashLexer
-from typing import List
 
 from ..core.core_settings import app_settings
 from ..exporters.common import *
@@ -12,14 +11,14 @@ class CurlExporter:
     name: str = "Curl"
     output_ext: str = "sh"
 
-    def export_data(self, api_calls: List[ApiCall]):
+    def export_data(self, api_calls: list[ApiCall]):
         output = [self.__export_api_call(api_call) for api_call in api_calls]
         return "<br/>".join(output)
 
     def __export_api_call(self, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         doc = f"""# {api_call.title}
-# 
+#
 {to_curl(api_call, last_exchange)}
 """
         return highlight(doc, BashLexer(), HtmlFormatter())

@@ -1,6 +1,5 @@
 import copy
 import logging
-from typing import List
 
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
@@ -14,7 +13,7 @@ from httprider.core.core_settings import app_settings
 from httprider.core.safe_rest_api_interactor import rest_api_interactor
 from httprider.external.rest_api_connector import http_exchange_signals
 from httprider.model.app_data import ApiCall
-from httprider.presenters import AssertionResultPresenter
+from httprider.presenters.assertion_result_presenter import AssertionResultPresenter
 from httprider.widgets.api_calls_list_view import ApiCallItemDelegate
 
 PADDING = 5
@@ -67,15 +66,9 @@ class ApiListPresenter:
         self.separator_menu = QMenu()
         self.separator_menu.addAction(remove_action)
 
-        app_settings.app_data_writer.signals.api_call_added.connect(
-            self.add_request_widget
-        )
-        app_settings.app_data_writer.signals.api_call_updated.connect(
-            self.refresh_selected_item
-        )
-        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(
-            self.refresh_multiple_items
-        )
+        app_settings.app_data_writer.signals.api_call_added.connect(self.add_request_widget)
+        app_settings.app_data_writer.signals.api_call_updated.connect(self.refresh_selected_item)
+        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(self.refresh_multiple_items)
         app_settings.app_data_writer.signals.selected_tag_changed.connect(self.refresh)
 
     def on_fuzz_test(self):
@@ -149,15 +142,11 @@ class ApiListPresenter:
             total_rows = self.model.rowCount()
             after = self.dropped_row + 1
             if after >= total_rows:
-                next_sequence_number = (
-                    self.app_state_interactor.update_sequence_number()
-                )
+                next_sequence_number = self.app_state_interactor.update_sequence_number()
             else:
                 next_api_call = self.model.item(after).data(API_CALL_ROLE)
                 next_sequence_number = next_api_call.sequence_number
-            new_sequence_number = (
-                    prev_sequence_number + (next_sequence_number - prev_sequence_number) / 2
-            )
+            new_sequence_number = prev_sequence_number + (next_sequence_number - prev_sequence_number) / 2
             api_call.sequence_number = new_sequence_number
             logging.info(
                 f"API Call: {api_call.id} - "
@@ -170,9 +159,7 @@ class ApiListPresenter:
             self.view.setCurrentIndex(current_index)
 
     def add_request_widget(self, api_call_id, api_call: ApiCall, select_item=True):
-        logging.info(
-            f"Adding new item with id {api_call_id} to requests list - {api_call}"
-        )
+        logging.info(f"Adding new item with id {api_call_id} to requests list - {api_call}")
         item = QStandardItem(api_call.title)
         item.setData(api_call, API_CALL_ROLE)
         item.setData(QVariant(api_call.id), API_ID_ROLE)
@@ -186,10 +173,10 @@ class ApiListPresenter:
 
     def run_all_api_calls(self):
         total_rows = self.model.rowCount()
-        logging.debug("** Running multiple API calls: {}".format(total_rows))
+        logging.debug(f"** Running multiple API calls: {total_rows}")
         for n in range(total_rows):
             api_call = self.model.item(n).data(API_CALL_ROLE)
-            logging.debug("** Multiple APIs: API Call {}".format(api_call.id))
+            logging.debug(f"** Multiple APIs: API Call {api_call.id}")
             if api_call.enabled:
                 rest_api_interactor.make_http_call(api_call)
 
@@ -230,9 +217,9 @@ class ApiListPresenter:
             logging.info(f"Refreshing row {api_call_row} -> {api_call.id}")
             self.model.item(api_call_row).setData(api_call, API_CALL_ROLE)
 
-    def refresh_multiple_items(self, doc_ids: List[str], api_calls: List[ApiCall]):
+    def refresh_multiple_items(self, doc_ids: list[str], api_calls: list[ApiCall]):
         assert len(doc_ids) == len(api_calls)
-        for doc_id, api_call in zip(doc_ids, api_calls):
+        for doc_id, api_call in zip(doc_ids, api_calls, strict=False):
             self.add_request_widget(doc_id, api_call, select_item=False)
 
     def on_search_query(self, search_query):
@@ -267,19 +254,13 @@ class ApiListPresenter:
         duplicate_api_call = copy.deepcopy(api_call)
         duplicate_api_call.title = f"{duplicate_api_call.title} Duplicate"
         duplicate_api_call.last_response_code = 0
-        duplicate_api_call.sequence_number = (
-            self.app_state_interactor.update_sequence_number()
-        )
+        duplicate_api_call.sequence_number = self.app_state_interactor.update_sequence_number()
 
         api_call_interactor.add_api_call(duplicate_api_call)
 
     def __row_for_api_call(self, api_call_id):
         api_call_row = next(
-            (
-                n
-                for n in range(self.model.rowCount())
-                if self.model.item(n).data(API_ID_ROLE) == api_call_id
-            ),
+            (n for n in range(self.model.rowCount()) if self.model.item(n).data(API_ID_ROLE) == api_call_id),
             -1,
         )
         return api_call_row

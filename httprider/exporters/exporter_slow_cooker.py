@@ -1,15 +1,12 @@
 import attr
 from pygments.lexers.shell import BashLexer
-from typing import List
 
 from ..core.core_settings import app_settings
 from ..exporters.common import *
 from ..model.app_data import ApiCall, HttpExchange
 
 
-def to_slow_cooker(
-    api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True
-):
+def to_slow_cooker(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=True):
     http_method = api_call.http_method
     http_url = api_call.http_url
     req_headers = api_call.enabled_headers()
@@ -35,7 +32,7 @@ def to_slow_cooker(
     ]
 
     for k, v in sorted(req_headers.items()):
-        parts += [("-header", "{0}: {1}".format(k, v))]
+        parts += [("-header", f"{k}: {v}")]
 
     if req_body:
         body = req_body
@@ -50,7 +47,7 @@ def to_slow_cooker(
         if k:
             flat_parts.append(k)
         if v:
-            flat_parts.append("'{0}'".format(v))
+            flat_parts.append(f"'{v}'")
 
     return " ".join(flat_parts)
 
@@ -60,7 +57,7 @@ class SlowCookerExporter:
     name: str = "Slow Cooker (Performance)"
     output_ext: str = "sh"
 
-    def export_data(self, api_calls: List[ApiCall]):
+    def export_data(self, api_calls: list[ApiCall]):
         header = """
 ## Download and setup slow_cooker from https://github.com/buoyantio/slow_cooker
 <br/>## Brief description about common parameters
@@ -76,7 +73,7 @@ class SlowCookerExporter:
 <br/>
 <br/>## Log/Output format
 <br/>## $timestamp $good/$bad/$failed $trafficGoal $percentGoal $interval $min [$p50 $p95 $p99 $p999] $max $bhash
-<br/>## <strong>bad</strong> means a status code in the 500 range. <strong>failed</strong> means a connection failure. 
+<br/>## <strong>bad</strong> means a status code in the 500 range. <strong>failed</strong> means a connection failure.
 <br/>## <strong>percentGoal</strong> is calculated as the total number of good and bad requests as a percentage of <strong>trafficGoal</strong>.
 <br/>## <strong>bhash</strong> is the number of failed hashes of body content. A value greater than 0 indicates a real problem.
 <br/>## p50: 50% of requests completed took this long
@@ -91,7 +88,7 @@ class SlowCookerExporter:
     def __export_api_call(self, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         doc = f"""# {api_call.title}
-# 
+#
 {to_slow_cooker(api_call, last_exchange)}
 """
         return highlight(doc, BashLexer(), HtmlFormatter())

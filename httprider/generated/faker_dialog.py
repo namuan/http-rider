@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_DataGeneratorDialog(object):
+class Ui_DataGeneratorDialog:
     def setupUi(self, DataGeneratorDialog):
         DataGeneratorDialog.setObjectName("DataGeneratorDialog")
         DataGeneratorDialog.resize(422, 345)
@@ -20,7 +20,9 @@ class Ui_DataGeneratorDialog(object):
         self.buttonBox.setGeometry(QtCore.QRect(70, 310, 341, 32))
         self.buttonBox.setStyleSheet("color: rgb(0, 0, 0);")
         self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
+        self.buttonBox.setStandardButtons(
+            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok
+        )
         self.buttonBox.setObjectName("buttonBox")
         self.tabWidget = QtWidgets.QTabWidget(parent=DataGeneratorDialog)
         self.tabWidget.setGeometry(QtCore.QRect(20, 10, 391, 291))
@@ -218,8 +220,8 @@ class Ui_DataGeneratorDialog(object):
 
         self.retranslateUi(DataGeneratorDialog)
         self.tabWidget.setCurrentIndex(0)
-        self.buttonBox.accepted.connect(DataGeneratorDialog.accept) # type: ignore
-        self.buttonBox.rejected.connect(DataGeneratorDialog.reject) # type: ignore
+        self.buttonBox.accepted.connect(DataGeneratorDialog.accept)  # type: ignore
+        self.buttonBox.rejected.connect(DataGeneratorDialog.reject)  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(DataGeneratorDialog)
 
     def retranslateUi(self, DataGeneratorDialog):

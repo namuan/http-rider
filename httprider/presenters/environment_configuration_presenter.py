@@ -1,13 +1,12 @@
 import logging
 
-from PyQt6 import QtCore
-from PyQt6 import QtWidgets
+from PyQt6 import QtCore, QtWidgets
 
-from httprider.core.environment_interactor import environment_interactor
 from httprider.core import random_environment
 from httprider.core.core_settings import app_settings
+from httprider.core.environment_interactor import environment_interactor
 from httprider.model.app_data import Environment
-from httprider.presenters import KeyValueListPresenter
+from httprider.presenters.kv_list_presenter import KeyValueListPresenter
 
 
 class EnvironmentConfigurationPresenter:
@@ -15,42 +14,26 @@ class EnvironmentConfigurationPresenter:
         self.initial_load = True
         self.selected_environment = None
         self.parent_view = parent_view
-        self.environment_data_presenter = KeyValueListPresenter(
-            self.parent_view.lst_environment_data, self
-        )
+        self.environment_data_presenter = KeyValueListPresenter(self.parent_view.lst_environment_data, self)
 
         # domain events
-        app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(
-            self.refresh
-        )
+        app_settings.app_data_reader.signals.initial_cache_loading_completed.connect(self.refresh)
         app_settings.app_data_writer.signals.environments_imported.connect(self.refresh)
 
         # ui events
         self.parent_view.finished.connect(self.on_close)
-        self.parent_view.lst_environments.currentItemChanged.connect(
-            self.on_current_item_changed
-        )
-        self.parent_view.btn_add_environment.pressed.connect(
-            self.on_add_new_environment
-        )
-        self.parent_view.btn_remove_environment.pressed.connect(
-            self.on_remove_selected_environment
-        )
-        self.parent_view.btn_duplicate_environment.pressed.connect(
-            self.on_duplicate_environment
-        )
+        self.parent_view.lst_environments.currentItemChanged.connect(self.on_current_item_changed)
+        self.parent_view.btn_add_environment.pressed.connect(self.on_add_new_environment)
+        self.parent_view.btn_remove_environment.pressed.connect(self.on_remove_selected_environment)
+        self.parent_view.btn_duplicate_environment.pressed.connect(self.on_duplicate_environment)
         self.parent_view.lst_environments.itemChanged.connect(self.on_item_changed)
-        self.parent_view.lst_environments.itemSelectionChanged.connect(
-            self.on_item_selection_changed
-        )
+        self.parent_view.lst_environments.itemSelectionChanged.connect(self.on_item_selection_changed)
 
     def refresh(self):
         self.parent_view.lst_environments.clear()
         self.environment_data_presenter.clear()
         environments = app_settings.app_data_cache.get_environments()
-        logging.info(
-            f"Refreshing env config :: Total environments: {len(environments)}"
-        )
+        logging.info(f"Refreshing env config :: Total environments: {len(environments)}")
         for environment in environments:
             self.__add_environment_widget_item(environment)
 
@@ -63,12 +46,8 @@ class EnvironmentConfigurationPresenter:
             return
 
         new_env_name = random_environment()
-        logging.info(
-            f"Environment Duplicated :: {selected_item.text()} -> {new_env_name}"
-        )
-        selected_environment = app_settings.app_data_cache.get_selected_environment(
-            selected_item.text()
-        )
+        logging.info(f"Environment Duplicated :: {selected_item.text()} -> {new_env_name}")
+        selected_environment = app_settings.app_data_cache.get_selected_environment(selected_item.text())
         selected_environment.name = new_env_name
         self.__add_environment_widget_item(selected_environment)
         environment_interactor.add_environment(selected_environment)
@@ -77,9 +56,7 @@ class EnvironmentConfigurationPresenter:
         new_env = Environment(name=random_environment(), data={})
         self.__add_environment_widget_item(new_env)
         environment_interactor.add_environment(new_env)
-        self.parent_view.lst_environments.setCurrentRow(
-            self.parent_view.lst_environments.count() - 1
-        )
+        self.parent_view.lst_environments.setCurrentRow(self.parent_view.lst_environments.count() - 1)
 
     def on_remove_selected_environment(self):
         current_row = self.parent_view.lst_environments.currentRow()
@@ -101,14 +78,10 @@ class EnvironmentConfigurationPresenter:
 
         if previous_selected_item:
             previously_selected_item_text = previous_selected_item.text()
-            logging.debug(
-                f"saving previously selected item: {previously_selected_item_text}"
-            )
+            logging.debug(f"saving previously selected item: {previously_selected_item_text}")
             self.__save_environment_data(previously_selected_item_text)
 
-        env = app_settings.app_data_cache.get_selected_environment(
-            newly_selected_environment
-        )
+        env = app_settings.app_data_cache.get_selected_environment(newly_selected_environment)
         if env and env.get_data():
             logging.debug(f"Env: {env.name} has data {env.get_data()}")
             self.environment_data_presenter.update_items(env.get_data())
@@ -124,25 +97,17 @@ class EnvironmentConfigurationPresenter:
         self.set_selected_environment(newly_selected_item.text())
 
     def set_selected_environment(self, new_environment=None):
-        logging.debug(
-            f"Setting selected environment from: {self.selected_environment} to {new_environment}"
-        )
+        logging.debug(f"Setting selected environment from: {self.selected_environment} to {new_environment}")
         self.selected_environment = new_environment
 
     def on_item_changed(self, changed_item):
         old_environment_name = self.selected_environment
         changed_environment_name = changed_item.text()
-        old_environment: Environment = (
-            app_settings.app_data_cache.get_selected_environment(old_environment_name)
-        )
+        old_environment: Environment = app_settings.app_data_cache.get_selected_environment(old_environment_name)
         old_environment.name = changed_environment_name
 
-        logging.debug(
-            f"==== on_item_changed: {changed_environment_name} from {old_environment_name}"
-        )
-        environment_interactor.update_environment_name(
-            old_environment_name, old_environment
-        )
+        logging.debug(f"==== on_item_changed: {changed_environment_name} from {old_environment_name}")
+        environment_interactor.update_environment_name(old_environment_name, old_environment)
         self.set_selected_environment(changed_environment_name)
 
     def load_configuration_dialog(self):
@@ -168,9 +133,7 @@ class EnvironmentConfigurationPresenter:
 
     def __save_environment_data(self, environment_name):
         environment_data = self.environment_data_presenter.get_items()
-        environment_interactor.update_environment_data(
-            environment_name, environment_data
-        )
+        environment_interactor.update_environment_data(environment_name, environment_data)
 
     def __add_environment_widget_item(self, env: Environment):
         item = QtWidgets.QListWidgetItem()

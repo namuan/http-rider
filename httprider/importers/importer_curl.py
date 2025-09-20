@@ -5,6 +5,7 @@ import uncurl
 from uncurl.api import ParsedContext
 
 from httprider.core.app_state_interactor import AppStateInteractor
+
 from ..core import DynamicStringData, split_url_qs
 from ..model.app_data import ApiCall
 
@@ -41,21 +42,14 @@ class CurlImporter:
         return {hk: DynamicStringData(value=hv) for hk, hv in headers.items()}
 
     def __extract_form_data(self, ctx: ParsedContext):
-        form_content_type = (
-            ctx.headers.get("Content-Type", None) == "application/x-www-form-urlencoded"
-        )
+        form_content_type = ctx.headers.get("Content-Type", None) == "application/x-www-form-urlencoded"
         if form_content_type:
-            return {
-                fk: DynamicStringData(value=",".join(fv))
-                for fk, fv in parse.parse_qs(ctx.data).items()
-            }
+            return {fk: DynamicStringData(value=",".join(fv)) for fk, fv in parse.parse_qs(ctx.data).items()}
         else:
             return {}
 
     def __extract_request_body(self, ctx: ParsedContext):
-        form_content_type = (
-            ctx.headers.get("Content-Type", None) == "application/x-www-form-urlencoded"
-        )
+        form_content_type = ctx.headers.get("Content-Type", None) == "application/x-www-form-urlencoded"
         if not form_content_type:
             return ctx.data or ""
         else:

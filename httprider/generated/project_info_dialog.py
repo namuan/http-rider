@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_ProjectInfoDialog(object):
+class Ui_ProjectInfoDialog:
     def setupUi(self, ProjectInfoDialog):
         ProjectInfoDialog.setObjectName("ProjectInfoDialog")
         ProjectInfoDialog.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
@@ -32,7 +32,9 @@ class Ui_ProjectInfoDialog(object):
         self.label_8.setObjectName("label_8")
         self.gridLayout.addWidget(self.label_8, 8, 1, 1, 1)
         self.txt_project_info = QtWidgets.QTextEdit(parent=self.tab_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.txt_project_info.sizePolicy().hasHeightForWidth())
@@ -47,7 +49,9 @@ class Ui_ProjectInfoDialog(object):
         self.label_9 = QtWidgets.QLabel(parent=self.tab_2)
         self.label_9.setObjectName("label_9")
         self.horizontalLayout_7.addWidget(self.label_9)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+        )
         self.horizontalLayout_7.addItem(spacerItem)
         self.btn_add_server = QtWidgets.QToolButton(parent=self.tab_2)
         self.btn_add_server.setObjectName("btn_add_server")
@@ -84,7 +88,9 @@ class Ui_ProjectInfoDialog(object):
         self.label_6.setObjectName("label_6")
         self.gridLayout.addWidget(self.label_6, 6, 1, 1, 1)
         self.lst_servers = QtWidgets.QListWidget(parent=self.tab_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.MinimumExpanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.MinimumExpanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lst_servers.sizePolicy().hasHeightForWidth())

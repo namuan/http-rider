@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from httprider.core import abbreviate, template_sub, evaluate_nested_functions
+from httprider.core import abbreviate, evaluate_nested_functions, template_sub
 from httprider.core.util_functions import str_to_base64e
 
 

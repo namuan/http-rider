@@ -8,9 +8,7 @@ from httprider.model.app_data import ApiTestCase
 
 
 def apply_replacements(replacements, input_str):
-    return functools.reduce(
-        lambda accum, lst: accum.replace(*lst), replacements, input_str
-    )
+    return functools.reduce(lambda accum, lst: accum.replace(*lst), replacements, input_str)
 
 
 def assertion_variable_name(api_call_title, assertion_source, input_str):
@@ -39,28 +37,28 @@ def populate_tree_with_kv_dict(kv_dict, tree_widget):
         tree_widget.addTopLevelItem(item)
 
 
-from .assertion_result_presenter import AssertionResultPresenter
+from .api_calls_history_presenter import ApiCallsHistoryPresenter
 from .api_list_presenter import ApiListPresenter
+from .assertion_builder_presenter import AssertionBuilderPresenter
+from .assertion_list_presenter import AssertionListPresenter
+from .assertion_result_presenter import AssertionResultPresenter
+from .body_assertion_presenter import BodyAssertionPresenter
+from .code_generator_presenter import CodeGeneratorPresenter
 from .config_presenter import ConfigPresenter
+from .data_generator_presenter import DataGeneratorPresenter
 from .empty_frame_presenter import EmptyFramePresenter
+from .environment_configuration_presenter import EnvironmentConfigurationPresenter
+from .environments_menu_presenter import EnvironmentMenuPresenter
 from .envs_list_presenter import EnvironmentsListPresenter
 from .exchange_presenter import ExchangePresenter
+from .file_menu_presenter import FileMenuPresenter
+from .fuzz_test_presenter import FuzzTestPresenter
+from .generators_menu_presenter import GeneratorsMenuPresenter
+from .headers_assertions_presenter import HeadersAssertionPresenter
+from .importer_presenter import ImporterPresenter
 from .kv_list_presenter import KeyValueListPresenter
 from .main_presenter import MainPresenter
-from .importer_presenter import ImporterPresenter
-from .assertion_list_presenter import AssertionListPresenter
-from .body_assertion_presenter import BodyAssertionPresenter
-from .headers_assertions_presenter import HeadersAssertionPresenter
-from .assertion_builder_presenter import AssertionBuilderPresenter
-from .request_presenter import RequestPresenter
-from .tags_list_presenter import TagsListPresenter
-from .environment_configuration_presenter import EnvironmentConfigurationPresenter
-from .api_calls_history_presenter import ApiCallsHistoryPresenter
-from .code_generator_presenter import CodeGeneratorPresenter
-from .file_menu_presenter import FileMenuPresenter
-from .data_generator_presenter import DataGeneratorPresenter
-from .environments_menu_presenter import EnvironmentMenuPresenter
-from .fuzz_test_presenter import FuzzTestPresenter
-from .share_preview_presenter import SharePreviewPresenter
-from .generators_menu_presenter import GeneratorsMenuPresenter
 from .oepnapi_sdk_generator_presenter import OpenApiSdkGeneratorPresenter
+from .request_presenter import RequestPresenter
+from .share_preview_presenter import SharePreviewPresenter
+from .tags_list_presenter import TagsListPresenter

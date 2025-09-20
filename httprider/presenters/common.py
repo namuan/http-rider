@@ -8,13 +8,9 @@ from httprider.model.app_data import HttpExchange
 def markdown_request(exchange: HttpExchange):
     http_url = exchange.request.full_encoded_url
 
-    request_headers = dict_formatter(
-        exchange.request.headers.items(), "{k}: {v}", splitter="\n"
-    )
+    request_headers = dict_formatter(exchange.request.headers.items(), "{k}: {v}", splitter="\n")
 
-    formatted_request_body = highlight_format_json(
-        exchange.request.request_body, formatter=NullFormatter()
-    )
+    formatted_request_body = highlight_format_json(exchange.request.request_body, formatter=NullFormatter())
 
     return f"""
 **{exchange.request.http_method} {http_url}**
@@ -23,7 +19,7 @@ def markdown_request(exchange: HttpExchange):
 ```
 ```json
 {formatted_request_body or " "}
-```    
+```
     """
 
 
@@ -32,13 +28,9 @@ def markdown_response(exchange: HttpExchange):
     if exchange.response.is_mocked:
         elapsed_time = "Mocked Response"
 
-    response_headers = dict_formatter(
-        exchange.response.headers.items(), "{k}: {v}", splitter="\n"
-    )
+    response_headers = dict_formatter(exchange.response.headers.items(), "{k}: {v}", splitter="\n")
 
-    formatted_response_body = highlight_format_json(
-        exchange.response.response_body, formatter=NullFormatter()
-    )
+    formatted_response_body = highlight_format_json(exchange.response.response_body, formatter=NullFormatter())
     return f"""
 **HTTP {exchange.response.http_status_code} ({elapsed_time})**
 ```sh
@@ -58,6 +50,6 @@ def md_request_response_generator(exchange: HttpExchange, include_sep=True):
 {request_rendered}
 #### Response
 {response_rendered}
-{"=======================================================================================" if include_sep else ""}    
+{"=======================================================================================" if include_sep else ""}
     """
     return content

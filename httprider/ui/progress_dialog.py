@@ -8,7 +8,7 @@ from ..generated.progress_dialog import Ui_ProgressDialog
 
 class ProgressDialog(QDialog, Ui_ProgressDialog):
     def __init__(self, parent=None):
-        super(ProgressDialog, self).__init__(parent)
+        super().__init__(parent)
         self.initialize()
         self.btn_cancel_progress.pressed.connect(self.cancel_processing)
         http_exchange_signals.request_started.connect(self.show_dialog)

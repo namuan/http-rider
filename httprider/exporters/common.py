@@ -6,7 +6,7 @@ from pygments.lexers import data
 from yapf.yapflib.yapf_api import FormatCode
 
 from ..core import format_json
-from ..model.app_data import ExchangeRequest, ExchangeResponse, ApiCall, HttpExchange
+from ..model.app_data import ApiCall, ExchangeRequest, ExchangeResponse, HttpExchange
 
 internal_var_selector = re.compile(r"\$\{(\w+)\}")
 
@@ -49,9 +49,7 @@ def dict_formatter(dict_items, form, splitter=","):
 
 
 def extract_uri(url, servers):
-    matched_server = next(
-        (server for server in servers if url.startswith(server)), None
-    )
+    matched_server = next((server for server in servers if url.startswith(server)), None)
     if matched_server:
         return url.replace(matched_server, "")
 
@@ -74,9 +72,7 @@ def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=
         req_body = exchange.request.request_body
     elif not api_call:
         raise ValueError(
-            "Unable to make curl request as api_call is null and exchange response is {}".format(
-                exchange.response
-            )
+            f"Unable to make curl request as api_call is null and exchange response is {exchange.response}"
         )
 
     if req_qp:
@@ -85,7 +81,7 @@ def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=
     parts = [("curl", None), ("-X", http_method)]
 
     for k, v in sorted(req_headers.items()):
-        parts += [("-H", "{0}: {1}".format(k, v))]
+        parts += [("-H", f"{k}: {v}")]
 
     if req_body:
         body = req_body
@@ -106,7 +102,7 @@ def to_curl(api_call: ApiCall, exchange: HttpExchange, compressed=False, verify=
         if k:
             flat_parts.append(k)
         if v:
-            flat_parts.append("'{0}'".format(v))
+            flat_parts.append(f"'{v}'")
 
     return " ".join(flat_parts)
 

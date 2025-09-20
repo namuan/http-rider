@@ -1,6 +1,5 @@
-from PyQt6 import QtCore
-from PyQt6 import QtWidgets
-from PyQt6.QtGui import QKeyEvent, QFocusEvent
+from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtGui import QFocusEvent, QKeyEvent
 
 
 # noinspection PyPep8Naming
@@ -9,10 +8,8 @@ class NewTagEntryLineEdit(QtWidgets.QLineEdit):
     discard_tag_signal = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
-        super(NewTagEntryLineEdit, self).__init__(parent)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed
-        )
+        super().__init__(parent)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())

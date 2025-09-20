@@ -1,12 +1,11 @@
 import logging
 import operator
 from itertools import groupby
-from typing import List
 
 import attr
 from apispec import APISpec
 
-from httprider.core.core_settings import app_settings, CoreSettings
+from httprider.core.core_settings import CoreSettings, app_settings
 from httprider.core.json_schema import schema_from_json
 from httprider.exporters.common import *
 from httprider.model.app_data import (
@@ -21,7 +20,7 @@ class OpenApiv3Exporter:
     name: str = "OpenAPI(v3)"
     output_ext: str = "yml"
 
-    def export_data(self, api_calls: List[ApiCall], return_raw=False):
+    def export_data(self, api_calls: list[ApiCall], return_raw=False):
         project_info = self.app_config.app_data_reader.get_or_create_project_info()
         spec = self.init_spec(project_info)
 
@@ -42,11 +41,7 @@ class OpenApiv3Exporter:
             if tag.name in api_call_tags:
                 spec.tag(dict(name=tag.name, description=tag.description))
 
-        return (
-            spec.to_yaml()
-            if return_raw
-            else highlight(spec.to_yaml(), data.YamlLexer(), HtmlFormatter())
-        )
+        return spec.to_yaml() if return_raw else highlight(spec.to_yaml(), data.YamlLexer(), HtmlFormatter())
 
     def init_spec(self, project_info: ProjectInfo):
         return APISpec(
@@ -58,7 +53,6 @@ class OpenApiv3Exporter:
         )
 
     def export_api_calls(self, api_spec, api_path, api_calls, servers):
-
         http_relative_uri = self.url_from_last_exchange(api_calls, servers)
         # http_relative_uri = extract_uri(api_path, servers)
 
@@ -66,9 +60,7 @@ class OpenApiv3Exporter:
 
         for api in api_calls:
             http_method = api.http_method.lower()
-            logging.debug(
-                f"Exporting API Path: {http_method} {api_path}: API calls: {len(api_calls)}"
-            )
+            logging.debug(f"Exporting API Path: {http_method} {api_path}: API calls: {len(api_calls)}")
 
             operations[http_method] = operations.get(http_method) or {
                 "summary": api.title,
@@ -89,25 +81,21 @@ class OpenApiv3Exporter:
 
             # Request object
             if last_exchange.request.request_body:
-                operations[http_method]["requestBody"] = operations[http_method].get(
-                    "requestBody", {}
+                operations[http_method]["requestBody"] = operations[http_method].get("requestBody", {})
+                operations[http_method]["requestBody"]["content"] = operations[http_method]["requestBody"].get(
+                    "content", {}
                 )
-                operations[http_method]["requestBody"]["content"] = operations[
-                    http_method
-                ]["requestBody"].get("content", {})
 
                 request_content_type = last_exchange.request.content_type()
-                operations[http_method]["requestBody"]["content"][
-                    request_content_type
-                ] = schema_from_json(last_exchange.request.request_body)
+                operations[http_method]["requestBody"]["content"][request_content_type] = schema_from_json(
+                    last_exchange.request.request_body
+                )
 
             # Response object
             response_code = last_exchange.response.http_status_code
             if response_code:
                 operations[http_method]["responses"] = {
-                    response_code: {
-                        "description": "Map Status Code to Description Here"
-                    }
+                    response_code: {"description": "Map Status Code to Description Here"}
                 }
 
                 if last_exchange.response.response_body:
@@ -131,13 +119,11 @@ class OpenApiv3Exporter:
 
     def add_params(self, parameters, source_params, params_type):
         for param, param_value in source_params.items():
-            parameters.append(
-                {
-                    "name": param,
-                    "in": params_type,
-                    "schema": {"type": "string", "example": param_value},
-                }
-            )
+            parameters.append({
+                "name": param,
+                "in": params_type,
+                "schema": {"type": "string", "example": param_value},
+            })
 
 
 exporter = OpenApiv3Exporter(app_config=app_settings)

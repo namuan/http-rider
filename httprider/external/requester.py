@@ -21,11 +21,7 @@ class Requester:
         kwargs["verify"] = app_config.tls_verification
         kwargs["allow_redirects"] = app_config.allow_redirects
 
-        if (
-            app_config.http_proxy
-            and app_config.https_proxy
-            and not self.resource_in(resource, app_config.no_proxy)
-        ):
+        if app_config.http_proxy and app_config.https_proxy and not self.resource_in(resource, app_config.no_proxy):
             kwargs["proxies"] = {
                 "http": app_config.http_proxy,
                 "https": app_config.https_proxy,
@@ -37,19 +33,13 @@ class Requester:
         except requests.exceptions.HTTPError as e:
             return requests.Response(), ConnectionError(e)
         except Exception as e:
-            logging.error(e)
+            logging.exception(e)
             return requests.Response(), e
 
 
 if __name__ == "__main__":
     r = Requester()
     print(f"{r.resource_in('http://localhost:8080', 'localhost, ford.com')=}")
-    print(
-        f"{r.resource_in('https://internal.httprider.com/api', 'localhost, httprider.com')=}"
-    )
-    print(
-        f"{r.resource_in('https://internal.google.com/api', 'localhost, httprider.com')=}"
-    )
-    print(
-        f"{r.resource_in('https://internal.google.com/api', 'localhost, httprider.com, google.com')=}"
-    )
+    print(f"{r.resource_in('https://internal.httprider.com/api', 'localhost, httprider.com')=}")
+    print(f"{r.resource_in('https://internal.google.com/api', 'localhost, httprider.com')=}")
+    print(f"{r.resource_in('https://internal.google.com/api', 'localhost, httprider.com, google.com')=}")

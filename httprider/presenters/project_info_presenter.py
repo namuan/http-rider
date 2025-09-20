@@ -1,14 +1,14 @@
-from PyQt6 import QtWidgets, QtCore
+from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtWidgets import QListWidgetItem
 
-from httprider.presenters import KeyValueListPresenter
 from httprider.core.core_settings import app_settings
 from httprider.model.app_data import (
-    ProjectInfo,
-    TagInfo,
     COMMON_HEADERS,
     HTTP_CONTENT_TYPES,
+    ProjectInfo,
+    TagInfo,
 )
+from httprider.presenters.kv_list_presenter import KeyValueListPresenter
 from httprider.widgets.tag_info_widget import TagInfoWidget
 
 
@@ -18,9 +18,7 @@ class ProjectInfoPresenter:
         self.parent_view.finished.connect(self.on_close)
 
         self.parent_view.btn_add_server.pressed.connect(self.on_add_new_server)
-        self.parent_view.btn_remove_server.pressed.connect(
-            self.on_remove_selected_server
-        )
+        self.parent_view.btn_remove_server.pressed.connect(self.on_remove_selected_server)
 
         self.common_header_list_presenter = KeyValueListPresenter(
             self.parent_view.lst_common_headers,
@@ -29,16 +27,10 @@ class ProjectInfoPresenter:
             value_completions=HTTP_CONTENT_TYPES,
         )
 
-        app_settings.app_data_writer.signals.api_call_tag_added.connect(
-            self.on_tag_added
-        )
-        app_settings.app_data_writer.signals.api_call_tag_removed.connect(
-            self.reload_tags
-        )
+        app_settings.app_data_writer.signals.api_call_tag_added.connect(self.on_tag_added)
+        app_settings.app_data_writer.signals.api_call_tag_removed.connect(self.reload_tags)
         app_settings.app_data_writer.signals.api_call_removed.connect(self.reload_tags)
-        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(
-            self.reload_tags
-        )
+        app_settings.app_data_writer.signals.multiple_api_calls_added.connect(self.reload_tags)
 
     def show_dialog(self):
         project: ProjectInfo = app_settings.app_data_reader.get_or_create_project_info()

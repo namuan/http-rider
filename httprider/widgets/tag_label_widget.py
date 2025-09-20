@@ -1,7 +1,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 from httprider.core.api_call_interactor import api_call_interactor
-from ..core.core_settings import app_settings
+
 from ..generated.tag_label_widget import Ui_TagLabelWidget
 from ..model.app_data import ApiCall
 from ..widgets.new_tag_entry_input import NewTagEntryLineEdit
@@ -11,7 +11,7 @@ class TagLabel(QtWidgets.QLabel):
     clicked = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
-        super(TagLabel, self).__init__(parent)
+        super().__init__(parent)
         self.setStyleSheet("padding-left:1")
         self.setLineWidth(0)
 
@@ -26,7 +26,7 @@ class TagLabelWidget(QtWidgets.QWidget, Ui_TagLabelWidget):
     old_tag = None
 
     def __init__(self, api_call: ApiCall, tag_name, parent=None):
-        super(TagLabelWidget, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.lbl_tag = TagLabel(self.horizontalLayoutWidget)
         self.lbl_tag.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.IBeamCursor))

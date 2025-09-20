@@ -2,28 +2,28 @@ import logging
 import sys
 import traceback
 
-from PyQt6.QtGui import QDesktopServices, QCloseEvent, QIcon
+from PyQt6.QtGui import QCloseEvent, QDesktopServices, QIcon
 
-from httprider.presenters import *
 from httprider.generated.base_window import Ui_MainWindow
+from httprider.presenters import *
 from httprider.ui.code_generator_dialog import CodeGeneratorDialog
-from httprider.ui.fuzz_test_dialog import FuzzTestDialog
 from httprider.ui.configuration_dialog import ConfigurationDialog
 from httprider.ui.environment_configuration_dialog import EnvironmentConfigurationDialog
-from httprider.ui.share_preview_dialog import SharePreviewDialog
+from httprider.ui.fuzz_test_dialog import FuzzTestDialog
 
 # Import menu items after dialogs
 from httprider.ui.menus import menu_items
-from httprider.ui.shortcuts import shortcut_items
 from httprider.ui.progress_dialog import ProgressDialog
 from httprider.ui.project_info_dialog import ProjectInfoDialog
+from httprider.ui.share_preview_dialog import SharePreviewDialog
+from httprider.ui.shortcuts import shortcut_items
 from httprider.ui.toolbar import tool_bar_items
 from httprider.ui.updater_dialog import Updater
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
-        super(MainWindow, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
 
         # Add Components on Main Window
@@ -79,9 +79,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.btn_add_request.sizePolicy().hasHeightForWidth()
-        )
+        sizePolicy.setHeightForWidth(self.btn_add_request.sizePolicy().hasHeightForWidth())
         self.btn_add_request.setSizePolicy(sizePolicy)
         self.gridLayout.addWidget(self.btn_add_request, 0, 1, 1, 1)
         self.btn_add_request.setText("Add Request")
@@ -93,7 +91,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @staticmethod
     def log_uncaught_exceptions(cls, exc, tb) -> None:
         logging.critical("".join(traceback.format_tb(tb)))
-        logging.critical("{0}: {1}".format(cls, exc))
+        logging.critical(f"{cls}: {exc}")
 
     # Main Window events
     def resizeEvent(self, event):
@@ -119,14 +117,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def update_available(self, latest, current):
         update_available = True if latest > current else False
-        logging.info(
-            f"Update Available ({latest} > {current}) ? ({update_available}) Enable Toolbar Icon"
-        )
+        logging.info(f"Update Available ({latest} > {current}) ? ({update_available}) Enable Toolbar Icon")
         if update_available:
             toolbar_actions = self.tool_bar.actions()
-            updates_action = next(
-                act for act in toolbar_actions if act.text() == "Update Available"
-            )
+            updates_action = next(act for act in toolbar_actions if act.text() == "Update Available")
             if updates_action:
                 updates_action.setIcon(QIcon("images:download-48.png"))
                 updates_action.setEnabled(True)

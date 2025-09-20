@@ -1,8 +1,8 @@
 import logging
 
+from mistune import markdown
 from PyQt6.QtGui import QTextCursor
 from PyQt6.QtWidgets import QHeaderView
-from mistune import markdown
 
 from httprider.core.core_settings import app_settings
 from httprider.core.pygment_styles import pyg_styles
@@ -23,55 +23,31 @@ class ExchangePresenter:
         self.view.txt_raw_request.document().setDefaultStyleSheet(pyg_styles())
         self.view.txt_raw_response.document().setDefaultStyleSheet(pyg_styles())
 
-        self.view.txt_exchange_request_body.document().setDefaultStyleSheet(
-            pyg_styles()
-        )
+        self.view.txt_exchange_request_body.document().setDefaultStyleSheet(pyg_styles())
         self.view.txt_response_body.document().setDefaultStyleSheet(pyg_styles())
 
-        self.view.tbl_exchange_request_headers.header().setSectionResizeMode(
-            0, QHeaderView.ResizeMode.Stretch
-        )
-        self.view.tbl_exchange_request_headers.header().setSectionResizeMode(
-            1, QHeaderView.ResizeMode.Stretch
-        )
-        self.view.tbl_exchange_request_params.header().setSectionResizeMode(
-            0, QHeaderView.ResizeMode.Stretch
-        )
-        self.view.tbl_exchange_request_params.header().setSectionResizeMode(
-            1, QHeaderView.ResizeMode.Stretch
-        )
-        self.view.tbl_exchange_form_params.header().setSectionResizeMode(
-            0, QHeaderView.ResizeMode.Stretch
-        )
-        self.view.tbl_exchange_form_params.header().setSectionResizeMode(
-            1, QHeaderView.ResizeMode.Stretch
-        )
-        self.view.tbl_response_headers.header().setSectionResizeMode(
-            0, QHeaderView.ResizeMode.Stretch
-        )
-        self.view.tbl_response_headers.header().setSectionResizeMode(
-            1, QHeaderView.ResizeMode.Stretch
-        )
+        self.view.tbl_exchange_request_headers.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.view.tbl_exchange_request_headers.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        self.view.tbl_exchange_request_params.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.view.tbl_exchange_request_params.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        self.view.tbl_exchange_form_params.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.view.tbl_exchange_form_params.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        self.view.tbl_response_headers.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.view.tbl_response_headers.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
 
         # ui events
         self.view.btn_share_preview.clicked.connect(self.open_share_preview)
 
         # domain events
         app_settings.app_data_writer.signals.exchange_added.connect(self.refresh)
-        app_settings.app_data_reader.signals.api_call_change_selection.connect(
-            self.display_last_exchange
-        )
-        app_settings.app_data_writer.signals.selected_exchange_changed.connect(
-            self.on_exchange_changed
-        )
+        app_settings.app_data_reader.signals.api_call_change_selection.connect(self.display_last_exchange)
+        app_settings.app_data_writer.signals.selected_exchange_changed.connect(self.on_exchange_changed)
 
     def open_share_preview(self):
         self.view.share_preview_dialog.show_exchange_preview(self.current_exchange)
 
     def display_last_exchange(self, api_call: ApiCall):
-        api_call_exchanges = app_settings.app_data_cache.get_api_call_exchanges(
-            api_call.id
-        )
+        api_call_exchanges = app_settings.app_data_cache.get_api_call_exchanges(api_call.id)
         if api_call_exchanges:
             last_exchange = api_call_exchanges[-1]
             self.refresh(last_exchange)
@@ -103,18 +79,10 @@ class ExchangePresenter:
         self.view.lbl_request_time.setText(http_request.request_time)
         self.render_raw_exchange(self.view.txt_raw_request, markdown_request(exchange))
 
-        self.view.txt_exchange_request_body.setHtml(
-            request_body_highlighted(http_request)
-        )
-        populate_tree_with_kv_dict(
-            http_request.headers.items(), self.view.tbl_exchange_request_headers
-        )
-        populate_tree_with_kv_dict(
-            http_request.query_params.items(), self.view.tbl_exchange_request_params
-        )
-        populate_tree_with_kv_dict(
-            http_request.form_params.items(), self.view.tbl_exchange_form_params
-        )
+        self.view.txt_exchange_request_body.setHtml(request_body_highlighted(http_request))
+        populate_tree_with_kv_dict(http_request.headers.items(), self.view.tbl_exchange_request_headers)
+        populate_tree_with_kv_dict(http_request.query_params.items(), self.view.tbl_exchange_request_params)
+        populate_tree_with_kv_dict(http_request.form_params.items(), self.view.tbl_exchange_form_params)
 
         http_response = exchange.response
 
@@ -125,12 +93,8 @@ class ExchangePresenter:
         # else:
         #     self.view.txt_raw_response.setStyleSheet("background-color: white;")
 
-        self.render_raw_exchange(
-            self.view.txt_raw_response, markdown_response(exchange)
-        )
+        self.render_raw_exchange(self.view.txt_raw_response, markdown_response(exchange))
 
         self.view.txt_response_body.setHtml(response_body_highlighted(http_response))
 
-        populate_tree_with_kv_dict(
-            http_response.headers.items(), self.view.tbl_response_headers
-        )
+        populate_tree_with_kv_dict(http_response.headers.items(), self.view.tbl_response_headers)

@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QMenu
+
 
 def menu_items(self):
     # File Menu
@@ -49,9 +50,7 @@ def menu_items(self):
 
     generate_data = QAction("&Insert Variables", self)
     generate_data.setShortcut("Ctrl+I")
-    generate_data.triggered.connect(
-        self.request_presenter.on_show_data_generator_dialog
-    )
+    generate_data.triggered.connect(self.request_presenter.on_show_data_generator_dialog)
 
     r: QMenu = self.menu_bar.addMenu("&Requests")
     r.addAction(single_request)

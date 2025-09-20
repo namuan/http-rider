@@ -1,5 +1,3 @@
-from PyQt6 import QtCore
-
 from httprider.core.api_call_interactor import api_call_interactor
 from httprider.core.app_state_interactor import AppStateInteractor
 from httprider.model.app_data import ApiCall

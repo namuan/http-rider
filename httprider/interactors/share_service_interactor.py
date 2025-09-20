@@ -1,10 +1,10 @@
 import json
 import logging
 
-from PyQt6.QtCore import QUrl, QByteArray, QBuffer
+from PyQt6.QtCore import QBuffer, QByteArray, QUrl
 from PyQt6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 
-from httprider.core import str_to_base64_encoded_bytes, bytes_to_str, str_to_bytes
+from httprider.core import bytes_to_str, str_to_base64_encoded_bytes, str_to_bytes
 from httprider.core.core_settings import app_settings
 
 
@@ -18,19 +18,13 @@ class ShareServiceInteractor:
 
     def on_received_response(self, reply: QNetworkReply):
         if reply.error() != QNetworkReply.NoError:
-            error_msg = "Unable to create new print share: {}".format(
-                reply.errorString()
-            )
+            error_msg = f"Unable to create new print share: {reply.errorString()}"
             logging.error(error_msg)
             app_settings.app_data_writer.signals.exchange_share_failed.emit(error_msg)
             return
 
-        share_location = reply.rawHeader(
-            QByteArray(bytes("Location", encoding="utf-8"))
-        )
-        app_settings.app_data_writer.signals.exchange_share_created.emit(
-            share_location.data().decode()
-        )
+        share_location = reply.rawHeader(QByteArray(bytes("Location", encoding="utf-8")))
+        app_settings.app_data_writer.signals.exchange_share_created.emit(share_location.data().decode())
         reply.deleteLater()
         self.buffer.close()
 

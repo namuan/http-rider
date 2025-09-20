@@ -2,21 +2,17 @@ import json
 import sys
 
 from PyQt6 import QtCore
-from PyQt6.QtCore import Qt, QUrl
+from PyQt6.QtCore import QUrl
 from PyQt6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 from PyQt6.QtWidgets import QApplication, QDialog
 
 
 class Updater(QDialog):
-    api_github_latest: QUrl = QUrl(
-        "https://api.github.com/repos/namuan/http-rider-osx/releases/latest"
-    )
-    latest_release_page: QUrl = QUrl(
-        "https://github.com/namuan/http-rider-osx/releases/latest"
-    )
+    api_github_latest: QUrl = QUrl("https://api.github.com/repos/namuan/http-rider-osx/releases/latest")
+    latest_release_page: QUrl = QUrl("https://github.com/namuan/http-rider-osx/releases/latest")
 
     def __init__(self, parent=None, flags=QtCore.Qt.WindowType.Dialog | QtCore.Qt.WindowType.WindowCloseButtonHint):
-        super(Updater, self).__init__(parent, flags)
+        super().__init__(parent, flags)
         self.parent = parent
         self.manager = QNetworkAccessManager(self)
         self.manager.finished.connect(self.done)

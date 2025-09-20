@@ -1,15 +1,14 @@
 import logging
-from typing import List, Dict
 
 from ..core import json_path, response_code_formatter, response_code_round_up
 from ..core.constants import DEFAULT_TAG, AssertionDataSource
 from ..model.app_data import (
     ApiCall,
-    AppState,
     ApiTestCase,
-    HttpExchange,
+    AppState,
     Assertion,
     Environment,
+    HttpExchange,
 )
 from ..model.app_data_reader import AppDataReader
 from ..model.app_data_writer import AppDataWriter
@@ -18,10 +17,7 @@ from ..model.app_data_writer import AppDataWriter
 def _build_filter_query(query=None, tag=None):
     selected_tag = tag if tag != DEFAULT_TAG else None
     if selected_tag and query:
-        return (
-            lambda api_call: query.lower() in api_call.title.lower()
-            and selected_tag in api_call.tags
-        )
+        return lambda api_call: query.lower() in api_call.title.lower() and selected_tag in api_call.tags
 
     if selected_tag:
         return lambda api_call: selected_tag in api_call.tags
@@ -33,12 +29,12 @@ def _build_filter_query(query=None, tag=None):
 
 
 class AppDataCache:
-    api_call_list: Dict[str, ApiCall] = {}
-    api_test_cases: Dict[str, ApiTestCase] = {}
-    api_http_exchanges: Dict[str, List[HttpExchange]] = {}
+    api_call_list: dict[str, ApiCall] = {}
+    api_test_cases: dict[str, ApiTestCase] = {}
+    api_http_exchanges: dict[str, list[HttpExchange]] = {}
     app_state: AppState = None
     search_query = None
-    environments: Dict[str, Environment] = {}
+    environments: dict[str, Environment] = {}
 
     def __init__(self, data_reader: AppDataReader, data_writer: AppDataWriter):
         self.app_data_reader = data_reader
@@ -47,46 +43,26 @@ class AppDataCache:
         # API Calls
         self.app_data_writer.signals.api_call_added.connect(self.on_api_call_added)
         self.app_data_writer.signals.api_call_removed.connect(self.on_api_call_removed)
-        self.app_data_writer.signals.multiple_api_calls_added.connect(
-            self.on_multiple_api_calls_added
-        )
-        self.app_data_writer.signals.api_call_tag_added.connect(
-            lambda c: self.refresh_cache_item(c.id)
-        )
-        self.app_data_writer.signals.api_call_tag_removed.connect(
-            lambda c: self.refresh_cache_item(c.id)
-        )
+        self.app_data_writer.signals.multiple_api_calls_added.connect(self.on_multiple_api_calls_added)
+        self.app_data_writer.signals.api_call_tag_added.connect(lambda c: self.refresh_cache_item(c.id))
+        self.app_data_writer.signals.api_call_tag_removed.connect(lambda c: self.refresh_cache_item(c.id))
         self.app_data_writer.signals.api_call_updated.connect(self.refresh_cache_item)
 
         # AppState
         self.app_data_writer.signals.app_state_updated.connect(self.refresh_app_state)
 
         # API Test Cases
-        self.app_data_writer.signals.api_test_case_changed.connect(
-            self.refresh_api_test_case
-        )
+        self.app_data_writer.signals.api_test_case_changed.connect(self.refresh_api_test_case)
 
         # API Exchange
-        self.app_data_writer.signals.exchange_added.connect(
-            self.on_api_http_exchange_added
-        )
-        self.app_data_writer.signals.exchange_changed.connect(
-            self.on_api_http_exchange_updated
-        )
+        self.app_data_writer.signals.exchange_added.connect(self.on_api_http_exchange_added)
+        self.app_data_writer.signals.exchange_changed.connect(self.on_api_http_exchange_updated)
 
         # Environments
-        self.app_data_writer.signals.environment_added.connect(
-            self.refresh_environments
-        )
-        self.app_data_writer.signals.environment_removed.connect(
-            self.refresh_environments
-        )
-        self.app_data_writer.signals.environment_renamed.connect(
-            self.refresh_environments
-        )
-        self.app_data_writer.signals.environment_data_changed.connect(
-            self.refresh_environments
-        )
+        self.app_data_writer.signals.environment_added.connect(self.refresh_environments)
+        self.app_data_writer.signals.environment_removed.connect(self.refresh_environments)
+        self.app_data_writer.signals.environment_renamed.connect(self.refresh_environments)
+        self.app_data_writer.signals.environment_data_changed.connect(self.refresh_environments)
 
     def load_cache(self):
         self.api_call_list = self.app_data_reader.get_all_api_calls_from_db()
@@ -108,9 +84,7 @@ class AppDataCache:
         self.app_data_reader.signals.initial_cache_loading_completed.emit()
 
     def refresh_environments(self):
-        self.environments = {
-            e.name: e for e in self.app_data_reader.get_environments_from_db()
-        }
+        self.environments = {e.name: e for e in self.app_data_reader.get_environments_from_db()}
 
     def get_environments(self):
         return self.environments.values()
@@ -156,16 +130,14 @@ class AppDataCache:
             if self.api_call_list.get(doc_id, None):
                 del self.api_call_list[doc_id]
 
-    def on_multiple_api_calls_added(self, doc_ids: List[str], api_calls: List[ApiCall]):
+    def on_multiple_api_calls_added(self, doc_ids: list[str], api_calls: list[ApiCall]):
         assert len(doc_ids) == len(api_calls)
-        for doc_id, api_call in zip(doc_ids, api_calls):
+        for doc_id, api_call in zip(doc_ids, api_calls, strict=False):
             api_call.id = doc_id
             self.api_call_list[api_call.id] = api_call
 
     def filter_api_calls(self, search_query=None, search_tag=None):
-        logging.info(
-            f"Filtering API Calls by Query {search_query} and Tag {search_tag}"
-        )
+        logging.info(f"Filtering API Calls by Query {search_query} and Tag {search_tag}")
         api_calls_filter = _build_filter_query(query=search_query, tag=search_tag)
         all_api_calls = self.get_all_api_calls()
         return sorted(
@@ -202,9 +174,7 @@ class AppDataCache:
         return self.app_state
 
     @staticmethod
-    def get_latest_assertion_value_from_exchange(
-        assertion: Assertion, exchange: HttpExchange
-    ):
+    def get_latest_assertion_value_from_exchange(assertion: Assertion, exchange: HttpExchange):
         if assertion.data_from == AssertionDataSource.REQUEST_HEADER.value:
             return exchange.request.headers.get(assertion.selector.lower(), None)
         elif assertion.data_from == AssertionDataSource.RESPONSE_HEADER.value:
@@ -218,13 +188,9 @@ class AppDataCache:
         elif assertion.data_from == AssertionDataSource.RESPONSE_TIME.value:
             return response_code_round_up(exchange.response.elapsed_time)
 
-    def __build_assertion(
-        self, api_call: ApiCall, exchange: HttpExchange, api_test_case: ApiTestCase
-    ):
+    def __build_assertion(self, api_call: ApiCall, exchange: HttpExchange, api_test_case: ApiTestCase):
         return {
-            assertion.var_name: self.get_latest_assertion_value_from_exchange(
-                assertion, exchange
-            )
+            assertion.var_name: self.get_latest_assertion_value_from_exchange(assertion, exchange)
             for assertion in api_test_case.assertions
         }
 
@@ -242,11 +208,9 @@ class AppDataCache:
             return HttpExchange(api_call_id)
 
     def get_api_test_case(self, api_call_id):
-        return self.api_test_cases.get(
-            api_call_id, ApiTestCase.from_json(None, api_call_id)
-        )
+        return self.api_test_cases.get(api_call_id, ApiTestCase.from_json(None, api_call_id))
 
-    def get_multiple_api_latest_exchanges(self, api_calls: List[ApiCall]):
+    def get_multiple_api_latest_exchanges(self, api_calls: list[ApiCall]):
         """Returns latest Http Exchanges for multiple API Calls"""
         return [self.get_last_exchange(api_call.id) for api_call in api_calls]
 

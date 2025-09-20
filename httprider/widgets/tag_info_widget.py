@@ -15,6 +15,4 @@ class TagInfoWidget(QWidget, Ui_TagInfoWidget):
         self.txt_tag_info.setPlainText(tag_info.description)
 
     def getData(self):
-        return TagInfo(
-            name=self.lbl_tag.text(), description=self.txt_tag_info.toPlainText()
-        )
+        return TagInfo(name=self.lbl_tag.text(), description=self.txt_tag_info.toPlainText())

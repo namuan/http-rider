@@ -1,5 +1,5 @@
-import base64
 import ast
+import base64
 import codecs
 import functools
 import importlib
@@ -14,12 +14,12 @@ from string import Template
 from urllib import parse
 
 import attr
-from PyQt6.QtWidgets import QApplication
 from jsonpath_ng.ext import parse as jsonpath_parse
+from PyQt6.QtWidgets import QApplication
 
-from .constants import ContentType, UTF_8_ENCODING
+from .constants import UTF_8_ENCODING, ContentType
 from .faker_config import fake
-from .generators import random_string_generator, internal_func_rgx, return_func_result
+from .generators import internal_func_rgx, random_string_generator, return_func_result
 
 
 class DynamicStringType(Enum):
@@ -28,7 +28,7 @@ class DynamicStringType(Enum):
 
 
 @attr.s(auto_attribs=True)
-class DynamicStringData(object):
+class DynamicStringData:
     # Deprecated property display_text
     display_text: str = "NOT_USED"
     value: str = ""
@@ -36,11 +36,7 @@ class DynamicStringData(object):
     is_enabled: bool = True
 
     def display_value(self):
-        return (
-            self.value
-            if self.string_type == DynamicStringType.PLAIN.value
-            else "*" * len(self.value)
-        )
+        return self.value if self.string_type == DynamicStringType.PLAIN.value else "*" * len(self.value)
 
 
 def rot13(in_str: str):
@@ -89,7 +85,7 @@ def random_project_name():
 
 
 def elapsed_time_formatter(elapsed_time):
-    return "N/A" if elapsed_time <= 0 else "{:.0f} ms".format(elapsed_time)
+    return "N/A" if elapsed_time <= 0 else f"{elapsed_time:.0f} ms"
 
 
 def response_code_formatter(response_code):
@@ -125,8 +121,8 @@ def json_path(json_doc, path_query):
             return key_found[0].value
         else:
             return None
-    except Exception as e:
-        logging.error(f"json_path failed: {json_doc} path query: {path_query}")
+    except Exception:
+        logging.exception(f"json_path failed: {json_doc} path query: {path_query}")
         return None
 
 
@@ -140,9 +136,7 @@ def replace_response_variables(vars_tokens, exchange_response):
     for hk, hv in exchange_response.headers.items():
         exchange_response.headers[hk] = template_sub(hv, vars_tokens)
 
-    exchange_response.response_body = template_sub(
-        exchange_response.response_body, vars_tokens
-    )
+    exchange_response.response_body = template_sub(exchange_response.response_body, vars_tokens)
     return exchange_response
 
 
@@ -178,24 +172,18 @@ def replace_variables(vars_tokens, exchange_request):
     for fk, fv in exchange_request.form_params.items():
         exchange_request.form_params[fk] = template_sub(fv, vars_tokens)
 
-    exchange_request.request_body = compact_json(
-        template_sub(exchange_request.request_body, vars_tokens)
-    )
+    exchange_request.request_body = compact_json(template_sub(exchange_request.request_body, vars_tokens))
     return exchange_request
 
 
 def template_sub(templated_string, tokens):
-    return evaluate_nested_functions(
-        Template(templated_string).safe_substitute(tokens) if templated_string else ""
-    )
+    return evaluate_nested_functions(Template(templated_string).safe_substitute(tokens) if templated_string else "")
 
 
 def evaluate_nested_functions(templated_string):
     match_found = internal_func_rgx.search(templated_string)
     while match_found:
-        templated_string = internal_func_rgx.sub(
-            return_func_result, templated_string, count=0
-        )
+        templated_string = internal_func_rgx.sub(return_func_result, templated_string, count=0)
         match_found = internal_func_rgx.search(templated_string)
 
     return templated_string
@@ -204,9 +192,7 @@ def evaluate_nested_functions(templated_string):
 def import_modules(package):
     return {
         name: importlib.import_module(name)
-        for finder, name, ispkg in pkgutil.iter_modules(
-            package.__path__, package.__name__ + "."
-        )
+        for finder, name, ispkg in pkgutil.iter_modules(package.__path__, package.__name__ + ".")
     }
 
 
@@ -257,7 +243,7 @@ def load_json_show_error(json_str):
         j = json.loads(json_str)
         return j
     except JSONDecodeError:
-        logging.error(f"Error in loading JSON: {json_str}")
+        logging.exception(f"Error in loading JSON: {json_str}")
 
 
 def gen_uuid():
@@ -265,9 +251,7 @@ def gen_uuid():
 
 
 def strip_comments(request_body):
-    return "".join(
-        [l for l in request_body.splitlines() if not l.lstrip().startswith("//")]
-    )
+    return "".join([l for l in request_body.splitlines() if not l.lstrip().startswith("//")])
 
 
 def mask_secret(str_val):

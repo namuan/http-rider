@@ -1,2 +1,0 @@
-[console_scripts]
-http-rider = httprider.application:main

@@ -4,10 +4,8 @@ from ..generated.new_item_widget import Ui_NewItemWidget
 
 
 class NewItemButtonWidget(QtWidgets.QWidget, Ui_NewItemWidget):
-    def __init__(
-        self, parent=None, parent_widget_item=None, on_add_new_header_pressed=None
-    ):
-        super(NewItemButtonWidget, self).__init__(parent)
+    def __init__(self, parent=None, parent_widget_item=None, on_add_new_header_pressed=None):
+        super().__init__(parent)
         self.setupUi(self)
         self.setLayout(self.horizontalLayout)
         self.parent_widget_item = parent_widget_item

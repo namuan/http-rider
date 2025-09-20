@@ -6,7 +6,7 @@ from ..presenters import ConfigPresenter
 
 class ConfigurationDialog(QDialog, Ui_Configuration):
     def __init__(self, parent=None):
-        super(ConfigurationDialog, self).__init__(parent)
+        super().__init__(parent)
         self.presenter = ConfigPresenter(self, parent)
 
     def initialize(self):

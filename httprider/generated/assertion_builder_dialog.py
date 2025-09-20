@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_AssertionBuilderDialog(object):
+class Ui_AssertionBuilderDialog:
     def setupUi(self, AssertionBuilderDialog):
         AssertionBuilderDialog.setObjectName("AssertionBuilderDialog")
         AssertionBuilderDialog.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
@@ -43,7 +43,9 @@ class Ui_AssertionBuilderDialog(object):
         self.tbl_request_headers.headerItem().setTextAlignment(1, QtCore.Qt.AlignmentFlag.AlignCenter)
         self.verticalLayout.addWidget(self.tbl_request_headers)
         self.tbl_request_body = QtWidgets.QTreeView(parent=self.frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(self.tbl_request_body.sizePolicy().hasHeightForWidth())
@@ -73,7 +75,9 @@ class Ui_AssertionBuilderDialog(object):
         self.tbl_response_headers.headerItem().setTextAlignment(1, QtCore.Qt.AlignmentFlag.AlignCenter)
         self.verticalLayout_2.addWidget(self.tbl_response_headers)
         self.tbl_response_body = QtWidgets.QTreeView(parent=self.frame_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(self.tbl_response_body.sizePolicy().hasHeightForWidth())
@@ -94,7 +98,9 @@ class Ui_AssertionBuilderDialog(object):
         self.label_3 = QtWidgets.QLabel(parent=self.frame_3)
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_2.addWidget(self.label_3)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+        )
         self.horizontalLayout_2.addItem(spacerItem)
         self.btn_response_code_assertion = QtWidgets.QToolButton(parent=self.frame_3)
         self.btn_response_code_assertion.setObjectName("btn_response_code_assertion")

@@ -1,10 +1,8 @@
-from typing import List
-
 import attr
 from pygments.lexers.python import Python3Lexer
 
 from httprider.core import ContentType
-from httprider.core.core_settings import app_settings, CoreSettings
+from httprider.core.core_settings import CoreSettings, app_settings
 from httprider.exporters.common import *
 from httprider.model.app_data import ApiCall
 
@@ -14,22 +12,16 @@ def to_python_requests(idx, api_call: ApiCall, last_exchange: HttpExchange):
     method = last_exchange.request.http_method
     url = last_exchange.request.http_url
     has_qp = True if last_exchange.request.query_params else False
-    query_params = dict_formatter(
-        last_exchange.request.query_params.items(), '"{k}": "{v}"'
-    )
+    query_params = dict_formatter(last_exchange.request.query_params.items(), '"{k}": "{v}"')
     has_headers = True if last_exchange.request.headers else False
-    headers = dict_formatter(
-        last_exchange.request.headers.items(), '"{k}": "{v}"', splitter=",\n"
-    )
+    headers = dict_formatter(last_exchange.request.headers.items(), '"{k}": "{v}"', splitter=",\n")
     request_body_type = last_exchange.request.request_body_type
     request_body = None
     if request_body_type == ContentType.FORM:
-        request_body = "data={}".format(last_exchange.request.form_params)
+        request_body = f"data={last_exchange.request.form_params}"
     elif request_body_type == ContentType.JSON:
         has_json_body = True if last_exchange.request.request_body else False
-        request_body = "json={}".format(
-            last_exchange.request.request_body if has_json_body else ""
-        )
+        request_body = "json={}".format(last_exchange.request.request_body if has_json_body else "")
 
     params_code = f"""
     params={{
@@ -66,7 +58,7 @@ class LocustTestsExporter:
     name: str = "Locust (Performance Tests)"
     output_ext: str = "py"
 
-    def export_data(self, api_calls: List[ApiCall], return_raw=False):
+    def export_data(self, api_calls: list[ApiCall], return_raw=False):
         file_header = """
 # python3 -m pip install locust - See https://docs.locust.io/en/stable/installation.html
 # python3 -m pip install Faker - See https://faker.readthedocs.io/en/master/
@@ -87,18 +79,18 @@ fake = Faker()
 
 def fake_person():
     return fake.name()
-    
+
 def random_uuid():
     return str(uuid.uuid4())
-    
+
 def random_str(length=10, with_punctuation=False):
     selection = string.ascii_letters + string.digits
     selection = selection + string.punctuation if with_punctuation else selection
     return ''.join(random.choice(selection) for i in range(length))
-    
+
 def random_int(min=0, max=100):
     return random.randint(min, max)
-    
+
 def bold(message):
     return f"\\033[1m{message}\\033[0m"
 
@@ -116,23 +108,16 @@ class ApiTestSteps(SequentialTaskSet):
 class ApiUser(HttpUser):
     tasks = [ApiTestSteps]
     host = "localhost"
-    
+
     # See https://docs.locust.io/en/stable/api.html#locust.wait_time
     wait_time = constant(1) # wait between requests. Other options between(5, 15) or constant_pacing(1)
-        
+
         """
-        output = [
-            self.__export_api_call(idx, api_call)
-            for idx, api_call in enumerate(api_calls)
-        ]
+        output = [self.__export_api_call(idx, api_call) for idx, api_call in enumerate(api_calls)]
         unformatted_code = file_header + "\n".join(output) + file_footer
         formatted_code, _ = format_python_code(unformatted_code)
 
-        return (
-            formatted_code
-            if return_raw
-            else highlight(formatted_code, Python3Lexer(), HtmlFormatter())
-        )
+        return formatted_code if return_raw else highlight(formatted_code, Python3Lexer(), HtmlFormatter())
 
     def __export_api_call(self, idx, api_call):
         last_exchange = self.app_config.app_data_cache.get_last_exchange(api_call.id)

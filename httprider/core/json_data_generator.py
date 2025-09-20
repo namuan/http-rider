@@ -1,6 +1,6 @@
 import string
 import sys
-from random import randint, getrandbits, choices
+from random import choices, getrandbits, randint
 
 DEFAULT_INT_UPPER_LIMIT = sys.maxsize
 DEFAULT_INT_LOWER_LIMIT = -1 * sys.maxsize
@@ -76,10 +76,7 @@ class JsonDataGenerator:
         arr_items_type = items.get("type", "object")
         arr_length = self.rand_int(self.array_max_length, 0)
         if arr_items_type == "object":
-            return [
-                self.fuzz_object(arr_schema["items"]["properties"])
-                for _ in range(arr_length)
-            ]
+            return [self.fuzz_object(arr_schema["items"]["properties"]) for _ in range(arr_length)]
         else:
             fuzz_func = self.type_mapping.get(arr_items_type)
             return [fuzz_func(items) for _ in range(arr_length)]

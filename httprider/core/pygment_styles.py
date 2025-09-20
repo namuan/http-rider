@@ -1,4 +1,5 @@
 from PyQt6.QtCore import QFile, QFileInfo, QTextStream
+
 from httprider.core.theme_mode import is_dark
 
 __pyg_styles = None
@@ -19,4 +20,4 @@ def pyg_styles():
         return __pyg_styles
     else:
         pyg_theme = "dark" if is_dark() else "light"
-        return styles_from_file("themes:pyg-{}.css".format(pyg_theme))
+        return styles_from_file(f"themes:pyg-{pyg_theme}.css")

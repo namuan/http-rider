@@ -1,38 +1,37 @@
 import json
 from collections import defaultdict
+from typing import Any
 
 import attr
 import cattr
-from typing import List, Any, Optional, Dict
 
-from ..core import internal_func_rgx
-from ..core.generators import call_generator_func
-from ..core import gen_uuid
-from ..core.constants import AssertionMatchers, AssertionDataSource
+from ..core import gen_uuid, internal_func_rgx
+from ..core.constants import AssertionDataSource, AssertionMatchers
 from ..core.core_settings import app_settings
+from ..core.generators import call_generator_func
 from ..exporters.common import *
-from ..model.app_data import ApiTestCase, HttpExchange, Environment, Assertion
+from ..model.app_data import ApiTestCase, Assertion, Environment, HttpExchange
 
 internal_func_map = defaultdict(str)
 
 
 @attr.s(auto_attribs=True)
-class RunscopeEnvironment(object):
-    initial_variables: Dict
+class RunscopeEnvironment:
+    initial_variables: dict
     name: str
     id: str
     verify_ssl: bool
 
 
 @attr.s(auto_attribs=True)
-class RunscopeVariable(object):
+class RunscopeVariable:
     source: str
     property: str
     name: str
 
 
 @attr.s(auto_attribs=True)
-class RunscopeAssertion(object):
+class RunscopeAssertion:
     comparison: str
     source: str
     value: int
@@ -40,28 +39,28 @@ class RunscopeAssertion(object):
 
 
 @attr.s(auto_attribs=True)
-class Step(object):
-    assertions: List[RunscopeAssertion]
-    auth: Dict
+class Step:
+    assertions: list[RunscopeAssertion]
+    auth: dict
     body: str
-    form: Dict
-    headers: Dict
+    form: dict
+    headers: dict
     method: str
     note: str
     step_type: str
     url: str
     id: str
-    variables: List[Any]
+    variables: list[Any]
 
 
 @attr.s(auto_attribs=True)
-class RunscopeTest(object):
+class RunscopeTest:
     name: str
     description: str
-    environments: List[RunscopeEnvironment]
-    steps: List[Step]
+    environments: list[RunscopeEnvironment]
+    steps: list[Step]
     version: str = "1.0"
-    trigger_url: Optional[str] = ""
+    trigger_url: str | None = ""
 
     def to_json(self):
         return cattr.unstructure(self)
@@ -70,7 +69,7 @@ class RunscopeTest(object):
         return json.dumps(self.to_json())
 
 
-def to_runscope_env(env: Environment, func_map: Dict):
+def to_runscope_env(env: Environment, func_map: dict):
     return RunscopeEnvironment(
         initial_variables={**env.get_env_map(), **func_map},
         name=env.name,
@@ -81,9 +80,7 @@ def to_runscope_env(env: Environment, func_map: Dict):
 
 def to_runscope_matcher(matcher, assertion_var_type):
     mapper = {
-        AssertionMatchers.EQ.value: "equal_number"
-        if assertion_var_type == "int"
-        else "equal",
+        AssertionMatchers.EQ.value: "equal_number" if assertion_var_type == "int" else "equal",
         AssertionMatchers.NOT_EQ.value: "not_equal",
         AssertionMatchers.NOT_NULL.value: "not_empty",
         AssertionMatchers.EMPTY.value: "empty",
@@ -94,7 +91,7 @@ def to_runscope_matcher(matcher, assertion_var_type):
         AssertionMatchers.GT.value: "is_greater_than",
     }
 
-    return mapper.get(matcher, None)
+    return mapper.get(matcher)
 
 
 def to_runscope_source(data_source):
@@ -103,7 +100,7 @@ def to_runscope_source(data_source):
         AssertionDataSource.RESPONSE_BODY.value: "response_json",
     }
 
-    return mapper.get(data_source, None)
+    return mapper.get(data_source)
 
 
 def to_runscope_property(selector):
@@ -133,20 +130,14 @@ def to_runscope_variable(assertion: Assertion):
 
 
 def convert_internal_variable(str_with_variable):
-    return (
-        internal_var_selector.sub(r"{{\1}}", str_with_variable, count=0)
-        if str_with_variable
-        else ""
-    )
+    return internal_var_selector.sub(r"{{\1}}", str_with_variable, count=0) if str_with_variable else ""
 
 
 ENV_PREFIX = "env_var"
 
 
 def convert_internal_functions(str_with_internal_func):
-    return internal_func_rgx.sub(
-        r"{{{{{0}_\1}}}}".format(ENV_PREFIX), str_with_internal_func, count=0
-    )
+    return internal_func_rgx.sub(rf"{{{{{ENV_PREFIX}_\1}}}}", str_with_internal_func, count=0)
 
 
 def find_internal_functions(str_with_internal_func):
@@ -166,9 +157,7 @@ def to_runscope_format(str_with_internal_keywords):
         for k in find_internal_functions(str_with_internal_keywords)
     }
     internal_func_map = {**internal_func_map, **func_map}
-    return convert_internal_functions(
-        convert_internal_variable(str_with_internal_keywords)
-    )
+    return convert_internal_functions(convert_internal_variable(str_with_internal_keywords))
 
 
 def to_runscope_request_body(request_body):
@@ -180,28 +169,18 @@ def to_runscope_url(api_call):
     req_qp = api_call.enabled_query_params()
     http_url = api_call.http_url
     if req_qp:
-        http_url = (
-            api_call.http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
-        )
+        http_url = api_call.http_url + "?" + "&".join([f"{k}={v}" for k, v in req_qp.items()])
     return to_runscope_format(http_url)
 
 
-def to_runscope_step(
-    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
-):
+def to_runscope_step(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
     transformed_request_body = to_runscope_request_body(api_call.http_request_body)
     return Step(
-        assertions=[
-            to_runscope_assertion(a) for a in api_test_case.comparable_assertions()
-        ],
+        assertions=[to_runscope_assertion(a) for a in api_test_case.comparable_assertions()],
         auth={},
         body=transformed_request_body,
-        form={
-            k: to_runscope_format(v) for k, v in api_call.enabled_form_params().items()
-        },
-        headers={
-            k: to_runscope_format(v) for k, v in api_call.enabled_headers().items()
-        },
+        form={k: to_runscope_format(v) for k, v in api_call.enabled_form_params().items()},
+        headers={k: to_runscope_format(v) for k, v in api_call.enabled_headers().items()},
         method=last_exchange.request.http_method,
         note=api_call.title,
         step_type="request",
@@ -215,7 +194,7 @@ class RunscopeExporter:
     name: str = "Runscope"
     output_ext: str = "json"
 
-    def export_data(self, api_calls: List[ApiCall]):
+    def export_data(self, api_calls: list[ApiCall]):
         project_info = app_settings.app_data_reader.get_or_create_project_info()
         environments = app_settings.app_data_cache.get_environments()
 
@@ -224,9 +203,7 @@ class RunscopeExporter:
         runscope_test = RunscopeTest(
             name=project_info.title,
             description=project_info.info,
-            environments=[
-                to_runscope_env(env, internal_func_map) for env in environments
-            ],
+            environments=[to_runscope_env(env, internal_func_map) for env in environments],
             steps=output_steps,
         )
 

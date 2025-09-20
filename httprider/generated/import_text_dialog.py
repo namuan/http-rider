@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_ImportTextDialog(object):
+class Ui_ImportTextDialog:
     def setupUi(self, ImportTextDialog):
         ImportTextDialog.setObjectName("ImportTextDialog")
         ImportTextDialog.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
@@ -28,13 +28,15 @@ class Ui_ImportTextDialog(object):
         self.verticalLayout.addWidget(self.lbl_error_message)
         self.btn_dialog_buttons = QtWidgets.QDialogButtonBox(parent=ImportTextDialog)
         self.btn_dialog_buttons.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.btn_dialog_buttons.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
+        self.btn_dialog_buttons.setStandardButtons(
+            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok
+        )
         self.btn_dialog_buttons.setObjectName("btn_dialog_buttons")
         self.verticalLayout.addWidget(self.btn_dialog_buttons)
 
         self.retranslateUi(ImportTextDialog)
-        self.btn_dialog_buttons.accepted.connect(ImportTextDialog.accept) # type: ignore
-        self.btn_dialog_buttons.rejected.connect(ImportTextDialog.reject) # type: ignore
+        self.btn_dialog_buttons.accepted.connect(ImportTextDialog.accept)  # type: ignore
+        self.btn_dialog_buttons.rejected.connect(ImportTextDialog.reject)  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(ImportTextDialog)
 
     def retranslateUi(self, ImportTextDialog):

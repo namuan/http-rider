@@ -1,13 +1,11 @@
 from PyQt6.QtCore import *
-from PyQt6.QtGui import QKeyEvent, QFocusEvent, QStandardItemModel, QAction
+from PyQt6.QtGui import QAction, QFocusEvent, QKeyEvent, QStandardItemModel
 from PyQt6.QtWidgets import *
 
 from ..core import DynamicStringData, DynamicStringType
 from ..core.constants import DYNAMIC_STRING_ROLE
 from ..core.generators import file_func_generator
 from ..ui import open_file
-from ..ui.data_generator_dialog import DataGeneratorDialog
-from ..ui.utility_functions_dialog import UtilityFunctionsDialog
 
 
 class ChildLineEdit(QLineEdit):
@@ -21,7 +19,7 @@ class ChildLineEdit(QLineEdit):
         background-color: #2882af;
         color: white;
         border-style: none;
-        border-radius: 2px;        
+        border-radius: 2px;
         """
         )
         self.hide()
@@ -36,9 +34,7 @@ class ChildLineEdit(QLineEdit):
         self.completer().activated[QModelIndex].connect(self.on_completion)
 
     def on_completion(self, index: QModelIndex):
-        self.entry_completed.emit(
-            index.data(Qt.ItemDataRole.DisplayRole), index.data(DYNAMIC_STRING_ROLE), False
-        )
+        self.entry_completed.emit(index.data(Qt.ItemDataRole.DisplayRole), index.data(DYNAMIC_STRING_ROLE), False)
 
     def focusOutEvent(self, e: QFocusEvent):
         if self.completer().popup().isVisible():
@@ -95,6 +91,10 @@ class CompletionLineEdit(QLineEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent = parent
+        # Lazy import to avoid circular dependencies
+        from ..ui.data_generator_dialog import DataGeneratorDialog
+        from ..ui.utility_functions_dialog import UtilityFunctionsDialog
+
         self.data_generator_dialog = DataGeneratorDialog(self)
         self.utility_functions_dialog = UtilityFunctionsDialog(self)
         self.child_edit = ChildLineEdit(self)
@@ -154,9 +154,7 @@ class CompletionLineEdit(QLineEdit):
         else:
             self.process_completion(text_in_field, variable_name, rollback)
 
-    def process_completion(
-        self, text_in_field, variable_name, rollback=False, replace_text=False
-    ):
+    def process_completion(self, text_in_field, variable_name, rollback=False, replace_text=False):
         self.child_edit.completer().popup().hide()
         self.child_edit.hide()
         self.child_edit.setText("")

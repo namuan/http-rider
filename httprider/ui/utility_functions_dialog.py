@@ -1,9 +1,8 @@
 from PyQt6 import QtCore
-from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QDialog
 
-from ..presenters.utility_functions_presenter import UtilityFunctionsPresenter
 from ..generated.tools_dialog import Ui_UtilityFunctionsDialog
+from ..presenters.utility_functions_presenter import UtilityFunctionsPresenter
 
 
 class UtilityFunctionsDialog(QDialog, Ui_UtilityFunctionsDialog):

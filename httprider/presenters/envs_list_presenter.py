@@ -12,9 +12,7 @@ class EnvironmentsListPresenter:
 
     def __get_combox_box(self):
         toolbar_actions = self.parent_view.tool_bar.actions()
-        tags_list_action = next(
-            act for act in toolbar_actions if act.text() == "Environmnents"
-        )
+        tags_list_action = next(act for act in toolbar_actions if act.text() == "Environmnents")
         return tags_list_action.defaultWidget()
 
     def on_env_changed(self, new_env):

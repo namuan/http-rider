@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_NewItemWidget(object):
+class Ui_NewItemWidget:
     def setupUi(self, NewItemWidget):
         NewItemWidget.setObjectName("NewItemWidget")
         NewItemWidget.resize(417, 44)

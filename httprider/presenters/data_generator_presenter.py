@@ -15,61 +15,37 @@ class DataGeneratorPresenter:
 
     def fake_to_form(self):
         # Misc section
-        random_string = random_string_generator(
-            (
-                self.view.txt_random_string_chars.text(),
-                self.view.chk_random_string_letters.isChecked(),
-                self.view.chk_random_string_digits.isChecked(),
-            )
-        )
-        self.view.lbl_eg_random_string.setText("eg: {}".format(random_string))
-        self.view.lbl_eg_uuid.setText("eg: {}".format(random_uuid()))
+        random_string = random_string_generator((
+            self.view.txt_random_string_chars.text(),
+            self.view.chk_random_string_letters.isChecked(),
+            self.view.chk_random_string_digits.isChecked(),
+        ))
+        self.view.lbl_eg_random_string.setText(f"eg: {random_string}")
+        self.view.lbl_eg_uuid.setText(f"eg: {random_uuid()}")
         self.view.lbl_eg_custom_string.setText(
             "eg: {}".format(
-                custom_string_generator(
-                    (
-                        self.view.txt_custom_string_template.text(),
-                        self.view.chk_custom_string_uppercase.isChecked(),
-                    )
-                )
+                custom_string_generator((
+                    self.view.txt_custom_string_template.text(),
+                    self.view.chk_custom_string_uppercase.isChecked(),
+                ))
             )
         )
         # Person section
         gender = self.view.gender_selector.currentText()
-        self.view.lbl_eg_person_prefix.setText(
-            "eg: {}".format(random_person(("prefix", gender)))
-        )
-        self.view.lbl_eg_person_first_name.setText(
-            "eg: {}".format(random_person(("first_name", gender)))
-        )
-        self.view.lbl_eg_person_last_name.setText(
-            "eg: {}".format(random_person(("last_name", gender)))
-        )
-        self.view.lbl_eg_person_full_name.setText(
-            "eg: {}".format(random_person(("full_name", gender)))
-        )
-        self.view.lbl_eg_person_suffix.setText(
-            "eg: {}".format(random_person(("suffix", gender)))
-        )
+        self.view.lbl_eg_person_prefix.setText("eg: {}".format(random_person(("prefix", gender))))
+        self.view.lbl_eg_person_first_name.setText("eg: {}".format(random_person(("first_name", gender))))
+        self.view.lbl_eg_person_last_name.setText("eg: {}".format(random_person(("last_name", gender))))
+        self.view.lbl_eg_person_full_name.setText("eg: {}".format(random_person(("full_name", gender))))
+        self.view.lbl_eg_person_suffix.setText("eg: {}".format(random_person(("suffix", gender))))
 
         # Address section
 
-        self.view.lbl_eg_address_country.setText(
-            "eg: {}".format(random_address("country"))
-        )
-        self.view.lbl_eg_address_full.setText(
-            "eg: {}...".format(random_address("address")[:15])
-        )
-        self.view.lbl_eg_address_secondary.setText(
-            "eg: {}".format(random_address("secondary"))
-        )
-        self.view.lbl_eg_address_street.setText(
-            "eg: {}".format(random_address("street"))
-        )
+        self.view.lbl_eg_address_country.setText("eg: {}".format(random_address("country")))
+        self.view.lbl_eg_address_full.setText("eg: {}...".format(random_address("address")[:15]))
+        self.view.lbl_eg_address_secondary.setText("eg: {}".format(random_address("secondary")))
+        self.view.lbl_eg_address_street.setText("eg: {}".format(random_address("street")))
         self.view.lbl_eg_address_city.setText("eg: {}".format(random_address("city")))
-        self.view.lbl_eg_address_zipcode.setText(
-            "eg: {}".format(random_address("zipcode"))
-        )
+        self.view.lbl_eg_address_zipcode.setText("eg: {}".format(random_address("zipcode")))
         self.view.lbl_eg_address_state.setText("eg: {}".format(random_address("state")))
 
     def get_function(self):
@@ -82,7 +58,7 @@ class DataGeneratorPresenter:
                 digits = self.view.chk_random_string_digits.isChecked()
                 return f"${{random({chars}, {letters}, {digits})}}"
             if self.view.cmb_uuid.isChecked():
-                return f"${{uuid()}}"
+                return "${uuid()}"
             if self.view.cmb_custom_string.isChecked():
                 custom_template = self.view.txt_custom_string_template.text()
                 upper_case = self.view.chk_custom_string_uppercase.isChecked()
@@ -100,18 +76,18 @@ class DataGeneratorPresenter:
                 return f'${{person("suffix", "{self.view.gender_selector.currentText()}")}}'
         if current_tab == "address":
             if self.view.cmb_address_country.isChecked():
-                return f'${{address("country")}}'
+                return '${address("country")}'
 
             if self.view.cmb_address_full.isChecked():
-                return f'${{address("address")}}'
+                return '${address("address")}'
             if self.view.cmb_address_secondary.isChecked():
-                return f'${{address("secondary")}}'
+                return '${address("secondary")}'
             if self.view.cmb_address_street.isChecked():
-                return f'${{address("street")}}'
+                return '${address("street")}'
             if self.view.cmb_address_city.isChecked():
-                return f'${{address("city")}}'
+                return '${address("city")}'
             if self.view.cmb_address_zipcode.isChecked():
-                return f'${{address("zipcode")}}'
+                return '${address("zipcode")}'
             if self.view.cmb_address_state.isChecked():
-                return f'${{address("state")}}'
+                return '${address("state")}'
         return "N/A"

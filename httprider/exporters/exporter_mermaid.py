@@ -2,7 +2,6 @@ import re
 
 import attr
 from pygments.lexers.jvm import JavaLexer
-from typing import List
 
 from ..core.core_settings import app_settings
 from ..exporters.common import *
@@ -19,7 +18,7 @@ def get_actors_from_title(api_title):
 
 
 def gen_function(api_call, last_exchange, api_test_case):
-    source, target, title = get_actors_from_title(api_call.title)
+    source, target, _title = get_actors_from_title(api_call.title)
     if not source:
         return ""
 
@@ -35,7 +34,7 @@ class MermaidExporter:
     name: str = "Mermaid Sequence Diagrams"
     output_ext: str = "mm"
 
-    def export_data(self, api_calls: List[ApiCall]):
+    def export_data(self, api_calls: list[ApiCall]):
         test_file_header = """
 To generate a sequence diagram, make sure that API Title is using the following syntax
 
@@ -44,15 +43,11 @@ To generate a sequence diagram, make sure that API Title is using the following 
 The above will generate the following syntax
 
 sequenceDiagram
-    ActorA ->> ActorB: Get product details        
+    ActorA ->> ActorB: Get product details
 """
-        sorted_apis_by_sequence = sorted(
-            api_calls, key=lambda a: a.sequence_number or 0
-        )
+        sorted_apis_by_sequence = sorted(api_calls, key=lambda a: a.sequence_number or 0)
 
-        output = [
-            self.__export_api_call(api_call) for api_call in sorted_apis_by_sequence
-        ]
+        output = [self.__export_api_call(api_call) for api_call in sorted_apis_by_sequence]
 
         combined_output = "\n".join(output)
 

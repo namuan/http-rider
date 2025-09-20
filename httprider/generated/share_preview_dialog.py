@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_SharePreviewDialog(object):
+class Ui_SharePreviewDialog:
     def setupUi(self, SharePreviewDialog):
         SharePreviewDialog.setObjectName("SharePreviewDialog")
         SharePreviewDialog.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
@@ -22,7 +22,9 @@ class Ui_SharePreviewDialog(object):
         self.label = QtWidgets.QLabel(parent=SharePreviewDialog)
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem)
         self.btn_show_preview = QtWidgets.QPushButton(parent=SharePreviewDialog)
         font = QtGui.QFont()
@@ -52,7 +54,12 @@ class Ui_SharePreviewDialog(object):
     def retranslateUi(self, SharePreviewDialog):
         _translate = QtCore.QCoreApplication.translate
         SharePreviewDialog.setWindowTitle(_translate("SharePreviewDialog", "Dialog"))
-        self.label.setText(_translate("SharePreviewDialog", "Review/Edit the following request/response but note that any changes made in the preview will be discarded when the dialog is closed."))
+        self.label.setText(
+            _translate(
+                "SharePreviewDialog",
+                "Review/Edit the following request/response but note that any changes made in the preview will be discarded when the dialog is closed.",
+            )
+        )
         self.btn_show_preview.setText(_translate("SharePreviewDialog", "Preview"))
         self.btn_share_exchange.setText(_translate("SharePreviewDialog", "Share"))
         self.lbl_share_location.setText(_translate("SharePreviewDialog", "Share location will appear here"))

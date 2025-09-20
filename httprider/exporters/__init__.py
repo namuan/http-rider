@@ -1,18 +1,20 @@
-from . import exporter_apickli
-from . import exporter_curl
-from . import exporter_markdown
-from . import exporter_mermaid
-from . import exporter_openapi_v3
-from . import exporter_runscope
-from . import exporter_restassured
-from . import exporter_python_requests
-from . import exporter_plantuml
-from . import exporter_slow_cooker
-from . import exporter_confluence
-from . import exporter_locust_tests
-from . import exporter_spring_contract_tests
-from . import exporter_java_feign_client
-from . import exporter_spring_boot_api_java
+from . import (
+    exporter_apickli,
+    exporter_confluence,
+    exporter_curl,
+    exporter_java_feign_client,
+    exporter_locust_tests,
+    exporter_markdown,
+    exporter_mermaid,
+    exporter_openapi_v3,
+    exporter_plantuml,
+    exporter_python_requests,
+    exporter_restassured,
+    exporter_runscope,
+    exporter_slow_cooker,
+    exporter_spring_boot_api_java,
+    exporter_spring_contract_tests,
+)
 
 exporter_plugins = {
     "locust": exporter_locust_tests,

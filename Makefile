@@ -38,7 +38,7 @@ clean: ## Clean build artifacts
 	@echo "🚀 Removing build artifacts"
 	@find . -type f -name "*.pyc" -delete
 	@find . -type d -name "__pycache__" -delete
-	@find . -type d -name "*.egg-info" -delete
+	@find . -type d -name "*.egg-info" -exec rm -rf {} +
 	@rm -rf build/ dist/
 
 context: clean-build ## Build context file from application sources

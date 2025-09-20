@@ -1,6 +1,5 @@
 import attr
 from pygments.lexers.jvm import JavaLexer
-from typing import List
 
 from ..core.core_settings import app_settings
 from ..exporters.common import *
@@ -17,7 +16,7 @@ def get_actors_from_title(api_title):
 
 
 def gen_function(api_call, last_exchange, api_test_case, project_info):
-    source, target, title = get_actors_from_title(api_call.title)
+    source, target, _title = get_actors_from_title(api_call.title)
     api_uri = last_exchange.request.http_url
     if not source:
         return ""
@@ -41,26 +40,26 @@ def gen_function(api_call, last_exchange, api_test_case, project_info):
     response_code = last_exchange.response.http_status_code
 
     statements = [
-        f"'" + ("-" * 100),
+        "'" + ("-" * 100),
         f'"{source.strip()}"->"{target.strip()}": **{last_exchange.request.http_method}** "{api_uri}"',
         f"rnote right {source.strip()}",
         f"{api_call.title}",
-        f"",
-        f"**Headers**",
+        "",
+        "**Headers**",
         f"{headers}",
-        f"**Query Params**",
+        "**Query Params**",
         f"{query_params}",
-        f"**Payload**",
+        "**Payload**",
         f"{formatted_request_body}",
-        f"",
-        f"**Response**",
+        "",
+        "**Response**",
         f"//HTTP {response_code}//",
-        f"",
-        f"**Headers**",
+        "",
+        "**Headers**",
         f"{response_headers}",
-        f"**Payload**",
+        "**Payload**",
         f"{formatted_response_body}",
-        f"end note",
+        "end note",
     ]
 
     return "\n".join(statements)
@@ -71,7 +70,7 @@ class PlantUmlExporter:
     name: str = "PlantUML Sequence Diagrams"
     output_ext: str = "puml"
 
-    def export_data(self, api_calls: List[ApiCall]):
+    def export_data(self, api_calls: list[ApiCall]):
         test_file_header = """
 To generate a sequence diagram, make sure that API Title is using the following syntax
 
@@ -82,15 +81,11 @@ The above will generate the following syntax
 @startuml
 ActorA -> ActorB: Get product details
 @enduml
-            
-"""
-        sorted_apis_by_sequence = sorted(
-            api_calls, key=lambda a: a.sequence_number or 0
-        )
 
-        output = [
-            self.__export_api_call(api_call) for api_call in sorted_apis_by_sequence
-        ]
+"""
+        sorted_apis_by_sequence = sorted(api_calls, key=lambda a: a.sequence_number or 0)
+
+        output = [self.__export_api_call(api_call) for api_call in sorted_apis_by_sequence]
 
         combined_output = "\n".join(output)
 

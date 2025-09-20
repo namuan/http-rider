@@ -7,7 +7,7 @@ def structure_attrs_from_dict(obj, cl):
     # For public use.
 
     # conv_obj = obj.copy()  # Dict of converted parameters.
-    conv_obj = dict()  # Start fresh
+    conv_obj = {}  # Start fresh
 
     # dispatch = self._structure_func.dispatch
     dispatch = cattr.global_converter._structure_func.dispatch  # Ugly I know
@@ -20,7 +20,7 @@ def structure_attrs_from_dict(obj, cl):
         name = a.name
         try:
             val = obj[name]
-        except KeyError as k:
+        except KeyError:
             continue
         conv_obj[name] = dispatch(type_)(val, type_)
 
@@ -30,8 +30,6 @@ def structure_attrs_from_dict(obj, cl):
 # Import statements after any function definitions as they are using
 # from the importers
 
-from . import importer_curl
-from . import importer_openapi_v3
-from . import importer_postman_collections
+from . import importer_curl, importer_openapi_v3, importer_postman_collections
 
 importer_plugins = [importer_curl, importer_openapi_v3, importer_postman_collections]

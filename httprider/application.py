@@ -1,9 +1,10 @@
 import sys
+
 from PyQt6.QtWidgets import *
 
+from httprider import __appname__, __desktopid__, __version__
 from httprider.themes import theme_provider
 from httprider.ui.main_window import MainWindow
-from httprider import __version__, __appname__, __desktopid__
 
 
 def main():

@@ -1,16 +1,15 @@
 import attr
 from pygments.lexers.jvm import JavaLexer
-from typing import List
 
+from httprider.codegen.schema_to_java_generator import to_java_function_name
 from httprider.core.core_settings import app_settings
 from httprider.exporters.common import *
 from httprider.model.app_data import (
     ApiCall,
-    HttpExchange,
     ApiTestCase,
     AssertionDataSource,
+    HttpExchange,
 )
-from httprider.codegen.schema_to_java_generator import to_java_function_name
 
 
 def gen_given(api_call: ApiCall, last_exchange: HttpExchange):
@@ -41,18 +40,14 @@ def gen_when(api_call: ApiCall, last_exchange: HttpExchange):
     return "\n".join(statements)
 
 
-def gen_then(
-    api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase
-):
+def gen_then(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiTestCase):
     statements = ["\tthen()."]
     for a in api_test_case.assertions:
         if a.data_from == AssertionDataSource.RESPONSE_CODE.value:
             statements.append(f"                statusCode({converter(a)})")
 
         if a.data_from == AssertionDataSource.RESPONSE_HEADER.value:
-            statements.append(
-                f'                header("{a.selector}", "{converter(a)}")'
-            )
+            statements.append(f'                header("{a.selector}", "{converter(a)}")')
 
         if a.data_from == AssertionDataSource.RESPONSE_BODY.value:
             statements.append(f'                body("{a.selector}", "{converter(a)}")')
@@ -64,18 +59,14 @@ def gen_then(
 
 
 def converter(assertion):
-    return (
-        "exist"
-        if assertion.expected_value == "Not Null"
-        else f"{assertion.expected_value}"
-    )
+    return "exist" if assertion.expected_value == "Not Null" else f"{assertion.expected_value}"
 
 
 def gen_function(api_call, last_exchange, api_test_case):
     return f"""
     void {to_java_function_name(api_call.title)}() {{
 {gen_given(api_call, last_exchange)}
-{gen_when(api_call, last_exchange)}                
+{gen_when(api_call, last_exchange)}
 {gen_then(api_call, last_exchange, api_test_case)};
     }}
     """
@@ -86,11 +77,11 @@ class RestAssuredExporter:
     name: str = "Rest Assured"
     output_ext: str = "java"
 
-    def export_data(self, api_calls: List[ApiCall]):
+    def export_data(self, api_calls: list[ApiCall]):
         test_file_header = """
 /*
     Maven Dependencies
-     
+
     <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>rest-assured</artifactId>
@@ -99,7 +90,7 @@ class RestAssuredExporter:
     </dependency>
 
     Hamcrest Matchers
-    
+
     <dependency>
         <groupId>org.hamcrest</groupId>
         <artifactId>hamcrest-all</artifactId>
@@ -107,7 +98,7 @@ class RestAssuredExporter:
     </dependency>
 
     JSON Schema Validation
-    
+
     <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>json-schema-validator</artifactId>
@@ -120,10 +111,10 @@ import io.restassured.RestAssured.*;
 import io.restassured.matcher.RestAssuredMatchers.*;
 import org.hamcrest.Matchers.*;
 
-class AirHttpTests {   
+class AirHttpTests {
         """
         test_file_footer = """
-}        
+}
         """
         output = [self.__export_api_call(api_call) for api_call in api_calls]
         return (

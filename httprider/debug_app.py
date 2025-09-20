@@ -11,7 +11,7 @@ class DebugWindow(QtWidgets.QMainWindow, Ui_DebugWindow):
     edit_mode = True
 
     def __init__(self, parent=None):
-        super(DebugWindow, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         # ui events
         self.plainTextEdit.floatingButtonClicked.connect(self.on_test)
@@ -19,9 +19,7 @@ class DebugWindow(QtWidgets.QMainWindow, Ui_DebugWindow):
 
     def on_test(self):
         self.edit_mode = not self.edit_mode
-        self.plainTextEdit.appendPlainText(
-            "Button Clicked - Mode: {}".format("Edit" if self.edit_mode else "Preview")
-        )
+        self.plainTextEdit.appendPlainText("Button Clicked - Mode: {}".format("Edit" if self.edit_mode else "Preview"))
         self.update_floating_button_text()
 
     def update_floating_button_text(self):

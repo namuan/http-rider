@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_TagLabelWidget(object):
+class Ui_TagLabelWidget:
     def setupUi(self, TagLabelWidget):
         TagLabelWidget.setObjectName("TagLabelWidget")
         TagLabelWidget.resize(194, 36)

@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class Ui_MainWindow:
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1077, 723)
@@ -27,7 +27,9 @@ class Ui_MainWindow(object):
         self.lst_http_requests.setDefaultDropAction(QtCore.Qt.DropAction.MoveAction)
         self.lst_http_requests.setObjectName("lst_http_requests")
         self.frame_request_response = QtWidgets.QFrame(parent=self.splitter)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_request_response.sizePolicy().hasHeightForWidth())
@@ -58,7 +60,11 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.txt_http_url.setFont(font)
-        self.txt_http_url.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.txt_http_url.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignLeading
+            | QtCore.Qt.AlignmentFlag.AlignLeft
+            | QtCore.Qt.AlignmentFlag.AlignVCenter
+        )
         self.txt_http_url.setObjectName("txt_http_url")
         self.horizontalLayout.addWidget(self.txt_http_url)
         self.btn_send_request = QtWidgets.QPushButton(parent=self.frame_request_response)
@@ -71,7 +77,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.btn_send_request)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.tabWidget = QtWidgets.QTabWidget(parent=self.frame_request_response)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
@@ -134,7 +142,9 @@ class Ui_MainWindow(object):
         self.chk_mock_response_enabled = QtWidgets.QCheckBox(parent=self.tab_7)
         self.chk_mock_response_enabled.setObjectName("chk_mock_response_enabled")
         self.horizontalLayout_16.addWidget(self.chk_mock_response_enabled)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+        )
         self.horizontalLayout_16.addItem(spacerItem)
         self.txt_mocked_response_code = QtWidgets.QLineEdit(parent=self.tab_7)
         self.txt_mocked_response_code.setText("")
@@ -174,7 +184,9 @@ class Ui_MainWindow(object):
         self.list_assertion_results.setObjectName("list_assertion_results")
         self.verticalLayout.addWidget(self.list_assertion_results)
         self.frame_exchange = QtWidgets.QFrame(parent=self.splitter)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred
+        )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_exchange.sizePolicy().hasHeightForWidth())
@@ -307,9 +319,13 @@ class Ui_MainWindow(object):
         self.txt_api_description.setPlaceholderText(_translate("MainWindow", "Request description ..."))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_description), _translate("MainWindow", "Description"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_headers), _translate("MainWindow", "Headers"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_queryparams), _translate("MainWindow", "Query Params"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_queryparams), _translate("MainWindow", "Query Params")
+        )
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_formparams), _translate("MainWindow", "Form Params"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_request_body), _translate("MainWindow", "Request Body"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.tab_request_body), _translate("MainWindow", "Request Body")
+        )
         self.chk_mock_response_enabled.setText(_translate("MainWindow", "Enabled"))
         self.txt_mocked_response_code.setPlaceholderText(_translate("MainWindow", "200"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "Mocked Response"))
@@ -334,6 +350,8 @@ class Ui_MainWindow(object):
         self.tbl_response_headers.headerItem().setText(1, _translate("MainWindow", "Value"))
         self.tabWidget_4.setTabText(self.tabWidget_4.indexOf(self.tab_4), _translate("MainWindow", "Headers"))
         self.tabWidget_4.setTabText(self.tabWidget_4.indexOf(self.tab_5), _translate("MainWindow", "Body"))
+
+
 from ..widgets.api_calls_list_view import ApiCallsListView
 from ..widgets.completion_line_edit import CompletionLineEdit
 from ..widgets.completion_plain_text import CompletionPlainTextEdit

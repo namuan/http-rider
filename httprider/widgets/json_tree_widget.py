@@ -6,7 +6,7 @@ NoneType = type(None)
 ItemRole = Qt.ItemDataRole.UserRole + 200
 
 
-class JsonTreeItem(object):
+class JsonTreeItem:
     def __init__(self, parent=None):
         self.parentItem = parent
         self.childItems = []
@@ -45,16 +45,8 @@ class JsonTreeItem(object):
                 child = self.load_json(item, f"Index {index}", topItem)
                 topItem.appendChild(child)
         else:
-            topItem.itemValue = (
-                self.__flatten_string(json_data)
-                if isinstance(json_data, str)
-                else json_data
-            )
-            topItem.itemValue = (
-                self.__flatten_string(json_data)
-                if isinstance(json_data, str)
-                else json_data
-            )
+            topItem.itemValue = self.__flatten_string(json_data) if isinstance(json_data, str) else json_data
+            topItem.itemValue = self.__flatten_string(json_data) if isinstance(json_data, str) else json_data
 
         return topItem
 

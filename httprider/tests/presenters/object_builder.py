@@ -7,9 +7,9 @@ from httprider.core.core_settings import CoreSettings
 from httprider.core.faker_config import g
 from httprider.model.app_data import (
     ApiCall,
-    HttpExchange,
     ExchangeRequest,
     ExchangeResponse,
+    HttpExchange,
     ProjectInfo,
 )
 

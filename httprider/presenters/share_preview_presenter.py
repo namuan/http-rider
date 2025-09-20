@@ -4,7 +4,7 @@ from httprider.core.core_settings import app_settings
 from httprider.core.markdown_renderer import HighlightRenderer
 from httprider.core.pygment_styles import pyg_styles
 from httprider.interactors.share_service_interactor import ShareServiceInteractor
-from httprider.model.app_data import HttpExchange, ApiCall, ProjectInfo
+from httprider.model.app_data import ApiCall, HttpExchange, ProjectInfo
 from httprider.presenters.common import md_request_response_generator
 
 renderer = HighlightRenderer()
@@ -27,21 +27,15 @@ class SharePreviewPresenter:
         self.view.btn_share_exchange.clicked.connect(self.share_exchange)
 
         # domain events
-        app_settings.app_data_writer.signals.exchange_share_created.connect(
-            self.on_share_created
-        )
-        app_settings.app_data_writer.signals.exchange_share_failed.connect(
-            self.on_share_failed
-        )
+        app_settings.app_data_writer.signals.exchange_share_created.connect(self.on_share_created)
+        app_settings.app_data_writer.signals.exchange_share_failed.connect(self.on_share_failed)
 
     def on_share_failed(self, error_message):
         self.view.lbl_share_location.setText(error_message)
         self.on_share_exchange_saved()
 
     def on_share_created(self, share_location_url):
-        share_location_href = 'Shared document: <a href="{0}">{0}</a>'.format(
-            share_location_url
-        )
+        share_location_href = f'Shared document: <a href="{share_location_url}">{share_location_url}</a>'
         self.view.lbl_share_location.setText(share_location_href)
         self.on_share_exchange_saved()
 
@@ -72,7 +66,7 @@ class SharePreviewPresenter:
     def prepend_api_call(self, api_call: ApiCall, raw_md):
         return f"""### {api_call.title}
 {api_call.description}
-        
+
 {raw_md}"""
 
     def refresh(self):
@@ -80,13 +74,9 @@ class SharePreviewPresenter:
         project: ProjectInfo = app_settings.app_data_reader.get_or_create_project_info()
         md_project_info = self.md_for_project_info(project)
 
-        md_content_for_exchanges = [
-            self.md_for_exchange(exchange) for exchange in self.selected_exchanges
-        ]
+        md_content_for_exchanges = [self.md_for_exchange(exchange) for exchange in self.selected_exchanges]
 
-        self.md_content = (
-            md_project_info + "\r\n" + "\r\n".join(md_content_for_exchanges)
-        )
+        self.md_content = md_project_info + "\r\n" + "\r\n".join(md_content_for_exchanges)
 
         self.render_raw_markdown()
 
@@ -109,9 +99,7 @@ class SharePreviewPresenter:
 
     def show_dialog_multiple_apis(self):
         api_calls = app_settings.app_data_cache.get_all_active_api_calls()
-        self.selected_exchanges = (
-            app_settings.app_data_cache.get_multiple_api_latest_exchanges(api_calls)
-        )
+        self.selected_exchanges = app_settings.app_data_cache.get_multiple_api_latest_exchanges(api_calls)
         self.refresh()
         self.view.show()
 

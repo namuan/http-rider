@@ -1,20 +1,21 @@
 import logging
 from functools import partial
 
-from PyQt6.QtCore import Qt, QModelIndex
+from PyQt6.QtCore import QModelIndex, Qt
 from PyQt6.QtWidgets import (
-    QTreeWidgetItem,
-    QHeaderView,
-    QStyledItemDelegate,
     QComboBox,
-    QTreeWidget,
+    QHeaderView,
     QPushButton,
+    QStyledItemDelegate,
+    QTreeWidget,
+    QTreeWidgetItem,
 )
 
 from httprider.core import elapsed_time_formatter, response_code_formatter
 from httprider.core.constants import ASSERTION_TYPE_ROLE, AssertionMatchers
 from httprider.core.core_settings import app_settings
 from httprider.model.app_data import Assertion, AssertionDataSource, HttpExchange
+
 from . import assertion_variable_name
 
 
@@ -46,52 +47,32 @@ class AssertionListPresenter:
         self.view.setItemDelegateForColumn(0, NoEditDelegate(self.view))
         self.view.setItemDelegateForColumn(3, NoEditDelegate(self.view))
 
-        self.parent_view.btn_response_code_assertion.pressed.connect(
-            self.add_response_code_assertion
-        )
-        self.parent_view.btn_response_time_assertion.pressed.connect(
-            self.add_response_time_assertion
-        )
+        self.parent_view.btn_response_code_assertion.pressed.connect(self.add_response_code_assertion)
+        self.parent_view.btn_response_time_assertion.pressed.connect(self.add_response_time_assertion)
 
     def add_response_code_assertion(self):
         api_call = self.parent_presenter.current
-        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(
-            api_call.id
-        )
-        current_response_code = response_code_formatter(
-            last_exchange.response.http_status_code
-        )
-        item = QTreeWidgetItem(
-            [
-                AssertionDataSource.RESPONSE_CODE.value,
-                assertion_variable_name(
-                    api_call.title, AssertionDataSource.RESPONSE_CODE.value, ""
-                ),
-                None,
-                current_response_code,
-            ]
-        )
+        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
+        current_response_code = response_code_formatter(last_exchange.response.http_status_code)
+        item = QTreeWidgetItem([
+            AssertionDataSource.RESPONSE_CODE.value,
+            assertion_variable_name(api_call.title, AssertionDataSource.RESPONSE_CODE.value, ""),
+            None,
+            current_response_code,
+        ])
         item.setData(3, ASSERTION_TYPE_ROLE, "int")
         self.add_item(item, current_data=current_response_code)
 
     def add_response_time_assertion(self):
         api_call = self.parent_presenter.current
-        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(
-            api_call.id
-        )
-        current_elapsed_time = elapsed_time_formatter(
-            last_exchange.response.elapsed_time
-        )
-        item = QTreeWidgetItem(
-            [
-                AssertionDataSource.RESPONSE_TIME.value,
-                assertion_variable_name(
-                    api_call.title, AssertionDataSource.RESPONSE_TIME.value, ""
-                ),
-                None,
-                current_elapsed_time,
-            ]
-        )
+        last_exchange: HttpExchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
+        current_elapsed_time = elapsed_time_formatter(last_exchange.response.elapsed_time)
+        item = QTreeWidgetItem([
+            AssertionDataSource.RESPONSE_TIME.value,
+            assertion_variable_name(api_call.title, AssertionDataSource.RESPONSE_TIME.value, ""),
+            None,
+            current_elapsed_time,
+        ])
         item.setData(3, ASSERTION_TYPE_ROLE, "float")
         self.add_item(item, current_data=current_elapsed_time)
 
@@ -172,12 +153,8 @@ class AssertionListPresenter:
 
     def refresh(self, api_test_case, last_exchange: HttpExchange):
         self.parent_view.tbl_assertions.clear()
-        formatted_response_code = response_code_formatter(
-            last_exchange.response.http_status_code
-        )
-        self.parent_view.btn_response_code_assertion.setText(
-            f"HTTP {formatted_response_code}"
-        )
+        formatted_response_code = response_code_formatter(last_exchange.response.http_status_code)
+        self.parent_view.btn_response_code_assertion.setText(f"HTTP {formatted_response_code}")
         elapsed_time = elapsed_time_formatter(last_exchange.response.elapsed_time)
         self.parent_view.btn_response_time_assertion.setText(elapsed_time)
 
@@ -190,10 +167,10 @@ class AssertionListPresenter:
                 current_value_from_exchange = app_settings.app_data_cache.get_latest_assertion_value_from_exchange(
                     assertion, last_exchange
                 )
-            except Exception as e:
-                logging.error("Unable to retrieve value")
-                logging.error(assertion)
-                logging.error(last_exchange)
+            except Exception:
+                logging.exception("Unable to retrieve value")
+                logging.exception(assertion)
+                logging.exception(last_exchange)
 
             # @todo: Create a function to convert row in assertions table <-> Assertion object
             item.setData(0, Qt.ItemDataRole.DisplayRole, assertion.data_from)

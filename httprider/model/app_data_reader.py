@@ -4,21 +4,21 @@ import logging
 from PyQt6.QtCore import QObject, pyqtSignal
 
 from ..core.constants import (
-    API_TEST_CASE_RECORD_TYPE,
-    HTTP_EXCHANGE_RECORD_TYPE,
-    ENVIRONMENT_RECORD_TYPE,
-    PROJECT_INFO_RECORD_TYPE,
-    APP_STATE_RECORD_TYPE,
     API_CALL_RECORD_TYPE,
+    API_TEST_CASE_RECORD_TYPE,
+    APP_STATE_RECORD_TYPE,
+    ENVIRONMENT_RECORD_TYPE,
+    HTTP_EXCHANGE_RECORD_TYPE,
+    PROJECT_INFO_RECORD_TYPE,
 )
 from ..model.app_data import (
     ApiCall,
-    AppData,
     ApiTestCase,
-    HttpExchange,
-    Environment,
-    ProjectInfo,
+    AppData,
     AppState,
+    Environment,
+    HttpExchange,
+    ProjectInfo,
 )
 
 
@@ -35,10 +35,7 @@ class AppDataReader(AppData):
     def get_all_api_calls_from_db(self):
         table = self.ldb[API_CALL_RECORD_TYPE]
         api_calls_db = table.find(name=API_CALL_RECORD_TYPE)
-        return {
-            api_db["api_call_id"]: ApiCall.from_json(json.loads(api_db["object"]))
-            for api_db in api_calls_db
-        }
+        return {api_db["api_call_id"]: ApiCall.from_json(json.loads(api_db["object"])) for api_db in api_calls_db}
 
     def get_api_call_from_db(self, api_call_id):
         logging.info(f"DB: {api_call_id} - Getting API call")
@@ -59,9 +56,7 @@ class AppDataReader(AppData):
 
     def get_api_call_exchanges_from_db(self, doc_id):
         table = self.ldb[HTTP_EXCHANGE_RECORD_TYPE]
-        http_exchanges_db = table.find(
-            name=HTTP_EXCHANGE_RECORD_TYPE, api_call_id=doc_id
-        )
+        http_exchanges_db = table.find(name=HTTP_EXCHANGE_RECORD_TYPE, api_call_id=doc_id)
         return [
             HttpExchange.from_json(json.loads(obj["object"]))
             for obj in http_exchanges_db
@@ -86,9 +81,7 @@ class AppDataReader(AppData):
         if not environments_db:
             return []
 
-        return [
-            Environment.from_json(json.loads(obj["object"])) for obj in environments_db
-        ]
+        return [Environment.from_json(json.loads(obj["object"])) for obj in environments_db]
 
     def get_selected_environment_from_db(self, environment_name):
         table = self.ldb[ENVIRONMENT_RECORD_TYPE]

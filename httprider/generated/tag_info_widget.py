@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_TagInfoWidget(object):
+class Ui_TagInfoWidget:
     def setupUi(self, TagInfoWidget):
         TagInfoWidget.setObjectName("TagInfoWidget")
         TagInfoWidget.resize(516, 165)
@@ -46,7 +46,9 @@ class Ui_TagInfoWidget(object):
         self.lbl_tag.setObjectName("lbl_tag")
         self.gridLayout.addWidget(self.lbl_tag, 0, 0, 1, 1)
         self.txt_tag_info = QtWidgets.QPlainTextEdit(parent=TagInfoWidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.txt_tag_info.sizePolicy().hasHeightForWidth())

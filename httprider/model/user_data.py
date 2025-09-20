@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Optional
 
 import attr
 
@@ -10,6 +9,6 @@ class SavedState(Enum):
 
 
 @attr.s(auto_attribs=True)
-class UserProject(object):
-    location: Optional[str]
-    state: Optional[SavedState] = SavedState.UN_SAVED
+class UserProject:
+    location: str | None
+    state: SavedState | None = SavedState.UN_SAVED

@@ -9,7 +9,7 @@ venv
 target
 __pycache__/
 .idea/
-contextual_app.egg-info
+*.egg-info/
 build/
 dist/
 .DS_Store

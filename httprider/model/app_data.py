@@ -1,22 +1,22 @@
 from datetime import datetime, timedelta
-from typing import Any, Optional, Dict, List
+from typing import Any
 
 import attr
 import cattr
 from requests.structures import CaseInsensitiveDict
 
-from httprider.core import DynamicStringData, strip_comments, compact_json
+from httprider.core import DynamicStringData, compact_json, strip_comments
 from httprider.core.constants import *
 
 
 @attr.s(auto_attribs=True)
-class TagInfo(object):
+class TagInfo:
     name: str = ""
     description: str = ""
 
 
 @attr.s(auto_attribs=True)
-class ProjectInfo(object):
+class ProjectInfo:
     record_type: str = PROJECT_INFO_RECORD_TYPE
     id: str = ""
     title: str = ""
@@ -29,9 +29,9 @@ class ProjectInfo(object):
     license_name: str = ""
     setup_code: str = ""
     teardown_code: str = ""
-    tags: List[TagInfo] = []
-    servers: List[str] = []
-    common_headers: Dict[str, DynamicStringData] = {}
+    tags: list[TagInfo] = []
+    servers: list[str] = []
+    common_headers: dict[str, DynamicStringData] = {}
 
     @classmethod
     def from_json(cls, json_obj):
@@ -44,12 +44,12 @@ class ProjectInfo(object):
 
 
 @attr.s(auto_attribs=True)
-class AppState(object):
+class AppState:
     record_type: str = APP_STATE_RECORD_TYPE
-    selected_tag: Optional[str] = None
-    selected_env: Optional[str] = None
-    selected_search: Optional[str] = None
-    last_sequence_number: Optional[int] = 0
+    selected_tag: str | None = None
+    selected_env: str | None = None
+    selected_search: str | None = None
+    last_sequence_number: int | None = 0
 
     @classmethod
     def from_json(cls, json_obj=None):
@@ -62,30 +62,30 @@ class AppState(object):
 
 
 @attr.s(auto_attribs=True)
-class MockedResponse(object):
+class MockedResponse:
     is_enabled: bool = False
     status_code: int = 200
-    headers: Dict[str, DynamicStringData] = {}
+    headers: dict[str, DynamicStringData] = {}
     body: str = ""
 
 
 @attr.s(auto_attribs=True)
-class ApiCall(object):
+class ApiCall:
     id: str = None
     description: str = ""
     title: str = ""
     http_url: str = ""
     http_method: str = ""
-    http_headers: Dict[str, DynamicStringData] = {}
-    http_params: Dict[str, DynamicStringData] = {}
-    form_params: Dict[str, DynamicStringData] = {}
+    http_headers: dict[str, DynamicStringData] = {}
+    http_params: dict[str, DynamicStringData] = {}
+    form_params: dict[str, DynamicStringData] = {}
     http_request_body: str = ""
-    sequence_number: Optional[int] = None
+    sequence_number: int | None = None
     type: str = API_CALL_RECORD_TYPE
-    tags: List = []
-    last_response_code: Optional[int] = None
+    tags: list = []
+    last_response_code: int | None = None
     enabled: bool = True
-    last_assertion_result: Optional[bool] = None
+    last_assertion_result: bool | None = None
     mocked_response: MockedResponse = MockedResponse()
     is_separator: bool = False
 
@@ -106,54 +106,37 @@ class ApiCall(object):
         }
 
     def enabled_query_params(self, hide_secrets=True):
-        return {
-            k: v.display_value() if hide_secrets else v.value
-            for k, v in self.http_params.items()
-            if v.is_enabled
-        }
+        return {k: v.display_value() if hide_secrets else v.value for k, v in self.http_params.items() if v.is_enabled}
 
     def enabled_form_params(self, hide_secrets=True):
-        return {
-            k: v.display_value() if hide_secrets else v.value
-            for k, v in self.form_params.items()
-            if v.is_enabled
-        }
+        return {k: v.display_value() if hide_secrets else v.value for k, v in self.form_params.items() if v.is_enabled}
 
     def request_body_without_comments(self):
         return compact_json(strip_comments(self.http_request_body))
 
 
 @attr.s(auto_attribs=True)
-class ExchangeRequest(object):
+class ExchangeRequest:
     request_time: str = ""
     http_method: str = "GET"
     http_url: str = "Request not available"
     full_encoded_url: str = "Request not available"
-    headers: Dict = {}
-    query_params: Dict = {}
-    form_params: Dict = {}
+    headers: dict = {}
+    query_params: dict = {}
+    form_params: dict = {}
     request_body: str = ""
     request_body_type: ContentType = ContentType.NONE
     request_type: ExchangeRequestType = ExchangeRequestType.NORMAL
 
     def content_type(self):
-        return self.headers.get(
-            CONTENT_TYPE_HEADER_IN_EXCHANGE, self.request_body_type.value
-        )
+        return self.headers.get(CONTENT_TYPE_HEADER_IN_EXCHANGE, self.request_body_type.value)
 
     def is_fuzzed(self):
-        return (
-            self.request_type
-            and self.request_type.value == ExchangeRequestType.FUZZED.value
-        )
+        return self.request_type and self.request_type.value == ExchangeRequestType.FUZZED.value
 
     def url_with_qp(self):
         if self.query_params:
-            return (
-                self.http_url
-                + "?"
-                + "&".join([f"{k}={v}" for k, v in self.query_params.items()])
-            )
+            return self.http_url + "?" + "&".join([f"{k}={v}" for k, v in self.query_params.items()])
         else:
             return self.http_url
 
@@ -171,9 +154,9 @@ class ExchangeRequest(object):
 
 
 @attr.s(auto_attribs=True)
-class ExchangeResponse(object):
+class ExchangeResponse:
     http_status_code: int = 0
-    response_headers: Dict = {}
+    response_headers: dict = {}
     response_body: str = ""
     response_body_type: ContentType = ContentType.NONE
     response_time: float = 0.0
@@ -196,16 +179,12 @@ class ExchangeResponse(object):
         self.response_headers = {k: v for k, v in new_headers.lower_items()}
 
     def content_type(self):
-        return self.headers.get(
-            CONTENT_TYPE_HEADER_IN_EXCHANGE, self.response_body_type.value
-        )
+        return self.headers.get(CONTENT_TYPE_HEADER_IN_EXCHANGE, self.response_body_type.value)
 
     @classmethod
     def from_mocked_response(cls, mocked_response: MockedResponse):
         return cls(
-            response_headers={
-                k: v.value for k, v in mocked_response.headers.items() if v.is_enabled
-            },
+            response_headers={k: v.value for k, v in mocked_response.headers.items() if v.is_enabled},
             response_body=mocked_response.body,
             http_status_code=mocked_response.status_code,
             is_mocked=True,
@@ -214,7 +193,7 @@ class ExchangeResponse(object):
 
 
 @attr.s(auto_attribs=True)
-class Assertion(object):
+class Assertion:
     data_from: str = None
     var_name: str = None
     selector: str = None
@@ -222,18 +201,18 @@ class Assertion(object):
     expected_value: Any = None
     output: str = None
     var_type: str = None
-    result: Optional[bool] = None
+    result: bool | None = None
 
 
 @attr.s(auto_attribs=True)
-class HttpExchange(object):
+class HttpExchange:
     api_call_id: str
     id: str = None
     request: ExchangeRequest = ExchangeRequest()
     type: str = HTTP_EXCHANGE_RECORD_TYPE
     response: ExchangeResponse = ExchangeResponse()
     response_status: ExchangeResponseStatus = ExchangeResponseStatus.NONE
-    assertions: List[Assertion] = []
+    assertions: list[Assertion] = []
 
     def is_passed(self):
         return self.response_status == ExchangeResponseStatus.PASSED
@@ -258,11 +237,11 @@ class HttpExchange(object):
 
 
 @attr.s(auto_attribs=True)
-class Environment(object):
+class Environment:
     id: str = None
     record_type: str = ENVIRONMENT_RECORD_TYPE
     name: str = None
-    data: Dict[str, DynamicStringData] = {}
+    data: dict[str, DynamicStringData] = {}
 
     @classmethod
     def from_json(cls, json_obj=None):
@@ -287,11 +266,11 @@ class Environment(object):
 
 
 @attr.s(auto_attribs=True)
-class ApiTestCase(object):
+class ApiTestCase:
     api_call_id: str
     id: str = None
     record_type: str = API_TEST_CASE_RECORD_TYPE
-    assertions: List[Assertion] = []
+    assertions: list[Assertion] = []
     DEFAULT_VAR_PREFIX = "var"
 
     def to_json(self):
@@ -308,11 +287,7 @@ class ApiTestCase(object):
         return [a for a in self.assertions if a.matcher != AssertionMatchers.SKIP.value]
 
     def variables(self):
-        return [
-            a
-            for a in self.assertions
-            if not a.var_name.startswith(self.DEFAULT_VAR_PREFIX)
-        ]
+        return [a for a in self.assertions if not a.var_name.startswith(self.DEFAULT_VAR_PREFIX)]
 
 
 class AppData:

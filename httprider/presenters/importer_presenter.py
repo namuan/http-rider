@@ -18,9 +18,7 @@ class ImporterPresenter:
     def import_collection(self, importer):
         self.importer = importer
         if self.importer.input_type == "file":
-            file_location, _ = self.parent.open_file(
-                "Select File", Path("~").expanduser().as_posix()
-            )
+            file_location, _ = self.parent.open_file("Select File", Path("~").expanduser().as_posix())
             if file_location:
                 project_info, api_calls = self.importer.import_data(file_location)
                 api_call_interactor.add_multiple_api_calls(api_calls)

@@ -1,12 +1,12 @@
 from faker import Generator
 from faker.providers.address.en_US import Provider as AP
 from faker.providers.company.en_US import Provider as CP
+from faker.providers.date_time.en_US import Provider as DTProvider
 from faker.providers.internet.en_US import Provider as IP
+from faker.providers.lorem.en_US import Provider as LoremProvider
 from faker.providers.misc.en_US import Provider as MP
 from faker.providers.person.en_US import Provider as PP
 from faker.providers.python.en_US import Provider as PythonProvider
-from faker.providers.lorem.en_US import Provider as LoremProvider
-from faker.providers.date_time.en_US import Provider as DTProvider
 
 g = Generator()
 g.add_provider(PP)

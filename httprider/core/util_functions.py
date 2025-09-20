@@ -8,9 +8,7 @@ def str_to_base64e(arg, url_safe=False):
         return ""
 
     if url_safe:
-        return base64.urlsafe_b64encode(bytes(arg, UTF_8_ENCODING)).decode(
-            UTF_8_ENCODING
-        )
+        return base64.urlsafe_b64encode(bytes(arg, UTF_8_ENCODING)).decode(UTF_8_ENCODING)
     else:
         return base64.b64encode(bytes(arg, UTF_8_ENCODING)).decode(UTF_8_ENCODING)
 

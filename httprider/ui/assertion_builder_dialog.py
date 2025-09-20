@@ -6,7 +6,7 @@ from ..presenters import AssertionBuilderPresenter
 
 class AssertionBuilderDialog(QDialog, Ui_AssertionBuilderDialog):
     def __init__(self, parent=None):
-        super(AssertionBuilderDialog, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.presenter = AssertionBuilderPresenter(self)
 

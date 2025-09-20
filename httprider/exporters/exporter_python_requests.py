@@ -1,5 +1,3 @@
-from typing import List
-
 import attr
 from pygments.lexers.python import Python3Lexer
 
@@ -14,22 +12,16 @@ def to_python_requests(api_call, last_exchange):
     method = last_exchange.request.http_method
     url = last_exchange.request.http_url
     has_qp = True if last_exchange.request.query_params else False
-    query_params = dict_formatter(
-        last_exchange.request.query_params.items(), '"{k}": "{v}"'
-    )
+    query_params = dict_formatter(last_exchange.request.query_params.items(), '"{k}": "{v}"')
     has_headers = True if last_exchange.request.headers else False
-    headers = dict_formatter(
-        last_exchange.request.headers.items(), '"{k}": "{v}"', splitter=",\n"
-    )
+    headers = dict_formatter(last_exchange.request.headers.items(), '"{k}": "{v}"', splitter=",\n")
     request_body_type = last_exchange.request.request_body_type
     request_body = None
     if request_body_type == ContentType.FORM:
-        request_body = "data={}".format(last_exchange.request.form_params)
+        request_body = f"data={last_exchange.request.form_params}"
     elif request_body_type == ContentType.JSON:
         has_json_body = True if last_exchange.request.request_body else False
-        request_body = "json={}".format(
-            last_exchange.request.request_body if has_json_body else ""
-        )
+        request_body = "json={}".format(last_exchange.request.request_body if has_json_body else "")
 
     params_code = f"""
     params={{
@@ -64,7 +56,7 @@ class PythonRequestsExporter:
     name: str = "Python (Requests)"
     output_ext: str = "py"
 
-    def export_data(self, api_calls: List[ApiCall]):
+    def export_data(self, api_calls: list[ApiCall]):
         file_header = """
 # Install the Python Requests library
 

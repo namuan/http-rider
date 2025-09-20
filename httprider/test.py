@@ -1,8 +1,8 @@
 import logging
-from threading import Thread
-from multiprocessing import Process
-import requests
 import urllib.request
+from multiprocessing import Process
+
+import requests
 
 logging.basicConfig(format="%(threadName)-10s - %(message)s", level=logging.DEBUG)
 

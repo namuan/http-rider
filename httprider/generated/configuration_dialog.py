@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Configuration(object):
+class Ui_Configuration:
     def setupUi(self, Configuration):
         Configuration.setObjectName("Configuration")
         Configuration.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
@@ -47,7 +47,11 @@ class Ui_Configuration(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.formLayout = QtWidgets.QFormLayout()
         self.formLayout.setFieldGrowthPolicy(QtWidgets.QFormLayout.FieldGrowthPolicy.ExpandingFieldsGrow)
-        self.formLayout.setLabelAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.formLayout.setLabelAlignment(
+            QtCore.Qt.AlignmentFlag.AlignLeading
+            | QtCore.Qt.AlignmentFlag.AlignLeft
+            | QtCore.Qt.AlignmentFlag.AlignVCenter
+        )
         self.formLayout.setObjectName("formLayout")
         self.label = QtWidgets.QLabel(parent=self.tab)
         self.label.setObjectName("label")
@@ -133,7 +137,7 @@ class Ui_Configuration(object):
         self.label_4.setText(_translate("Configuration", "Server"))
         self.txt_print_server.setText(_translate("Configuration", "http://localhost:8080"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("Configuration", "Print/Share"))
-        self.label_5.setText(_translate("Configuration", "Icons by <a href=\"https://icons8.com\">Icons8</a>"))
+        self.label_5.setText(_translate("Configuration", 'Icons by <a href="https://icons8.com">Icons8</a>'))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("Configuration", "Credit"))
         self.btn_save_configuration.setText(_translate("Configuration", "OK"))
         self.btn_cancel_configuration.setText(_translate("Configuration", "Cancel"))

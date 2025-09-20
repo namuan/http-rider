@@ -4,10 +4,10 @@ from pathlib import Path
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QStandardItem
 
-from httprider.exporters import exporter_plugins
-from httprider.core.pygment_styles import pyg_styles
 from httprider.core.constants import EXPORTER_COMBO_ROLE
 from httprider.core.core_settings import app_settings
+from httprider.core.pygment_styles import pyg_styles
+from httprider.exporters import exporter_plugins
 from httprider.model.app_data import ApiCall
 
 
@@ -24,15 +24,11 @@ class CodeGeneratorPresenter:
         self.selected_api: ApiCall = None
         self.view.txt_generated_code.document().setDefaultStyleSheet(pyg_styles())
 
-        self.view.cmb_exporters.currentIndexChanged[int].connect(
-            self.on_exporter_change
-        )
+        self.view.cmb_exporters.currentIndexChanged[int].connect(self.on_exporter_change)
         self.view.btn_copy_code.pressed.connect(self.on_copy_clipboard)
         self.view.btn_export_code.pressed.connect(self.on_export_file)
 
-        app_settings.app_data_reader.signals.api_call_change_selection.connect(
-            self.on_updated_selected_api
-        )
+        app_settings.app_data_reader.signals.api_call_change_selection.connect(self.on_updated_selected_api)
 
     def show_dialog(self):
         self.view.cmb_exporters.clear()
@@ -73,9 +69,7 @@ class CodeGeneratorPresenter:
         self.main_window.status_bar.showMessage("Copied to clipboard", 2000)
 
     def on_export_file(self):
-        file_location, _ = self.main_window.save_file(
-            "Select File", Path("~").expanduser().as_posix()
-        )
+        file_location, _ = self.main_window.save_file("Select File", Path("~").expanduser().as_posix())
         if file_location:
             file = Path(file_location)
             file.write_text(self.view.txt_generated_code.toPlainText())

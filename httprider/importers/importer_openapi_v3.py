@@ -8,9 +8,10 @@ from apispec.core import VALID_METHODS_OPENAPI_V3
 from prance import ResolvingParser
 
 from httprider.core.app_state_interactor import AppStateInteractor
+
 from ..core import DynamicStringData
 from ..core.json_data_generator import jdg
-from ..model.app_data import ProjectInfo, TagInfo, ApiCall
+from ..model.app_data import ApiCall, ProjectInfo, TagInfo
 
 
 @attr.s
@@ -39,10 +40,7 @@ class OpenApiV3Importer:
             version=openapi_info["version"].strip(),
             contact_email=openapi_info.get("contact", {}).get("email", "").strip(),
             contact_name=openapi_info.get("contact", {}).get("name", "").strip(),
-            tags=[
-                TagInfo(t["name"].strip(), t["description"].strip())
-                for t in openapi_tags
-            ],
+            tags=[TagInfo(t["name"].strip(), t["description"].strip()) for t in openapi_tags],
             servers=[server.get("url", "") for server in openapi_servers],
         )
         return info
@@ -61,9 +59,7 @@ class OpenApiV3Importer:
             )
             for path, path_spec in openapi_paths.items()
             for api_method, api_method_spec in path_spec.items()
-            for content_type, schema in self.__request_content_types(
-                api_method_spec
-            ).items()
+            for content_type, schema in self.__request_content_types(api_method_spec).items()
             if api_method.strip().lower() in VALID_METHODS_OPENAPI_V3
         ]
 
@@ -104,9 +100,7 @@ class OpenApiV3Importer:
         schema,
     ):
         logging.info(f"Converting {api_method} - {content_type} - {path}")
-        headers_params, query_params, form_params = self.__process_parameters(
-            path_spec, api_method_spec
-        )
+        headers_params, query_params, form_params = self.__process_parameters(path_spec, api_method_spec)
 
         if content_type:
             headers_params["Content-Type"] = DynamicStringData(value=content_type)

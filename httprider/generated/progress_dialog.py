@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_ProgressDialog(object):
+class Ui_ProgressDialog:
     def setupUi(self, ProgressDialog):
         ProgressDialog.setObjectName("ProgressDialog")
         ProgressDialog.setWindowModality(QtCore.Qt.WindowModality.WindowModal)

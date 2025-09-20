@@ -1,5 +1,6 @@
-from httprider.core.json_schema import schema_from_json
 import json
+
+from httprider.core.json_schema import schema_from_json
 
 
 def test_generate_schema_from_json():

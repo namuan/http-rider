@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_FuzzTestDialog(object):
+class Ui_FuzzTestDialog:
     def setupUi(self, FuzzTestDialog):
         FuzzTestDialog.setObjectName("FuzzTestDialog")
         FuzzTestDialog.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
@@ -30,7 +30,9 @@ class Ui_FuzzTestDialog(object):
         self.lbl_api_call.setFont(font)
         self.lbl_api_call.setObjectName("lbl_api_call")
         self.horizontalLayout_2.addWidget(self.lbl_api_call)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+        )
         self.horizontalLayout_2.addItem(spacerItem)
         self.line_2 = QtWidgets.QFrame(parent=FuzzTestDialog)
         self.line_2.setFrameShape(QtWidgets.QFrame.Shape.HLine)
@@ -82,7 +84,9 @@ class Ui_FuzzTestDialog(object):
         self.int_max_string_length.setProperty("value", 250)
         self.int_max_string_length.setObjectName("int_max_string_length")
         self.horizontalLayout.addWidget(self.int_max_string_length)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.txt_fuzz_output = QtWidgets.QPlainTextEdit(parent=FuzzTestDialog)

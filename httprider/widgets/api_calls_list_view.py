@@ -6,18 +6,18 @@ from httprider.core.constants import API_CALL_ROLE
 from httprider.model.app_data import ApiCall
 from httprider.themes.theme_provider import (
     api_call_list_disabled_color,
-    api_call_separator_rect,
-    api_call_list_selected_rect,
-    api_call_list_selected_pen,
-    http_ex_success,
-    http_ex_client_err,
-    http_ex_server_err,
-    http_ex_no_response,
-    api_call_list_title_color,
-    api_call_list_sub_title_color,
-    api_call_list_disabled_title_color,
     api_call_list_disabled_sub_title_color,
+    api_call_list_disabled_title_color,
+    api_call_list_selected_pen,
+    api_call_list_selected_rect,
     api_call_list_status_code_color,
+    api_call_list_sub_title_color,
+    api_call_list_title_color,
+    api_call_separator_rect,
+    http_ex_client_err,
+    http_ex_no_response,
+    http_ex_server_err,
+    http_ex_success,
 )
 
 PADDING = 5
@@ -64,15 +64,11 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         url_rect = font_metrics.boundingRect(
             0, 0, bounding_rect.width(), 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop, api_http_url
         )
-        size: QSize = QSize(
-            option.rect.width(), title_rect.height() + url_rect.height() + 10 * PADDING
-        )
+        size: QSize = QSize(option.rect.width(), title_rect.height() + url_rect.height() + 10 * PADDING)
 
         return size
 
-    def paint(
-        self, painter: QPainter, option: QStyleOptionViewItem, model_index: QModelIndex
-    ):
+    def paint(self, painter: QPainter, option: QStyleOptionViewItem, model_index: QModelIndex):
         if not model_index.isValid():
             return
 
@@ -92,9 +88,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
 
         api_title = api_call.title
         api_http_url = f"{api_call.http_method} {api_call.http_url}"
-        api_status_code = (
-            str(api_call.last_response_code) if api_call.last_response_code else None
-        )
+        api_status_code = str(api_call.last_response_code) if api_call.last_response_code else None
 
         title_pen_color = api_call_list_title_color()
         sub_title_pen_color = api_call_list_sub_title_color()
@@ -126,9 +120,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             title_rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWordWrap, elided_title
         )
 
-        self.draw_status_code(
-            title_rect, bounding_rect, painter, api_status_code, api_call
-        )
+        self.draw_status_code(title_rect, bounding_rect, painter, api_status_code, api_call)
 
         # http url
         font.setPointSize(self.URL_FONT_SIZE)
@@ -154,9 +146,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
 
         painter.restore()
 
-    def draw_status_code(
-        self, title_rect, bounding_rect, painter, api_status_code, api_call
-    ):
+    def draw_status_code(self, title_rect, bounding_rect, painter, api_status_code, api_call):
         code_rect_width = api_status_code * 2 if api_status_code else ""
 
         font: QFont = QApplication.font()
@@ -177,12 +167,8 @@ class ApiCallItemDelegate(QStyledItemDelegate):
 
         if api_status_code:
             color = self.color_from_response(api_call.last_response_code)
-            color_assertions = self.color_from_assertions(
-                api_call.last_assertion_result, color
-            )
-            gradient: QLinearGradient = QLinearGradient(
-                code_rect_f.topLeft(), code_rect_f.bottomRight()
-            )
+            color_assertions = self.color_from_assertions(api_call.last_assertion_result, color)
+            gradient: QLinearGradient = QLinearGradient(code_rect_f.topLeft(), code_rect_f.bottomRight())
             gradient.setColorAt(0, color)
             gradient.setColorAt(1, color_assertions)
             painter.fillPath(path, gradient)
