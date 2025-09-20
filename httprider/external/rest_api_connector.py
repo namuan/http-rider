@@ -2,7 +2,7 @@ import logging
 
 from PyQt6.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
 from requests import PreparedRequest
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError as RequestsConnectionError
 from urllib3.exceptions import NewConnectionError
 
 from httprider.core.constants import (
@@ -76,7 +76,7 @@ class RestApiConnector(QThread):
         """Update exchange request with prepared request if available"""
         if prepared_request:
             current_exchange_request.full_encoded_url = prepared_request.url or current_exchange_request
-            current_exchange_request.headers = {k: v for k, v in prepared_request.headers.items()}
+            current_exchange_request.headers = dict(prepared_request.headers.items())
             current_exchange_request.request_body = prepared_request.body or ""
             current_exchange_request.http_method = prepared_request.method
         else:
@@ -113,7 +113,7 @@ class RestApiConnector(QThread):
         # converting request to k/v structure
         kwargs = dict(headers=req.headers, params=req.query_params)
 
-        content_type = req.headers.get("%s" % CONTENT_TYPE_HEADER_IN_EXCHANGE, ContentType.NONE.value)
+        content_type = req.headers.get(f"{CONTENT_TYPE_HEADER_IN_EXCHANGE}", ContentType.NONE.value)
 
         if req.request_body:
             req.request_body_type = guess_content_type(req.request_body)
@@ -148,7 +148,7 @@ class RestApiConnector(QThread):
             self.exchange.request = self.update_request(self.exchange.request, response.request)
 
             # Building exchange response
-            if err and isinstance(err, ConnectionError):
+            if err and isinstance(err, RequestsConnectionError):
                 nce: NewConnectionError = err.args[0].reason
                 error_response = ExchangeResponse(http_status_code=-1, response_body=str(nce.args[0]))
                 self.exchange.response = error_response
@@ -167,7 +167,7 @@ class RestApiConnector(QThread):
             )
 
             # Cleanup (for both success/failure)
-            for fk, fv in kwargs.get("files", {}).items():
+            for _fk, fv in kwargs.get("files", {}).items():
                 fv.close()
 
             # This is to make sure that we cleanly quit this thread
@@ -195,4 +195,4 @@ class RestApiConnector(QThread):
         except Exception as e:
             http_exchange_signals.request_finished.emit(self.exchange.api_call_id)
             logging.exception(f"Unhandled exception: {e}")
-            raise e
+            raise

@@ -7,10 +7,10 @@ from ..exporters.common import *
 from ..model.app_data import ApiCall
 
 
-def gen_function(api_call, last_exchange, api_test_case):
+def gen_function(api_call, last_exchange, _api_test_case):
     request_headers = dict_formatter(last_exchange.request.headers.items(), "{k}: {v}", splitter="\n")
     response_headers = dict_formatter(last_exchange.response.headers.items(), "{k}: {v}", splitter="\n")
-    request_qp = {k: v for k, v in last_exchange.request.query_params.items()}
+    request_qp = dict(last_exchange.request.query_params.items())
     http_url = last_exchange.request.http_url
     if request_qp:
         http_url = http_url + "?" + dict_formatter(request_qp.items(), "{k}={v}", "&")

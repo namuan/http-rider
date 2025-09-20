@@ -124,10 +124,6 @@ public interface HttpRiderFeignClient {{
     def __export_api_call(self, project_info, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         api_test_case = app_settings.app_data_cache.get_api_test_case(api_call.id)
-        api_uri = last_exchange.request.http_url
-        response_code = last_exchange.response.http_status_code
-        formatted_request_body = format_json(last_exchange.request.request_body)
-        formatted_response_body = format_json(last_exchange.response.response_body)
         doc = f"""
 {gen_feign_client_class(api_call, last_exchange, api_test_case)}
 {gen_feign_client_request_class(api_call, last_exchange, api_test_case)}

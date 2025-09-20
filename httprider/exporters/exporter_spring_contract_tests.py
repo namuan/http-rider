@@ -132,7 +132,7 @@ def gen_test(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiT
     function_name = to_java_function_name(api_call.title)
     encoded_json_string = encode_json_string(last_exchange.request.request_body)
 
-    json_path_assertions = "\n".join([statement for statement in gen_test_assertions(api_test_case)])
+    json_path_assertions = "\n".join(list(gen_test_assertions(api_test_case)))
 
     test_code = f"""
 // 5. MockMvc test generator
@@ -256,7 +256,6 @@ import org.springframework.cloud.contract.spec.Contract
 
     def __export_api_call(self, project_info, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
-        api_test_case = app_settings.app_data_cache.get_api_test_case(api_call.id)
         api_uri = last_exchange.request.http_url
         response_code = last_exchange.response.http_status_code
         formatted_request_body = format_json(last_exchange.request.request_body)

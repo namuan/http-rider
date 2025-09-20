@@ -106,7 +106,7 @@ class OpenApiV3Importer:
             headers_params["Content-Type"] = DynamicStringData(value=content_type)
 
         return ApiCall(
-            tags=[t for t in api_method_spec.get("tags", [])],
+            tags=list(api_method_spec.get("tags", [])),
             http_url=f"{base_path}{path}",
             http_method=api_method.upper(),
             title=api_method_spec.get("summary", ""),

@@ -8,9 +8,9 @@ from httprider.core.constants import ASSERTION_TYPE_ROLE, AssertionDataSource
 from httprider.core.core_settings import app_settings
 from httprider.model.app_data import ApiCall, HttpExchange
 
-from . import assertion_variable_name
 from .assertion_list_presenter import AssertionListPresenter
 from .body_assertion_presenter import BodyAssertionPresenter
+from .common_utils import assertion_variable_name
 from .headers_assertions_presenter import HeadersAssertionPresenter
 
 

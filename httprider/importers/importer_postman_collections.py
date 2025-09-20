@@ -14,9 +14,9 @@ from ..model.app_data import ApiCall
 @attr.s(auto_attribs=True)
 class PostmanRequest:
     method: str
-    header: list = []
-    body: dict = {}
-    url: dict = {}
+    header: list = attr.Factory(list)
+    body: dict = attr.Factory(dict)
+    url: dict = attr.Factory(dict)
 
 
 @attr.s(auto_attribs=True)
@@ -24,14 +24,14 @@ class PostmanSubItem:
     name: str
     request: PostmanRequest
     response: list
-    event: list = []
+    event: list = attr.Factory(list)
 
 
 @attr.s(auto_attribs=True)
 class PostmanItem:
     name: str
     item: list[PostmanSubItem]
-    event: list = []
+    event: list = attr.Factory(list)
 
 
 @attr.s(auto_attribs=True)

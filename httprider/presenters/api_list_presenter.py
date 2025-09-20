@@ -218,7 +218,6 @@ class ApiListPresenter:
             self.model.item(api_call_row).setData(api_call, API_CALL_ROLE)
 
     def refresh_multiple_items(self, doc_ids: list[str], api_calls: list[ApiCall]):
-        assert len(doc_ids) == len(api_calls)
         for doc_id, api_call in zip(doc_ids, api_calls, strict=False):
             self.add_request_widget(doc_id, api_call, select_item=False)
 

@@ -106,9 +106,7 @@ class AppDataCache:
         return self.api_call_list.values()
 
     def get_api_call(self, api_call_id):
-        api_call = self.api_call_list.get(api_call_id)
-        assert api_call_id == api_call.id
-        return api_call
+        return self.api_call_list.get(api_call_id)
 
     def refresh_api_test_case(self, api_call_id):
         api_test_case = self.app_data_reader.get_api_test_case_from_db(api_call_id)
@@ -131,7 +129,6 @@ class AppDataCache:
                 del self.api_call_list[doc_id]
 
     def on_multiple_api_calls_added(self, doc_ids: list[str], api_calls: list[ApiCall]):
-        assert len(doc_ids) == len(api_calls)
         for doc_id, api_call in zip(doc_ids, api_calls, strict=False):
             api_call.id = doc_id
             self.api_call_list[api_call.id] = api_call
@@ -163,7 +160,7 @@ class AppDataCache:
     def get_all_env_variables(self):
         current_env = self.get_appstate_environment()
         environment: Environment = self.get_selected_environment(current_env)
-        return [f"${{{k}}}" for k in environment.get_data().keys()]
+        return [f"${{{k}}}" for k in environment.get_data()]
 
     def get_appstate_environment(self):
         app_state = self.get_app_state()

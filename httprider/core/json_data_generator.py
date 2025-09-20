@@ -41,14 +41,7 @@ class JsonDataGenerator:
         minute = self.rand_int(60, 1)
         second = self.rand_int(60, 1)
 
-        return "%s-%02d-%02dT%02d:%02d:%02d.000+00:00" % (
-            year,
-            month,
-            day,
-            hour,
-            minute,
-            second,
-        )
+        return f"{year}-{month:02d}-{day:02d}T{hour:02d}:{minute:02d}:{second:02d}.000+00:00"
 
     def fuzz_string(self, string_schema):
         is_enum = string_schema.get("enum")

@@ -31,7 +31,7 @@ class AssertionResultPresenter:
         api_call = app_settings.app_data_cache.get_api_call(api_test_case.api_call_id)
 
         if assertions_with_output:
-            api_call.last_assertion_result = all([a.result for a in assertions_with_output])
+            api_call.last_assertion_result = all(a.result for a in assertions_with_output)
         else:
             api_call.last_assertion_result = None
 

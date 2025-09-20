@@ -1,26 +1,26 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor, QFont, QFontDatabase, QIcon
+from PyQt6.QtGui import QColor
 
 from httprider.core.theme_mode import is_dark
 from httprider.themes.theme import Theme
 
 
 def configure_theme(application):
-    application.setWindowIcon(QIcon("icons:httprider.ico"))
-
-    application.setStyle(Theme(application))
+    theme = Theme(application)
     theme_mode = "dark" if is_dark() else "light"
-    application.style().load_stylesheet(theme_mode)
+    theme.load_stylesheet(theme_mode)
 
-    QFontDatabase.addApplicationFont("fonts:JetBrainsMono-Regular.ttf")
 
-    current_font: QFont = QFont("JetBrains Mono")
-    current_font.setPointSize(12)
-    application.setFont(current_font)
+def api_call_list_rect():
+    return QColor("#2b2b2b") if is_dark() else QColor("#ffffff")
+
+
+def api_call_list_pen():
+    return Qt.GlobalColor.white if is_dark() else Qt.GlobalColor.black
 
 
 def api_call_separator_rect():
-    return QColor("#404040") if is_dark() else QColor("#404040")
+    return QColor("#404040")
 
 
 def api_call_list_selected_rect():
@@ -52,20 +52,20 @@ def api_call_list_disabled_sub_title_color():
 
 
 def api_call_list_status_code_color():
-    return Qt.GlobalColor.white if is_dark() else Qt.GlobalColor.white
+    return Qt.GlobalColor.white
 
 
 def http_ex_success():
-    return QColor("#01721d") if is_dark() else QColor("#01721d")
+    return QColor("#01721d")
 
 
 def http_ex_client_err():
-    return QColor("#d8a413") if is_dark() else QColor("#d8a413")
+    return QColor("#d8a413")
 
 
 def http_ex_server_err():
-    return QColor("#a51e00") if is_dark() else QColor("#a51e00")
+    return QColor("#a51e00")
 
 
 def http_ex_no_response():
-    return QColor("#a51e00") if is_dark() else QColor("#a51e00")
+    return QColor("#a51e00")

@@ -5,10 +5,16 @@ __desktopid__ = "dev.deskriders.HttpRider"
 
 from pathlib import Path
 
-import sqlalchemy.dialects.sqlite
-import sqlalchemy.sql.default_comparator
-from pygments.styles.default import DefaultStyle
 from PyQt6.QtCore import QDir
+
+from httprider.core import *
+from httprider.core.constants import *
+from httprider.core.core_settings import app_settings as app_settings
+from httprider.core.generators import *
+from httprider.core.json_data_generator import *
+from httprider.core.pygment_styles import *
+from httprider.model import *
+from httprider.presenters import *
 
 resources_path = Path(__file__).parent.parent / "resources"
 QDir.addSearchPath("themes", resources_path.joinpath("themes").as_posix())

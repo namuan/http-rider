@@ -120,7 +120,7 @@ ignore = [
     "E741",
     # Temporary
     "F403",
-    "S101",
+#    "S101",
     "RUF012",
     "RUF001",
     "S311",
@@ -140,23 +140,24 @@ ignore = [
     "B904",
     "F405",
     "C408",
-    "F401",
-    "UP031",
-    "C416",
-    "F841",
-    "C416",
-    "E722",
-    "SIM118",
-    "SIM105",
-    "S110",
-    "E402",
-    "B007",
-    "TRY201",
-    "C419",
+#    "F401",
+#    "UP031",
+#    "C416",
+#    "F841",
+#    "C416",
+#    "E722",
+#    "SIM118",
+#    "SIM105",
+#    "S110",
+#    "E402",
+#    "B007",
+#    "TRY201",
+#    "C419",
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101"]
+"httprider/tests/*" = ["S101"]
+"httprider/generated/*" = ["E402"]
 
 [tool.ruff.format]
 preview = true

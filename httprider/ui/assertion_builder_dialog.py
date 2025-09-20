@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog
 
 from ..generated.assertion_builder_dialog import Ui_AssertionBuilderDialog
-from ..presenters import AssertionBuilderPresenter
+from ..presenters.assertion_builder_presenter import AssertionBuilderPresenter
 
 
 class AssertionBuilderDialog(QDialog, Ui_AssertionBuilderDialog):

@@ -1,49 +1,9 @@
-import functools
-
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import *
-
-from httprider.core.constants import REPLACEMENTS
-from httprider.model.app_data import ApiTestCase
-
-
-def apply_replacements(replacements, input_str):
-    return functools.reduce(lambda accum, lst: accum.replace(*lst), replacements, input_str)
-
-
-def assertion_variable_name(api_call_title, assertion_source, input_str):
-    norm_title = apply_replacements(REPLACEMENTS, api_call_title.lower().strip())
-    norm_input = apply_replacements(REPLACEMENTS, input_str.lower())
-
-    if norm_input:
-        return f"{ApiTestCase.DEFAULT_VAR_PREFIX}_{norm_title}_{assertion_source}_{norm_input}"
-    else:
-        return f"{ApiTestCase.DEFAULT_VAR_PREFIX}_{norm_title}_{assertion_source}"
-
-
-def populate_tree_with_json(json_data, json_model, tree_view):
-    json_model.setup_model(json_data)
-    tree_view.setModel(json_model)
-    tree_view.expandAll()
-    tree_view.header().setDefaultAlignment(Qt.AlignmentFlag.AlignHCenter)
-    tree_view.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-    tree_view.header().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
-
-
-def populate_tree_with_kv_dict(kv_dict, tree_widget):
-    tree_widget.clear()
-    for hn, hv in kv_dict:
-        item = QTreeWidgetItem([hn, hv])
-        tree_widget.addTopLevelItem(item)
-
-
 from .api_calls_history_presenter import ApiCallsHistoryPresenter
 from .api_list_presenter import ApiListPresenter
 from .assertion_builder_presenter import AssertionBuilderPresenter
-from .assertion_list_presenter import AssertionListPresenter
 from .assertion_result_presenter import AssertionResultPresenter
-from .body_assertion_presenter import BodyAssertionPresenter
 from .code_generator_presenter import CodeGeneratorPresenter
+from .common_utils import assertion_variable_name
 from .config_presenter import ConfigPresenter
 from .data_generator_presenter import DataGeneratorPresenter
 from .empty_frame_presenter import EmptyFramePresenter
@@ -54,11 +14,36 @@ from .exchange_presenter import ExchangePresenter
 from .file_menu_presenter import FileMenuPresenter
 from .fuzz_test_presenter import FuzzTestPresenter
 from .generators_menu_presenter import GeneratorsMenuPresenter
-from .headers_assertions_presenter import HeadersAssertionPresenter
 from .importer_presenter import ImporterPresenter
 from .kv_list_presenter import KeyValueListPresenter
 from .main_presenter import MainPresenter
-from .oepnapi_sdk_generator_presenter import OpenApiSdkGeneratorPresenter
+from .project_info_presenter import ProjectInfoPresenter
 from .request_presenter import RequestPresenter
 from .share_preview_presenter import SharePreviewPresenter
 from .tags_list_presenter import TagsListPresenter
+
+__all__ = [
+    "ApiListPresenter",
+    "ApiCallsHistoryPresenter",
+    "AssertionBuilderPresenter",
+    "AssertionResultPresenter",
+    "CodeGeneratorPresenter",
+    "ConfigPresenter",
+    "DataGeneratorPresenter",
+    "EmptyFramePresenter",
+    "EnvironmentConfigurationPresenter",
+    "EnvironmentMenuPresenter",
+    "EnvironmentsListPresenter",
+    "ExchangePresenter",
+    "FileMenuPresenter",
+    "FuzzTestPresenter",
+    "GeneratorsMenuPresenter",
+    "ImporterPresenter",
+    "KeyValueListPresenter",
+    "MainPresenter",
+    "ProjectInfoPresenter",
+    "RequestPresenter",
+    "SharePreviewPresenter",
+    "TagsListPresenter",
+    "assertion_variable_name",
+]

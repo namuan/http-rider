@@ -2,7 +2,7 @@ from PyQt6.QtCore import QModelIndex, Qt
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import QApplication, QHeaderView, QMenu
 
-from . import populate_tree_with_kv_dict
+from .common_utils import populate_tree_with_kv_dict
 
 
 class HeadersAssertionPresenter:

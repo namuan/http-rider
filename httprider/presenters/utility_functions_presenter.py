@@ -7,7 +7,7 @@ class UtilityFunctionsPresenter:
         self.parent = parent
 
         # update list of functions
-        for f in utility_func_map.keys():
+        for f in utility_func_map:
             self.view.function_selector.addItem(f)
 
         # Event handlers to refresh generated values

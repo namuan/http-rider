@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QApplication, QMenu, QTreeView
 
 from httprider.widgets.json_tree_widget import ItemRole, JsonModel
 
-from . import populate_tree_with_json
+from .common_utils import populate_tree_with_json
 
 
 class BodyAssertionPresenter:

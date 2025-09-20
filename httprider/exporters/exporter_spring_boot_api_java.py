@@ -132,7 +132,7 @@ def gen_test(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiT
     function_name = to_java_function_name(api_call.title)
     encoded_json_string = encode_json_string(last_exchange.request.request_body)
 
-    json_path_assertions = "\n".join([statement for statement in gen_test_assertions(api_test_case)])
+    json_path_assertions = "\n".join(list(gen_test_assertions(api_test_case)))
 
     test_code = f"""
 // 5. MockMvc test generator

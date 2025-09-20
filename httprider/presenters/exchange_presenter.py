@@ -11,8 +11,8 @@ from httprider.exporters.common import (
     response_body_highlighted,
 )
 from httprider.model.app_data import ApiCall, HttpExchange
-from httprider.presenters import populate_tree_with_kv_dict
 from httprider.presenters.common import markdown_request, markdown_response
+from httprider.presenters.common_utils import populate_tree_with_kv_dict
 
 
 class ExchangePresenter:

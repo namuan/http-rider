@@ -7,6 +7,7 @@ import json
 import logging
 import pkgutil
 import uuid
+from datetime import timedelta
 from enum import Enum
 from json import JSONDecodeError
 from pathlib import Path
@@ -20,6 +21,50 @@ from PyQt6.QtWidgets import QApplication
 from .constants import UTF_8_ENCODING, ContentType
 from .faker_config import fake
 from .generators import internal_func_rgx, random_string_generator, return_func_result
+
+__all__ = [
+    "UTF_8_ENCODING",
+    "ContentType",
+    "DynamicStringData",
+    "DynamicStringType",
+    "abbreviate",
+    "bytes_to_str",
+    "combine_request_headers",
+    "compact_json",
+    "data_type",
+    "elapsed_time_formatter",
+    "evaluate_nested_functions",
+    "fake",
+    "flatten_variables",
+    "format_json",
+    "gen_uuid",
+    "get_variable_tokens",
+    "guess_content_type",
+    "import_modules",
+    "internal_func_rgx",
+    "json_path",
+    "kv_list_to_dict",
+    "load_json_show_error",
+    "mask_secret",
+    "random_environment",
+    "random_project_name",
+    "random_string_generator",
+    "replace_response_variables",
+    "replace_variables",
+    "response_code_formatter",
+    "response_code_round_up",
+    "return_func_result",
+    "rot13",
+    "split_url_qs",
+    "str_to_base64_encoded_bytes",
+    "str_to_bool",
+    "str_to_bytes",
+    "str_to_int",
+    "strip_comments",
+    "template_sub",
+    "tor31",
+    "truncate",
+]
 
 
 class DynamicStringType(Enum):
@@ -85,6 +130,9 @@ def random_project_name():
 
 
 def elapsed_time_formatter(elapsed_time):
+    if isinstance(elapsed_time, timedelta):
+        total_ms = elapsed_time.total_seconds() * 1000
+        return "N/A" if total_ms <= 0 else f"{total_ms:.0f} ms"
     return "N/A" if elapsed_time <= 0 else f"{elapsed_time:.0f} ms"
 
 

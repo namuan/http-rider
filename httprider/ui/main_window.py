@@ -3,6 +3,7 @@ import sys
 import traceback
 
 from PyQt6.QtGui import QCloseEvent, QDesktopServices, QIcon
+from PyQt6.QtWidgets import QFrame, QGridLayout, QMainWindow, QPushButton, QSizePolicy, QToolBar
 
 from httprider.generated.base_window import Ui_MainWindow
 from httprider.presenters import *
@@ -108,7 +109,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.presenter.shutdown()
         try:
             QApplication.instance().exit(0)
+        # ruff: noqa: E722
         except:
+            logging.warning("Unable to exit")
             pass
 
     # End Main Window events

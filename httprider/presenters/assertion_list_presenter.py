@@ -16,7 +16,7 @@ from httprider.core.constants import ASSERTION_TYPE_ROLE, AssertionMatchers
 from httprider.core.core_settings import app_settings
 from httprider.model.app_data import Assertion, AssertionDataSource, HttpExchange
 
-from . import assertion_variable_name
+from .common_utils import assertion_variable_name
 
 
 class NoEditDelegate(QStyledItemDelegate):
