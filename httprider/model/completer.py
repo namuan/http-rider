@@ -1,9 +1,12 @@
+from typing import TYPE_CHECKING
+
 from PyQt6.QtGui import QStandardItem, QStandardItemModel
 
 from httprider.core.constants import DYNAMIC_STRING_ROLE
-from httprider.model.app_data import ApiTestCase
+from httprider.core.core_settings import app_settings
 
-from ..core.core_settings import app_settings
+if TYPE_CHECKING:
+    from httprider.model.app_data import ApiTestCase
 
 
 def get_completer_model():

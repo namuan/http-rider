@@ -3,7 +3,16 @@ import sys
 import traceback
 
 from PyQt6.QtGui import QCloseEvent, QDesktopServices, QIcon
-from PyQt6.QtWidgets import QFileDialog, QFrame, QGridLayout, QMainWindow, QPushButton, QSizePolicy, QToolBar
+from PyQt6.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QFrame,
+    QGridLayout,
+    QMainWindow,
+    QPushButton,
+    QSizePolicy,
+    QToolBar,
+)
 
 from httprider.generated.base_window import Ui_MainWindow
 from httprider.presenters import *
@@ -90,9 +99,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.api_list_presenter.run_all_api_calls()
 
     @staticmethod
-    def log_uncaught_exceptions(cls, exc, tb) -> None:
+    def log_uncaught_exceptions(exc_type, exc, tb) -> None:
         logging.critical("".join(traceback.format_tb(tb)))
-        logging.critical(f"{cls}: {exc}")
+        logging.critical(f"{exc_type}: {exc}")
 
     # Main Window events
     def resizeEvent(self, event):
@@ -112,7 +121,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # ruff: noqa: E722
         except:
             logging.warning("Unable to exit")
-            pass
 
     # End Main Window events
     def check_updates(self):

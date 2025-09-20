@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget
 
-from ..generated.tag_info_widget import Ui_TagInfoWidget
-from ..model.app_data import TagInfo
+from httprider.generated.tag_info_widget import Ui_TagInfoWidget
+from httprider.model.app_data import TagInfo
 
 
 class TagInfoWidget(QWidget, Ui_TagInfoWidget):

@@ -98,9 +98,7 @@ class FuzzTestPresenter:
         exchange_request = ExchangeRequest.from_api_call(api_call)
         exchange_request.headers = combine_request_headers(app_settings, exchange_request)
         var_tokens = get_variable_tokens(app_settings)
-        exchange_request = replace_variables(var_tokens, exchange_request)
-
-        return exchange_request
+        return replace_variables(var_tokens, exchange_request)
 
     def __generate_fuzzed_payload(self, request_json_body):
         if not request_json_body:

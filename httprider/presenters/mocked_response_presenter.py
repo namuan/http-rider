@@ -1,4 +1,4 @@
-from PyQt6.QtGui import QStandardItemModel
+from typing import TYPE_CHECKING
 
 from httprider.core import str_to_int
 from httprider.core.constants import COMMON_HEADERS, HTTP_CONTENT_TYPES
@@ -8,6 +8,9 @@ from httprider.exporters.common import highlight_format_json
 from httprider.model.app_data import MockedResponse
 from httprider.model.completer import get_completer_model
 from httprider.presenters.kv_list_presenter import KeyValueListPresenter
+
+if TYPE_CHECKING:
+    from PyQt6.QtGui import QStandardItemModel
 
 
 class MockedResponsePresenter:

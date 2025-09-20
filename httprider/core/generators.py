@@ -57,8 +57,7 @@ def custom_string_generator(args):
         if char_in_pattern == "*":
             if upper_case:
                 return random.choice(string.ascii_uppercase)
-            else:
-                return random.choice(string.ascii_lowercase)
+            return random.choice(string.ascii_lowercase)
         if char_in_pattern == "#":
             return random.choice(string.digits)
         return char_in_pattern
@@ -112,10 +111,9 @@ def call_generator_func(func_name, parsed_args):
     generator_function = m.get(func_name)
     if generator_function and args:
         return generator_function(args)
-    elif generator_function and not args:
+    if generator_function and not args:
         return generator_function()
-    else:
-        return noop(args)
+    return noop(args)
 
 
 # Accepts a regex match object which should have matched the regex for internal_func_rgx
@@ -130,8 +128,7 @@ def return_func_result(s):
 def file_func_generator(args, wrap_in_quotes=False):
     if wrap_in_quotes:
         return f'${{file("{args}")}}'
-    else:
-        return f"${{file({args})}}"
+    return f"${{file({args})}}"
 
 
 def is_file_function(func_value):

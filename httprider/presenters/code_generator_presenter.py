@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QStandardItem
@@ -8,7 +9,9 @@ from httprider.core.constants import EXPORTER_COMBO_ROLE
 from httprider.core.core_settings import app_settings
 from httprider.core.pygment_styles import pyg_styles
 from httprider.exporters import exporter_plugins
-from httprider.model.app_data import ApiCall
+
+if TYPE_CHECKING:
+    from httprider.model.app_data import ApiCall
 
 
 class DisplayMode(Enum):

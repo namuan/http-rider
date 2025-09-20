@@ -26,7 +26,10 @@ class Ui_CodeGeneratorDialog:
         self.cmb_exporters.setObjectName("cmb_exporters")
         self.horizontalLayout.addWidget(self.cmb_exporters)
         spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+            40,
+            20,
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Minimum,
         )
         self.horizontalLayout.addItem(spacerItem)
         self.btn_copy_code = QtWidgets.QPushButton(parent=CodeGeneratorDialog)

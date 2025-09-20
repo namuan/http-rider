@@ -3,16 +3,9 @@ import logging
 
 from PyQt6.QtCore import QObject, pyqtSignal
 
-from ..core import gen_uuid
-from ..core.constants import API_CALL_RECORD_TYPE, ENVIRONMENT_RECORD_TYPE
-from ..model.app_data import (
-    ApiCall,
-    ApiTestCase,
-    AppData,
-    Environment,
-    HttpExchange,
-    ProjectInfo,
-)
+from httprider.core import gen_uuid
+from httprider.core.constants import API_CALL_RECORD_TYPE, ENVIRONMENT_RECORD_TYPE
+from httprider.model.app_data import ApiCall, ApiTestCase, AppData, Environment, HttpExchange, ProjectInfo
 
 
 class AppDataSignals(QObject):

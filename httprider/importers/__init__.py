@@ -10,6 +10,7 @@ def structure_attrs_from_dict(obj, cl):
     conv_obj = {}  # Start fresh
 
     # dispatch = self._structure_func.dispatch
+    # ruff: noqa: SLF001
     dispatch = cattr.global_converter._structure_func.dispatch  # Ugly I know
     for a in cl.__attrs_attrs__:
         # We detect the type by metadata.

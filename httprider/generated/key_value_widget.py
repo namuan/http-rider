@@ -42,4 +42,4 @@ class Ui_KeyValueWidget:
         self.btn_remove_header.setText(_translate("KeyValueWidget", "-"))
 
 
-from ..widgets.completion_line_edit import CompletionLineEdit
+from httprider.widgets.completion_line_edit import CompletionLineEdit

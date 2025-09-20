@@ -3,7 +3,7 @@ import logging
 
 from PyQt6.QtCore import QObject, pyqtSignal
 
-from ..core.constants import (
+from httprider.core.constants import (
     API_CALL_RECORD_TYPE,
     API_TEST_CASE_RECORD_TYPE,
     APP_STATE_RECORD_TYPE,
@@ -11,15 +11,7 @@ from ..core.constants import (
     HTTP_EXCHANGE_RECORD_TYPE,
     PROJECT_INFO_RECORD_TYPE,
 )
-from ..model.app_data import (
-    ApiCall,
-    ApiTestCase,
-    AppData,
-    AppState,
-    Environment,
-    HttpExchange,
-    ProjectInfo,
-)
+from httprider.model.app_data import ApiCall, ApiTestCase, AppData, AppState, Environment, HttpExchange, ProjectInfo
 
 
 class AppDataReadSignals(QObject):
@@ -70,7 +62,8 @@ class AppDataReader(AppData):
         table = self.ldb[HTTP_EXCHANGE_RECORD_TYPE]
         http_exchange_db = table.find_one(exchange_id=exchange_id)
         if not http_exchange_db:
-            raise LookupError(f"Unable to find exchange with id: {exchange_id}")
+            msg = f"Unable to find exchange with id: {exchange_id}"
+            raise LookupError(msg)
 
         http_exchange_json = json.loads(http_exchange_db["object"])
         return HttpExchange.from_json(http_exchange_json)

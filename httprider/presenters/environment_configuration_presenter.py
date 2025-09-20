@@ -113,8 +113,7 @@ class EnvironmentConfigurationPresenter:
     def load_configuration_dialog(self):
         if not self.initial_load:
             return self.parent_view.show()
-        else:
-            self.initial_load = False
+        self.initial_load = False
 
         environments = app_settings.app_data_cache.get_environments()
         if not environments:
@@ -124,6 +123,7 @@ class EnvironmentConfigurationPresenter:
 
         self.parent_view.lst_environments.setCurrentRow(0)
         self.parent_view.show()
+        return None
 
     def on_close(self):
         selected_item = self.parent_view.lst_environments.currentItem()

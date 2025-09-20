@@ -1,10 +1,9 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 from httprider.core.api_call_interactor import api_call_interactor
-
-from ..generated.tag_label_widget import Ui_TagLabelWidget
-from ..model.app_data import ApiCall
-from ..widgets.new_tag_entry_input import NewTagEntryLineEdit
+from httprider.generated.tag_label_widget import Ui_TagLabelWidget
+from httprider.model.app_data import ApiCall
+from httprider.widgets.new_tag_entry_input import NewTagEntryLineEdit
 
 
 class TagLabel(QtWidgets.QLabel):

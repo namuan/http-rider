@@ -1,17 +1,13 @@
 import attr
 from pygments.lexers.jvm import JavaLexer
 
-from ..codegen.http_status_code_mapping import Languages, to_http_status
-from ..codegen.schema_to_java_generator import (
-    code_from_schema,
-    to_java_class_name,
-    to_java_function_name,
-)
-from ..core.constants import AssertionMatchers
-from ..core.core_settings import app_settings
-from ..core.json_schema import schema_from_json
-from ..exporters.common import *
-from ..model.app_data import ApiCall, ApiTestCase, Assertion, HttpExchange, ProjectInfo
+from httprider.codegen.http_status_code_mapping import Languages, to_http_status
+from httprider.codegen.schema_to_java_generator import code_from_schema, to_java_class_name, to_java_function_name
+from httprider.core.constants import AssertionMatchers
+from httprider.core.core_settings import app_settings
+from httprider.core.json_schema import schema_from_json
+from httprider.exporters.common import *
+from httprider.model.app_data import ApiCall, ApiTestCase, Assertion, HttpExchange, ProjectInfo
 
 
 def gen_tags(tags: list):
@@ -25,8 +21,7 @@ def convert_internal_variable(str_with_variable):
 def to_spring_http_method(http_method: str):
     if http_method.lower() not in ["options", "head"]:
         return f"@{to_java_class_name(http_method)}Mapping"
-    else:
-        return "@GetMapping"
+    return "@GetMapping"
 
 
 def to_mock_mvc_http_method(http_method: str):
@@ -76,7 +71,7 @@ def gen_controller(api_call: ApiCall, last_exchange: HttpExchange, api_test_case
     mapping = to_spring_http_method(api_call.http_method)
     resp_status, resp_message, resp_code = to_spring_response_status(last_exchange.response.http_status_code)
     function_name = to_java_function_name(api_call.title)
-    controller = f"""
+    return f"""
 // 4. Controller method
 import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.*;
@@ -97,8 +92,6 @@ public ApiResponse {function_name}() {{
     return response;
 }}
     """
-
-    return controller
 
 
 def to_json_result_matcher(a: Assertion):
@@ -134,7 +127,7 @@ def gen_test(api_call: ApiCall, last_exchange: HttpExchange, api_test_case: ApiT
 
     json_path_assertions = "\n".join(list(gen_test_assertions(api_test_case)))
 
-    test_code = f"""
+    return f"""
 // 5. MockMvc test generator
 // Add related imports here
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -151,8 +144,6 @@ public void test{function_name}() throws Exception {{
         .andReturn();
 }}
     """
-
-    return test_code
 
 
 def converter(assertion):
@@ -172,7 +163,7 @@ def converter_path_statement(assertion):
 
 
 def gen_fox_config(project_info: ProjectInfo):
-    output = f"""
+    return f"""
 // 1. SpringFox configuration
 import org.springframework.context.annotation.*;
 import springfox.documentation.builders.*;
@@ -234,7 +225,6 @@ public class SpringFoxConfiguration {{
     }}
 }}
     """
-    return output
 
 
 @attr.s

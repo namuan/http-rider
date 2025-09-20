@@ -5,12 +5,12 @@ from typing import Any
 import attr
 import cattr
 
-from ..core import gen_uuid, internal_func_rgx
-from ..core.constants import AssertionDataSource, AssertionMatchers
-from ..core.core_settings import app_settings
-from ..core.generators import call_generator_func
-from ..exporters.common import *
-from ..model.app_data import ApiTestCase, Assertion, Environment, HttpExchange
+from httprider.core import gen_uuid, internal_func_rgx
+from httprider.core.constants import AssertionDataSource, AssertionMatchers
+from httprider.core.core_settings import app_settings
+from httprider.core.generators import call_generator_func
+from httprider.exporters.common import *
+from httprider.model.app_data import ApiTestCase, Assertion, Environment, HttpExchange
 
 internal_func_map = defaultdict(str)
 
@@ -121,12 +121,11 @@ def to_runscope_assertion(assertion: Assertion):
 
 
 def to_runscope_variable(assertion: Assertion):
-    runscope_var = RunscopeVariable(
+    return RunscopeVariable(
         property=to_runscope_property(assertion.selector),
         source=to_runscope_source(assertion.data_from),
         name=assertion.var_name,
     )
-    return runscope_var
 
 
 def convert_internal_variable(str_with_variable):
@@ -145,12 +144,12 @@ def find_internal_functions(str_with_internal_func):
 
 
 def to_runscope_format(str_with_internal_keywords):
-    """
-    Using a global variable to store function map. It creates a map of variable name -> evaluated function value
+    """Using a global variable to store function map. It creates a map of variable name -> evaluated function value
     The global variable is then passed to to_runscope_env where the variables are set as initial variables
     :param str_with_internal_keywords: It could be URL, Header/Query param value or the request body
     :return: string with the internal keywords replaced by runscope syntax
     """
+    # ruff: noqa: PLW0603
     global internal_func_map
     func_map = {
         f"{ENV_PREFIX}_{k[0]}": call_generator_func(k[0], k[1])

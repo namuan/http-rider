@@ -21,7 +21,7 @@ class Ui_UtilityFunctionsDialog:
         self.buttonBox.setStyleSheet("color: rgb(0, 0, 0);")
         self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(
-            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok
+            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok,
         )
         self.buttonBox.setObjectName("buttonBox")
         self.lbl_selected_text = QtWidgets.QLabel(parent=UtilityFunctionsDialog)

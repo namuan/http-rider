@@ -22,7 +22,8 @@ class Ui_EnvironmentsConfigurationDialog:
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.splitter = QtWidgets.QSplitter(parent=EnvironmentsConfigurationDialog)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Preferred,
         )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
@@ -40,7 +41,10 @@ class Ui_EnvironmentsConfigurationDialog:
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+            40,
+            20,
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Minimum,
         )
         self.horizontalLayout.addItem(spacerItem)
         self.btn_duplicate_environment = QtWidgets.QToolButton(parent=self.frame)
@@ -59,7 +63,8 @@ class Ui_EnvironmentsConfigurationDialog:
         self.verticalLayout.addWidget(self.lst_environments)
         self.lst_environment_data = QtWidgets.QListWidget(parent=self.splitter)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)

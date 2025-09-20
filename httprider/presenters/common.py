@@ -46,10 +46,9 @@ def md_request_response_generator(exchange: HttpExchange, include_sep=True):
     request_rendered = markdown_request(exchange)
     response_rendered = markdown_response(exchange)
 
-    content = f"""#### Request
+    return f"""#### Request
 {request_rendered}
 #### Response
 {response_rendered}
 {"=======================================================================================" if include_sep else ""}
     """
-    return content

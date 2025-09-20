@@ -50,7 +50,7 @@ class Ui_Configuration:
         self.formLayout.setLabelAlignment(
             QtCore.Qt.AlignmentFlag.AlignLeading
             | QtCore.Qt.AlignmentFlag.AlignLeft
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            | QtCore.Qt.AlignmentFlag.AlignVCenter,
         )
         self.formLayout.setObjectName("formLayout")
         self.label = QtWidgets.QLabel(parent=self.tab)

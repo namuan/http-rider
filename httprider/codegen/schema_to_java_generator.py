@@ -39,8 +39,7 @@ def gen_class_variable(var_name, var_type, is_array=False):
     java_type = __type_mapping.get(json_type, f"Unhandled type {json_type}")
     if is_array:
         return f"List<{java_type}> {to_java_variable(var_name)};"
-    else:
-        return f"{java_type} {to_java_variable(var_name)};"
+    return f"{java_type} {to_java_variable(var_name)};"
 
 
 def gen_class(clazz_name, clazz_properties):
@@ -59,12 +58,11 @@ def gen_array(var_name, json_schema):
     array_items = json_schema.get("items")
     if not array_items:
         return f"Object {var_name};"
-    elif array_items and array_items.get("type") == "object":
+    if array_items and array_items.get("type") == "object":
         clazz_name = var_name.capitalize()
         item_class = gen_class(clazz_name, array_items.get("properties"))
         return item_class + "\n" + f"List<{clazz_name}> {var_name};"
-    else:
-        return gen_class_variable(var_name, array_items, is_array=True)
+    return gen_class_variable(var_name, array_items, is_array=True)
 
 
 def code_from_schema(root_clazz, json_schema):
@@ -73,5 +71,6 @@ def code_from_schema(root_clazz, json_schema):
     schema_type = json_schema.get("type", "object")
     if schema_type == "array":
         return gen_array("Root", json_schema)
-    elif schema_type == "object" and json_schema.get("properties"):
+    if schema_type == "object" and json_schema.get("properties"):
         return gen_class(root_clazz, json_schema["properties"])
+    return None

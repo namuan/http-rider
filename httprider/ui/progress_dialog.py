@@ -2,8 +2,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtWidgets import QDialog
 
-from ..external.rest_api_connector import http_exchange_signals
-from ..generated.progress_dialog import Ui_ProgressDialog
+from httprider.external.rest_api_connector import http_exchange_signals
+from httprider.generated.progress_dialog import Ui_ProgressDialog
 
 
 class ProgressDialog(QDialog, Ui_ProgressDialog):

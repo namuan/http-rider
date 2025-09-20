@@ -9,15 +9,12 @@ def styles_from_file(filename):
     if QFileInfo(filename).exists():
         qss_file = QFile(filename)
         qss_file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
-        content = QTextStream(qss_file).readAll()
-        return content
-    else:
-        return None
+        return QTextStream(qss_file).readAll()
+    return None
 
 
 def pyg_styles():
     if __pyg_styles:
         return __pyg_styles
-    else:
-        pyg_theme = "dark" if is_dark() else "light"
-        return styles_from_file(f"themes:pyg-{pyg_theme}.css")
+    pyg_theme = "dark" if is_dark() else "light"
+    return styles_from_file(f"themes:pyg-{pyg_theme}.css")

@@ -35,7 +35,7 @@ def to_python_requests(idx, api_call: ApiCall, last_exchange: HttpExchange):
     }},
     """
 
-    py_func = f"""
+    return f"""
     @task
     # @task(10) # To run this test 10 times
     def {func_name}(self):
@@ -49,7 +49,6 @@ def to_python_requests(idx, api_call: ApiCall, last_exchange: HttpExchange):
         )
         print_details("{func_name}", response)
     """
-    return py_func
 
 
 @attr.s(auto_attribs=True)
@@ -121,11 +120,10 @@ class ApiUser(HttpUser):
 
     def __export_api_call(self, idx, api_call):
         last_exchange = self.app_config.app_data_cache.get_last_exchange(api_call.id)
-        doc = f"""
+        return f"""
     # {api_call.title}
     {to_python_requests(idx, api_call, last_exchange)}
 """
-        return doc
 
 
 exporter = LocustTestsExporter(app_config=app_settings)

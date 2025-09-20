@@ -9,7 +9,7 @@ def __delete_nested_keys(nested_dict, keys):
     for k in keys:
         with suppress(KeyError):
             del nested_dict[k]
-    for _ke, v in nested_dict.items():
+    for v in nested_dict.values():
         if isinstance(v, dict):
             __delete_nested_keys(v, keys)
 

@@ -72,9 +72,8 @@ class JsonDataGenerator:
         arr_length = self.rand_int(self.array_max_length, 0)
         if arr_items_type == "object":
             return [self.fuzz_object(arr_schema["items"]["properties"]) for _ in range(arr_length)]
-        else:
-            fuzz_func = self.type_mapping.get(arr_items_type)
-            return [fuzz_func(items) for _ in range(arr_length)]
+        fuzz_func = self.type_mapping.get(arr_items_type)
+        return [fuzz_func(items) for _ in range(arr_length)]
 
     def fuzz_object(self, root_properties):
         obj_root = {}
@@ -92,8 +91,9 @@ class JsonDataGenerator:
         schema_type = json_schema.get("type", "object")
         if schema_type == "array":
             return self.fuzz_array(json_schema)
-        elif schema_type == "object" and json_schema.get("properties"):
+        if schema_type == "object" and json_schema.get("properties"):
             return self.fuzz_object(json_schema["properties"])
+        return None
 
 
 jdg = JsonDataGenerator()

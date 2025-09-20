@@ -133,8 +133,7 @@ class ExchangeRequest:
     def url_with_qp(self):
         if self.query_params:
             return f"{self.http_url}?{self.query_params}"
-        else:
-            return self.http_url
+        return self.http_url
 
     @classmethod
     def from_api_call(cls, api_call: ApiCall, hide_secrets=True):

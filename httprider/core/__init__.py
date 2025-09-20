@@ -101,8 +101,7 @@ def truncate(directory, with_parent=True):
     p = Path(directory)
     if with_parent:
         return f"../{p.parent.name}/{p.name}"
-    else:
-        return p.name
+    return p.name
 
 
 def str_to_int(int_str, default=0):
@@ -168,8 +167,7 @@ def json_path(json_doc, path_query):
         key_found = parsed_query.find(j)
         if key_found:
             return key_found[0].value
-        else:
-            return None
+        return None
     except Exception:
         logging.exception(f"json_path failed: {json_doc} path query: {path_query}")
         return None
@@ -190,9 +188,7 @@ def replace_response_variables(vars_tokens, exchange_response):
 
 
 def combine_request_headers(app_settings, exchange_request):
-    """
-    Inject common headers respecting existing headers on the request
-    """
+    """Inject common headers respecting existing headers on the request"""
     project_info = app_settings.app_data_reader.get_or_create_project_info()
     common_headers = {k: v.value for k, v in project_info.common_headers.items()}
     return {**common_headers, **exchange_request.headers}
@@ -206,8 +202,7 @@ def get_variable_tokens(app_settings):
     flatten_runtime_vars = functools.reduce(flatten_variables, all_runtime_vars, {})
 
     env_map = env.get_env_map()
-    vars_tokens = {**env_map, **flatten_runtime_vars}
-    return vars_tokens
+    return {**env_map, **flatten_runtime_vars}
 
 
 def replace_variables(vars_tokens, exchange_request):
@@ -253,8 +248,7 @@ def split_url_qs(url: str):
             url_qs[0],
             {qk: DynamicStringData(value=",".join(qv)) for qk, qv in qs.items()},
         )
-    else:
-        return url_qs[0], {}
+    return url_qs[0], {}
 
 
 def format_json(json_str):
@@ -289,8 +283,7 @@ def guess_content_type(body):
 
 def load_json_show_error(json_str):
     try:
-        j = json.loads(json_str)
-        return j
+        return json.loads(json_str)
     except JSONDecodeError:
         logging.exception(f"Error in loading JSON: {json_str}")
 

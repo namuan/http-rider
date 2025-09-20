@@ -28,7 +28,8 @@ class Ui_MainWindow:
         self.lst_http_requests.setObjectName("lst_http_requests")
         self.frame_request_response = QtWidgets.QFrame(parent=self.splitter)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred
+            QtWidgets.QSizePolicy.Policy.Preferred,
+            QtWidgets.QSizePolicy.Policy.Preferred,
         )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
@@ -63,7 +64,7 @@ class Ui_MainWindow:
         self.txt_http_url.setAlignment(
             QtCore.Qt.AlignmentFlag.AlignLeading
             | QtCore.Qt.AlignmentFlag.AlignLeft
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            | QtCore.Qt.AlignmentFlag.AlignVCenter,
         )
         self.txt_http_url.setObjectName("txt_http_url")
         self.horizontalLayout.addWidget(self.txt_http_url)
@@ -78,7 +79,8 @@ class Ui_MainWindow:
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.tabWidget = QtWidgets.QTabWidget(parent=self.frame_request_response)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
@@ -143,7 +145,10 @@ class Ui_MainWindow:
         self.chk_mock_response_enabled.setObjectName("chk_mock_response_enabled")
         self.horizontalLayout_16.addWidget(self.chk_mock_response_enabled)
         spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+            40,
+            20,
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Minimum,
         )
         self.horizontalLayout_16.addItem(spacerItem)
         self.txt_mocked_response_code = QtWidgets.QLineEdit(parent=self.tab_7)
@@ -185,7 +190,8 @@ class Ui_MainWindow:
         self.verticalLayout.addWidget(self.list_assertion_results)
         self.frame_exchange = QtWidgets.QFrame(parent=self.splitter)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred
+            QtWidgets.QSizePolicy.Policy.Preferred,
+            QtWidgets.QSizePolicy.Policy.Preferred,
         )
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
@@ -320,11 +326,13 @@ class Ui_MainWindow:
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_description), _translate("MainWindow", "Description"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_headers), _translate("MainWindow", "Headers"))
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.tab_queryparams), _translate("MainWindow", "Query Params")
+            self.tabWidget.indexOf(self.tab_queryparams),
+            _translate("MainWindow", "Query Params"),
         )
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_formparams), _translate("MainWindow", "Form Params"))
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.tab_request_body), _translate("MainWindow", "Request Body")
+            self.tabWidget.indexOf(self.tab_request_body),
+            _translate("MainWindow", "Request Body"),
         )
         self.chk_mock_response_enabled.setText(_translate("MainWindow", "Enabled"))
         self.txt_mocked_response_code.setPlaceholderText(_translate("MainWindow", "200"))
@@ -352,6 +360,6 @@ class Ui_MainWindow:
         self.tabWidget_4.setTabText(self.tabWidget_4.indexOf(self.tab_5), _translate("MainWindow", "Body"))
 
 
-from ..widgets.api_calls_list_view import ApiCallsListView
-from ..widgets.completion_line_edit import CompletionLineEdit
-from ..widgets.completion_plain_text import CompletionPlainTextEdit
+from httprider.widgets.api_calls_list_view import ApiCallsListView
+from httprider.widgets.completion_line_edit import CompletionLineEdit
+from httprider.widgets.completion_plain_text import CompletionPlainTextEdit

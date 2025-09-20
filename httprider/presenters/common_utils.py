@@ -21,8 +21,7 @@ def assertion_variable_name(api_call_title, assertion_source, input_str):
 
     if norm_input:
         return f"{ApiTestCase.DEFAULT_VAR_PREFIX}_{norm_title}_{assertion_source}_{norm_input}"
-    else:
-        return f"{ApiTestCase.DEFAULT_VAR_PREFIX}_{norm_title}_{assertion_source}"
+    return f"{ApiTestCase.DEFAULT_VAR_PREFIX}_{norm_title}_{assertion_source}"
 
 
 def populate_tree_with_json(json_data, json_model, tree_view):

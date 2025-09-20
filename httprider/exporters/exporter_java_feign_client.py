@@ -1,23 +1,19 @@
 import attr
 from pygments.lexers.jvm import JavaLexer
 
-from ..codegen.http_status_code_mapping import Languages, to_http_status
-from ..codegen.schema_to_java_generator import (
-    code_from_schema,
-    to_java_function_name,
-)
-from ..core.core_settings import app_settings
-from ..core.json_schema import schema_from_json
-from ..exporters.common import *
-from ..model.app_data import ApiCall, ApiTestCase, HttpExchange
+from httprider.codegen.http_status_code_mapping import Languages, to_http_status
+from httprider.codegen.schema_to_java_generator import code_from_schema, to_java_function_name
+from httprider.core.core_settings import app_settings
+from httprider.core.json_schema import schema_from_json
+from httprider.exporters.common import *
+from httprider.model.app_data import ApiCall, ApiTestCase, HttpExchange
 
 
 def to_spring_http_method(http_method: str):
     norm_http_method = http_method.lower()
     if norm_http_method not in ["options", "head"]:
         return f"@{norm_http_method.lower().capitalize()}Mapping"
-    else:
-        return "@GetMapping"
+    return "@GetMapping"
 
 
 def to_spring_response_status(http_status_code):
@@ -65,12 +61,10 @@ def gen_feign_client_class(api_call: ApiCall, last_exchange: HttpExchange, api_t
     if has_response:
         mapping_annotations.append(f'produces = "{response_media_type}"')
 
-    feign_clazz = f"""
+    return f"""
     {mapping}({",".join(mapping_annotations)})
     ApiResponse {function_name}(ApiRequest apiRequest);
     """
-
-    return feign_clazz
 
 
 @attr.s

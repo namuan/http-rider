@@ -87,7 +87,7 @@ _mappings = {
         508: ("HttpStatus.LOOP_DETECTED", "Loop Detected"),
         509: ("HttpStatus.BANDWIDTH_LIMIT_EXCEEDED", "Bandwidth Limit Exceeded"),
         510: ("HttpStatus.NOT_EXTENDED", "Not Extended"),
-    }
+    },
 }
 
 
@@ -96,5 +96,4 @@ def to_http_status(http_status_code, lang):
 
 
 if __name__ == "__main__":
-    print(to_http_status(409, Languages.JAVA))
-    print(to_http_status(400, Languages.JAVA))
+    pass

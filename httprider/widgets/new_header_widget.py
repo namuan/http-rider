@@ -1,6 +1,6 @@
 from PyQt6 import QtWidgets
 
-from ..generated.new_item_widget import Ui_NewItemWidget
+from httprider.generated.new_item_widget import Ui_NewItemWidget
 
 
 class NewItemButtonWidget(QtWidgets.QWidget, Ui_NewItemWidget):

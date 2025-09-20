@@ -40,7 +40,3 @@ class Requester:
 
 if __name__ == "__main__":
     r = Requester()
-    print(f"{r.resource_in('http://localhost:8080', 'localhost, ford.com')=}")
-    print(f"{r.resource_in('https://internal.httprider.com/api', 'localhost, httprider.com')=}")
-    print(f"{r.resource_in('https://internal.google.com/api', 'localhost, httprider.com')=}")
-    print(f"{r.resource_in('https://internal.google.com/api', 'localhost, httprider.com, google.com')=}")

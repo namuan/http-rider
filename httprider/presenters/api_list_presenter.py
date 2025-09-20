@@ -151,7 +151,7 @@ class ApiListPresenter:
             logging.info(
                 f"API Call: {api_call.id} - "
                 f"New Sequence {new_sequence_number} - "
-                f"Moved between {prev_sequence_number} and {next_sequence_number}"
+                f"Moved between {prev_sequence_number} and {next_sequence_number}",
             )
 
             api_call_interactor.update_api_call(api_call.id, api_call)
@@ -230,7 +230,8 @@ class ApiListPresenter:
         self.model.clear()
         app_state = app_settings.app_data_cache.get_app_state()
         api_calls = app_settings.app_data_cache.filter_api_calls(
-            search_query=app_state.selected_search, search_tag=app_state.selected_tag
+            search_query=app_state.selected_search,
+            search_tag=app_state.selected_tag,
         )
         for api in api_calls:
             self.add_request_widget(api.id, api, select_item=False)
@@ -258,8 +259,7 @@ class ApiListPresenter:
         api_call_interactor.add_api_call(duplicate_api_call)
 
     def __row_for_api_call(self, api_call_id):
-        api_call_row = next(
+        return next(
             (n for n in range(self.model.rowCount()) if self.model.item(n).data(API_ID_ROLE) == api_call_id),
             -1,
         )
-        return api_call_row

@@ -1,7 +1,7 @@
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QDialog
 
-from ..generated.import_text_dialog import Ui_ImportTextDialog
+from httprider.generated.import_text_dialog import Ui_ImportTextDialog
 
 
 class ImportTextDialog(QDialog, Ui_ImportTextDialog):

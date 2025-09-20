@@ -83,29 +83,31 @@ class OpenApiv3Exporter:
             if last_exchange.request.request_body:
                 operations[http_method]["requestBody"] = operations[http_method].get("requestBody", {})
                 operations[http_method]["requestBody"]["content"] = operations[http_method]["requestBody"].get(
-                    "content", {}
+                    "content",
+                    {},
                 )
 
                 request_content_type = last_exchange.request.content_type()
                 operations[http_method]["requestBody"]["content"][request_content_type] = schema_from_json(
-                    last_exchange.request.request_body
+                    last_exchange.request.request_body,
                 )
 
             # Response object
             response_code = last_exchange.response.http_status_code
             if response_code:
                 operations[http_method]["responses"] = {
-                    response_code: {"description": "Map Status Code to Description Here"}
+                    response_code: {"description": "Map Status Code to Description Here"},
                 }
 
                 if last_exchange.response.response_body:
                     generated_response_schema = schema_from_json(
-                        last_exchange.response.response_body, remove_required=True
+                        last_exchange.response.response_body,
+                        remove_required=True,
                     )
                     response_content_type = last_exchange.response.content_type()
 
                     operations[http_method]["responses"][response_code]["content"] = {
-                        response_content_type: generated_response_schema
+                        response_content_type: generated_response_schema,
                     }
 
         # Build spec
@@ -114,8 +116,7 @@ class OpenApiv3Exporter:
     def url_from_last_exchange(self, api_calls, servers):
         api_call = api_calls[0]
         last_exchange = self.app_config.app_data_cache.get_last_exchange(api_call.id)
-        http_relative_uri = extract_uri(last_exchange.request.http_url, servers)
-        return http_relative_uri
+        return extract_uri(last_exchange.request.http_url, servers)
 
     def add_params(self, parameters, source_params, params_type):
         for param, param_value in source_params.items():

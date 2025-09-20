@@ -29,7 +29,7 @@ class Ui_ImportTextDialog:
         self.btn_dialog_buttons = QtWidgets.QDialogButtonBox(parent=ImportTextDialog)
         self.btn_dialog_buttons.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.btn_dialog_buttons.setStandardButtons(
-            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok
+            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok,
         )
         self.btn_dialog_buttons.setObjectName("btn_dialog_buttons")
         self.verticalLayout.addWidget(self.btn_dialog_buttons)

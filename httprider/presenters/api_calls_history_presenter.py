@@ -69,5 +69,4 @@ class ApiCallsHistoryPresenter:
 
         if is_selected:
             return "selected" + color_code
-        else:
-            return color_code
+        return color_code

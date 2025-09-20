@@ -130,13 +130,6 @@ class RequestPresenter:
         self.update_tags_on_form(self.current, self.current.tags)
         self.mocked_response_presenter.object_to_form(self.current.mocked_response)
 
-        # Try setting the border to red
-        # @todo: One way to indicate that JSON is invalid.
-        # Not sure that best way to code it
-        # self.view.txt_request_body.setStyleSheet("border: 1px solid red")
-        # self.view.txt_request_body.setLineWidth(1)
-        # self.view.txt_request_body.setObjectName("txt_api_description")
-
     def save_new_tag(self, new_tag):
         if new_tag not in self.current.tags:
             api_call_interactor.add_tag_to_api_call(self.current, new_tag)

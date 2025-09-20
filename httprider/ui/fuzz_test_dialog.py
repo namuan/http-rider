@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog
 
-from ..generated.fuzz_test_dialog import Ui_FuzzTestDialog
-from ..presenters import FuzzTestPresenter
+from httprider.generated.fuzz_test_dialog import Ui_FuzzTestDialog
+from httprider.presenters import FuzzTestPresenter
 
 
 class FuzzTestDialog(QDialog, Ui_FuzzTestDialog):

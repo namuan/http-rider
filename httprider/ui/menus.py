@@ -1,12 +1,16 @@
 import logging
 from functools import partial
+from typing import TYPE_CHECKING
 
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QMenu
 
-from ..importers import importer_plugins
+from httprider.importers import importer_plugins
+
+if TYPE_CHECKING:
+    from PyQt6.QtWidgets import QMenu
 
 
+# ruff: noqa: PLR0915
 def menu_items(self):
     # File Menu
     new_action = QAction("&New", self)
@@ -24,18 +28,12 @@ def menu_items(self):
     save_as_action = QAction("Save &As...", self)
     save_as_action.triggered.connect(self.file_menu_presenter.on_file_save_as)
 
-    # save_env_and_apis_action = QAction("Save &Environments And APIs...", self)
-    # save_env_and_apis_action.triggered.connect(
-    #     self.file_menu_presenter.on_file_save_env_and_apis
-    # )
-
     f: QMenu = self.menu_bar.addMenu("&File")
     f.addAction(new_action)
     f.addAction(open_action)
     f.addSeparator()
     f.addAction(save_action)
     f.addAction(save_as_action)
-    # f.addAction(save_env_and_apis_action)
 
     # Separate Import menu with dynamic plugin discovery
     import_menu: QMenu = self.menu_bar.addMenu("&Import")
@@ -85,10 +83,3 @@ def menu_items(self):
     r: QMenu = self.menu_bar.addMenu("&Environments")
     r.addAction(export_env_action)
     r.addAction(import_env_action)
-
-    # Generators Menu
-    # openapi_sdk_gen_action = QAction("&OpenAPI SDK", self)
-    # openapi_sdk_gen_action.triggered.connect(self.generator_menu_presenter.on_openapi_sdk_generator)
-    #
-    # r: QMenu = self.menu_bar.addMenu("&Generators")
-    # r.addAction(openapi_sdk_gen_action)

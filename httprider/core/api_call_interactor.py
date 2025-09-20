@@ -1,8 +1,8 @@
 import logging
 
-from ..core import gen_uuid
-from ..core.core_settings import app_settings
-from ..model.app_data import ApiCall
+from httprider.core import gen_uuid
+from httprider.core.core_settings import app_settings
+from httprider.model.app_data import ApiCall
 
 
 class ApiCallInteractor:

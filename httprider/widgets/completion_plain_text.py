@@ -2,7 +2,7 @@ from PyQt6.QtCore import QRect, Qt
 from PyQt6.QtGui import QAction, QKeyEvent, QTextCharFormat, QTextCursor
 from PyQt6.QtWidgets import QDialog, QPlainTextEdit
 
-from ..widgets.completion_line_edit import ChildLineEdit
+from httprider.widgets.completion_line_edit import ChildLineEdit
 
 
 class PlainTextContextMenuHandler:
@@ -34,8 +34,8 @@ class CompletionPlainTextEdit(QPlainTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
         # Lazy import to avoid circular dependencies
-        from ..ui.data_generator_dialog import DataGeneratorDialog
-        from ..ui.utility_functions_dialog import UtilityFunctionsDialog
+        from httprider.ui.data_generator_dialog import DataGeneratorDialog
+        from httprider.ui.utility_functions_dialog import UtilityFunctionsDialog
 
         self.data_generator_dialog = DataGeneratorDialog(self)
         self.utility_functions_dialog = UtilityFunctionsDialog(self)

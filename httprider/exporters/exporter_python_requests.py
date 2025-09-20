@@ -34,7 +34,7 @@ def to_python_requests(api_call, last_exchange):
         {headers if has_headers else ""}
     }},
     """
-    py_func = f"""
+    return f"""
 def {func_name}():
     try:
         response = requests.{method.lower()}(
@@ -48,7 +48,6 @@ def {func_name}():
     except requests.exceptions.RequestException as e:
         print(f'HTTP Request failed {{e}}')
     """
-    return py_func
 
 
 @attr.s
@@ -75,10 +74,9 @@ import uuid
 
     def __export_api_call(self, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
-        doc = f"""# {api_call.title}
+        return f"""# {api_call.title}
 {to_python_requests(api_call, last_exchange)}
 """
-        return doc
 
 
 exporter = PythonRequestsExporter()

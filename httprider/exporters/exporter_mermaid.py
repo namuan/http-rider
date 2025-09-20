@@ -3,9 +3,9 @@ import re
 import attr
 from pygments.lexers.jvm import JavaLexer
 
-from ..core.core_settings import app_settings
-from ..exporters.common import *
-from ..model.app_data import ApiCall
+from httprider.core.core_settings import app_settings
+from httprider.exporters.common import *
+from httprider.model.app_data import ApiCall
 
 regex = r".*\[([\S\s]*)->([\S\s][^]]*)\](.*)$"
 
@@ -23,7 +23,7 @@ def gen_function(api_call, last_exchange, api_test_case):
         return ""
 
     statements = [
-        f"    {source.strip()}->>{target.strip()}: {last_exchange.request.http_method} {last_exchange.request.http_url}"
+        f"    {source.strip()}->>{target.strip()}: {last_exchange.request.http_method} {last_exchange.request.http_url}",
     ]
 
     return "\n".join(statements)
@@ -60,8 +60,7 @@ sequenceDiagram
     def __export_api_call(self, api_call):
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         api_test_case = app_settings.app_data_cache.get_api_test_case(api_call.id)
-        doc = gen_function(api_call, last_exchange, api_test_case)
-        return doc
+        return gen_function(api_call, last_exchange, api_test_case)
 
 
 exporter = MermaidExporter()

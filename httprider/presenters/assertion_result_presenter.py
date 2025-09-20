@@ -41,8 +41,7 @@ class AssertionResultPresenter:
         api_call_exchanges = app_settings.app_data_cache.get_api_call_exchanges(api_call_id)
         if api_call_exchanges:
             return api_call_exchanges[-1]
-        else:
-            return HttpExchange(api_call_id)
+        return HttpExchange(api_call_id)
 
     def new_api_call_selected(self, api_call: ApiCall):
         last_exchange = self.__get_last_exchange(api_call.id)
@@ -129,7 +128,9 @@ class AssertionResultPresenter:
 
         # Convert values by type
         current_val, expected_val, conversion_success = self._convert_values_by_type(
-            current_val, expected_val, val_type
+            current_val,
+            expected_val,
+            val_type,
         )
         if not conversion_success:
             return False

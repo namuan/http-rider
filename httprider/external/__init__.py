@@ -1,2 +1,6 @@
+from pathlib import Path
+
+
 def open_form_file(file_location):
-    return open(file_location, "rb")  # noqa: SIM115
+    with Path(file_location).open("rb") as f:
+        return f.read()

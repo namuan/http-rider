@@ -23,7 +23,10 @@ class Ui_SharePreviewDialog:
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
         spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+            40,
+            20,
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Minimum,
         )
         self.horizontalLayout.addItem(spacerItem)
         self.btn_show_preview = QtWidgets.QPushButton(parent=SharePreviewDialog)
@@ -58,7 +61,7 @@ class Ui_SharePreviewDialog:
             _translate(
                 "SharePreviewDialog",
                 "Review/Edit the following request/response but note that any changes made in the preview will be discarded when the dialog is closed.",
-            )
+            ),
         )
         self.btn_show_preview.setText(_translate("SharePreviewDialog", "Preview"))
         self.btn_share_exchange.setText(_translate("SharePreviewDialog", "Share"))

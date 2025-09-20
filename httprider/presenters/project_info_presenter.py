@@ -69,7 +69,7 @@ class ProjectInfoPresenter:
 
     def add_widget_item(self, server):
         item = QtWidgets.QListWidgetItem()
-        item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+        item.setFlags(item.flags() | QtCore.Qt.ItemFlag.ItemIsEditable)
         item.setText(server)
         self.parent_view.lst_servers.addItem(item)
 

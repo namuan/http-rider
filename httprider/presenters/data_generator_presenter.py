@@ -27,8 +27,8 @@ class DataGeneratorPresenter:
                 custom_string_generator((
                     self.view.txt_custom_string_template.text(),
                     self.view.chk_custom_string_uppercase.isChecked(),
-                ))
-            )
+                )),
+            ),
         )
         # Person section
         gender = self.view.gender_selector.currentText()

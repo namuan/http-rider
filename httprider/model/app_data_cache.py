@@ -1,18 +1,11 @@
 import logging
 from typing import ClassVar
 
-from ..core import json_path, response_code_formatter, response_code_round_up
-from ..core.constants import DEFAULT_TAG, AssertionDataSource
-from ..model.app_data import (
-    ApiCall,
-    ApiTestCase,
-    AppState,
-    Assertion,
-    Environment,
-    HttpExchange,
-)
-from ..model.app_data_reader import AppDataReader
-from ..model.app_data_writer import AppDataWriter
+from httprider.core import json_path, response_code_formatter, response_code_round_up
+from httprider.core.constants import DEFAULT_TAG, AssertionDataSource
+from httprider.model.app_data import ApiCall, ApiTestCase, AppState, Assertion, Environment, HttpExchange
+from httprider.model.app_data_reader import AppDataReader
+from httprider.model.app_data_writer import AppDataWriter
 
 
 def _build_filter_query(query=None, tag=None):
@@ -67,7 +60,7 @@ class AppDataCache:
 
     def load_cache(self):
         self.api_call_list = self.app_data_reader.get_all_api_calls_from_db()
-        for _, api_call in self.api_call_list.items():
+        for api_call in self.api_call_list.values():
             api_test_case = self.app_data_reader.get_api_test_case_from_db(api_call.id)
             self.api_test_cases[api_call.id] = api_test_case
             http_exchanges = self.app_data_reader.get_api_call_exchanges(api_call.id)
@@ -80,7 +73,7 @@ class AppDataCache:
             f"API Calls: {len(self.api_call_list)} - "
             f"API Test Cases: {len(self.api_test_cases)} - "
             f"API HTTP Exchanges: {len(self.api_http_exchanges)} -"
-            f"Environments: {len(self.environments)} - "
+            f"Environments: {len(self.environments)} - ",
         )
         self.app_data_reader.signals.initial_cache_loading_completed.emit()
 
@@ -175,16 +168,17 @@ class AppDataCache:
     def get_latest_assertion_value_from_exchange(assertion: Assertion, exchange: HttpExchange):
         if assertion.data_from == AssertionDataSource.REQUEST_HEADER.value:
             return exchange.request.headers.get(assertion.selector.lower(), None)
-        elif assertion.data_from == AssertionDataSource.RESPONSE_HEADER.value:
+        if assertion.data_from == AssertionDataSource.RESPONSE_HEADER.value:
             return exchange.response.headers.get(assertion.selector.lower(), None)
-        elif assertion.data_from == AssertionDataSource.REQUEST_BODY.value:
+        if assertion.data_from == AssertionDataSource.REQUEST_BODY.value:
             return json_path(exchange.request.request_body, assertion.selector)
-        elif assertion.data_from == AssertionDataSource.RESPONSE_BODY.value:
+        if assertion.data_from == AssertionDataSource.RESPONSE_BODY.value:
             return json_path(exchange.response.response_body, assertion.selector)
-        elif assertion.data_from == AssertionDataSource.RESPONSE_CODE.value:
+        if assertion.data_from == AssertionDataSource.RESPONSE_CODE.value:
             return response_code_formatter(exchange.response.http_status_code)
-        elif assertion.data_from == AssertionDataSource.RESPONSE_TIME.value:
+        if assertion.data_from == AssertionDataSource.RESPONSE_TIME.value:
             return response_code_round_up(exchange.response.elapsed_time)
+        return None
 
     def __build_assertion(self, api_call: ApiCall, exchange: HttpExchange, api_test_case: ApiTestCase):
         return {
@@ -202,8 +196,7 @@ class AppDataCache:
         api_call_exchanges = self.get_api_call_exchanges(api_call_id)
         if api_call_exchanges:
             return api_call_exchanges[-1]
-        else:
-            return HttpExchange(api_call_id)
+        return HttpExchange(api_call_id)
 
     def get_api_test_case(self, api_call_id):
         return self.api_test_cases.get(api_call_id, ApiTestCase.from_json(None, api_call_id))

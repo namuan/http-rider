@@ -1,9 +1,9 @@
 import attr
 from pygments.lexers.shell import BashLexer
 
-from ..core.core_settings import app_settings
-from ..exporters.common import *
-from ..model.app_data import ApiCall
+from httprider.core.core_settings import app_settings
+from httprider.exporters.common import *
+from httprider.model.app_data import ApiCall
 
 
 @attr.s

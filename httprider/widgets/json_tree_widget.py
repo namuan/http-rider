@@ -1,6 +1,6 @@
 from PyQt6.QtCore import *
 
-from ..core import load_json_show_error
+from httprider.core import load_json_show_error
 
 NoneType = type(None)
 ItemRole = Qt.ItemDataRole.UserRole + 200
@@ -78,7 +78,7 @@ class JsonModel(QAbstractItemModel):
         if role == Qt.ItemDataRole.DisplayRole:
             if col == 0:
                 return item.itemKey
-            elif col == 1:
+            if col == 1:
                 return item.itemValue
 
         if role == ItemRole:
@@ -86,21 +86,21 @@ class JsonModel(QAbstractItemModel):
 
         return QVariant()
 
+    # ruff: noqa: PLR0911
     def __convert_to_json_type(self, clazz):
         if clazz is str:
             return "String"
-        elif clazz is dict:
+        if clazz is dict:
             return "Object"
-        elif clazz is list:
+        if clazz is list:
             return "Array"
-        elif clazz is int or clazz is float:
+        if clazz is int or clazz is float:
             return "Number"
-        elif clazz is bool:
+        if clazz is bool:
             return "Boolean"
-        elif clazz is NoneType:
+        if clazz is NoneType:
             return "Null"
-        else:
-            return str(clazz)
+        return str(clazz)
 
     def headerData(self, section, orientation, role=None):
         if orientation == Qt.Horizontal and role == Qt.DisplayRole:

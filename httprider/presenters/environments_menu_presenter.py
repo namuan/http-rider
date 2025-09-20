@@ -1,13 +1,15 @@
 import json
-import os
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import cattr
 
 from httprider.core.core_settings import app_settings
 from httprider.core.environment_interactor import environment_interactor
 from httprider.model.app_data import Environment
-from httprider.model.user_data import UserProject
+
+if TYPE_CHECKING:
+    from httprider.model.user_data import UserProject
 
 
 class EnvironmentMenuPresenter:
@@ -16,7 +18,7 @@ class EnvironmentMenuPresenter:
 
     def on_export(self):
         user_project: UserProject = app_settings.load_current_project()
-        current_project_folder = os.path.dirname(user_project.location)
+        current_project_folder = Path(user_project.location).parent
         file_location, _ = self.main_window.save_file(
             "Export Environments",
             current_project_folder,
@@ -29,7 +31,7 @@ class EnvironmentMenuPresenter:
 
     def on_import(self):
         user_project: UserProject = app_settings.load_current_project()
-        current_project_folder = os.path.dirname(user_project.location)
+        current_project_folder = Path(user_project.location).parent
         file_location, _ = self.main_window.open_file(
             "Import Environments",
             current_project_folder,

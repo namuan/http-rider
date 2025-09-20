@@ -44,7 +44,8 @@ class Ui_AssertionBuilderDialog:
         self.verticalLayout.addWidget(self.tbl_request_headers)
         self.tbl_request_body = QtWidgets.QTreeView(parent=self.frame)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
@@ -76,7 +77,8 @@ class Ui_AssertionBuilderDialog:
         self.verticalLayout_2.addWidget(self.tbl_response_headers)
         self.tbl_response_body = QtWidgets.QTreeView(parent=self.frame_2)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
@@ -99,7 +101,10 @@ class Ui_AssertionBuilderDialog:
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_2.addWidget(self.label_3)
         spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+            40,
+            20,
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Minimum,
         )
         self.horizontalLayout_2.addItem(spacerItem)
         self.btn_response_code_assertion = QtWidgets.QToolButton(parent=self.frame_3)

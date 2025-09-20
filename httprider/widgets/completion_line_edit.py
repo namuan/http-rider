@@ -2,10 +2,10 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import QAction, QFocusEvent, QKeyEvent, QStandardItemModel
 from PyQt6.QtWidgets import *
 
-from ..core import DynamicStringData, DynamicStringType
-from ..core.constants import DYNAMIC_STRING_ROLE
-from ..core.generators import file_func_generator
-from ..ui import open_file
+from httprider.core import DynamicStringData, DynamicStringType
+from httprider.core.constants import DYNAMIC_STRING_ROLE
+from httprider.core.generators import file_func_generator
+from httprider.ui import open_file
 
 
 class ChildLineEdit(QLineEdit):
@@ -20,7 +20,7 @@ class ChildLineEdit(QLineEdit):
         color: white;
         border-style: none;
         border-radius: 2px;
-        """
+        """,
         )
         self.hide()
 
@@ -92,8 +92,8 @@ class CompletionLineEdit(QLineEdit):
         super().__init__(parent)
         self.parent = parent
         # Lazy import to avoid circular dependencies
-        from ..ui.data_generator_dialog import DataGeneratorDialog
-        from ..ui.utility_functions_dialog import UtilityFunctionsDialog
+        from httprider.ui.data_generator_dialog import DataGeneratorDialog
+        from httprider.ui.utility_functions_dialog import UtilityFunctionsDialog
 
         self.data_generator_dialog = DataGeneratorDialog(self)
         self.utility_functions_dialog = UtilityFunctionsDialog(self)

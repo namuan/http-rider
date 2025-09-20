@@ -1,5 +1,6 @@
+from typing import TYPE_CHECKING
+
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QStandardItemModel
 from PyQt6.QtWidgets import *
 
 from httprider.core import DynamicStringData
@@ -7,6 +8,9 @@ from httprider.core.core_settings import app_settings
 from httprider.model.completer import get_completer_model
 from httprider.widgets.key_value_widget import KeyValueWidget
 from httprider.widgets.new_header_widget import NewItemButtonWidget
+
+if TYPE_CHECKING:
+    from PyQt6.QtGui import QStandardItemModel
 
 
 class KeyValueListPresenter:

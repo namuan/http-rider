@@ -1,5 +1,6 @@
 import json
 import logging
+from dataclasses import dataclass
 from itertools import groupby
 from operator import itemgetter
 
@@ -7,11 +8,21 @@ import attr
 from apispec.core import VALID_METHODS_OPENAPI_V3
 from prance import ResolvingParser
 
+from httprider.core import DynamicStringData
 from httprider.core.app_state_interactor import AppStateInteractor
+from httprider.core.json_data_generator import jdg
+from httprider.model.app_data import ApiCall, ProjectInfo, TagInfo
 
-from ..core import DynamicStringData
-from ..core.json_data_generator import jdg
-from ..model.app_data import ApiCall, ProjectInfo, TagInfo
+
+@dataclass
+class ApiCallParams:
+    base_path: str
+    path: str
+    path_spec: dict
+    api_method: str
+    api_method_spec: dict
+    content_type: str
+    schema: dict
 
 
 @attr.s
@@ -34,7 +45,7 @@ class OpenApiV3Importer:
         openapi_info = openapi_spec.specification["info"]
         openapi_tags = openapi_spec.specification["tags"]
         openapi_servers = openapi_spec.specification["servers"]
-        info = ProjectInfo(
+        return ProjectInfo(
             info=openapi_info["description"].strip(),
             title=openapi_info["title"].strip(),
             version=openapi_info["version"].strip(),
@@ -43,19 +54,20 @@ class OpenApiV3Importer:
             tags=[TagInfo(t["name"].strip(), t["description"].strip()) for t in openapi_tags],
             servers=[server.get("url", "") for server in openapi_servers],
         )
-        return info
 
     def __extract_api_calls(self, base_path, openapi_spec):
         openapi_paths = openapi_spec.specification["paths"]
         return [
             self.__convert_to_api_call(
-                base_path,
-                path,
-                path_spec,
-                api_method,
-                api_method_spec,
-                content_type,
-                schema,
+                ApiCallParams(
+                    base_path=base_path,
+                    path=path,
+                    path_spec=path_spec,
+                    api_method=api_method,
+                    api_method_spec=api_method_spec,
+                    content_type=content_type,
+                    schema=schema,
+                ),
             )
             for path, path_spec in openapi_paths.items()
             for api_method, api_method_spec in path_spec.items()
@@ -72,8 +84,7 @@ class OpenApiV3Importer:
 
         if not has_request_body:
             return {None: None}
-        else:
-            return api_method_spec["requestBody"]["content"]
+        return api_method_spec["requestBody"]["content"]
 
     def __process_parameters(self, path_spec, api_method_spec):
         path_params = path_spec.get("parameters", [])
@@ -89,29 +100,23 @@ class OpenApiV3Importer:
 
         return gp.get("header", {}), gp.get("query", {}), gp.get("form", {})
 
-    def __convert_to_api_call(
-        self,
-        base_path,
-        path,
-        path_spec,
-        api_method,
-        api_method_spec,
-        content_type,
-        schema,
-    ):
-        logging.info(f"Converting {api_method} - {content_type} - {path}")
-        headers_params, query_params, form_params = self.__process_parameters(path_spec, api_method_spec)
+    def __convert_to_api_call(self, params: ApiCallParams):
+        logging.info(f"Converting {params.api_method} - {params.content_type} - {params.path}")
+        headers_params, query_params, form_params = self.__process_parameters(
+            params.path_spec,
+            params.api_method_spec,
+        )
 
-        if content_type:
-            headers_params["Content-Type"] = DynamicStringData(value=content_type)
+        if params.content_type:
+            headers_params["Content-Type"] = DynamicStringData(value=params.content_type)
 
         return ApiCall(
-            tags=list(api_method_spec.get("tags", [])),
-            http_url=f"{base_path}{path}",
-            http_method=api_method.upper(),
-            title=api_method_spec.get("summary", ""),
-            http_request_body=self.__extract_request_body(content_type, schema),
-            description=api_method_spec.get("description", ""),
+            tags=list(params.api_method_spec.get("tags", [])),
+            http_url=f"{params.base_path}{params.path}",
+            http_method=params.api_method.upper(),
+            title=params.api_method_spec.get("summary", ""),
+            http_request_body=self.__extract_request_body(params.content_type, params.schema),
+            description=params.api_method_spec.get("description", ""),
             http_headers=headers_params,
             http_params=query_params,
             form_params=form_params,

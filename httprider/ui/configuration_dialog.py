@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog
 
-from ..generated.configuration_dialog import Ui_Configuration
-from ..presenters import ConfigPresenter
+from httprider.generated.configuration_dialog import Ui_Configuration
+from httprider.presenters import ConfigPresenter
 
 
 class ConfigurationDialog(QDialog, Ui_Configuration):

@@ -77,38 +77,7 @@ line-length = 120
 fix = true
 
 [tool.ruff.lint]
-select = [
-    # flake8-2020
-    "YTT",
-    # flake8-bandit
-    "S",
-    # flake8-bugbear
-    "B",
-    # flake8-builtins
-    "A",
-    # flake8-comprehensions
-    "C4",
-    # flake8-debugger
-    "T10",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
-    # mccabe
-    "C90",
-    # pycodestyle
-    "E", "W",
-    # pyflakes
-    "F",
-    # pygrep-hooks
-    "PGH",
-    # pyupgrade
-    "UP",
-    # ruff
-    "RUF",
-    # tryceratops
-    "TRY",
-]
+select = [ "ALL" ]
 ignore = [
     # LineTooLong
     "E501",
@@ -120,11 +89,42 @@ ignore = [
     "E741",
     "F403",
     "F405",
+    "D",
+    "ANN",
+    "PLR2004",
+    # Newly added codes from make check
+    "ARG001",
+    "ARG002",
+    "BLE001",
+    "ERA001",
+    "FBT002",
+    "FBT003",
+    "G004",
+    "G202",
+    "INP001",
+    "N801",
+    "N802",
+    "N803",
+    "N806",
+    "N814",
+    "PERF403",
+    "PLC0414",
+    "PLR0911",
+#    "PLR0913",
+#    "PLR0915",
+#    "PLW0211",
+#    "PLW0603",
+#    "PTH120",
+#    "PTH123",
+#    "SIM115",
+#    "SLF001",
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "httprider/tests/*" = ["S101"]
-"httprider/generated/*" = ["E402"]
+"httprider/generated/*" = ["E402", "PLR0915"]
+"httprider/widgets/*" = ["N", "ARG002"]
+"httprider/ui/*" = ["N", "ARG002"]
 
 [tool.ruff.format]
 preview = true

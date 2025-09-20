@@ -4,10 +4,9 @@ import attr
 import uncurl
 from uncurl.api import ParsedContext
 
+from httprider.core import DynamicStringData, split_url_qs
 from httprider.core.app_state_interactor import AppStateInteractor
-
-from ..core import DynamicStringData, split_url_qs
-from ..model.app_data import ApiCall
+from httprider.model.app_data import ApiCall
 
 
 @attr.s
@@ -22,7 +21,8 @@ class CurlImporter:
             api_call = self.__extract_api_call(ctx)
             return None, [api_call]
         except BaseException as e:
-            raise SyntaxError("Unable to parse curl command") from e
+            msg = "Unable to parse curl command"
+            raise SyntaxError(msg) from e
 
     def __extract_api_call(self, ctx):
         url, qs = split_url_qs(ctx.url.strip())
@@ -45,15 +45,13 @@ class CurlImporter:
         form_content_type = ctx.headers.get("Content-Type", None) == "application/x-www-form-urlencoded"
         if form_content_type:
             return {fk: DynamicStringData(value=",".join(fv)) for fk, fv in parse.parse_qs(ctx.data).items()}
-        else:
-            return {}
+        return {}
 
     def __extract_request_body(self, ctx: ParsedContext):
         form_content_type = ctx.headers.get("Content-Type", None) == "application/x-www-form-urlencoded"
         if not form_content_type:
             return ctx.data or ""
-        else:
-            return ""
+        return ""
 
 
 importer = CurlImporter()

@@ -21,7 +21,7 @@ class Ui_DataGeneratorDialog:
         self.buttonBox.setStyleSheet("color: rgb(0, 0, 0);")
         self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(
-            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok
+            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok,
         )
         self.buttonBox.setObjectName("buttonBox")
         self.tabWidget = QtWidgets.QTabWidget(parent=DataGeneratorDialog)

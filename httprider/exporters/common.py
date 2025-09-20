@@ -5,8 +5,8 @@ from pygments.formatters.html import HtmlFormatter
 from pygments.lexers import data
 from yapf.yapflib.yapf_api import FormatCode
 
-from ..core import format_json
-from ..model.app_data import ApiCall, ExchangeRequest, ExchangeResponse, HttpExchange
+from httprider.core import format_json
+from httprider.model.app_data import ApiCall, ExchangeRequest, ExchangeResponse, HttpExchange
 
 internal_var_selector = re.compile(r"\$\{(\w+)\}")
 
@@ -78,9 +78,11 @@ def _get_request_data(api_call: ApiCall, exchange: HttpExchange):
             exchange.request.request_body,
         )
 
-    raise ValueError(f"Unable to make curl request as api_call is null and exchange response is {exchange.response}")
+    msg = f"Unable to make curl request as api_call is null and exchange response is {exchange.response}"
+    raise ValueError(msg)
 
 
+# ruff: noqa: PLR0913
 def _build_curl_parts(http_method, http_url, req_headers, req_body, compressed, verify):
     """Build curl command parts."""
     parts = [("curl", None), ("-X", http_method)]

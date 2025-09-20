@@ -5,10 +5,10 @@ from pathlib import Path
 import attr
 import cattr
 
-from ..core import DynamicStringData, kv_list_to_dict
-from ..core.app_state_interactor import AppStateInteractor
-from ..importers import structure_attrs_from_dict
-from ..model.app_data import ApiCall
+from httprider.core import DynamicStringData, kv_list_to_dict
+from httprider.core.app_state_interactor import AppStateInteractor
+from httprider.importers import structure_attrs_from_dict
+from httprider.model.app_data import ApiCall
 
 
 @attr.s(auto_attribs=True)
@@ -57,7 +57,7 @@ class PostmanCollectionImporter:
         )
 
     def __extract_api_call(self, item: PostmanItem, sub_item: PostmanSubItem):
-        api_call = ApiCall(
+        return ApiCall(
             tags=[item.name],
             title=sub_item.name,
             description=sub_item.name,
@@ -70,14 +70,14 @@ class PostmanCollectionImporter:
             },
             sequence_number=self.app_state_interactor.update_sequence_number(),
         )
-        return api_call
 
     def __internal_variables(self, input_str):
         return re.sub(self.var_selector, r"${\2}", input_str, count=0) if input_str else ""
 
     def __validate_file(self, file_path):
         if not (Path(file_path).exists() and Path(file_path).is_file()):
-            raise FileNotFoundError(f"Path {file_path} should be a valid file path")
+            msg = f"Path {file_path} should be a valid file path"
+            raise FileNotFoundError(msg)
 
 
 for cls in [PostmanDataModel, PostmanItem, PostmanSubItem, PostmanRequest]:

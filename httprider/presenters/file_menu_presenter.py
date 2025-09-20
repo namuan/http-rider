@@ -1,5 +1,5 @@
-import os
 import shutil
+from pathlib import Path
 
 from httprider.core.core_settings import app_settings
 from httprider.model.user_data import SavedState, UserProject
@@ -15,7 +15,7 @@ class FileMenuPresenter:
 
     def on_file_open(self):
         user_project: UserProject = app_settings.load_current_project()
-        current_project_folder = os.path.dirname(user_project.location)
+        current_project_folder = Path(user_project.location).parent
         file_location, _ = self.main_window.open_file(
             "Select Project File",
             current_project_folder,
@@ -29,7 +29,7 @@ class FileMenuPresenter:
 
     def on_file_save(self, retain_current_project_file=False):
         user_project: UserProject = app_settings.load_current_project()
-        current_project_folder = os.path.dirname(user_project.location)
+        current_project_folder = Path(user_project.location).parent
         if user_project.state == SavedState.UN_SAVED:
             file_location, _ = self.main_window.save_file(
                 "Save Project File",
@@ -60,6 +60,7 @@ class FileMenuPresenter:
 
     def reload_app(self):
         """Switches the underlying data table to point to new file
-        And refreshes all the views"""
+        And refreshes all the views
+        """
         app_settings.new_app_data()
         self.main_window.presenter.refresh_app()

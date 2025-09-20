@@ -2,9 +2,9 @@ import attr
 from pygments.formatters.other import NullFormatter
 from pygments.lexers.markup import MarkdownLexer
 
-from ..core.core_settings import app_settings
-from ..exporters.common import *
-from ..model.app_data import ApiCall
+from httprider.core.core_settings import app_settings
+from httprider.exporters.common import *
+from httprider.model.app_data import ApiCall
 
 
 def gen_function(api_call, last_exchange, _api_test_case):
@@ -18,7 +18,7 @@ def gen_function(api_call, last_exchange, _api_test_case):
     formatted_request_body = highlight_format_json(last_exchange.request.request_body, formatter=NullFormatter())
     formatted_response_body = highlight_format_json(last_exchange.response.response_body, formatter=NullFormatter())
 
-    content = f"""
+    return f"""
 h3. {api_call.title}
 
 {api_call.description}
@@ -51,7 +51,6 @@ HTTP {last_exchange.response.http_status_code}
 {formatted_response_body or " "}
 {{code}}
 """
-    return content
 
 
 @attr.s

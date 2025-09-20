@@ -2,9 +2,10 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import *
 
-from ..widgets.search_line_edit_widget import SearchLineEdit
+from httprider.widgets.search_line_edit_widget import SearchLineEdit
 
 
+# ruff: noqa: PLR0915
 def tool_bar_items(self):
     """Create a tool bar for the main window."""
     self.tool_bar.setObjectName("maintoolbar")
@@ -20,11 +21,6 @@ def tool_bar_items(self):
     tool_bar_add_call_action = QAction(QIcon("images:plus-48.png"), "Add Request", self)
     tool_bar_add_call_action.triggered.connect(self.empty_frame_presenter.on_btn_add_request)
     self.tool_bar.addAction(tool_bar_add_call_action)
-
-    # Disabling support for adding separators
-    # tool_bar_add_separator_action = QAction(QIcon("images:separator-48.png"), 'Add Separator', self)
-    # tool_bar_add_separator_action.triggered.connect(self.empty_frame_presenter.on_btn_add_separator)
-    # self.tool_bar.addAction(tool_bar_add_separator_action)
 
     tool_bar_remove_call_action = QAction(QIcon("images:minus-48.png"), "Remove Request", self)
     tool_bar_remove_call_action.triggered.connect(self.api_list_presenter.on_remove_selected_item)

@@ -33,7 +33,8 @@ class Ui_ProjectInfoDialog:
         self.gridLayout.addWidget(self.label_8, 8, 1, 1, 1)
         self.txt_project_info = QtWidgets.QTextEdit(parent=self.tab_2)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -50,7 +51,10 @@ class Ui_ProjectInfoDialog:
         self.label_9.setObjectName("label_9")
         self.horizontalLayout_7.addWidget(self.label_9)
         spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+            40,
+            20,
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Minimum,
         )
         self.horizontalLayout_7.addItem(spacerItem)
         self.btn_add_server = QtWidgets.QToolButton(parent=self.tab_2)
@@ -89,7 +93,8 @@ class Ui_ProjectInfoDialog:
         self.gridLayout.addWidget(self.label_6, 6, 1, 1, 1)
         self.lst_servers = QtWidgets.QListWidget(parent=self.tab_2)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.MinimumExpanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.MinimumExpanding,
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

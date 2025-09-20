@@ -3,6 +3,7 @@
 block_cipher = None
 
 import httprider
+from PyInstaller.utils.hooks import collect_data_files
 
 a = Analysis(['bin/app'],
              pathex=['.'],
@@ -11,7 +12,7 @@ a = Analysis(['bin/app'],
                 ('resources/images/*', 'resources/images'),
                 ('resources/fonts/*', 'resources/fonts'),
                 ('resources/themes/*', 'resources/themes'),
-             ],
+             ] + collect_data_files('openapi_spec_validator'),
              hiddenimports=[],
              hookspath=None,
              runtime_hooks=None,

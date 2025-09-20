@@ -1,10 +1,11 @@
 import logging
+from typing import TYPE_CHECKING
 
 from PyQt6.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
 from requests import PreparedRequest
 from requests.exceptions import ConnectionError as RequestsConnectionError
-from urllib3.exceptions import NewConnectionError
 
+from httprider.core import get_variable_tokens, guess_content_type, replace_response_variables, replace_variables
 from httprider.core.constants import (
     CONTENT_TYPE_HEADER_IN_EXCHANGE,
     ContentType,
@@ -16,12 +17,8 @@ from httprider.external import open_form_file
 from httprider.external.requester import Requester
 from httprider.model.app_data import ExchangeRequest, ExchangeResponse, HttpExchange
 
-from ..core import (
-    get_variable_tokens,
-    guess_content_type,
-    replace_response_variables,
-    replace_variables,
-)
+if TYPE_CHECKING:
+    from urllib3.exceptions import NewConnectionError
 
 
 class HttpExchangeSignals(QObject):
@@ -150,11 +147,11 @@ class RestApiConnector(QThread):
 
         logging.info(
             f"<== make_http_call({self.exchange.api_call_id}): "
-            f"Received response in {self.exchange.response.elapsed_time}"
+            f"Received response in {self.exchange.response.elapsed_time}",
         )
 
         # Cleanup (for both success/failure)
-        for _fk, fv in kwargs.get("files", {}).items():
+        for fv in kwargs.get("files", {}).values():
             fv.close()
 
     def _emit_finished_signals(self, req: ExchangeRequest):
@@ -177,7 +174,7 @@ class RestApiConnector(QThread):
         # deriving request content type
         req: ExchangeRequest = self.exchange.request
         logging.info(
-            f"==>[{self.tname}] make_http_call({self.exchange.api_call_id}): Http {req.http_method} to {req.http_url}"
+            f"==>[{self.tname}] make_http_call({self.exchange.api_call_id}): Http {req.http_method} to {req.http_url}",
         )
 
         # converting request to k/v structure

@@ -1,9 +1,9 @@
 import attr
 from pygments.lexers.jvm import JavaLexer
 
-from ..core.core_settings import app_settings
-from ..exporters.common import *
-from ..model.app_data import ApiCall
+from httprider.core.core_settings import app_settings
+from httprider.exporters.common import *
+from httprider.model.app_data import ApiCall
 
 regex = r".*\[([\S\s]*)->([\S\s][^]]*)\](.*)$"
 
@@ -99,8 +99,7 @@ ActorA -> ActorB: Get product details
         project_info = app_settings.app_data_reader.get_or_create_project_info()
         last_exchange = app_settings.app_data_cache.get_last_exchange(api_call.id)
         api_test_case = app_settings.app_data_cache.get_api_test_case(api_call.id)
-        doc = gen_function(api_call, last_exchange, api_test_case, project_info)
-        return doc
+        return gen_function(api_call, last_exchange, api_test_case, project_info)
 
 
 exporter = PlantUmlExporter()

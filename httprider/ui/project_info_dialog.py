@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog
 
-from ..generated.project_info_dialog import Ui_ProjectInfoDialog
-from ..presenters.project_info_presenter import ProjectInfoPresenter
+from httprider.generated.project_info_dialog import Ui_ProjectInfoDialog
+from httprider.presenters.project_info_presenter import ProjectInfoPresenter
 
 
 class ProjectInfoDialog(QDialog, Ui_ProjectInfoDialog):

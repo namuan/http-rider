@@ -31,7 +31,10 @@ class Ui_FuzzTestDialog:
         self.lbl_api_call.setObjectName("lbl_api_call")
         self.horizontalLayout_2.addWidget(self.lbl_api_call)
         spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+            40,
+            20,
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Minimum,
         )
         self.horizontalLayout_2.addItem(spacerItem)
         self.line_2 = QtWidgets.QFrame(parent=FuzzTestDialog)
@@ -85,7 +88,10 @@ class Ui_FuzzTestDialog:
         self.int_max_string_length.setObjectName("int_max_string_length")
         self.horizontalLayout.addWidget(self.int_max_string_length)
         spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum
+            40,
+            20,
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Minimum,
         )
         self.horizontalLayout.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout)

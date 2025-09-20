@@ -1,9 +1,10 @@
+from typing import TYPE_CHECKING
+
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
 from httprider.core.constants import API_CALL_ROLE
-from httprider.model.app_data import ApiCall
 from httprider.themes.theme_provider import (
     api_call_list_disabled_color,
     api_call_list_disabled_sub_title_color,
@@ -20,6 +21,9 @@ from httprider.themes.theme_provider import (
     http_ex_success,
 )
 
+if TYPE_CHECKING:
+    from httprider.model.app_data import ApiCall
+
 PADDING = 5
 
 
@@ -35,7 +39,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
 
     def sizeHint(self, option: QStyleOptionViewItem, model_index: QModelIndex):
         if not model_index.isValid():
-            return
+            return None
 
         bounding_rect = option.rect
 
@@ -54,7 +58,12 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         font.setBold(self.TITLE_FONT_BOLD)
         font_metrics: QFontMetrics = QFontMetrics(font)
         title_rect = font_metrics.boundingRect(
-            0, 0, bounding_rect.width(), 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop, api_title
+            0,
+            0,
+            bounding_rect.width(),
+            0,
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
+            api_title,
         )
 
         # http url + method
@@ -62,7 +71,12 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         font.setBold(self.URL_FONT_BOLD)
         font_metrics: QFontMetrics = QFontMetrics(font)
         url_rect = font_metrics.boundingRect(
-            0, 0, bounding_rect.width(), 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop, api_http_url
+            0,
+            0,
+            bounding_rect.width(),
+            0,
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop,
+            api_http_url,
         )
         size: QSize = QSize(option.rect.width(), title_rect.height() + url_rect.height() + 10 * PADDING)
 
@@ -103,7 +117,9 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         font.setBold(self.TITLE_FONT_BOLD)
         font_metrics: QFontMetrics = QFontMetrics(font)
         elided_title = font_metrics.elidedText(
-            api_title, Qt.TextElideMode.ElideRight, bounding_rect.width() - 10 * PADDING
+            api_title,
+            Qt.TextElideMode.ElideRight,
+            bounding_rect.width() - 10 * PADDING,
         )
         # title
         title_rect = font_metrics.boundingRect(
@@ -117,7 +133,9 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         painter.setFont(font)
         painter.setPen(title_pen_color)
         painter.drawText(
-            title_rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWordWrap, elided_title
+            title_rect,
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWordWrap,
+            elided_title,
         )
 
         self.draw_status_code(title_rect, bounding_rect, painter, api_status_code, api_call)
@@ -127,7 +145,9 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         font.setBold(self.URL_FONT_BOLD)
         font_metrics: QFontMetrics = QFontMetrics(font)
         elided_http_url = font_metrics.elidedText(
-            api_http_url, Qt.TextElideMode.ElideMiddle, bounding_rect.width() - 5 * PADDING
+            api_http_url,
+            Qt.TextElideMode.ElideMiddle,
+            bounding_rect.width() - 5 * PADDING,
         )
 
         url_rect = font_metrics.boundingRect(
@@ -141,7 +161,9 @@ class ApiCallItemDelegate(QStyledItemDelegate):
         painter.setFont(font)
         painter.setPen(sub_title_pen_color)
         painter.drawText(
-            url_rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWordWrap, elided_http_url
+            url_rect,
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWordWrap,
+            elided_http_url,
         )
 
         painter.restore()
@@ -176,7 +198,9 @@ class ApiCallItemDelegate(QStyledItemDelegate):
             painter.setPen(api_call_list_status_code_color())
             if api_call.last_response_code > 0:
                 painter.drawText(
-                    code_rect, Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignVCenter, api_status_code
+                    code_rect,
+                    Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignVCenter,
+                    api_status_code,
                 )
 
     def color_from_assertions(self, assertion_result, response_color):
@@ -200,6 +224,7 @@ class ApiCallItemDelegate(QStyledItemDelegate):
 
         if 500 <= response_code < 600:
             return self.RED_COLOR
+        return None
 
 
 class ApiCallsListView(QListView):

@@ -61,8 +61,7 @@ def mock_db_table():
 
 
 def mock_app_data_writer():
-    app_data_writer = Mock()
-    return app_data_writer
+    return Mock()
 
 
 def mock_app_data_cache():

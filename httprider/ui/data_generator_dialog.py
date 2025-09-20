@@ -1,8 +1,8 @@
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QDialog
 
-from ..generated.faker_dialog import Ui_DataGeneratorDialog
-from ..presenters.data_generator_presenter import DataGeneratorPresenter
+from httprider.generated.faker_dialog import Ui_DataGeneratorDialog
+from httprider.presenters.data_generator_presenter import DataGeneratorPresenter
 
 
 class DataGeneratorDialog(QDialog, Ui_DataGeneratorDialog):
