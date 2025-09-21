@@ -13,6 +13,35 @@ Downloads are currently available for MacOS and Windows however it is simple to 
 
 See [https://www.httprider.com/docs/getting-started/installation/](https://namuan.github.io/http-rider-docs/docs/getting-started/installation/) for instructions for different operating systems.
 
+### Installation from Source
+
+To install HttpRider from source:
+
+1. **Clone the repository or download the ZIP file:**
+
+   ```bash
+   git clone https://github.com/namuan/http-rider.git
+   cd http-rider
+   ```
+
+2. **Run the installation script (macOS):**
+
+   ```bash
+   ./install.command
+   ```
+
+   This script will:
+
+   - Install `uv` (if not already installed)
+   - Set up the virtual environment and dependencies
+   - Install the application in your `~/Applications` folder
+
+3. **Alternative manual installation:**
+   ```bash
+   make install  # Install dependencies and pre-commit hooks
+   make run      # Run the application
+   ```
+
 ### Features
 
 🚀 Feature complete | 🙈 Experimental | 📝 In development | ☁️️ Planned
@@ -75,10 +104,10 @@ See [https://www.httprider.com/docs/getting-started/installation/](https://namua
 
 ### Development
 
-Run the following command to set-up virtual environment
+Run the following command to set-up virtual environment and install pre-commit hooks
 
 ```
-$ make setup
+$ make install
 ```
 
 Then `make run` should startup the application.
@@ -87,4 +116,4 @@ Then `make run` should startup the application.
 $ make run
 ```
 
-You can just run `make` to display list of available commands.
+You can run `make help` or just `make` to display list of available commands.
