@@ -47,8 +47,8 @@ dependencies = [
 Homepage = "https://deskriders.dev"
 Repository = "https://github.com/namuan/httprider"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest",
     "pytest-qt",
     "pre-commit",
