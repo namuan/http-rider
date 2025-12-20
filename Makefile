@@ -44,6 +44,9 @@ clean: ## Clean build artifacts
 context: clean-build ## Build context file from application sources
 	llm-context-builder.py --extensions .py --ignored_dirs build dist generated venv .venv .idea .aider.tags.cache.v3 --print_contents --temp_file
 
+uic: ## Converts ui files to python
+	for i in `ls resources/ui/*.ui`; do FNAME=`basename $${i} ".ui"`; uv run pyuic6 $${i} > "httprider/generated/$${FNAME}.py"; done
+
 package: clean ## Run installer
 	@uv run pyinstaller main.spec --clean
 
