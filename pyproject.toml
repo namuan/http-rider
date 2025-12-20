@@ -114,7 +114,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "httprider/tests/*" = ["S101"]
-"httprider/generated/*" = ["E402", "PLR0915"]
+"httprider/generated/*" = ["E402", "PLR0915", "TID252", "PGH003"]
 "httprider/widgets/*" = ["N", "ARG002"]
 "httprider/ui/*" = ["N", "ARG002"]
 
